@@ -77,3 +77,9 @@
 - `ARCHITECTURE.md` (este documento complementario).
 - `IMPLEMENTATION_PLAN.md` (este documento).
 - `LOG.md` para registrar cada paso ejecutado.
+
+## Estado al 2025-11-11
+
+- **Fases 0-2 completadas**: repo configurado, ingesta (`table0.json`) reproducible y motor alineado con Hoja 1 (excepto los casos Shop/ML, donde priorizamos los tags propios).
+- **Referencias actualizadas**: `data/reference/1.json` refleja los cambios recientes (`CLUB`, `TOLERANCIA LESIONES`), y el comparador `npm run compare:derived` queda como prueba de regresi�n.
+- **Pr�ximo foco (Fase 3)**: formalizar la generaci�n de cache en `apps/cache-builder`, versionar los artefactos (`players.json`, `clubs.json`, `meta.json`, �ndices) y preparar los datos para la futura UI modular.

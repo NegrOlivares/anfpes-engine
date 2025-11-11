@@ -1,0 +1,794 @@
+[
+  {
+    "index": 1,
+    "column": "A",
+    "header": "ID",
+    "formula": 1
+  },
+  {
+    "index": 2,
+    "column": "B",
+    "header": "NOMBRE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CK$5000,2,FALSE)"
+  },
+  {
+    "index": 3,
+    "column": "C",
+    "header": "NACIONALIDAD",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CK$5000,80,FALSE)"
+  },
+  {
+    "index": 4,
+    "column": "D",
+    "header": "DORSAL",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CK$5000,89,FALSE)"
+  },
+  {
+    "index": 5,
+    "column": "E",
+    "header": "ALTURA",
+    "formula": "=VLOOKUP(A2,'0'!$A$2:$Q$5000,17,FALSE)"
+  },
+  {
+    "index": 6,
+    "column": "F",
+    "header": "PESO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CA$5000,79,FALSE)"
+  },
+  {
+    "index": 7,
+    "column": "G",
+    "header": "EDAD",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$BZ$5000,78,FALSE)"
+  },
+  {
+    "index": 8,
+    "column": "H",
+    "header": "PIE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$R$5000,18,FALSE)"
+  },
+  {
+    "index": 9,
+    "column": "I",
+    "header": "D",
+    "formula": "=IFERROR(CHOOSE(MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 10,
+    "column": "J",
+    "header": "E",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:I2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 11,
+    "column": "K",
+    "header": "M",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:J2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 12,
+    "column": "L",
+    "header": "A",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:K2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 13,
+    "column": "M",
+    "header": "R",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:L2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 14,
+    "column": "N",
+    "header": "C",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:M2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 15,
+    "column": "O",
+    "header": "A",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:N2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 16,
+    "column": "P",
+    "header": "C",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:O2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 17,
+    "column": "Q",
+    "header": "I",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:P2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 18,
+    "column": "R",
+    "header": "O",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:Q2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 19,
+    "column": "S",
+    "header": "N",
+    "formula": "=IFERROR(CHOOSE(_xlfn.AGGREGATE(15,6,(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1)/((INDEX('0'!$D$2:$O$5000,MATCH($A2,'0'!$A$2:$A$5000,0),0)=1)*(COLUMN('0'!$D$1:$O$1)-COLUMN('0'!$D$1)+1<>MAX(1,INDEX('0'!$P$2:$P$5000,MATCH($A2,'0'!$A$2:$A$5000,0))))),COLUMNS($I2:R2)),\"GK\",\"SWP\",\"CB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RB\",\"LB\")),\"DMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WB\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWB\",\"LWB\")),\"CMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"SMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RMF\",\"LMF\")),\"AMF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"B\",\"WF\",IF(INDEX('0'!$S$2:$S$5000,MATCH($A2,'0'!$A$2:$A$5000,0))=\"R\",\"RWF\",\"LWF\")),\"SS\",\"CF\"),\"\")"
+  },
+  {
+    "index": 20,
+    "column": "T",
+    "header": "CLUB",
+    "formula": "=IF(DV2=0,IF(DS2>0,CONCATENATE(\"Selección \",C2),IF(DT2>0,CONCATENATE(\"Classic \",C2),IFERROR(VLOOKUP(B2,#REF!,2,FALSE),\"Libre\"))),DV2)"
+  },
+  {
+    "index": 21,
+    "column": "U",
+    "header": "PROMEDIO",
+    "formula": "=ROUND((IF($CV2=0, $BA2, IF(OR($CV2=2, $CV2=3), $BB2, IF($CV2=4, $BC2, IF($CV2=6, $BD2, IF($CV2=5, $BE2, IF($CV2=7, $BF2, IF($CV2=8, $BG2, IF($CV2=9, $BH2, IF($CV2=10, $BI2, IF($CV2=11, $BJ2, IF($CV2=12, $BK2, 0)))))))))))),0)"
+  },
+  {
+    "index": 22,
+    "column": "V",
+    "header": "ATAQUE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:V$5000,22,FALSE)"
+  },
+  {
+    "index": 23,
+    "column": "W",
+    "header": "DEFENSA",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:W$5000,23,FALSE)"
+  },
+  {
+    "index": 24,
+    "column": "X",
+    "header": "ESTABILIDAD",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:X$5000,24,FALSE)"
+  },
+  {
+    "index": 25,
+    "column": "Y",
+    "header": "RESISTENCIA",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:Y$5000,25,FALSE)"
+  },
+  {
+    "index": 26,
+    "column": "Z",
+    "header": "VELOCIDAD MÁXIMA",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:Z$5000,26,FALSE)"
+  },
+  {
+    "index": 27,
+    "column": "AA",
+    "header": "ACELERACIÓN",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AA$5000,27,FALSE)"
+  },
+  {
+    "index": 28,
+    "column": "AB",
+    "header": "REPUESTA",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AB$5000,28,FALSE)"
+  },
+  {
+    "index": 29,
+    "column": "AC",
+    "header": "AGILIDAD",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AC$5000,29,FALSE)"
+  },
+  {
+    "index": 30,
+    "column": "AD",
+    "header": "PRECISIÓN DRIBBLE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AD$5000,30,FALSE)"
+  },
+  {
+    "index": 31,
+    "column": "AE",
+    "header": "VELOCIDAD DRIBBLE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AE$5000,31,FALSE)"
+  },
+  {
+    "index": 32,
+    "column": "AF",
+    "header": "PRECISIÓN   P CORTO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AF$5000,32,FALSE)"
+  },
+  {
+    "index": 33,
+    "column": "AG",
+    "header": "VELOCIDAD  P CORTO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AG$5000,33,FALSE)"
+  },
+  {
+    "index": 34,
+    "column": "AH",
+    "header": "PRECISIÓN       P LARGO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AH$5000,34,FALSE)"
+  },
+  {
+    "index": 35,
+    "column": "AI",
+    "header": "VELOCIDAD     P LARGO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AI$5000,35,FALSE)"
+  },
+  {
+    "index": 36,
+    "column": "AJ",
+    "header": "PRECISIÓN DISPARO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AJ$5000,36,FALSE)"
+  },
+  {
+    "index": 37,
+    "column": "AK",
+    "header": "POTENCIA DISPARO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AK$5000,37,FALSE)"
+  },
+  {
+    "index": 38,
+    "column": "AL",
+    "header": "TÉCNICA DISPARO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AL$5000,38,FALSE)"
+  },
+  {
+    "index": 39,
+    "column": "AM",
+    "header": "PRECISIÓN TIRO LIBRE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AM$5000,39,FALSE)"
+  },
+  {
+    "index": 40,
+    "column": "AN",
+    "header": "EFECTO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AN$5000,40,FALSE)"
+  },
+  {
+    "index": 41,
+    "column": "AO",
+    "header": "CABEZAZO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AO$5000,41,FALSE)"
+  },
+  {
+    "index": 42,
+    "column": "AP",
+    "header": "SALTO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AP$5000,42,FALSE)"
+  },
+  {
+    "index": 43,
+    "column": "AQ",
+    "header": "TÉCNICA",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AQ$5000,43,FALSE)"
+  },
+  {
+    "index": 44,
+    "column": "AR",
+    "header": "AGRESIVIDAD",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AR$5000,44,FALSE)"
+  },
+  {
+    "index": 45,
+    "column": "AS",
+    "header": "MENTALIDAD",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AS$5000,45,FALSE)"
+  },
+  {
+    "index": 46,
+    "column": "AT",
+    "header": "ARQUERO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AT$5000,46,FALSE)"
+  },
+  {
+    "index": 47,
+    "column": "AU",
+    "header": "TRABAJO EN EQUIPO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AU$5000,47,FALSE)"
+  },
+  {
+    "index": 48,
+    "column": "AV",
+    "header": "TOLERANCIA LESIONES",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AV$5000,19,FALSE)"
+  },
+  {
+    "index": 49,
+    "column": "AW",
+    "header": "CONSISTENCIA",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AV$5000,48,FALSE)"
+  },
+  {
+    "index": 50,
+    "column": "AX",
+    "header": "CONDICIÓN FITNESS",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AW$5000,49,FALSE)"
+  },
+  {
+    "index": 51,
+    "column": "AY",
+    "header": "PRECICIÓN PIE MALO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AX$5000,20,FALSE)"
+  },
+  {
+    "index": 52,
+    "column": "AZ",
+    "header": "FRECUENCIA PIE MALO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:AY$5000,21,FALSE)"
+  },
+  {
+    "index": 53,
+    "column": "BA",
+    "header": "PT",
+    "formula": "=(ROUND(SUM((($AT2*2+$W2)/3-25)*0.52,($AB2-25)*0.52,($X2-25)*0.12,($AP2-25)*0.12,7),0)*99)/103"
+  },
+  {
+    "index": 54,
+    "column": "BB",
+    "header": "CT/LIB",
+    "formula": "=(ROUND(SUM(($AO2-25)*0.2,($BT2-25)*0.27,($BU2-25)*0.27,($BP2-25)*0.11,($X2-25)*0.21,($AP2-25)*0.21,($Y2-25)*0.1,7),0)*99)/103"
+  },
+  {
+    "index": 55,
+    "column": "BC",
+    "header": "SA",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.06,($AQ2-25)*0.1,($AD2-25)*0.15,($AH2-25)*0.15,($BT2-25)*0.15,($BU2-25)*0.14,($BP2-25)*0.15,($BQ2-25)*0.15,($X2-25)*0.12,($AP2-25)*0.12,($Y2-25)*0.13,8),0)*99)/103"
+  },
+  {
+    "index": 56,
+    "column": "BD",
+    "header": "LA",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.06,($AQ2-25)*0.1,($AD2-25)*0.15,($AH2-25)*0.15,($BT2-25)*0.15,($BU2-25)*0.14,($BP2-25)*0.15,($BQ2-25)*0.15,($X2-25)*0.12,($AP2-25)*0.12,($Y2-25)*0.13,8),0)*99)/103"
+  },
+  {
+    "index": 57,
+    "column": "BE",
+    "header": "CCD",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.07,($AQ2-25)*0.19,($AD2-25)*0.16,($AF2-25)*0.19,($AH2-25)*0.2,($AN2-25)*0.13,($BT2-25)*0.07,($BU2-25)*0.03,($BP2-25)*0.03,($BQ2-25)*0.03,($X2-25)*0.14,($AP2-25)*0.05,($Y2-25)*0.15,8),0)*99)/103"
+  },
+  {
+    "index": 58,
+    "column": "BF",
+    "header": "CC",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.05,($AQ2-25)*0.25,($AD2-25)*0.25,($AF2-25)*0.25,($AH2-25)*0.22,($BT2-25)*0.03,($BP2-25)*0.04,($BQ2-25)*0.06,($X2-25)*0.05,($Y2-25)*0.18,7),0)*99)/103"
+  },
+  {
+    "index": 59,
+    "column": "BG",
+    "header": "VOL",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.07,($AQ2-25)*0.16,($AD2-25)*0.26,($AF2-25)*0.07,($AH2-25)*0.13,($AN2-25)*0.04,($BP2-25)*0.26,($BQ2-25)*0.23,($Y2-25)*0.14,7),0)*99)/103"
+  },
+  {
+    "index": 60,
+    "column": "BH",
+    "header": "MP",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.15,($AQ2-25)*0.23,($AD2-25)*0.23,($AF2-25)*0.23,($AH2-25)*0.15,($BO2-25)*0.18,($BP2-25)*0.05,($BQ2-25)*0.07,($X2-25)*0.05,($Y2-25)*0.03,7),0)*99)/103"
+  },
+  {
+    "index": 61,
+    "column": "BI",
+    "header": "EX",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.18,($AQ2-25)*0.22,($AD2-25)*0.22,($AF2-25)*0.05,($AH2-25)*0.1,($BO2-25)*0.12,($BS2-25)*0.05,($BP2-25)*0.16,($BQ2-25)*0.16,($X2-25)*0.06,($Y2-25)*0.06,9),0)*99)/103"
+  },
+  {
+    "index": 62,
+    "column": "BJ",
+    "header": "SD",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.16,($AQ2-25)*0.2,($AD2-25)*0.2,($AF2-25)*0.1,($AH2-25)*0.1,($BO2-25)*0.15,($BS2-25)*0.06,($BP2-25)*0.1,($BQ2-25)*0.2,($X2-25)*0.07,($Y2-25)*0.04,7),0)*99)/103"
+  },
+  {
+    "index": 63,
+    "column": "BK",
+    "header": "DC",
+    "formula": "=(ROUND(SUM(($BN2-25)*0.33,($AQ2-25)*0.25,($AD2-25)*0.15,($BO2-25)*0.38,($AO2-25)*0.03,($BP2-25)*0.05,($BQ2-25)*0.05,($X2-25)*0.1,($AP2-25)*0.03,7),0)*99)/103"
+  },
+  {
+    "index": 64,
+    "column": "BL",
+    "header": "MEJOR PROMEDIO",
+    "formula": "=LARGE(BA2:BK2,1)"
+  },
+  {
+    "index": 65,
+    "column": "BM",
+    "header": "PROMEDIO CENSANTE",
+    "formula": "=(ROUND(SUM(MAX(BN2,BT2)*0.2,AVERAGE(BN2,BT2)*0.1,BV2*0.1,BX2*0.1,BR2*0.1,U2*0.2,BL2*0.1,(AW2*99)/8*0.02,(AX2*99)/8*0.03,IF(AV2=\"A\",99,IF(AV2=\"B\",67,IF(AV2=\"C\",33,0)))*0.02,X2*0.1,AB2*0.05,AC2*0.05),0)*99)/106"
+  },
+  {
+    "index": 66,
+    "column": "BN",
+    "header": "DESTREZA ATAQUE",
+    "formula": "=MAX(2/3*$V2+1/3*$AB2,2/3*$V2+1/3*$AR2)"
+  },
+  {
+    "index": 67,
+    "column": "BO",
+    "header": "FINIQUITO",
+    "formula": "=($AJ2*0.84+$AL2*0.16)"
+  },
+  {
+    "index": 68,
+    "column": "BP",
+    "header": "VELOCIDAD",
+    "formula": "=$AE2*(1-(((1/1.3)+0.5)/2))+$Z2*(((1/1.3)+0.5)/2)"
+  },
+  {
+    "index": 69,
+    "column": "BQ",
+    "header": "EXPLOSIVIDAD",
+    "formula": "=(2*$AC2+$AA2)/3"
+  },
+  {
+    "index": 70,
+    "column": "BR",
+    "header": "PROMEDIO AGILIDADES",
+    "formula": "=AVERAGE(BP2,BQ2)"
+  },
+  {
+    "index": 71,
+    "column": "BS",
+    "header": "POTENCIA DE PATADA",
+    "formula": "=MAX($AK2,$AI2,$AG2)*0.4+$AK2*(0.6/3)+$AI2*(0.6/3)+$AG2*(0.6/3)"
+  },
+  {
+    "index": 72,
+    "column": "BT",
+    "header": "DESTREZA DEFENSA",
+    "formula": "=MAX(2/3*$W2+1/3*$AB2,2/3*$W2+1/3*$AU2)"
+  },
+  {
+    "index": 73,
+    "column": "BU",
+    "header": "RECUPERACION DE BALÓN",
+    "formula": "=MAX(2/3*$W2+1/3*$X2,2/3*$W2+1/3*$AS2)"
+  },
+  {
+    "index": 74,
+    "column": "BV",
+    "header": "ALETISMO",
+    "formula": "=SUM(X2*0.3,AB2*0.2,Y2*0.1,BS2*0.1,BR2*0.2,BW2*0.1,CB2,CG2)"
+  },
+  {
+    "index": 75,
+    "column": "BW",
+    "header": "JUEGO AEREO",
+    "formula": "=AVERAGE((E2*99)/203,AP2)*0.35+AO2*0.45+AB2*0.1+X2*0.1+CB2"
+  },
+  {
+    "index": 76,
+    "column": "BX",
+    "header": "CREATIVIDAD",
+    "formula": "=SUM((AQ2*0.1),(AM2*0.025),(AN2*0.025),(AH2*0.25),(AF2*0.25),(AD2*0.2),(AB2*0.05),(AJ2*0.05),(AU2*0.05),BY2,BZ2*0.5,CC2,CD2,CM2*0.5)"
+  },
+  {
+    "index": 77,
+    "column": "BY",
+    "header": "REGATE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:BX$5000,50,FALSE)"
+  },
+  {
+    "index": 78,
+    "column": "BZ",
+    "header": "HAB REGATE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:BY$5000,51,FALSE)"
+  },
+  {
+    "index": 79,
+    "column": "CA",
+    "header": "POSICION",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:BZ$5000,52,FALSE)"
+  },
+  {
+    "index": 80,
+    "column": "CB",
+    "header": "REACCION",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CA$5000,53,FALSE)"
+  },
+  {
+    "index": 81,
+    "column": "CC",
+    "header": "CAP MANDO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CB$5000,54,FALSE)"
+  },
+  {
+    "index": 82,
+    "column": "CD",
+    "header": "PASES",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CC$5000,55,FALSE)"
+  },
+  {
+    "index": 83,
+    "column": "CE",
+    "header": "GOLEADOR",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CD$5000,56,FALSE)"
+  },
+  {
+    "index": 84,
+    "column": "CF",
+    "header": "1-1 GOL",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CE$5000,57,FALSE)"
+  },
+  {
+    "index": 85,
+    "column": "CG",
+    "header": "JUG POSTE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CF$5000,58,FALSE)"
+  },
+  {
+    "index": 86,
+    "column": "CH",
+    "header": "NO OFFSIDE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CG$5000,59,FALSE)"
+  },
+  {
+    "index": 87,
+    "column": "CI",
+    "header": "MID SHOOT",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CH$5000,60,FALSE)"
+  },
+  {
+    "index": 88,
+    "column": "CJ",
+    "header": "LADO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CI$5000,61,FALSE)"
+  },
+  {
+    "index": 89,
+    "column": "CK",
+    "header": "CENTRO",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CJ$5000,62,FALSE)"
+  },
+  {
+    "index": 90,
+    "column": "CL",
+    "header": "PENALES",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CK$5000,63,FALSE)"
+  },
+  {
+    "index": 91,
+    "column": "CM",
+    "header": "PASE 1 TOQ",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CL$5000,64,FALSE)"
+  },
+  {
+    "index": 92,
+    "column": "CN",
+    "header": "EXTERIOR",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CM$5000,65,FALSE)"
+  },
+  {
+    "index": 93,
+    "column": "CO",
+    "header": "MARCA MAN",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CN$5000,66,FALSE)"
+  },
+  {
+    "index": 94,
+    "column": "CP",
+    "header": "ENTRADAS",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CO$5000,67,FALSE)"
+  },
+  {
+    "index": 95,
+    "column": "CQ",
+    "header": "COBERTURA",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CP$5000,68,FALSE)"
+  },
+  {
+    "index": 96,
+    "column": "CR",
+    "header": "SI OFFSIDE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CQ$5000,69,FALSE)"
+  },
+  {
+    "index": 97,
+    "column": "CS",
+    "header": "PARAPENAL",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CR$5000,70,FALSE)"
+  },
+  {
+    "index": 98,
+    "column": "CT",
+    "header": "ACHIQUE 1-1",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CS$5000,71,FALSE)"
+  },
+  {
+    "index": 99,
+    "column": "CU",
+    "header": "SAQUE LARG",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:CT$5000,72,FALSE)"
+  },
+  {
+    "index": 100,
+    "column": "CV",
+    "header": "REGISTERED POSITION",
+    "formula": "=IFERROR(CHOOSE(MATCH(I2,{\"GK\";\"SWP\";\"CB\";\"SB\";\"RB\";\"LB\";\"DMF\";\"WB\";\"RWB\";\"LWB\";\"CMF\";\"SMF\";\"RMF\";\"LMF\";\"AMF\";\"WF\";\"RWF\";\"LWF\";\"SS\";\"CF\"},0),0,2,3,4,4,4,5,6,6,6,7,8,8,8,9,10,10,10,11,12),\"\")"
+  },
+  {
+    "index": 101,
+    "column": "CW",
+    "header": "GK  0",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,4,FALSE)"
+  },
+  {
+    "index": 102,
+    "column": "CX",
+    "header": "CWP  2",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,5,FALSE)"
+  },
+  {
+    "index": 103,
+    "column": "CY",
+    "header": "CBT  3",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,6,FALSE)"
+  },
+  {
+    "index": 104,
+    "column": "CZ",
+    "header": "SB  4",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,7,FALSE)"
+  },
+  {
+    "index": 105,
+    "column": "DA",
+    "header": "DMF  5",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,8,FALSE)"
+  },
+  {
+    "index": 106,
+    "column": "DB",
+    "header": "WB  6",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,9,FALSE)"
+  },
+  {
+    "index": 107,
+    "column": "DC",
+    "header": "CMF  7",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,10,FALSE)"
+  },
+  {
+    "index": 108,
+    "column": "DD",
+    "header": "SMF  8",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,11,FALSE)"
+  },
+  {
+    "index": 109,
+    "column": "DE",
+    "header": "AMF  9",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,12,FALSE)"
+  },
+  {
+    "index": 110,
+    "column": "DF",
+    "header": "WF 10",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,13,FALSE)"
+  },
+  {
+    "index": 111,
+    "column": "DG",
+    "header": "SS  11",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,14,FALSE)"
+  },
+  {
+    "index": 112,
+    "column": "DH",
+    "header": "CF  12",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$O$5000,15,FALSE)"
+  },
+  {
+    "index": 113,
+    "column": "DI",
+    "header": "FAVOURED SIDE",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$S$5000,19,FALSE)"
+  },
+  {
+    "index": 114,
+    "column": "DJ",
+    "header": "RB",
+    "formula": "=IF(AND($CZ2=1,OR($DI2=\"B\",$DI2=\"R\")),1,0)"
+  },
+  {
+    "index": 115,
+    "column": "DK",
+    "header": "LB",
+    "formula": "=IF(AND($CZ2=1,OR($DI2=\"B\",$DI2=\"L\")),1,0)"
+  },
+  {
+    "index": 116,
+    "column": "DL",
+    "header": "RWB",
+    "formula": "=IF(AND($DB2=1,OR($DI2=\"B\",$DI2=\"R\")),1,0)"
+  },
+  {
+    "index": 117,
+    "column": "DM",
+    "header": "LWB",
+    "formula": "=IF(AND($DB2=1,OR($DI2=\"B\",$DI2=\"L\")),1,0)"
+  },
+  {
+    "index": 118,
+    "column": "DN",
+    "header": "RMF",
+    "formula": "=IF(AND($DD2=1,OR($DI2=\"B\",$DI2=\"R\")),1,0)"
+  },
+  {
+    "index": 119,
+    "column": "DO",
+    "header": "LMF",
+    "formula": "=IF(AND($DD2=1,OR($DI2=\"B\",$DI2=\"L\")),1,0)"
+  },
+  {
+    "index": 120,
+    "column": "DP",
+    "header": "RWF",
+    "formula": "=IF(AND($DF2=1,OR($DI2=\"B\",$DI2=\"R\")),1,0)"
+  },
+  {
+    "index": 121,
+    "column": "DQ",
+    "header": "LWF",
+    "formula": "=IF(AND($DF2=1,OR($DI2=\"B\",$DI2=\"L\")),1,0)"
+  },
+  {
+    "index": 122,
+    "column": "DR",
+    "header": "DORSAL",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CK$5000,3,FALSE)"
+  },
+  {
+    "index": 123,
+    "column": "DS",
+    "header": "nro selección",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CK$5000,86,FALSE)"
+  },
+  {
+    "index": 124,
+    "column": "DT",
+    "header": "nro clasico",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CK$5000,87,FALSE)"
+  },
+  {
+    "index": 125,
+    "column": "DU",
+    "header": "SKIN COLOR",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CK$5000,81,FALSE)"
+  },
+  {
+    "index": 126,
+    "column": "DV",
+    "header": "CLUB TEAM",
+    "formula": "=VLOOKUP($A2,'0'!$A$2:$CK$5000,88,FALSE)"
+  },
+  {
+    "index": 127,
+    "column": "DW",
+    "header": "ATK",
+    "formula": "=((V2*0.5)+((AJ2*0.25)+V2*0.25))"
+  },
+  {
+    "index": 128,
+    "column": "DX",
+    "header": "TEC",
+    "formula": "=((AQ2*0.4)+(AD2*0.3)+(AF2*0.1)+(AH2*0.05)+(AM2*0.1)+(AN2*0.05))"
+  },
+  {
+    "index": 129,
+    "column": "DY",
+    "header": "RES",
+    "formula": "=Y2"
+  },
+  {
+    "index": 130,
+    "column": "DZ",
+    "header": "DEF",
+    "formula": "=W2"
+  },
+  {
+    "index": 131,
+    "column": "EA",
+    "header": "FUE",
+    "formula": "=(X2*0.6+AP2*0.3+AK2*0.1)"
+  },
+  {
+    "index": 132,
+    "column": "EB",
+    "header": "VEL",
+    "formula": "=(Z2*0.2)+(AA2*0.3)+(AB2*0.2)+(AE2*0.3)"
+  }
+]

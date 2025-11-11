@@ -4,12 +4,32 @@ CLI para generar los artefactos de datos.
 
 ## Exportar tabla 0
 
-`npm run export:table0 -- <tabla0.xlsx> [rutaSalida]`
+```
+npm run export:table0 -- <tabla0.xlsx> [rutaSalida]
+```
 
-Produce able0.json, able0.meta.json y stats.placeholder.json en data/processed/ por defecto.
+Produce `table0.json`, `table0.meta.json` y `stats.placeholder.json` en `data/processed/` por defecto.
 
 ## Exportar tabla derivada (tabla 1)
 
-`npm run export:derived -- <tabla0.xlsx> <ML.txt> [rutaSalida]`
+```
+npm run export:derived -- <tabla0.xlsx|tabla0.json> <ML.txt> [rutaSalida]
+```
 
-Lee la tabla 0 y la lista Shop/ML para generar able1.json + able1.meta.json con los campos calculados por el motor.
+Puedes pasar la hoja original (`.xlsx`) o el `table0.json` generado previamente por `export:table0`. En ambos casos se combina con la lista Shop/ML para producir `table1.json` + `table1.meta.json`.
+
+## Exportar la hoja 1 original (referencia)
+
+```
+npm run export:sheet1 -- "RAW DB + FORMULAS.xlsx" 1 [rutaSalida]
+```
+
+Convierte la hoja `1` del Excel original en un JSON dentro de `data/reference/`, útil para comparaciones y regresiones.
+
+## Comparar tabla derivada vs. referencia
+
+```
+npm run compare:derived -- [derived.json] [referencia.json] [limite]
+```
+
+Por defecto compara `data/processed/table1.json` contra `data/reference/1.json` e imprime las primeras divergencias detectadas.
