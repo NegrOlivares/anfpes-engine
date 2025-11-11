@@ -6,6 +6,20 @@ import { buildShopTagIndex, readShopMlFile } from '@anfpes/data-ingest';
 import { computeDerivedPlayers, type DerivedPlayer } from '@anfpes/engine';
 import { loadRawPlayers } from './utils';
 
+const DEMARCATION_COLUMNS = [
+  'D',
+  'E',
+  'M',
+  'A',
+  'R',
+  'C',
+  'A_1',
+  'C_1',
+  'I',
+  'O',
+  'N',
+] as const;
+
 interface BuildArgs {
   tablePath: string;
   shopPath: string;
@@ -62,6 +76,12 @@ export function buildData(args: BuildArgs) {
   }, {});
   writeJson(join(indicesDir, 'byClub.json'), byClub);
 
+  const byNationality = buildNationalityIndex(derived);
+  writeJson(join(indicesDir, 'byNationality.json'), byNationality);
+
+  const byPosition = buildPositionIndex(derived);
+  writeJson(join(indicesDir, 'byPosition.json'), byPosition);
+
   const meta = {
     generatedAt: new Date().toISOString(),
     dataVersion: dataVersion ?? deriveVersion(tablePath),
@@ -78,6 +98,8 @@ export function buildData(args: BuildArgs) {
       clubs: hashObject(clubs),
       byId: hashObject(byId),
       byClub: hashObject(byClub),
+      byNationality: hashObject(byNationality),
+      byPosition: hashObject(byPosition),
     },
   };
   writeJson(join(outputDir, 'meta.json'), meta);
@@ -97,6 +119,38 @@ function buildClubList(players: DerivedPlayer[]) {
   return Array.from(map.entries()).map(([name, playerIds]) => ({ name, playerIds }));
 }
 
+function buildNationalityIndex(players: DerivedPlayer[]) {
+  const map = new Map<string, string[]>();
+  players.forEach((player) => {
+    const key = normalizeKey(player.NACIONALIDAD ?? player.NATIONALITY, 'Desconocido');
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key)!.push(player.ID);
+  });
+  return Object.fromEntries(map);
+}
+
+function buildPositionIndex(players: DerivedPlayer[]) {
+  const map = new Map<string, string[]>();
+  players.forEach((player) => {
+    const slots = new Set<string>();
+    DEMARCATION_COLUMNS.forEach((column) => {
+      const value = player[column];
+      if (typeof value === 'string' && value.trim().length > 0) {
+        slots.add(value.trim());
+      }
+    });
+    slots.forEach((label) => {
+      if (!map.has(label)) {
+        map.set(label, []);
+      }
+      map.get(label)!.push(player.ID);
+    });
+  });
+  return Object.fromEntries(map);
+}
+
 function writeJson(path: string, data: unknown) {
   writeFileSync(path, JSON.stringify(data, null, 2), 'utf-8');
 }
@@ -110,6 +164,19 @@ function deriveVersion(tablePath: string): string {
   const base = tablePath.replace(/\\/g, '/').split('/').pop() ?? 'table0';
   const stamp = new Date().toISOString().slice(0, 10);
   return `${base.replace(/\.[^.]+$/, '')}-${stamp}`;
+}
+
+function normalizeKey(value: unknown, fallback: string): string {
+  if (typeof value === 'string' && value.trim().length > 0) {
+    return value.trim();
+  }
+  if (value !== null && value !== undefined) {
+    const text = String(value).trim();
+    if (text.length > 0) {
+      return text;
+    }
+  }
+  return fallback;
 }
 
 function main() {
