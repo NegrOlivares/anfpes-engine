@@ -1,0 +1,392 @@
+[
+  {
+    "name": "Roy Keane",
+    "expected": "Shop 1",
+    "actual": "Villarreal C.F."
+  },
+  {
+    "name": "Alen Boksic",
+    "expected": "Shop 1",
+    "actual": "Arsenal"
+  },
+  {
+    "name": "Roberto Sensini",
+    "expected": "Shop 1",
+    "actual": "Celtic"
+  },
+  {
+    "name": "Iván Zamorano",
+    "expected": "Shop 1",
+    "actual": "Celtic"
+  },
+  {
+    "name": "S. Effenberg",
+    "expected": "Shop 1",
+    "actual": "Olympique de Marseille"
+  },
+  {
+    "name": "Oleg Blokhin",
+    "expected": "Shop 1",
+    "actual": "Dynamo Kiev"
+  },
+  {
+    "name": "Valeri Karpin",
+    "expected": "Shop 1",
+    "actual": "Chelsea FC"
+  },
+  {
+    "name": "C. Alberto",
+    "expected": "Shop 1",
+    "actual": "Chievo Verona"
+  },
+  {
+    "name": "C. Valderrama",
+    "expected": "Shop 1",
+    "actual": "Chievo Verona"
+  },
+  {
+    "name": "Gustavo Nery",
+    "expected": "Shop 1",
+    "actual": "Parma"
+  },
+  {
+    "name": "Claudio López",
+    "expected": "Shop 1",
+    "actual": "Manchester United"
+  },
+  {
+    "name": "G. Popescu",
+    "expected": "Shop 1",
+    "actual": "R. Madrid"
+  },
+  {
+    "name": "Darío Silva",
+    "expected": "Shop 2",
+    "actual": "Manchester United"
+  },
+  {
+    "name": "Zlatko Zahovic",
+    "expected": "Shop 2",
+    "actual": "A.C. Milan"
+  },
+  {
+    "name": "Marcelo Salas",
+    "expected": "Shop 2",
+    "actual": "A.S. Roma"
+  },
+  {
+    "name": "J. Paulista",
+    "expected": "Shop 2",
+    "actual": "Olympique de Marseille"
+  },
+  {
+    "name": "Sergi Barjuan",
+    "expected": "Shop 2",
+    "actual": "Sporting Lisbon"
+  },
+  {
+    "name": "Diego Simeone",
+    "expected": "Shop 2",
+    "actual": "Bayern München"
+  },
+  {
+    "name": "Denis Law",
+    "expected": "Shop 2",
+    "actual": "A.C. Milan"
+  },
+  {
+    "name": "Tony Yeboah",
+    "expected": "Shop 2",
+    "actual": "Olympique Lyonnais"
+  },
+  {
+    "name": "Paolo Montero",
+    "expected": "Shop 2",
+    "actual": "Newcastle United FC"
+  },
+  {
+    "name": "Vágner Love",
+    "expected": "Shop 2",
+    "actual": "Paris Saint-Germain"
+  },
+  {
+    "name": "Patrick M'Boma",
+    "expected": "Shop 2",
+    "actual": "Manchester City"
+  },
+  {
+    "name": "M. Delvecchio",
+    "expected": "Shop 2",
+    "actual": "Boca Juniors"
+  },
+  {
+    "name": "F. Cavenaghi",
+    "expected": "Shop 3",
+    "actual": "Juventus"
+  },
+  {
+    "name": "Fran",
+    "expected": "Shop 3",
+    "actual": "Arsenal"
+  },
+  {
+    "name": "Frank de Boer",
+    "expected": "Shop 3",
+    "actual": "R. Madrid"
+  },
+  {
+    "name": "Thomas Hässler",
+    "expected": "Shop 3",
+    "actual": "Olympique Lyonnais"
+  },
+  {
+    "name": "K. Andersson",
+    "expected": "Shop 3",
+    "actual": "A.S. Roma"
+  },
+  {
+    "name": "José Cardozo",
+    "expected": "Shop 3",
+    "actual": "F.C. Barcelona"
+  },
+  {
+    "name": "José M. Bakero",
+    "expected": "Shop 3",
+    "actual": "Inter"
+  },
+  {
+    "name": "Mark Hughes",
+    "expected": "Shop 3",
+    "actual": "Manchester City"
+  },
+  {
+    "name": "Marc Overmars",
+    "expected": "Shop 3",
+    "actual": "Girondins de Bordeaux"
+  },
+  {
+    "name": "Marcel Desailly",
+    "expected": "Shop 3",
+    "actual": "Sevilla F.C."
+  },
+  {
+    "name": "Martin Dahlin",
+    "expected": "Shop 3",
+    "actual": "Sporting Lisbon"
+  },
+  {
+    "name": "Matt Le Tissier",
+    "expected": "Shop 3",
+    "actual": "Roda JC"
+  },
+  {
+    "name": "Luis Enrique",
+    "expected": "Shop 3",
+    "actual": "Bayern München"
+  },
+  {
+    "name": "Alan Shearer",
+    "expected": "Shop 3",
+    "actual": "Girondins de Bordeaux"
+  },
+  {
+    "name": "F. Asprilla",
+    "expected": "Shop 4",
+    "actual": "Paris Saint-Germain"
+  },
+  {
+    "name": "Adrian Ilie",
+    "expected": "Shop 4",
+    "actual": "Roda JC"
+  },
+  {
+    "name": "Allan Simonsen",
+    "expected": "Shop 4",
+    "actual": "Inter"
+  },
+  {
+    "name": "Andreas Herzog",
+    "expected": "Shop 4",
+    "actual": "Parma"
+  },
+  {
+    "name": "Íhor Belánov",
+    "expected": "Shop 4",
+    "actual": "Athletic Club"
+  },
+  {
+    "name": "Preben Elkjaer",
+    "expected": "Shop 4",
+    "actual": "Boca Juniors"
+  },
+  {
+    "name": "Giovanni",
+    "expected": "Shop 4",
+    "actual": "Sevilla F.C."
+  },
+  {
+    "name": "Christian Ziege",
+    "expected": "Shop 4",
+    "actual": "Parma"
+  },
+  {
+    "name": "Igor Protti",
+    "expected": "Shop 4",
+    "actual": "A.C. Milan"
+  },
+  {
+    "name": "Marc-Vivien Foé",
+    "expected": "Shop 4",
+    "actual": "Ajax"
+  },
+  {
+    "name": "Rubén Sosa",
+    "expected": "Shop 4",
+    "actual": "Olympique de Marseille"
+  },
+  {
+    "name": "C. Dugarry",
+    "expected": "Shop 4",
+    "actual": "Sparta Rotterdam"
+  },
+  {
+    "name": "Ronald de Boer",
+    "expected": "Shop 4",
+    "actual": "Inter"
+  },
+  {
+    "name": "Amedeo Carboni",
+    "expected": "Shop 4",
+    "actual": "PSV Eindhoven"
+  },
+  {
+    "name": "S. Mihajlovic",
+    "expected": "Shop 5",
+    "actual": "Manchester United"
+  },
+  {
+    "name": "Rolando Zárate",
+    "expected": "Shop 5",
+    "actual": "Roda JC"
+  },
+  {
+    "name": "F. Ravanelli",
+    "expected": "Shop 5",
+    "actual": "Athletic Club"
+  },
+  {
+    "name": "Jens Jeremies",
+    "expected": "Shop 5",
+    "actual": "ADO Den Haag"
+  },
+  {
+    "name": "R. Prosinecki",
+    "expected": "Shop 5",
+    "actual": "Olympique de Marseille"
+  },
+  {
+    "name": "Ciro Ferrara",
+    "expected": "Shop 5",
+    "actual": "Sporting Lisbon"
+  },
+  {
+    "name": "Mauro Tassotti",
+    "expected": "Shop 5",
+    "actual": "Bayern München"
+  },
+  {
+    "name": "Nilmar",
+    "expected": "Shop 5",
+    "actual": "F.C. Barcelona"
+  },
+  {
+    "name": "Mário Jardel",
+    "expected": "Shop 5",
+    "actual": "Villarreal C.F."
+  },
+  {
+    "name": "+",
+    "expected": "Shop 5",
+    "actual": "Rangers"
+  },
+  {
+    "name": "M. Pochettino",
+    "expected": "Shop 5",
+    "actual": "R. Sociedad"
+  },
+  {
+    "name": "Niall Quinn",
+    "expected": "Shop 5",
+    "actual": "Boca Juniors"
+  },
+  {
+    "name": "M. Fernandes",
+    "expected": "Shop 5",
+    "actual": "Sporting Lisbon"
+  },
+  {
+    "name": "Víktor Onopko",
+    "expected": "Shop 5",
+    "actual": "Athletic Club"
+  },
+  {
+    "name": "Sunday Oliseh",
+    "expected": "Shop 5",
+    "actual": "Chelsea FC"
+  },
+  {
+    "name": "Taribo West",
+    "expected": "Shop 5",
+    "actual": "R. Sociedad"
+  },
+  {
+    "name": "Jacques Songo'o",
+    "expected": "Shop 5",
+    "actual": "Athletic Club"
+  },
+  {
+    "name": "Tore André Flo",
+    "expected": "Shop 5",
+    "actual": "Chievo Verona"
+  },
+  {
+    "name": "Mauro Silva",
+    "expected": "Shop 5",
+    "actual": "Lazio"
+  },
+  {
+    "name": "Walton",
+    "expected": "ML Young",
+    "actual": "Sevilla F.C."
+  },
+  {
+    "name": "Schwarz",
+    "expected": "ML Young",
+    "actual": "Sevilla F.C."
+  },
+  {
+    "name": "Palmieri",
+    "expected": "ML Young",
+    "actual": "Chievo Verona"
+  },
+  {
+    "name": "Kruger",
+    "expected": "ML Young",
+    "actual": "ADO Den Haag"
+  },
+  {
+    "name": "Orellano",
+    "expected": "ML Young",
+    "actual": "Olympique de Marseille"
+  },
+  {
+    "name": "Solimar",
+    "expected": "ML Young",
+    "actual": "Inter"
+  },
+  {
+    "name": "Shimizu",
+    "expected": "ML Young",
+    "actual": "NAC Breda"
+  }
+]
