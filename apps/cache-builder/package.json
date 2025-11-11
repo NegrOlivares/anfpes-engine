@@ -10,6 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@anfpes/data-ingest": "file:../../packages/data-ingest"
+    "@anfpes/data-ingest": "file:../../packages/data-ingest",
+    "@anfpes/engine": "file:../../packages/engine"
   }
 }

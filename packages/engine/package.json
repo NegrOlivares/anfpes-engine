@@ -13,5 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@anfpes/data-ingest": "file:../data-ingest"
   }
 }

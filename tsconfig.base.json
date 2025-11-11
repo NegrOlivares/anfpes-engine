@@ -7,7 +7,9 @@
     "baseUrl": ".",
     "paths": {
       "@anfpes/data-ingest": ["packages/data-ingest/src"],
-      "@anfpes/data-ingest/*": ["packages/data-ingest/src/*"]
+      "@anfpes/data-ingest/*": ["packages/data-ingest/src/*"],
+      "@anfpes/engine": ["packages/engine/src"],
+      "@anfpes/engine/*": ["packages/engine/src/*"]
     },
     "forceConsistentCasingInFileNames": true,
     "strict": true,

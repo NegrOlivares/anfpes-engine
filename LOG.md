@@ -14,3 +14,8 @@
 - Ajusté `.prettierignore`, migré ESLint a `eslint.config.mjs`, añadí `.gitattributes` y afiné scripts para evitar que lint/formato toquen binarios.
 - Implementé validadores de columnas/IDs, placeholder de estadísticas extras y pruebas adicionales.
 - Creé el comando `npm run export:table0` (apps/cache-builder) que genera `data/processed/table0.json` + metadatos y artefactos base para futuras estadísticas.
+- Arranqué la Fase 2 creando el módulo del motor: tipos `DerivedPlayer`, helpers estilo Excel (`vlookup`, `match`, `ifError`, `average`), derivador básico y cálculo de club con Shop/ML.
+- Añadí pruebas unitarias para los helpers y el cálculo inicial (`packages/engine/tests`) y verifiqué el paquete con `npm run test:root -- engine`.
+- Expandí el motor con mapeos de biografía y stats principales (altura, peso, edad, pie, 30+ atributos PES) y dejé preparado el cálculo de promedios.
+- Construí `apps/cache-builder/src/exportDerived.ts` y el comando `npm run export:derived` para generar `table1.json` usando tabla 0 + Shop/ML.
+- Actualicé la documentación (`IMPLEMENTATION_PLAN.md`, `apps/cache-builder/README.md`) y ejecuté lint/tests de la fase nueva.

@@ -2,8 +2,14 @@
 
 CLI para generar los artefactos de datos.
 
-## Comando principal
+## Exportar tabla 0
 
-    npm run export:table0 -- <ruta.xlsx> [rutaSalida]
+`npm run export:table0 -- <tabla0.xlsx> [rutaSalida]`
 
-Genera \\ able0.json\\ y metadatos en data/processed/ por defecto.
+Produce able0.json, able0.meta.json y stats.placeholder.json en data/processed/ por defecto.
+
+## Exportar tabla derivada (tabla 1)
+
+`npm run export:derived -- <tabla0.xlsx> <ML.txt> [rutaSalida]`
+
+Lee la tabla 0 y la lista Shop/ML para generar able1.json + able1.meta.json con los campos calculados por el motor.
