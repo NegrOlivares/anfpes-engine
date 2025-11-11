@@ -2,9 +2,12 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "composite": true
   },
   "include": ["src/**/*.ts"],
-  "references": []
+  "references": [
+    { "path": "../../packages/data-ingest" },
+    { "path": "../../packages/engine" }
+  ]
 }
