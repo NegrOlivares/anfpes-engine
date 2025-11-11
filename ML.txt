@@ -1,0 +1,370 @@
+﻿Kerlon	Shop 1
+Roy Keane	Shop 1
+Kevin Phillips	Shop 1
+Roger Milla	Shop 1
+A. Mostovói	Shop 1
+Álex Aguinaga	Shop 1
+Alen Boksic	Shop 1
+Jamie Redknapp	Shop 1
+Roberto Sensini	Shop 1
+Ian Rush	Shop 1
+Fernando Hierro	Shop 1
+Iván Zamorano	Shop 1
+Hugo Sánchez	Shop 1
+Eusébio	Shop 1
+Giovane Élber	Shop 1
+Edmundo	Shop 1
+S. Effenberg	Shop 1
+Enzo Scifo	Shop 1
+E. Francescoli	Shop 1
+Oleg Blokhin	Shop 1
+Garrincha	Shop 1
+Valeri Karpin	Shop 1
+C. Alberto	Shop 1
+C. Valderrama	Shop 1
+Gustavo Nery	Shop 1
+C. Caniggia	Shop 1
+Claudio López	Shop 1
+Clemente R.	Shop 1
+Gheorghe Hagi	Shop 1
+G. Popescu	Shop 1
+Kenny Dalglish	Shop 1
+Sándor Kocsis	Shop 1
+Darío Silva	Shop 2
+Zlatko Zahovic	Shop 2
+Marcelo Salas	Shop 2
+B. Lizarazu	Shop 2
+G. Giannini	Shop 2
+J. Paulista	Shop 2
+George Weah	Shop 2
+George Best	Shop 2
+Josep Guardiola	Shop 2
+Zvonimir Boban	Shop 2
+Ciriaco Sforza	Shop 2
+Franklin Salas	Shop 2
+Sergi Barjuan	Shop 2
+Davor Suker	Shop 2
+A. Di Stéfano	Shop 2
+Diego Simeone	Shop 2
+Denis Law	Shop 2
+Dejan Savicevic	Shop 2
+Dragan Dzajic	Shop 2
+Thomas Ravelli	Shop 2
+Tony Yeboah	Shop 2
+Tomas Brolin	Shop 2
+D. Stojkovic	Shop 2
+Paolo Montero	Shop 2
+Paulo Sousa	Shop 2
+Vágner Love	Shop 2
+P. Andersson	Shop 2
+Patrick M'Boma	Shop 2
+K. Balakov	Shop 2
+M. Delvecchio	Shop 2
+P. Schmeichel	Shop 2
+G. Lentini	Shop 2
+F. Cavenaghi	Shop 3
+Ferenc Puskás	Shop 3
+E. Butragueño	Shop 3
+Brian Laudrup	Shop 3
+Fran	Shop 3
+Frank de Boer	Shop 3
+H. Stoichkov	Shop 3
+Freddy Adu	Shop 3
+P. Mijatovic	Shop 3
+Billy Bremner	Shop 3
+Thomas Hässler	Shop 3
+K. Andersson	Shop 3
+José Cardozo	Shop 3
+José M. Bakero	Shop 3
+J. Chilavert	Shop 3
+René Higuita	Shop 3
+Romário	Shop 3
+Jorge Campos	Shop 3
+Mark Hughes	Shop 3
+G. Signori	Shop 3
+J. Vonlanthen	Shop 3
+Marc Overmars	Shop 3
+Marcel Desailly	Shop 3
+Martin Dahlin	Shop 3
+Michael Laudrup	Shop 3
+Youri Djorkaeff	Shop 3
+A. Östlund	Shop 3
+Matt Le Tissier	Shop 3
+Luis Enrique	Shop 3
+Lev Yashin	Shop 3
+Alan Shearer	Shop 3
+Dennis Bergkamp	Shop 3
+Khodadad Azizi	Shop 4
+F. Asprilla	Shop 4
+Adrian Ilie	Shop 4
+Allan Simonsen	Shop 4
+Andreas Herzog	Shop 4
+Íhor Belánov	Shop 4
+Preben Elkjaer	Shop 4
+Lucas Castromán	Shop 4
+Dagoberto	Shop 4
+Pat Jennings	Shop 4
+Giovanni	Shop 4
+Djalminha	Shop 4
+S. Conceiçao	Shop 4
+T. Begiristain	Shop 4
+Christian Ziege	Shop 4
+Denis Irwin	Shop 4
+Falcao	Shop 4
+Haim Revivo	Shop 4
+Juan C. Henao	Shop 4
+Igor Protti	Shop 4
+Zbigniew Boniek	Shop 4
+Juan S. Verón	Shop 4
+Magrao	Shop 4
+S. Matthews	Shop 4
+Marc-Vivien Foé	Shop 4
+M. Preud'homme	Shop 4
+Luis Suárez M.	Shop 4
+Lucas Radebe	Shop 4
+Rubén Sosa	Shop 4
+C. Dugarry	Shop 4
+Ronald de Boer	Shop 4
+Amedeo Carboni	Shop 4
+S. Mihajlovic	Shop 5
+Rolando Zárate	Shop 5
+F. Ravanelli	Shop 5
+Jens Jeremies	Shop 5
+R. Prosinecki	Shop 5
+Ciro Ferrara	Shop 5
+Mauro Tassotti	Shop 5
+Nilmar	Shop 5
+Mário Jardel	Shop 5
++	Shop 5
+César Delgado	Shop 5
+S. Shyshchenko	Shop 5
+N. Winterburn	Shop 5
+G. Pessotto	Shop 5
+Darren Anderton	Shop 5
+M. Pochettino	Shop 5
+Lee Dixon	Shop 5
+Mark Bosnich	Shop 5
+D. Kühbauer	Shop 5
+Niall Quinn	Shop 5
+Jason McAteer	Shop 5
+M. Fernandes	Shop 5
+Víktor Onopko	Shop 5
+Sunday Oliseh	Shop 5
+Taribo West	Shop 5
+Jacques Songo'o	Shop 5
+Tore André Flo	Shop 5
+Denílson	Shop 5
+Elvir Baljic	Shop 5
+C. Tiffert	Shop 5
+Mauro Silva	Shop 5
+Nigel Martyn	Shop 5
+Andrews	ML Young
+Baker	ML Young
+Carter	ML Young
+Cooper	ML Young
+Gibson	ML Young
+Jackson	ML Young
+Mitchell	ML Young
+Murray	ML Young
+Newman	ML Young
+Reeves	ML Young
+Rowland	ML Young
+Shaw	ML Young
+Simpson	ML Young
+Walton	ML Young
+Wilkins	ML Young
+Wood	ML Young
+Adam	ML Young
+Andre	ML Young
+Bouquet	ML Young
+Clement	ML Young
+Dupont	ML Young
+Ettori	ML Young
+Fernandez	ML Young
+Guegan	ML Young
+Jean	ML Young
+Leclerc	ML Young
+Marchand	ML Young
+Martel	ML Young
+Perrin	ML Young
+Renard	ML Young
+Riou	ML Young
+Traore	ML Young
+Barth	ML Young
+Baumann	ML Young
+Berger	ML Young
+Dietrich	ML Young
+Eckstein	ML Young
+Fischer	ML Young
+Hoffmann	ML Young
+Holzer	ML Young
+Kaiser	ML Young
+Kremer	ML Young
+Lindner	ML Young
+Lorenz	ML Young
+Schmidt	ML Young
+Schwarz	ML Young
+Wolf	ML Young
+Bianchi	ML Young
+Palmieri	ML Young
+Arts	ML Young
+Bos	ML Young
+Doesburg	ML Young
+Hoekstra	ML Young
+Jacobs	ML Young
+Koeman	ML Young
+Kooistra	ML Young
+Postma	ML Young
+Van den Berg	ML Young
+Van der Meer	ML Young
+Camacho	ML Young
+Chapi	ML Young
+Gutierrez	ML Young
+Herrero	ML Young
+Menendez	ML Young
+Merino	ML Young
+Navarro	ML Young
+Pelaez	ML Young
+Prieto	ML Young
+Rubio	ML Young
+Sanz	ML Young
+Serrano	ML Young
+Soler	ML Young
+Weber	ML Young
+Cuypers	ML Young
+Mertens	ML Young
+Thijs	ML Young
+Nikolov	ML Young
+Bilic	ML Young
+Bosnjak	ML Young
+Siegl	ML Young
+Jacobsen	ML Young
+Aaltonen	ML Young
+Delios	ML Young
+Ioannidis	ML Young
+Szalai	ML Young
+Conwey	ML Young
+O'Sullivan	ML Young
+Clarke	ML Young
+Jasinski	ML Young
+Andre	ML Young
+Sousa	ML Young
+Buga	ML Young
+Alexeev	ML Young
+Zakharov	ML Young
+Graham	ML Young
+McKenzie	ML Young
+Franovic	ML Young
+Jovancevic	ML Young
+Nikolic	ML Young
+Mattsson	ML Young
+Ahmet	ML Young
+Cem	ML Young
+Engin	ML Young
+Stoyanov	ML Young
+Griffiths	ML Young
+Komol	ML Young
+Abdel Salam	ML Young
+El Moubarki	ML Young
+Shittu	ML Young
+Khumalo	ML Young
+Mokrani	ML Young
+Chacon	ML Young
+Samuels	ML Young
+Cervantes	ML Young
+Buchanan	ML Young
+Acosta	ML Young
+Bustos	ML Young
+Cabrera	ML Young
+Juarez	ML Young
+Rivero	ML Young
+Zarate	ML Young
+Borges	ML Young
+Guimaraes	ML Young
+Machado	ML Young
+Nascimento	ML Young
+Ribeiro	ML Young
+Soares	ML Young
+Cocio	ML Young
+Rolong	ML Young
+Fatecha	ML Young
+Prandini	ML Young
+Wang Mingwei	ML Young
+Noushevar	ML Young
+Yamada	ML Young
+Kim Cyun Hi	ML Young
+Sahafi	ML Young
+Boffa	ML Young
+Bradley	ML Young
+Oliver	ML Young
+Spencer	ML Young
+Benon	ML Young
+Moulin	ML Young
+Wiart	ML Young
+Gunther	ML Young
+Huber	ML Young
+Kruger	ML Young
+Gambino	ML Young
+Nijkamp	ML Young
+Van Dijk	ML Young
+Espinosa	ML Young
+Oscar	ML Young
+Ramon	ML Young
+Feurer	ML Young
+Matic	ML Young
+Gottwald	ML Young
+Frederiksen	ML Young
+Duffy	ML Young
+Hugo	ML Young
+Yegorov	ML Young
+Fredriksson	ML Young
+Shubin	ML Young
+Orellano	ML Young
+Solimar	ML Young
+Kobayashi	ML Young
+Matsumoto	ML Young
+Sasaki	ML Young
+Shimizu	ML Young
+Takahashi	ML Young
+Kim U Don	ML Young
+Kim Jon Yoru	ML Young
+Kim Myon U	ML Young
+I Gyon Fun	ML Young
+I Chol Yon	ML Young
+Park Jyun Hi	ML Young
+Che Hyon Hon	ML Young
+Hong Yon Nam	ML Young
+Cho Jin Wha	ML Young
+Barota	ML Old
+Celnili	ML Old
+Dulic	ML Old
+Edingson	ML Old
+Harty	ML Old
+Kelsen	ML Old
+Nachdecal	ML Old
+Njorgo	ML Old
+Ostwaut	ML Old
+Vornander	ML Old
+Ivarov	Equipo ML
+Valeny	Equipo ML
+Jaric	Equipo ML
+Stremer	Equipo ML
+Dodo	Equipo ML
+Iouga	Equipo ML
+Espimas	Equipo ML
+Ximelez	Equipo ML
+Minanda	Equipo ML
+Ordaz	Equipo ML
+Castolo	Equipo ML
+Lothar	Equipo ML
+Zamenhof	Equipo ML
+Ceciu	Equipo ML
+Libermann	Equipo ML
+Ruskin	Equipo ML
+Giersen	Equipo ML
+Stein	Equipo ML
+Macco	Equipo ML
+Fouque	Equipo ML
+Burchet	Equipo ML
+Hamsun	Equipo ML
+Huylens	Equipo ML
