@@ -1,0 +1,3 @@
+﻿node_modules\ncoverage\ndist\n*.xlsx\n*.zip\n
+data/processed/
+

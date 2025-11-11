@@ -4,6 +4,11 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "moduleDetection": "force",
+    "baseUrl": ".",
+    "paths": {
+      "@anfpes/data-ingest": ["packages/data-ingest/src"],
+      "@anfpes/data-ingest/*": ["packages/data-ingest/src/*"]
+    },
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,

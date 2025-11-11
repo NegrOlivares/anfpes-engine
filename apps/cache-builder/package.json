@@ -1,0 +1,15 @@
+{
+  "name": "@anfpes/cache-builder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"TODO: build cache\"",
+    "dev": "echo \"TODO: dev cache builder\"",
+    "lint": "eslint src --ext .ts --no-error-on-unmatched-pattern",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@anfpes/data-ingest": "file:../../packages/data-ingest"
+  }
+}

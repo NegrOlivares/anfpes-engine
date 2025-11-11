@@ -4,5 +4,11 @@
     "composite": true,
     "noEmit": true
   },
-  "include": []
+  "include": [],
+  "references": [
+    { "path": "./packages/data-ingest" },
+    { "path": "./packages/engine" },
+    { "path": "./apps/cache-builder" },
+    { "path": "./apps/ui" }
+  ]
 }

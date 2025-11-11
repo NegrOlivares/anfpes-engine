@@ -8,3 +8,9 @@
 - Inicialicé el monorepo Node (`package.json`, workspaces, `.gitignore`, configs de TS/ESLint/Prettier`) e instalé dependencias base (TypeScript, Vitest, ESLint, Prettier, Husky, lint-staged).
 - Creé la estructura vacía de `packages/` y `apps/`, con README descriptivos.
 - Configuré Husky + lint-staged para formatear cambios antes de los commits.
+- Añadí scripts coordinados (`dev`, `lint`, `test`), referencias `tsconfig` y documenté la tubería de exportación de tabla 0 en `IMPLEMENTATION_PLAN.md`.
+- Creé `packages/data-ingest` con lectores para `ML.txt` y `tabla 0` (XLSX), tipos compartidos y pruebas con Vitest.
+- Configuré Vitest global, dependencias adicionales (`xlsx`, `@types/node`) y los `package.json` locales de `packages/*` y `apps/*`.
+- Ajusté `.prettierignore`, migré ESLint a `eslint.config.mjs`, añadí `.gitattributes` y afiné scripts para evitar que lint/formato toquen binarios.
+- Implementé validadores de columnas/IDs, placeholder de estadísticas extras y pruebas adicionales.
+- Creé el comando `npm run export:table0` (apps/cache-builder) que genera `data/processed/table0.json` + metadatos y artefactos base para futuras estadísticas.

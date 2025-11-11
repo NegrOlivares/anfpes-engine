@@ -10,21 +10,29 @@
   ],
   "scripts": {
     "build": "npm run typecheck && npm run lint && npm run test",
-    "dev": "echo \"Define dev scripts por paquete\"",
+    "dev": "npm run dev:workspaces",
+    "dev:workspaces": "npm run dev --workspaces --if-present",
     "format": "prettier --write .",
-    "lint": "eslint . --ext .ts,.tsx,.js,.cjs,.mjs",
+    "lint": "npm run lint:root && npm run lint:workspaces",
+    "lint:root": "eslint . --ext .ts,.tsx,.js,.cjs,.mjs",
+    "lint:workspaces": "npm run lint --workspaces --if-present",
     "prepare": "husky",
-    "test": "vitest",
+    "export:table0": "tsx apps/cache-builder/src/exportTable0.ts",
+    "test": "npm run test:root && npm run test:workspaces",
+    "test:root": "vitest run",
     "test:watch": "vitest watch",
+    "test:workspaces": "npm run test --workspaces --if-present",
     "typecheck": "tsc -b"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,json,md}": "prettier --write"
+    "*.{ts,tsx,js,cjs,mjs,json,md}": "prettier --write"
   },
   "devDependencies": {
+    "@types/node": "^22.10.1",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
-    "@vitest/coverage-c8": "^0.33.0",
+    "typescript-eslint": "^8.46.0",
+    "@vitest/coverage-v8": "^1.6.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
@@ -33,6 +41,6 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.8"
+    "vitest": "^1.6.1"
   }
 }

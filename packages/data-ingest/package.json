@@ -1,0 +1,20 @@
+{
+  "name": "@anfpes/data-ingest",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "dev": "tsc -b --watch",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

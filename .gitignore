@@ -19,3 +19,6 @@ Thumbs.db
 
 # Husky
 .husky/_/
+data/processed/
+*.json.tmp
+
