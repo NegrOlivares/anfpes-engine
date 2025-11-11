@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "echo \"TODO: build cache\"",
+    "build": "tsx src/buildData.ts",
+    "build:data": "tsx src/buildData.ts",
     "dev": "echo \"TODO: dev cache builder\"",
     "lint": "eslint src --ext .ts --no-error-on-unmatched-pattern",
     "test": "vitest run"

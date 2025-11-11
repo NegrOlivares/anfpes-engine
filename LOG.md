@@ -31,3 +31,4 @@
 - Regenerado `data/reference/1.json` y vuelto a comparar con `npm run compare:derived` hasta dejar como unica diferencia los jugadores Shop/ML (decision intencional).
 - Normalice los flags laterales (`SMF  8`, `RMF`, `LMF`) y resolvi el caso especial del rating `EX` de Maradona (divisor 105).
 - Actualice `IMPLEMENTATION_PLAN.md` con el estado actual y deje registrado que la Fase 2 queda cerrada; el siguiente paso es comenzar la generacion de cache (Fase 3).
+- Inici� la Fase 3 creando el comando "npm run build:data" (apps/cache-builder) que genera players/clubs/indices/meta en data/cache/.

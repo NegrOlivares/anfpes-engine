@@ -33,3 +33,18 @@ npm run compare:derived -- [derived.json] [referencia.json] [limite]
 ```
 
 Por defecto compara `data/processed/table1.json` contra `data/reference/1.json` e imprime las primeras divergencias detectadas.
+
+## Generar la cach� completa
+
+```
+npm run build:data -- <tabla0.xlsx|tabla0.json> <ML.txt> [directorioCache] [version]
+```
+
+Encadena la ingesta y el motor para producir:
+
+- `players.json`: arreglo con los jugadores derivados.
+- `clubs.json`: agrupaci�n { nombre, playerIds }.
+- `indices/byId.json` y `indices/byClub.json`.
+- `meta.json`: metadatos (versionado, hashes, conteos).
+
+Por defecto los artefactos se escriben en `data/cache/`.

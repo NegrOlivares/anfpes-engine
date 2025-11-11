@@ -21,6 +21,7 @@
     "export:derived": "tsx apps/cache-builder/src/exportDerived.ts",
     "export:sheet1": "tsx apps/cache-builder/src/exportSheet1.ts",
     "compare:derived": "tsx apps/cache-builder/src/compareDerived.ts",
+    "build:data": "tsx apps/cache-builder/src/buildData.ts",
     "test": "npm run test:root && npm run test:workspaces",
     "test:root": "vitest run",
     "test:watch": "vitest watch",
