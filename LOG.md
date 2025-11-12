@@ -33,3 +33,10 @@
 - Actualice `IMPLEMENTATION_PLAN.md` con el estado actual y deje registrado que la Fase 2 queda cerrada; el siguiente paso es comenzar la generacion de cache (Fase 3).
 - Inici� la Fase 3 creando el comando "npm run build:data" (apps/cache-builder) que genera players/clubs/indices/meta en data/cache/.
 - Extend� build:data para generar �ndices byNationality/byPosition e inclu� los hashes correspondientes en meta.
+- Ejecute `npm run build:data -- data/processed/table0.json ML.txt data/cache/dev dev`, verifiqu? los artefactos (players.json, clubs.json, meta.json, indices/byId|byClub|byNationality|byPosition) en data/cache/dev y dej? registrado que el flujo completo de la Fase 3 queda validado.
+
+- Arranque la Fase 4 montando la app React/Vite (`apps/ui`), creando un plugin que expone/copias los archivos de data/cache, definiendo los primeros componentes (resumen de meta y tabla de jugadores) y dejando operativos los scripts dev/build/preview (`npm run build --workspace @anfpes/ui`).
+
+- Implemente el store global con Zustand (`apps/ui/src/store/cacheStore.ts`), conecte los componentes de meta y tabla para usarlo sin reordenar los IDs (respaldando lo que viene de la tabla 1) y valide lint/build del paquete UI.
+
+- Añadí el módulo `PlayerSearch` (filtro + detalle con stats y demarcaciones) consumiendo el store global, moví el formateo a utilidades comunes y actualicé estilos para el nuevo layout; `npm run lint/build --workspace @anfpes/ui` sigue pasando tras los cambios.

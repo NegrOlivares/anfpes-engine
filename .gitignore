@@ -3,6 +3,8 @@ node_modules/
 
 # Build artifacts
 dist/
+apps/ui/dist/
+*.tsbuildinfo
 build/
 coverage/
 
