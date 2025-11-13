@@ -136,7 +136,8 @@ type PromedioPositionEntry = {
 
 const PROMEDIO_POSITION_MAP: PromedioPositionEntry[] = [
   { codes: [0, 1], key: 'PT' },
-  { codes: [2, 3], key: 'CT/LIB' },
+  { codes: [2], key: 'CT' },
+  { codes: [3], key: 'LIB' },
   { codes: [4], key: 'SA' },
   { codes: [6], key: 'LA' },
   { codes: [5], key: 'CCD' },
@@ -371,7 +372,7 @@ function computeCompositeMetrics(player: DerivedPlayer): Record<string, number> 
 }
 
 type RatingsByPosition = Record<
-  'PT' | 'CT/LIB' | 'SA' | 'LA' | 'CCD' | 'CC' | 'VOL' | 'MP' | 'EX' | 'SD' | 'DC',
+  'PT' | 'CT' | 'LIB' | 'SA' | 'LA' | 'CCD' | 'CC' | 'VOL' | 'MP' | 'EX' | 'SD' | 'DC',
   number | null
 >;
 
@@ -387,7 +388,19 @@ function computePositionRatings(player: DerivedPlayer): RatingsByPosition {
         ],
         constant: 7,
       },
-      'CT/LIB': {
+      CT: {
+        terms: [
+          (num(player.CABEZAZO) - 25) * 0.2,
+          (num(player['DESTREZA DEFENSA']) - 25) * 0.27,
+          (num(player['RECUPERACION DE BALÓN']) - 25) * 0.27,
+          (num(player.VELOCIDAD) - 25) * 0.11,
+          (num(player.ESTABILIDAD) - 25) * 0.21,
+          (num(player.SALTO) - 25) * 0.21,
+          (num(player.RESISTENCIA) - 25) * 0.1,
+        ],
+        constant: 7,
+      },
+      LIB: {
         terms: [
           (num(player.CABEZAZO) - 25) * 0.2,
           (num(player['DESTREZA DEFENSA']) - 25) * 0.27,
@@ -548,7 +561,8 @@ function computePositionRatings(player: DerivedPlayer): RatingsByPosition {
     },
     {
       PT: null,
-      'CT/LIB': null,
+      CT: null,
+      LIB: null,
       SA: null,
       LA: null,
       CCD: null,

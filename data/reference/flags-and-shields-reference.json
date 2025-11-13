@@ -1,0 +1,1234 @@
+{
+  "nationalities": [
+    {
+      "nationality": "CLUB",
+      "row": 19
+    },
+    {
+      "nationality": "A.C. Milan",
+      "row": 20
+    },
+    {
+      "nationality": "A.S. Roma",
+      "row": 21
+    },
+    {
+      "nationality": "AC Sparta Praha",
+      "row": 22
+    },
+    {
+      "nationality": "ADO Den Haag",
+      "row": 23
+    },
+    {
+      "nationality": "AJ Auxerre",
+      "row": 24
+    },
+    {
+      "nationality": "Ajax",
+      "row": 25
+    },
+    {
+      "nationality": "Arsenal",
+      "row": 26
+    },
+    {
+      "nationality": "AS Monaco",
+      "row": 27
+    },
+    {
+      "nationality": "AS Nancy-Lorraine",
+      "row": 28
+    },
+    {
+      "nationality": "AS Saint-Étienne",
+      "row": 29
+    },
+    {
+      "nationality": "Ascoli",
+      "row": 30
+    },
+    {
+      "nationality": "Aston Villa FC",
+      "row": 31
+    },
+    {
+      "nationality": "Atalanta",
+      "row": 32
+    },
+    {
+      "nationality": "Athletic Club",
+      "row": 33
+    },
+    {
+      "nationality": "AZ",
+      "row": 34
+    },
+    {
+      "nationality": "Bayern München",
+      "row": 35
+    },
+    {
+      "nationality": "Benfica",
+      "row": 36
+    },
+    {
+      "nationality": "Besiktas JK",
+      "row": 37
+    },
+    {
+      "nationality": "Blackburn Rovers FC",
+      "row": 38
+    },
+    {
+      "nationality": "Boca Juniors",
+      "row": 39
+    },
+    {
+      "nationality": "Bolton Wanderers FC",
+      "row": 40
+    },
+    {
+      "nationality": "C. Atlético Madrid",
+      "row": 41
+    },
+    {
+      "nationality": "C. Gimnastic",
+      "row": 42
+    },
+    {
+      "nationality": "C.A. Osasuna",
+      "row": 43
+    },
+    {
+      "nationality": "Cagliari",
+      "row": 44
+    },
+    {
+      "nationality": "Catania",
+      "row": 45
+    },
+    {
+      "nationality": "Celtic",
+      "row": 46
+    },
+    {
+      "nationality": "Charlton Athletic FC",
+      "row": 47
+    },
+    {
+      "nationality": "Chelsea FC",
+      "row": 48
+    },
+    {
+      "nationality": "Chievo Verona",
+      "row": 49
+    },
+    {
+      "nationality": "Classic Argentina",
+      "row": 50
+    },
+    {
+      "nationality": "Classic Brazil",
+      "row": 51
+    },
+    {
+      "nationality": "Classic England",
+      "row": 52
+    },
+    {
+      "nationality": "Classic France",
+      "row": 53
+    },
+    {
+      "nationality": "Classic Germany",
+      "row": 54
+    },
+    {
+      "nationality": "Classic Italy",
+      "row": 55
+    },
+    {
+      "nationality": "Classic Netherlands",
+      "row": 56
+    },
+    {
+      "nationality": "Club Brugge KV",
+      "row": 57
+    },
+    {
+      "nationality": "CS Sedan",
+      "row": 58
+    },
+    {
+      "nationality": "Djurgardens IF",
+      "row": 59
+    },
+    {
+      "nationality": "Dynamo Kiev",
+      "row": 60
+    },
+    {
+      "nationality": "Empoli",
+      "row": 61
+    },
+    {
+      "nationality": "Equipo ML",
+      "row": 62
+    },
+    {
+      "nationality": "ES Troyes AC",
+      "row": 63
+    },
+    {
+      "nationality": "Everton FC",
+      "row": 64
+    },
+    {
+      "nationality": "F.C. Barcelona",
+      "row": 65
+    },
+    {
+      "nationality": "F.C. Copenhagen",
+      "row": 66
+    },
+    {
+      "nationality": "FC Groningen",
+      "row": 67
+    },
+    {
+      "nationality": "FC Lorient",
+      "row": 68
+    },
+    {
+      "nationality": "FC Nantes-Atlantique",
+      "row": 69
+    },
+    {
+      "nationality": "FC Porto",
+      "row": 70
+    },
+    {
+      "nationality": "FC Sochaux",
+      "row": 71
+    },
+    {
+      "nationality": "FC Twente",
+      "row": 72
+    },
+    {
+      "nationality": "FC Utrecht",
+      "row": 73
+    },
+    {
+      "nationality": "Fenerbahce SK",
+      "row": 74
+    },
+    {
+      "nationality": "Feyenoord",
+      "row": 75
+    },
+    {
+      "nationality": "Fiorentina",
+      "row": 76
+    },
+    {
+      "nationality": "Fulham FC",
+      "row": 77
+    },
+    {
+      "nationality": "Galatasaray",
+      "row": 78
+    },
+    {
+      "nationality": "Getafe C.F.",
+      "row": 79
+    },
+    {
+      "nationality": "Girondins de Bordeaux",
+      "row": 80
+    },
+    {
+      "nationality": "Heracles Almelo",
+      "row": 81
+    },
+    {
+      "nationality": "Inter",
+      "row": 82
+    },
+    {
+      "nationality": "Juventus",
+      "row": 83
+    },
+    {
+      "nationality": "Lazio",
+      "row": 84
+    },
+    {
+      "nationality": "Le Mans UC 72",
+      "row": 85
+    },
+    {
+      "nationality": "Levante U.D.",
+      "row": 86
+    },
+    {
+      "nationality": "Libre",
+      "row": 87
+    },
+    {
+      "nationality": "Lille OSC",
+      "row": 88
+    },
+    {
+      "nationality": "Liverpool FC",
+      "row": 89
+    },
+    {
+      "nationality": "Livorno",
+      "row": 90
+    },
+    {
+      "nationality": "Manchester City",
+      "row": 91
+    },
+    {
+      "nationality": "Manchester United",
+      "row": 92
+    },
+    {
+      "nationality": "Messina",
+      "row": 93
+    },
+    {
+      "nationality": "Middlesbrough FC",
+      "row": 94
+    },
+    {
+      "nationality": "ML Old",
+      "row": 95
+    },
+    {
+      "nationality": "ML Young",
+      "row": 96
+    },
+    {
+      "nationality": "N.E.C. Nijmegen",
+      "row": 97
+    },
+    {
+      "nationality": "NAC Breda",
+      "row": 98
+    },
+    {
+      "nationality": "Newcastle United FC",
+      "row": 99
+    },
+    {
+      "nationality": "OGC Nice",
+      "row": 100
+    },
+    {
+      "nationality": "Olympiacos Piraeus",
+      "row": 101
+    },
+    {
+      "nationality": "Olympique de Marseille",
+      "row": 102
+    },
+    {
+      "nationality": "Olympique Lyonnais",
+      "row": 103
+    },
+    {
+      "nationality": "Palermo",
+      "row": 104
+    },
+    {
+      "nationality": "Panathinaikos FC",
+      "row": 105
+    },
+    {
+      "nationality": "Paris Saint-Germain",
+      "row": 106
+    },
+    {
+      "nationality": "Parma",
+      "row": 107
+    },
+    {
+      "nationality": "PES United",
+      "row": 108
+    },
+    {
+      "nationality": "Portsmouth FC",
+      "row": 109
+    },
+    {
+      "nationality": "PSV Eindhoven",
+      "row": 110
+    },
+    {
+      "nationality": "R. Betis",
+      "row": 111
+    },
+    {
+      "nationality": "R. Madrid",
+      "row": 112
+    },
+    {
+      "nationality": "R. Racing C.",
+      "row": 113
+    },
+    {
+      "nationality": "R. Sociedad",
+      "row": 114
+    },
+    {
+      "nationality": "R. Zaragoza",
+      "row": 115
+    },
+    {
+      "nationality": "R.C. Celta",
+      "row": 116
+    },
+    {
+      "nationality": "R.C. Deportivo la Coruña",
+      "row": 117
+    },
+    {
+      "nationality": "R.C. Recreativo de Huelva",
+      "row": 118
+    },
+    {
+      "nationality": "R.C.D. Espanyol",
+      "row": 119
+    },
+    {
+      "nationality": "R.C.D. Mallorca",
+      "row": 120
+    },
+    {
+      "nationality": "Rangers",
+      "row": 121
+    },
+    {
+      "nationality": "RC Lens",
+      "row": 122
+    },
+    {
+      "nationality": "Reading FC",
+      "row": 123
+    },
+    {
+      "nationality": "Reggina",
+      "row": 124
+    },
+    {
+      "nationality": "River Plate",
+      "row": 125
+    },
+    {
+      "nationality": "RKC Waalwijk",
+      "row": 126
+    },
+    {
+      "nationality": "Roda JC",
+      "row": 127
+    },
+    {
+      "nationality": "Rosenborg BK",
+      "row": 128
+    },
+    {
+      "nationality": "RSC Anderlecht",
+      "row": 129
+    },
+    {
+      "nationality": "Sampdoria",
+      "row": 130
+    },
+    {
+      "nationality": "Sao Paulo FC",
+      "row": 131
+    },
+    {
+      "nationality": "SBV Excelsior",
+      "row": 132
+    },
+    {
+      "nationality": "SC Heerenveen",
+      "row": 133
+    },
+    {
+      "nationality": "Selección Angola",
+      "row": 134
+    },
+    {
+      "nationality": "Selección Argentina",
+      "row": 135
+    },
+    {
+      "nationality": "Selección Australia",
+      "row": 136
+    },
+    {
+      "nationality": "Selección Austria",
+      "row": 137
+    },
+    {
+      "nationality": "Selección Belgium",
+      "row": 138
+    },
+    {
+      "nationality": "Selección Brazil",
+      "row": 139
+    },
+    {
+      "nationality": "Selección Bulgaria",
+      "row": 140
+    },
+    {
+      "nationality": "Selección Cameroon",
+      "row": 141
+    },
+    {
+      "nationality": "Selección Chile",
+      "row": 142
+    },
+    {
+      "nationality": "Selección Colombia",
+      "row": 143
+    },
+    {
+      "nationality": "Selección Costa Rica",
+      "row": 144
+    },
+    {
+      "nationality": "Selección Cote d'Ivoire",
+      "row": 145
+    },
+    {
+      "nationality": "Selección Croatia",
+      "row": 146
+    },
+    {
+      "nationality": "Selección Czech Republic",
+      "row": 147
+    },
+    {
+      "nationality": "Selección Denmark",
+      "row": 148
+    },
+    {
+      "nationality": "Selección Ecuador",
+      "row": 149
+    },
+    {
+      "nationality": "Selección England",
+      "row": 150
+    },
+    {
+      "nationality": "Selección Finland",
+      "row": 151
+    },
+    {
+      "nationality": "Selección France",
+      "row": 152
+    },
+    {
+      "nationality": "Selección Germany",
+      "row": 153
+    },
+    {
+      "nationality": "Selección Ghana",
+      "row": 154
+    },
+    {
+      "nationality": "Selección Greece",
+      "row": 155
+    },
+    {
+      "nationality": "Selección Hungary",
+      "row": 156
+    },
+    {
+      "nationality": "Selección Iran",
+      "row": 157
+    },
+    {
+      "nationality": "Selección Ireland",
+      "row": 158
+    },
+    {
+      "nationality": "Selección Italy",
+      "row": 159
+    },
+    {
+      "nationality": "Selección Japan",
+      "row": 160
+    },
+    {
+      "nationality": "Selección Latvia",
+      "row": 161
+    },
+    {
+      "nationality": "Selección Mexico",
+      "row": 162
+    },
+    {
+      "nationality": "Selección Netherlands",
+      "row": 163
+    },
+    {
+      "nationality": "Selección Nigeria",
+      "row": 164
+    },
+    {
+      "nationality": "Selección Northern Ireland",
+      "row": 165
+    },
+    {
+      "nationality": "Selección Norway",
+      "row": 166
+    },
+    {
+      "nationality": "Selección Paraguay",
+      "row": 167
+    },
+    {
+      "nationality": "Selección Peru",
+      "row": 168
+    },
+    {
+      "nationality": "Selección Poland",
+      "row": 169
+    },
+    {
+      "nationality": "Selección Portugal",
+      "row": 170
+    },
+    {
+      "nationality": "Selección Romania",
+      "row": 171
+    },
+    {
+      "nationality": "Selección Russia",
+      "row": 172
+    },
+    {
+      "nationality": "Selección Saudi Arabia",
+      "row": 173
+    },
+    {
+      "nationality": "Selección Scotland",
+      "row": 174
+    },
+    {
+      "nationality": "Selección Serbia and Montenegro",
+      "row": 175
+    },
+    {
+      "nationality": "Selección Slovakia",
+      "row": 176
+    },
+    {
+      "nationality": "Selección Slovenia",
+      "row": 177
+    },
+    {
+      "nationality": "Selección South Africa",
+      "row": 178
+    },
+    {
+      "nationality": "Selección South Korea",
+      "row": 179
+    },
+    {
+      "nationality": "Selección Spain",
+      "row": 180
+    },
+    {
+      "nationality": "Selección Sweden",
+      "row": 181
+    },
+    {
+      "nationality": "Selección Switzerland",
+      "row": 182
+    },
+    {
+      "nationality": "Selección Togo",
+      "row": 183
+    },
+    {
+      "nationality": "Selección Trinidad and Tobago",
+      "row": 184
+    },
+    {
+      "nationality": "Selección Tunisia",
+      "row": 185
+    },
+    {
+      "nationality": "Selección Turkey",
+      "row": 186
+    },
+    {
+      "nationality": "Selección Ukraine",
+      "row": 187
+    },
+    {
+      "nationality": "Selección Uruguay",
+      "row": 188
+    },
+    {
+      "nationality": "Selección United States",
+      "row": 189
+    },
+    {
+      "nationality": "Selección Wales",
+      "row": 190
+    },
+    {
+      "nationality": "Sevilla F.C.",
+      "row": 191
+    },
+    {
+      "nationality": "Sheffield United FC",
+      "row": 192
+    },
+    {
+      "nationality": "Shop 1",
+      "row": 193
+    },
+    {
+      "nationality": "Shop 2",
+      "row": 194
+    },
+    {
+      "nationality": "Shop 3",
+      "row": 195
+    },
+    {
+      "nationality": "Shop 4",
+      "row": 196
+    },
+    {
+      "nationality": "Shop 5",
+      "row": 197
+    },
+    {
+      "nationality": "Siena",
+      "row": 198
+    },
+    {
+      "nationality": "Sparta Rotterdam",
+      "row": 199
+    },
+    {
+      "nationality": "Sporting Lisbon",
+      "row": 200
+    },
+    {
+      "nationality": "Stade Rennais FC",
+      "row": 201
+    },
+    {
+      "nationality": "Torino",
+      "row": 202
+    },
+    {
+      "nationality": "Tottenham Hotspur FC",
+      "row": 203
+    },
+    {
+      "nationality": "Toulouse FC",
+      "row": 204
+    },
+    {
+      "nationality": "Udinese",
+      "row": 205
+    },
+    {
+      "nationality": "Valencia C.F.",
+      "row": 206
+    },
+    {
+      "nationality": "Valenciennes FC",
+      "row": 207
+    },
+    {
+      "nationality": "Villarreal C.F.",
+      "row": 208
+    },
+    {
+      "nationality": "Vitesse",
+      "row": 209
+    },
+    {
+      "nationality": "Watford FC",
+      "row": 210
+    },
+    {
+      "nationality": "WE United",
+      "row": 211
+    },
+    {
+      "nationality": "West Ham United FC",
+      "row": 212
+    },
+    {
+      "nationality": "Wigan Athletic FC",
+      "row": 213
+    },
+    {
+      "nationality": "Willem II",
+      "row": 214
+    },
+    {
+      "nationality": "Man Blue",
+      "row": 215
+    },
+    {
+      "nationality": "FC Belgium",
+      "row": 216
+    },
+    {
+      "nationality": "Patagonia",
+      "row": 217
+    },
+    {
+      "nationality": "Athenakos FC",
+      "row": 218
+    },
+    {
+      "nationality": "FC Bosphorus",
+      "row": 219
+    },
+    {
+      "nationality": "Pompy",
+      "row": 220
+    },
+    {
+      "nationality": "Hertfordshire",
+      "row": 221
+    }
+  ],
+  "clubs": [
+    {
+      "club": "PAIS",
+      "row": 227
+    },
+    {
+      "club": "Albania",
+      "row": 228
+    },
+    {
+      "club": "Algeria",
+      "row": 229
+    },
+    {
+      "club": "Angola",
+      "row": 230
+    },
+    {
+      "club": "Argentina",
+      "row": 231
+    },
+    {
+      "club": "Armenia",
+      "row": 232
+    },
+    {
+      "club": "Australia",
+      "row": 233
+    },
+    {
+      "club": "Austria",
+      "row": 234
+    },
+    {
+      "club": "Belarus",
+      "row": 235
+    },
+    {
+      "club": "Belgium",
+      "row": 236
+    },
+    {
+      "club": "Benin",
+      "row": 237
+    },
+    {
+      "club": "Bolivia",
+      "row": 238
+    },
+    {
+      "club": "Bosnia and Herzegovina",
+      "row": 239
+    },
+    {
+      "club": "Brazil",
+      "row": 240
+    },
+    {
+      "club": "Bulgaria",
+      "row": 241
+    },
+    {
+      "club": "Burkina Faso",
+      "row": 242
+    },
+    {
+      "club": "Cameroon",
+      "row": 243
+    },
+    {
+      "club": "Canada",
+      "row": 244
+    },
+    {
+      "club": "Cape Verde",
+      "row": 245
+    },
+    {
+      "club": "Chile",
+      "row": 246
+    },
+    {
+      "club": "China",
+      "row": 247
+    },
+    {
+      "club": "Colombia",
+      "row": 248
+    },
+    {
+      "club": "Costa Rica",
+      "row": 249
+    },
+    {
+      "club": "Cote d'Ivoire",
+      "row": 250
+    },
+    {
+      "club": "Croatia",
+      "row": 251
+    },
+    {
+      "club": "Cyprus",
+      "row": 252
+    },
+    {
+      "club": "Czech Republic",
+      "row": 253
+    },
+    {
+      "club": "Denmark",
+      "row": 254
+    },
+    {
+      "club": "DR Congo",
+      "row": 255
+    },
+    {
+      "club": "Ecuador",
+      "row": 256
+    },
+    {
+      "club": "Egypt",
+      "row": 257
+    },
+    {
+      "club": "England",
+      "row": 258
+    },
+    {
+      "club": "Equatorial Guinea",
+      "row": 259
+    },
+    {
+      "club": "Estonia",
+      "row": 260
+    },
+    {
+      "club": "Finland",
+      "row": 261
+    },
+    {
+      "club": "France",
+      "row": 262
+    },
+    {
+      "club": "Gabon",
+      "row": 263
+    },
+    {
+      "club": "Gambia",
+      "row": 264
+    },
+    {
+      "club": "Georgia",
+      "row": 265
+    },
+    {
+      "club": "Germany",
+      "row": 266
+    },
+    {
+      "club": "Ghana",
+      "row": 267
+    },
+    {
+      "club": "Greece",
+      "row": 268
+    },
+    {
+      "club": "Grenada",
+      "row": 269
+    },
+    {
+      "club": "Guadeloupe",
+      "row": 270
+    },
+    {
+      "club": "Guinea",
+      "row": 271
+    },
+    {
+      "club": "Guinea-Bissau",
+      "row": 272
+    },
+    {
+      "club": "Honduras",
+      "row": 273
+    },
+    {
+      "club": "Hungary",
+      "row": 274
+    },
+    {
+      "club": "Iceland",
+      "row": 275
+    },
+    {
+      "club": "Iran",
+      "row": 276
+    },
+    {
+      "club": "Ireland",
+      "row": 277
+    },
+    {
+      "club": "Israel",
+      "row": 278
+    },
+    {
+      "club": "Italy",
+      "row": 279
+    },
+    {
+      "club": "Jamaica",
+      "row": 280
+    },
+    {
+      "club": "Japan",
+      "row": 281
+    },
+    {
+      "club": "Kenya",
+      "row": 282
+    },
+    {
+      "club": "Latvia",
+      "row": 283
+    },
+    {
+      "club": "Liberia",
+      "row": 284
+    },
+    {
+      "club": "Libya",
+      "row": 285
+    },
+    {
+      "club": "Liechtenstein",
+      "row": 286
+    },
+    {
+      "club": "Lithuania",
+      "row": 287
+    },
+    {
+      "club": "Macedonia",
+      "row": 288
+    },
+    {
+      "club": "Mali",
+      "row": 289
+    },
+    {
+      "club": "Martinique",
+      "row": 290
+    },
+    {
+      "club": "Mexico",
+      "row": 291
+    },
+    {
+      "club": "Morocco",
+      "row": 292
+    },
+    {
+      "club": "Mozambique",
+      "row": 293
+    },
+    {
+      "club": "Netherlands",
+      "row": 294
+    },
+    {
+      "club": "Netherlands Antilles",
+      "row": 295
+    },
+    {
+      "club": "New Zealand",
+      "row": 296
+    },
+    {
+      "club": "Nigeria",
+      "row": 297
+    },
+    {
+      "club": "Northern Ireland",
+      "row": 298
+    },
+    {
+      "club": "Norway",
+      "row": 299
+    },
+    {
+      "club": "Oman",
+      "row": 300
+    },
+    {
+      "club": "Panama",
+      "row": 301
+    },
+    {
+      "club": "Paraguay",
+      "row": 302
+    },
+    {
+      "club": "Peru",
+      "row": 303
+    },
+    {
+      "club": "Poland",
+      "row": 304
+    },
+    {
+      "club": "Portugal",
+      "row": 305
+    },
+    {
+      "club": "Romania",
+      "row": 306
+    },
+    {
+      "club": "Russia",
+      "row": 307
+    },
+    {
+      "club": "Saudi Arabia",
+      "row": 308
+    },
+    {
+      "club": "Scotland",
+      "row": 309
+    },
+    {
+      "club": "Senegal",
+      "row": 310
+    },
+    {
+      "club": "Serbia and Montenegro",
+      "row": 311
+    },
+    {
+      "club": "Sierra Leone",
+      "row": 312
+    },
+    {
+      "club": "Slovakia",
+      "row": 313
+    },
+    {
+      "club": "Slovenia",
+      "row": 314
+    },
+    {
+      "club": "South Africa",
+      "row": 315
+    },
+    {
+      "club": "South Korea",
+      "row": 316
+    },
+    {
+      "club": "Spain",
+      "row": 317
+    },
+    {
+      "club": "Sweden",
+      "row": 318
+    },
+    {
+      "club": "Switzerland",
+      "row": 319
+    },
+    {
+      "club": "Togo",
+      "row": 320
+    },
+    {
+      "club": "Trinidad and Tobago",
+      "row": 321
+    },
+    {
+      "club": "Tunisia",
+      "row": 322
+    },
+    {
+      "club": "Turkey",
+      "row": 323
+    },
+    {
+      "club": "Ukraine",
+      "row": 324
+    },
+    {
+      "club": "Uruguay",
+      "row": 325
+    },
+    {
+      "club": "United States",
+      "row": 326
+    },
+    {
+      "club": "Uzbekistan",
+      "row": 327
+    },
+    {
+      "club": "Venezuela",
+      "row": 328
+    },
+    {
+      "club": "Wales",
+      "row": 329
+    },
+    {
+      "club": "Zimbabwe",
+      "row": 330
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+/* Banderas optimizadas - solo las 103 que usamos */
+/* Base styles from flag-icons */
+.fi {
+  position: relative;
+  display: inline-block;
+  line-height: 1em;
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
+.fi:before {
+  content: "\00a0";
+}
+
+.fi.fis {
+  width: 1.33333333em;
+}
+
+/* Ratio 4x3 (default) */
+.fi {
+  width: 1.33333333em;
+  line-height: 1em;
+}
+
+/* Import only the flags we need (103 countries) */
+@import 'flag-icons/css/flag-icons.min.css' layer(flags);

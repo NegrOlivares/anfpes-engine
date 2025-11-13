@@ -1,0 +1,24 @@
+{
+  "shields": [
+    {
+      "file": "image306.png",
+      "col": "H",
+      "row": 81,
+      "sourceCol": 7
+    }
+  ],
+  "flags": [
+    {
+      "file": "image1.png",
+      "col": "J",
+      "row": 244,
+      "sourceCol": 9
+    },
+    {
+      "file": "image296.png",
+      "col": "J",
+      "row": 228,
+      "sourceCol": 9
+    }
+  ]
+}

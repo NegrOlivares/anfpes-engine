@@ -1,28 +1,34 @@
-import { CacheSummary } from './components/CacheSummary';
-import { PlayerPeek } from './components/PlayerPeek';
-import { PlayerSearch } from './components/PlayerSearch';
+import { useMemo, useState } from 'react';
 import { useCacheLoader } from './store/cacheStore';
+import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
+import { DashboardModule } from './modules/DashboardModule';
+import { PlayerSearch } from './components/PlayerSearch';
+import { PlayerProfile } from './components/PlayerProfile';
 
-const cacheEnv = import.meta.env.VITE_CACHE_ENV ?? 'dev';
+const modules: ModuleDefinition[] = [
+  { id: 'dashboard', label: 'Dashboard', component: DashboardModule },
+  { id: 'search', label: 'Buscador', component: PlayerSearch },
+  { id: 'profile', label: 'Perfil', component: PlayerProfile },
+];
 
 export default function App() {
   useCacheLoader();
+  const [activeModuleId, setActiveModuleId] = useState(modules[0].id);
+
+  const ActiveModule = useMemo(() => {
+    const target = modules.find((module) => module.id === activeModuleId);
+    return target?.component ?? modules[0].component;
+  }, [activeModuleId]);
 
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <div>
-          <p className="eyebrow">ANFPES :: Fase 4</p>
-          <h1>Panel de datos</h1>
-          <p className="subtitle">
-            Explorador de la cache generada por el motor. Fuente: <code>{cacheEnv}</code>
-          </p>
-        </div>
-      </header>
+      <ModuleTabs
+        modules={modules}
+        activeId={activeModuleId}
+        onSelect={setActiveModuleId}
+      />
       <main className="app-main">
-        <CacheSummary />
-        <PlayerPeek />
-        <PlayerSearch />
+        <ActiveModule />
       </main>
     </div>
   );

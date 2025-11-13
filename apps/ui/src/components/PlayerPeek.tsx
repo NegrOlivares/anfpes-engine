@@ -1,7 +1,7 @@
 import type { DerivedPlayer } from '@anfpes/engine';
 import { cacheClient } from '../services/cacheClient';
 import { useCacheStore } from '../store/cacheStore';
-import { formatPlayerValue } from '../utils/format';
+import { getFieldDisplayValue } from '../utils/playerDisplay';
 
 const columns: Array<{ key: keyof DerivedPlayer | string; label: string }> = [
   { key: 'ID', label: 'ID' },
@@ -10,7 +10,8 @@ const columns: Array<{ key: keyof DerivedPlayer | string; label: string }> = [
   { key: 'NACIONALIDAD', label: 'Nacionalidad' },
   { key: 'PROMEDIO', label: 'Promedio' },
   { key: 'PT', label: 'PT' },
-  { key: 'CT/LIB', label: 'CT/LIB' },
+  { key: 'CT', label: 'CT' },
+  { key: 'LIB', label: 'LIB' },
   { key: 'DC', label: 'DC' },
 ];
 
@@ -50,16 +51,11 @@ export function PlayerPeek() {
               {preview.map((player) => (
                 <tr key={player.ID}>
                   {columns.map((column) => {
-                    const value = player[column.key as keyof DerivedPlayer];
-                    return (
-                      <td key={column.key as string}>
-                        {value === null || value === undefined || value === '' ? (
-                          <span className="muted">-</span>
-                        ) : (
-                          formatPlayerValue(value, 3)
-                        )}
-                      </td>
+                    const value = getFieldDisplayValue(
+                      column.key as keyof DerivedPlayer,
+                      player,
                     );
+                    return <td key={column.key as string}>{value}</td>;
                   })}
                 </tr>
               ))}

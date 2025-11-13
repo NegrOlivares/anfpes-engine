@@ -12,6 +12,11 @@
   },
   "dependencies": {
     "@anfpes/data-ingest": "file:../../packages/data-ingest",
-    "@anfpes/engine": "file:../../packages/engine"
+    "@anfpes/engine": "file:../../packages/engine",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/xml2js": "^0.4.14",
+    "sharp": "^0.34.5"
   }
 }

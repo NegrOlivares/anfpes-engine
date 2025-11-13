@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -50,9 +50,16 @@ export function buildData(args: BuildArgs) {
   const rawPlayers = loadRawPlayers(tablePath);
   const shopEntries = readShopMlFile(shopPath);
   const shopIndex = buildShopTagIndex(shopEntries);
-  const derived = computeDerivedPlayers(
+  let derived = computeDerivedPlayers(
     rawPlayers.map((raw) => ({ raw, shopTags: shopIndex })),
   );
+
+  const allowedIds = loadAllowedIds();
+  if (allowedIds) {
+    const initialCount = derived.length;
+    derived = derived.filter((player) => allowedIds.has(String(player.ID)));
+    console.log(`Filtered players by allowed IDs: ${initialCount} -> ${derived.length}`);
+  }
 
   mkdirSync(outputDir, { recursive: true });
 
@@ -182,6 +189,56 @@ function normalizeKey(value: unknown, fallback: string): string {
 function main() {
   const args = parseArgs(process.argv);
   buildData(args);
+}
+
+function loadAllowedIds(): Set<string> | undefined {
+  const overridePath = process.env.ALLOWED_IDS_PATH;
+  const defaultPath = resolve(process.cwd(), 'data/reference/1.json');
+  const targetPath = overridePath ? resolve(process.cwd(), overridePath) : defaultPath;
+
+  if (!existsSync(targetPath)) {
+    if (overridePath) {
+      console.warn(
+        `[build:data] Allowed IDs file "${targetPath}" not found. Skipping filter.`,
+      );
+    }
+    return undefined;
+  }
+
+  try {
+    const payload = JSON.parse(readFileSync(targetPath, 'utf-8'));
+    if (!Array.isArray(payload)) {
+      console.warn(`[build:data] Expected array in "${targetPath}". Skipping filter.`);
+      return undefined;
+    }
+
+    const ids = new Set<string>();
+    payload.forEach((entry) => {
+      if (typeof entry === 'number' || typeof entry === 'string') {
+        ids.add(String(entry));
+      } else if (entry && typeof entry === 'object' && 'ID' in entry) {
+        const value = (entry as Record<string, unknown>).ID;
+        if (value !== null && value !== undefined) {
+          ids.add(String(value));
+        }
+      }
+    });
+
+    if (!ids.size) {
+      console.warn(
+        `[build:data] "${targetPath}" did not yield any IDs. Skipping filter.`,
+      );
+      return undefined;
+    }
+
+    console.log(`[build:data] Loaded ${ids.size} allowed IDs from "${targetPath}".`);
+    return ids;
+  } catch (error) {
+    console.warn(
+      `[build:data] Failed to parse "${targetPath}" (${(error as Error).message}). Skipping filter.`,
+    );
+    return undefined;
+  }
 }
 
 const invokedUrl = process.argv[1]

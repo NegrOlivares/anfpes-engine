@@ -43,7 +43,25 @@ export const cacheClient = {
   },
   getPlayers(): Promise<DerivedPlayer[]> {
     if (!playersPromise) {
-      playersPromise = fetchJson<DerivedPlayer[]>('players.json');
+      playersPromise = fetchJson<DerivedPlayer[]>('players.json').then((players) =>
+        players.map((player) => {
+          const record = player as Record<string, DerivedPlayer[keyof DerivedPlayer]>;
+          const ctValue = record.CT ?? record['CT/LIB'];
+          if (ctValue !== undefined) {
+            record.CT = ctValue;
+            if (record.LIB === undefined) {
+              record.LIB = ctValue;
+            }
+          }
+          if (record.LIB === undefined && record['CT/LIB'] !== undefined) {
+            record.LIB = record['CT/LIB'];
+          }
+          if ('CT/LIB' in record) {
+            delete record['CT/LIB'];
+          }
+          return player;
+        }),
+      );
     }
     return playersPromise;
   },

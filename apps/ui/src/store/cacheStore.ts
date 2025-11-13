@@ -12,12 +12,15 @@ interface CacheState {
   meta?: CacheMeta;
   clubs?: CacheClub[];
   players?: DerivedPlayer[];
+  selectedPlayerId?: string;
+  setSelectedPlayer: (id: string | null) => void;
   load: () => Promise<void>;
   resetError: () => void;
 }
 
 export const useCacheStore = create<CacheState>((set, get) => ({
   status: 'idle',
+  selectedPlayerId: undefined,
   load: async () => {
     const { status } = get();
     if (status === 'loading' || status === 'ready') {
@@ -46,6 +49,10 @@ export const useCacheStore = create<CacheState>((set, get) => ({
       });
     }
   },
+  setSelectedPlayer: (id) =>
+    set({
+      selectedPlayerId: id ?? undefined,
+    }),
   resetError: () => set({ error: undefined }),
 }));
 
@@ -62,4 +69,13 @@ export function useCacheLoader() {
 
 export function useCacheReady() {
   return useCacheStore((state) => state.status === 'ready');
+}
+
+export function useSelectedPlayer(): DerivedPlayer | undefined {
+  return useCacheStore((state) => {
+    if (!state.players || !state.selectedPlayerId) {
+      return undefined;
+    }
+    return state.players.find((player) => player.ID === state.selectedPlayerId);
+  });
 }

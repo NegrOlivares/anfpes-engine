@@ -28,3 +28,11 @@ npm run preview --workspace @anfpes/ui
 - `VITE_CACHE_BASE`: ruta base que usara el fetch (`/cache/<env>` si no se define).
 
 Durante `npm run dev` el servidor expone la cache directamente desde `data/cache`. En `npm run build` se copia a `dist/cache` para que los archivos queden disponibles junto al bundle.
+
+## Modulos actuales
+
+- **Dashboard**: resumen de metadatos + tabla rapida (primeros 20 IDs).
+- **Buscador**: filtro por ID/nombre/club/nacionalidad; al seleccionar un jugador se actualiza la seleccion global.
+- **Perfil**: ficha detallada del jugador seleccionado (demarcaciones, bio, ratings).
+
+La seleccion de jugador se guarda en el store compartido (`cacheStore`), de modo que cualquier nuevo modulo puede reutilizarla sin volver a consultar la cache.
