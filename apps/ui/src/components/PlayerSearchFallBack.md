@@ -3,24 +3,24 @@ import { useEffect, useMemo, useState, useRef } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import {
-  DEFAULT_TABLE_COLUMNS,
-  FIELD_GROUPS,
-  getTableHeaderLabel,
-  getSortedColumns,
+DEFAULT_TABLE_COLUMNS,
+FIELD_GROUPS,
+getTableHeaderLabel,
+getSortedColumns,
 } from '../constants/playerFields';
 import { POSITION_COLORS, type SortConfig } from '../types/table';
 import { TableCell } from './TableCell';
 import { PositionBadges } from './PositionBadges';
 import { AddToPreselectionModal } from './AddToPreselectionModal';
 import {
-  formatClub,
-  formatNationality,
-  formatSelectionDisplay,
-  getFieldFilterValue,
-  getFieldLabel,
-  normalizeFieldKey,
-  shouldDisplayField,
-  SPECIAL_SKILL_FIELDS,
+formatClub,
+formatNationality,
+formatSelectionDisplay,
+getFieldFilterValue,
+getFieldLabel,
+normalizeFieldKey,
+shouldDisplayField,
+SPECIAL_SKILL_FIELDS,
 } from '../utils/playerDisplay';
 import { usePlayerViews, type FilterCondition } from '../hooks/usePlayerViews';
 import { getNationalityInfo } from '../data/nationalities';
@@ -30,170 +30,178 @@ import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 type FilterOperator = 'eq' | 'contains' | 'gte' | 'lte' | 'between';
 
 const POSITION_CODES = [
-  { code: 'GK', label: 'PT', color: POSITION_COLORS.PT },
-  { code: 'SWP', label: 'LIB', color: POSITION_COLORS.LIB },
-  { code: 'CB', label: 'CT', color: POSITION_COLORS.CT },
-  { code: 'SB', label: 'SA', color: POSITION_COLORS.SA },
-  { code: 'RB', label: 'DD', color: POSITION_COLORS.DD },
-  { code: 'LB', label: 'DI', color: POSITION_COLORS.DI },
-  { code: 'DMF', label: 'CCD', color: POSITION_COLORS.CCD },
-  { code: 'WB', label: 'LA', color: POSITION_COLORS.LA },
-  { code: 'RWB', label: 'DLD', color: POSITION_COLORS.DLD },
-  { code: 'LWB', label: 'DLI', color: POSITION_COLORS.DLI },
-  { code: 'CMF', label: 'CC', color: POSITION_COLORS.CC },
-  { code: 'SMF', label: 'VOL', color: POSITION_COLORS.VOL },
-  { code: 'RMF', label: 'CDR', color: POSITION_COLORS.CDR },
-  { code: 'LMF', label: 'CIZ', color: POSITION_COLORS.CIZ },
-  { code: 'AMF', label: 'MP', color: POSITION_COLORS.MP },
-  { code: 'WF', label: 'EX', color: POSITION_COLORS.EX },
-  { code: 'RWF', label: 'ED', color: POSITION_COLORS.ED },
-  { code: 'LWF', label: 'EI', color: POSITION_COLORS.EI },
-  { code: 'SS', label: 'SD', color: POSITION_COLORS.SD },
-  { code: 'CF', label: 'DC', color: POSITION_COLORS.DC },
+{ code: 'GK', label: 'PT', color: POSITION_COLORS.PT },
+{ code: 'SWP', label: 'LIB', color: POSITION_COLORS.LIB },
+{ code: 'CB', label: 'CT', color: POSITION_COLORS.CT },
+{ code: 'SB', label: 'SA', color: POSITION_COLORS.SA },
+{ code: 'RB', label: 'DD', color: POSITION_COLORS.DD },
+{ code: 'LB', label: 'DI', color: POSITION_COLORS.DI },
+{ code: 'DMF', label: 'CCD', color: POSITION_COLORS.CCD },
+{ code: 'WB', label: 'LA', color: POSITION_COLORS.LA },
+{ code: 'RWB', label: 'DLD', color: POSITION_COLORS.DLD },
+{ code: 'LWB', label: 'DLI', color: POSITION_COLORS.DLI },
+{ code: 'CMF', label: 'CC', color: POSITION_COLORS.CC },
+{ code: 'SMF', label: 'VOL', color: POSITION_COLORS.VOL },
+{ code: 'RMF', label: 'CDR', color: POSITION_COLORS.CDR },
+{ code: 'LMF', label: 'CIZ', color: POSITION_COLORS.CIZ },
+{ code: 'AMF', label: 'MP', color: POSITION_COLORS.MP },
+{ code: 'WF', label: 'EX', color: POSITION_COLORS.EX },
+{ code: 'RWF', label: 'ED', color: POSITION_COLORS.ED },
+{ code: 'LWF', label: 'EI', color: POSITION_COLORS.EI },
+{ code: 'SS', label: 'SD', color: POSITION_COLORS.SD },
+{ code: 'CF', label: 'DC', color: POSITION_COLORS.DC },
 ];
 
 const DEMARCATION_COLUMNS = [
-  'D',
-  'E',
-  'M',
-  'A',
-  'R',
-  'C',
-  'A_1',
-  'C_1',
-  'I',
-  'O',
-  'N',
+'D',
+'E',
+'M',
+'A',
+'R',
+'C',
+'A_1',
+'C_1',
+'I',
+'O',
+'N',
 ] as const;
 
+// Mapeo de posiciones ambidiestras a sus variantes laterales
+const AMBIDEXTROUS_EQUIVALENCE: Record<string, string[]> = {
+SB: ['RB', 'LB'],
+WB: ['RWB', 'LWB'],
+SMF: ['RMF', 'LMF'],
+WF: ['RWF', 'LWF'],
+};
+
 const STATIC_FIELD_OPTIONS: Record<string, string[]> = {
-  PIE: ['Derecho', 'Izquierdo', 'Ambos'],
-  'FAVOURED SIDE': ['Derecho', 'Izquierdo', 'Ambos'],
-  'SKIN COLOR': ['Claro', 'Medio', 'Moreno', 'Negro'],
-  'TOLERANCIA LESIONES': ['A', 'B', 'C'],
-  CONSISTENCIA: ['1', '2', '3', '4', '5', '6', '7', '8'],
-  'CONDICI\u00D3N FITNESS': ['1', '2', '3', '4', '5', '6', '7', '8'],
-  'PRECICI\u00D3N PIE MALO': ['1', '2', '3', '4', '5', '6', '7', '8'],
-  'FRECUENCIA PIE MALO': ['1', '2', '3', '4', '5', '6', '7', '8'],
-  'nro selección': ['Si', 'No'],
-  'nro clasico': ['Si', 'No'],
-  ANFPES: ['Si', 'No'],
+PIE: ['Derecho', 'Izquierdo', 'Ambos'],
+'FAVOURED SIDE': ['Derecho', 'Izquierdo', 'Ambos'],
+'SKIN COLOR': ['Claro', 'Medio', 'Moreno', 'Negro'],
+'TOLERANCIA LESIONES': ['A', 'B', 'C'],
+CONSISTENCIA: ['1', '2', '3', '4', '5', '6', '7', '8'],
+'CONDICI\u00D3N FITNESS': ['1', '2', '3', '4', '5', '6', '7', '8'],
+'PRECICI\u00D3N PIE MALO': ['1', '2', '3', '4', '5', '6', '7', '8'],
+'FRECUENCIA PIE MALO': ['1', '2', '3', '4', '5', '6', '7', '8'],
+'nro selección': ['Si', 'No'],
+'nro clasico': ['Si', 'No'],
+ANFPES: ['Si', 'No'],
 };
 const DYNAMIC_OPTION_FIELDS = new Set(['NACIONALIDAD', 'CLUB']);
 
 SPECIAL_SKILL_FIELDS.forEach((field) => {
-  STATIC_FIELD_OPTIONS[field] = ['Si', 'No'];
+STATIC_FIELD_OPTIONS[field] = ['Si', 'No'];
 });
 
 const OPERATOR_OPTIONS: Array<{
-  value: FilterOperator;
-  label: string;
-  needsSecond?: boolean;
+value: FilterOperator;
+label: string;
+needsSecond?: boolean;
 }> = [
-  { value: 'eq', label: 'Es exactamente' },
-  { value: 'contains', label: 'Contiene' },
-  { value: 'gte', label: 'Es mayor o igual que' },
-  { value: 'lte', label: 'Es menor o igual que' },
-  { value: 'between', label: 'Es entre', needsSecond: true },
+{ value: 'eq', label: 'Es exactamente' },
+{ value: 'contains', label: 'Contiene' },
+{ value: 'gte', label: 'Es mayor o igual que' },
+{ value: 'lte', label: 'Es menor o igual que' },
+{ value: 'between', label: 'Es entre', needsSecond: true },
 ];
 
 function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
+return text
+.toLowerCase()
+.normalize('NFD')
+.replace(/[\u0300-\u036f]/g, '');
 }
 
 function safeNormalize(value: unknown): string {
-  if (value === null || value === undefined) {
-    return '';
-  }
-  return normalize(String(value));
+if (value === null || value === undefined) {
+return '';
+}
+return normalize(String(value));
 }
 
 export function PlayerSearch() {
-  const players = useCacheStore((state) => state.players);
-  const status = useCacheStore((state) => state.status);
-  const error = useCacheStore((state) => state.error);
-  const selectedId = useCacheStore((state) => state.selectedPlayerId);
-  const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
+const players = useCacheStore((state) => state.players);
+const status = useCacheStore((state) => state.status);
+const error = useCacheStore((state) => state.error);
+const selectedId = useCacheStore((state) => state.selectedPlayerId);
+const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
 
-  const {
-    savedViews,
-    currentViewId,
-    saveView,
-    deleteView,
-    loadView,
-    saveLastViewState,
-    loadLastViewState,
-  } = usePlayerViews();
+const {
+savedViews,
+currentViewId,
+saveView,
+deleteView,
+loadView,
+saveLastViewState,
+loadLastViewState,
+} = usePlayerViews();
 
-  const [query, setQuery] = useState('');
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState<FilterCondition[]>([]);
-  const [positionsFilter, setPositionsFilter] = useState<string[]>([]);
-  const [sortConfig, setSortConfig] = useState<SortConfig[]>([
-    { key: 'PROMEDIO', direction: 'desc' },
-  ]);
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-    new Set(DEFAULT_TABLE_COLUMNS),
-  );
-  const [columnsMenuOpen, setColumnsMenuOpen] = useState(false);
-  const [viewsMenuOpen, setViewsMenuOpen] = useState(false);
-  const [saveViewDialogOpen, setSaveViewDialogOpen] = useState(false);
-  const [newViewName, setNewViewName] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(50);
+const [query, setQuery] = useState('');
+const [filtersOpen, setFiltersOpen] = useState(false);
+const [filters, setFilters] = useState<FilterCondition[]>([]);
+const [positionsFilter, setPositionsFilter] = useState<string[]>([]);
+const [sortConfig, setSortConfig] = useState<SortConfig[]>([
+{ key: 'PROMEDIO', direction: 'desc' },
+]);
+const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
+new Set(DEFAULT_TABLE_COLUMNS),
+);
+const [columnsMenuOpen, setColumnsMenuOpen] = useState(false);
+const [viewsMenuOpen, setViewsMenuOpen] = useState(false);
+const [saveViewDialogOpen, setSaveViewDialogOpen] = useState(false);
+const [newViewName, setNewViewName] = useState('');
+const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage] = useState(50);
 
-  // Preselection states
-  const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
-  const selectPlayer = usePreselectionStore((state) => state.selectPlayer);
-  const deselectPlayer = usePreselectionStore((state) => state.deselectPlayer);
-  const selectAllPlayers = usePreselectionStore((state) => state.selectAllPlayers);
-  const clearSelection = usePreselectionStore((state) => state.clearSelection);
-  const getPlayerPreselections = usePreselectionStore(
-    (state) => state.getPlayerPreselections,
-  );
-  const [addToPreselectionModalOpen, setAddToPreselectionModalOpen] = useState(false);
-  const [lastSelectedPlayerId, setLastSelectedPlayerId] = useState<string | null>(null);
-  const floatingButtonRef = useRef<HTMLButtonElement>(null);
+// Preselection states
+const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
+const selectPlayer = usePreselectionStore((state) => state.selectPlayer);
+const deselectPlayer = usePreselectionStore((state) => state.deselectPlayer);
+const selectAllPlayers = usePreselectionStore((state) => state.selectAllPlayers);
+const clearSelection = usePreselectionStore((state) => state.clearSelection);
+const getPlayerPreselections = usePreselectionStore(
+(state) => state.getPlayerPreselections,
+);
+const [addToPreselectionModalOpen, setAddToPreselectionModalOpen] = useState(false);
+const [lastSelectedPlayerId, setLastSelectedPlayerId] = useState<string | null>(null);
+const floatingButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Cargar el último estado al iniciar
-  useEffect(() => {
-    const lastState = loadLastViewState();
-    if (lastState) {
-      setFilters(lastState.filters);
-      setPositionsFilter(lastState.positionsFilter);
-      setSortConfig(lastState.sortConfig);
-      setVisibleColumns(new Set(lastState.visibleColumns));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+// Cargar el último estado al iniciar
+useEffect(() => {
+const lastState = loadLastViewState();
+if (lastState) {
+setFilters(lastState.filters);
+setPositionsFilter(lastState.positionsFilter);
+setSortConfig(lastState.sortConfig);
+setVisibleColumns(new Set(lastState.visibleColumns));
+}
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
-  // Guardar el estado actual cuando cambie
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      saveLastViewState({
-        filters,
-        positionsFilter,
-        sortConfig,
-        visibleColumns: Array.from(visibleColumns),
-      });
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [filters, positionsFilter, sortConfig, visibleColumns, saveLastViewState]);
+// Guardar el estado actual cuando cambie
+useEffect(() => {
+const timeoutId = setTimeout(() => {
+saveLastViewState({
+filters,
+positionsFilter,
+sortConfig,
+visibleColumns: Array.from(visibleColumns),
+});
+}, 500);
+return () => clearTimeout(timeoutId);
+}, [filters, positionsFilter, sortConfig, visibleColumns, saveLastViewState]);
 
-  const normalizedQuery = normalize(query.trim());
+const normalizedQuery = query.trim().toLowerCase();
 
-  // Columnas visibles ordenadas según FIELD_ORDER
-  const sortedVisibleColumns = useMemo(() => {
-    return getSortedColumns(visibleColumns);
-  }, [visibleColumns]);
+// Columnas visibles ordenadas según FIELD_ORDER
+const sortedVisibleColumns = useMemo(() => {
+return getSortedColumns(visibleColumns);
+}, [visibleColumns]);
 
-  const fieldOptions = useMemo(() => {
-    if (!players || !players.length) {
-      return [];
-    }
+const fieldOptions = useMemo(() => {
+if (!players || !players.length) {
+return [];
+}
 
     const options: Array<{ value: string; label: string; isGroup?: boolean }> = [];
 
@@ -217,13 +225,14 @@ export function PlayerSearch() {
     });
 
     return options;
-  }, [players]);
 
-  const fieldValueOptions = useMemo<Record<string, string[]>>(() => {
-    const base: Record<string, string[]> = { ...STATIC_FIELD_OPTIONS };
-    if (!players) {
-      return base;
-    }
+}, [players]);
+
+const fieldValueOptions = useMemo<Record<string, string[]>>(() => {
+const base: Record<string, string[]> = { ...STATIC_FIELD_OPTIONS };
+if (!players) {
+return base;
+}
 
     const collectors = new Map<string, Set<string>>();
     DYNAMIC_OPTION_FIELDS.forEach((field) => collectors.set(field, new Set<string>()));
@@ -247,12 +256,13 @@ export function PlayerSearch() {
     });
 
     return base;
-  }, [players]);
 
-  const results = useMemo(() => {
-    if (!players) {
-      return [];
-    }
+}, [players]);
+
+const results = useMemo(() => {
+if (!players) {
+return [];
+}
 
     let filtered = players.filter((player) => {
       const matchesSearch =
@@ -299,34 +309,36 @@ export function PlayerSearch() {
     }
 
     return filtered;
-  }, [players, normalizedQuery, filters, positionsFilter, sortConfig]);
 
-  const totalPages = Math.ceil(results.length / itemsPerPage);
-  const paginatedResults = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return results.slice(start, start + itemsPerPage);
-  }, [results, currentPage, itemsPerPage]);
+}, [players, normalizedQuery, filters, positionsFilter, sortConfig]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [normalizedQuery, filters, positionsFilter]);
+const totalPages = Math.ceil(results.length / itemsPerPage);
+const paginatedResults = useMemo(() => {
+const start = (currentPage - 1) \* itemsPerPage;
+return results.slice(start, start + itemsPerPage);
+}, [results, currentPage, itemsPerPage]);
 
-  useEffect(() => {
-    if (!paginatedResults.length) {
-      setSelectedPlayer(null);
-      return;
-    }
+useEffect(() => {
+setCurrentPage(1);
+}, [normalizedQuery, filters, positionsFilter]);
+
+useEffect(() => {
+if (!paginatedResults.length) {
+setSelectedPlayer(null);
+return;
+}
 
     if (!selectedId || !paginatedResults.some((player) => player.ID === selectedId)) {
       setSelectedPlayer(paginatedResults[0].ID as string);
     }
-  }, [paginatedResults, selectedId, setSelectedPlayer]);
 
-  // Position floating button near last selected player
-  useEffect(() => {
-    if (!lastSelectedPlayerId || selectedPlayerIds.size === 0) {
-      return;
-    }
+}, [paginatedResults, selectedId, setSelectedPlayer]);
+
+// Position floating button near last selected player
+useEffect(() => {
+if (!lastSelectedPlayerId || selectedPlayerIds.size === 0) {
+return;
+}
 
     const updateButtonPosition = () => {
       const rowElement = document.querySelector(
@@ -381,109 +393,110 @@ export function PlayerSearch() {
       window.removeEventListener('scroll', updateButtonPosition);
       window.removeEventListener('resize', updateButtonPosition);
     };
-  }, [lastSelectedPlayerId, selectedPlayerIds.size, paginatedResults]);
 
-  const loading = status === 'idle' || status === 'loading';
+}, [lastSelectedPlayerId, selectedPlayerIds.size, paginatedResults]);
 
-  const handleAddFilter = () => {
-    if (!fieldOptions.length) {
-      return;
-    }
-    // Buscar el primer campo que no sea un grupo
-    const firstValidField = fieldOptions.find((opt) => !opt.isGroup);
-    if (!firstValidField) {
-      return;
-    }
-    const newFilter: FilterCondition = {
-      id: crypto.randomUUID(),
-      field: firstValidField.value,
-      operator: 'eq',
-      value: '',
-    };
-    setFilters((current) => [...current, newFilter]);
-    setFiltersOpen(true);
-  };
+const loading = status === 'idle' || status === 'loading';
 
-  const handleUpdateFilter = (id: string, partial: Partial<FilterCondition>) => {
-    setFilters((current) =>
-      current.map((filter) => {
-        if (filter.id !== id) {
-          return filter;
-        }
-        const next: FilterCondition = { ...filter, ...partial };
-        if (partial.field) {
-          next.value = '';
-          next.secondaryValue = undefined;
-        }
-        return next;
-      }),
-    );
-  };
+const handleAddFilter = () => {
+if (!fieldOptions.length) {
+return;
+}
+// Buscar el primer campo que no sea un grupo
+const firstValidField = fieldOptions.find((opt) => !opt.isGroup);
+if (!firstValidField) {
+return;
+}
+const newFilter: FilterCondition = {
+id: crypto.randomUUID(),
+field: firstValidField.value,
+operator: 'eq',
+value: '',
+};
+setFilters((current) => [...current, newFilter]);
+setFiltersOpen(true);
+};
 
-  const handleRemoveFilter = (id: string) => {
-    setFilters((current) => current.filter((filter) => filter.id !== id));
-  };
+const handleUpdateFilter = (id: string, partial: Partial<FilterCondition>) => {
+setFilters((current) =>
+current.map((filter) => {
+if (filter.id !== id) {
+return filter;
+}
+const next: FilterCondition = { ...filter, ...partial };
+if (partial.field) {
+next.value = '';
+next.secondaryValue = undefined;
+}
+return next;
+}),
+);
+};
 
-  const handleClearFilters = () => {
-    setFilters([]);
-    setPositionsFilter([]);
-  };
+const handleRemoveFilter = (id: string) => {
+setFilters((current) => current.filter((filter) => filter.id !== id));
+};
 
-  const handleSaveView = () => {
-    if (!newViewName.trim()) {
-      return;
-    }
-    saveView(newViewName.trim(), {
-      filters,
-      positionsFilter,
-      sortConfig,
-      visibleColumns: Array.from(visibleColumns),
-    });
-    setNewViewName('');
-    setSaveViewDialogOpen(false);
-  };
+const handleClearFilters = () => {
+setFilters([]);
+setPositionsFilter([]);
+};
 
-  const handleLoadView = (viewId: string) => {
-    const view = loadView(viewId);
-    if (view) {
-      setFilters(view.filters);
-      setPositionsFilter(view.positionsFilter);
-      setSortConfig(view.sortConfig);
-      setVisibleColumns(new Set(view.visibleColumns));
-    }
-    setViewsMenuOpen(false);
-  };
+const handleSaveView = () => {
+if (!newViewName.trim()) {
+return;
+}
+saveView(newViewName.trim(), {
+filters,
+positionsFilter,
+sortConfig,
+visibleColumns: Array.from(visibleColumns),
+});
+setNewViewName('');
+setSaveViewDialogOpen(false);
+};
 
-  const handleDeleteView = (viewId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (confirm('¿Estás seguro de que quieres eliminar esta vista?')) {
-      deleteView(viewId);
-    }
-  };
+const handleLoadView = (viewId: string) => {
+const view = loadView(viewId);
+if (view) {
+setFilters(view.filters);
+setPositionsFilter(view.positionsFilter);
+setSortConfig(view.sortConfig);
+setVisibleColumns(new Set(view.visibleColumns));
+}
+setViewsMenuOpen(false);
+};
 
-  const handleClearCurrentView = () => {
-    setFilters([]);
-    setPositionsFilter([]);
-    setSortConfig([{ key: 'PROMEDIO', direction: 'desc' }]);
-    setVisibleColumns(new Set(DEFAULT_TABLE_COLUMNS));
-  };
+const handleDeleteView = (viewId: string, e: React.MouseEvent) => {
+e.stopPropagation();
+if (confirm('¿Estás seguro de que quieres eliminar esta vista?')) {
+deleteView(viewId);
+}
+};
 
-  const handleTogglePlayerSelection = (playerId: string) => {
-    if (selectedPlayerIds.has(playerId)) {
-      deselectPlayer(playerId);
-      // Si era el último seleccionado y lo deseleccionamos, limpiar
-      if (lastSelectedPlayerId === playerId) {
-        setLastSelectedPlayerId(null);
-      }
-    } else {
-      selectPlayer(playerId);
-      setLastSelectedPlayerId(playerId);
-    }
-  };
+const handleClearCurrentView = () => {
+setFilters([]);
+setPositionsFilter([]);
+setSortConfig([{ key: 'PROMEDIO', direction: 'desc' }]);
+setVisibleColumns(new Set(DEFAULT_TABLE_COLUMNS));
+};
 
-  const handleToggleAllVisible = () => {
-    const visibleIds = paginatedResults.map((p) => p.ID);
-    const allSelected = visibleIds.every((id) => selectedPlayerIds.has(id));
+const handleTogglePlayerSelection = (playerId: string) => {
+if (selectedPlayerIds.has(playerId)) {
+deselectPlayer(playerId);
+// Si era el último seleccionado y lo deseleccionamos, limpiar
+if (lastSelectedPlayerId === playerId) {
+setLastSelectedPlayerId(null);
+}
+} else {
+selectPlayer(playerId);
+setLastSelectedPlayerId(playerId);
+}
+};
+
+const handleToggleAllVisible = () => {
+const visibleIds = paginatedResults.map((p) => p.ID);
+const allSelected = visibleIds.every((id) => selectedPlayerIds.has(id));
 
     if (allSelected) {
       // Deseleccionar todos los visibles
@@ -497,49 +510,50 @@ export function PlayerSearch() {
         setLastSelectedPlayerId(visibleIds[visibleIds.length - 1]);
       }
     }
-  };
 
-  const handleSort = (key: keyof DerivedPlayer, multi: boolean) => {
-    setSortConfig((current) => {
-      if (multi) {
-        const existing = current.find((s) => s.key === key);
-        if (existing) {
-          if (existing.direction === 'desc') {
-            return current.map((s) =>
-              s.key === key ? { ...s, direction: 'asc' as const } : s,
-            );
-          }
-          return current.filter((s) => s.key !== key);
-        }
-        return [...current, { key, direction: 'desc' }];
-      }
-      const existing = current.find((s) => s.key === key);
-      if (existing && existing.direction === 'desc') {
-        return [{ key, direction: 'asc' }];
-      }
-      if (existing && existing.direction === 'asc') {
-        return [];
-      }
-      return [{ key, direction: 'desc' }];
-    });
-  };
+};
 
-  const toggleColumn = (column: string) => {
-    setVisibleColumns((current) => {
-      const next = new Set(current);
-      if (next.has(column)) {
-        if (column !== 'NOMBRE' && next.size > 1) next.delete(column);
-      } else {
-        next.add(column);
-      }
-      return next;
-    });
-  };
+const handleSort = (key: keyof DerivedPlayer, multi: boolean) => {
+setSortConfig((current) => {
+if (multi) {
+const existing = current.find((s) => s.key === key);
+if (existing) {
+if (existing.direction === 'desc') {
+return current.map((s) =>
+s.key === key ? { ...s, direction: 'asc' as const } : s,
+);
+}
+return current.filter((s) => s.key !== key);
+}
+return [...current, { key, direction: 'desc' }];
+}
+const existing = current.find((s) => s.key === key);
+if (existing && existing.direction === 'desc') {
+return [{ key, direction: 'asc' }];
+}
+if (existing && existing.direction === 'asc') {
+return [];
+}
+return [{ key, direction: 'desc' }];
+});
+};
 
-  const getColumnType = (
-    field: string,
-  ): 'text' | 'number' | 'stat' | 'rating' | 'injury' => {
-    if (field === 'TOLERANCIA LESIONES') return 'injury';
+const toggleColumn = (column: string) => {
+setVisibleColumns((current) => {
+const next = new Set(current);
+if (next.has(column)) {
+if (column !== 'NOMBRE' && next.size > 1) next.delete(column);
+} else {
+next.add(column);
+}
+return next;
+});
+};
+
+const getColumnType = (
+field: string,
+): 'text' | 'number' | 'stat' | 'rating' | 'injury' => {
+if (field === 'TOLERANCIA LESIONES') return 'injury';
 
     // Ratings de posición (promedios con barras)
     if (
@@ -642,52 +656,49 @@ export function PlayerSearch() {
     }
 
     return 'text';
-  };
 
-  return (
-    <section className="card player-search">
-      <header className="search-header">
-        <div className="search-field">
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Nombre, Club o Nacionalidad"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-        </div>
-        <div className="search-actions">
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() => setViewsMenuOpen((open) => !open)}
-          >
-            Vistas {viewsMenuOpen ? '▲' : '▼'}
-          </button>
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() => setFiltersOpen((open) => !open)}
-          >
-            Filtros
-          </button>
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() => setColumnsMenuOpen((open) => !open)}
-          >
-            Columnas {columnsMenuOpen ? '▲' : '▼'}
-          </button>
-          <button
-            type="button"
-            className="secondary-button ghost"
-            onClick={handleClearFilters}
-            disabled={!filters.length && !positionsFilter.length}
-          >
-            Limpiar filtros
-          </button>
-        </div>
-      </header>
+};
+
+return (
+<section className="card player-search">
+<header className="search-header">
+<div className="search-field">
+<input
+className="search-input"
+type="text"
+placeholder="Nombre, Club o Nacionalidad"
+value={query}
+onChange={(event) => setQuery(event.target.value)}
+/>
+</div>
+<div className="search-actions">
+<button
+type="button"
+className="secondary-button"
+onClick={() => setViewsMenuOpen((open) => !open)} >
+Vistas {viewsMenuOpen ? '▲' : '▼'}
+</button>
+<button
+type="button"
+className="secondary-button"
+onClick={() => setFiltersOpen((open) => !open)} >
+Filtros
+</button>
+<button
+type="button"
+className="secondary-button"
+onClick={() => setColumnsMenuOpen((open) => !open)} >
+Columnas {columnsMenuOpen ? '▲' : '▼'}
+</button>
+<button
+type="button"
+className="secondary-button ghost"
+onClick={handleClearFilters}
+disabled={!filters.length && !positionsFilter.length} >
+Limpiar filtros
+</button>
+</div>
+</header>
 
       {viewsMenuOpen && (
         <div className="views-panel">
@@ -1254,15 +1265,16 @@ export function PlayerSearch() {
         />
       )}
     </section>
-  );
+
+);
 }
 
 function evaluateFilter(filter: FilterCondition, player: DerivedPlayer): boolean {
-  // Manejo especial para filtro ANFPES
-  if (filter.field === 'ANFPES') {
-    const playerClub = player.CLUB as string;
-    const isAnfpesClub = ANFPES_CLUBS.has(playerClub);
-    const filterValue = filter.value.trim().toLowerCase();
+// Manejo especial para filtro ANFPES
+if (filter.field === 'ANFPES') {
+const playerClub = player.CLUB as string;
+const isAnfpesClub = ANFPES_CLUBS.has(playerClub);
+const filterValue = filter.value.trim().toLowerCase();
 
     if (filterValue === 'si') {
       return isAnfpesClub;
@@ -1270,93 +1282,94 @@ function evaluateFilter(filter: FilterCondition, player: DerivedPlayer): boolean
       return !isAnfpesClub;
     }
     return true; // Si no hay valor, no filtrar
-  }
 
-  const rawValue = player[filter.field as keyof DerivedPlayer];
-  const displayValue = getFieldFilterValue(filter.field as keyof DerivedPlayer, player);
-  const normalizedDisplay = displayValue.toLowerCase();
-  const normalizedFilterValue = filter.value.trim().toLowerCase();
+}
 
-  switch (filter.operator) {
-    case 'contains':
-      if (!normalizedFilterValue) {
-        return true;
-      }
-      return normalizedDisplay.includes(normalizedFilterValue);
-    case 'eq':
-      if (!normalizedFilterValue) {
-        return true;
-      }
-      return normalizedDisplay === normalizedFilterValue;
-    case 'gte': {
-      const playerNumber = toNumber(rawValue);
-      const filterNumber = toNumber(filter.value);
-      if (playerNumber === null || filterNumber === null) {
-        return false;
-      }
-      return playerNumber >= filterNumber;
-    }
-    case 'lte': {
-      const playerNumber = toNumber(rawValue);
-      const filterNumber = toNumber(filter.value);
-      if (playerNumber === null || filterNumber === null) {
-        return false;
-      }
-      return playerNumber <= filterNumber;
-    }
-    case 'between': {
-      const playerNumber = toNumber(rawValue);
-      const start = toNumber(filter.value);
-      const end = toNumber(filter.secondaryValue);
-      if (playerNumber === null || start === null || end === null) {
-        return false;
-      }
-      const min = Math.min(start, end);
-      const max = Math.max(start, end);
-      return playerNumber >= min && playerNumber <= max;
-    }
-    default:
-      return true;
-  }
+const rawValue = player[filter.field as keyof DerivedPlayer];
+const displayValue = getFieldFilterValue(filter.field as keyof DerivedPlayer, player);
+const normalizedDisplay = displayValue.toLowerCase();
+const normalizedFilterValue = filter.value.trim().toLowerCase();
+
+switch (filter.operator) {
+case 'contains':
+if (!normalizedFilterValue) {
+return true;
+}
+return normalizedDisplay.includes(normalizedFilterValue);
+case 'eq':
+if (!normalizedFilterValue) {
+return true;
+}
+return normalizedDisplay === normalizedFilterValue;
+case 'gte': {
+const playerNumber = toNumber(rawValue);
+const filterNumber = toNumber(filter.value);
+if (playerNumber === null || filterNumber === null) {
+return false;
+}
+return playerNumber >= filterNumber;
+}
+case 'lte': {
+const playerNumber = toNumber(rawValue);
+const filterNumber = toNumber(filter.value);
+if (playerNumber === null || filterNumber === null) {
+return false;
+}
+return playerNumber <= filterNumber;
+}
+case 'between': {
+const playerNumber = toNumber(rawValue);
+const start = toNumber(filter.value);
+const end = toNumber(filter.secondaryValue);
+if (playerNumber === null || start === null || end === null) {
+return false;
+}
+const min = Math.min(start, end);
+const max = Math.max(start, end);
+return playerNumber >= min && playerNumber <= max;
+}
+default:
+return true;
+}
 }
 
 function toNumber(value: unknown): number | null {
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return value;
-  }
-  if (typeof value === 'string' && value.trim().length > 0) {
-    const parsed = Number(value.replace(',', '.'));
-    if (!Number.isNaN(parsed)) {
-      return parsed;
-    }
-  }
-  return null;
+if (typeof value === 'number' && Number.isFinite(value)) {
+return value;
+}
+if (typeof value === 'string' && value.trim().length > 0) {
+const parsed = Number(value.replace(',', '.'));
+if (!Number.isNaN(parsed)) {
+return parsed;
+}
+}
+return null;
 }
 
 // Mapeo de posiciones ambidiestras a sus variantes laterales
 const AMBIDEXTROUS_EQUIVALENCE: Record<string, string[]> = {
-  SB: ['RB', 'LB'],
-  WB: ['RWB', 'LWB'],
-  SMF: ['RMF', 'LMF'],
-  WF: ['RWF', 'LWF'],
+SB: ['RB', 'LB'],
+WB: ['RWB', 'LWB'],
+SMF: ['RMF', 'LMF'],
+WF: ['RWF', 'LWF'],
 };
 
 function matchesPositions(player: DerivedPlayer, positions: string[]): boolean {
-  if (!positions.length) {
-    return true;
-  }
-  const playerPositions = DEMARCATION_COLUMNS.map(
-    (column) => player[column as keyof DerivedPlayer],
-  ).filter(Boolean) as string[];
-  if (!playerPositions.length) {
-    return false;
-  }
+if (!positions.length) {
+return true;
+}
+const playerPositions = DEMARCATION_COLUMNS.map(
+(column) => player[column as keyof DerivedPlayer],
+).filter(Boolean) as string[];
+if (!playerPositions.length) {
+return false;
+}
 
-  return playerPositions.some((playerCode) => {
-    // Coincidencia exacta
-    if (positions.includes(playerCode)) {
-      return true;
-    }
+return playerPositions.some((playerCode) => {
+// Coincidencia exacta
+if (positions.includes(playerCode)) {
+return true;
+}
 
     // Si el jugador tiene posición ambidiestra, verificar si buscan sus variantes laterales
     const lateralVariants = AMBIDEXTROUS_EQUIVALENCE[playerCode];
@@ -1365,16 +1378,17 @@ function matchesPositions(player: DerivedPlayer, positions: string[]): boolean {
     }
 
     return false;
-  });
+
+});
 }
 
 function togglePosition(
-  code: string,
-  setPositions: React.Dispatch<React.SetStateAction<string[]>>,
+code: string,
+setPositions: React.Dispatch<React.SetStateAction<string[]>>,
 ) {
-  setPositions((current) =>
-    current.includes(code)
-      ? current.filter((position) => position !== code)
-      : [...current, code],
-  );
+setPositions((current) =>
+current.includes(code)
+? current.filter((position) => position !== code)
+: [...current, code],
+);
 }

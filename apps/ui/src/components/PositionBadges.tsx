@@ -40,7 +40,9 @@ const POSITION_TRANSLATION: Record<string, string> = {
 };
 
 // Clasificación de posiciones por línea
-const POSITION_LINE: Record<string, 'PT' | 'DEF' | 'MED' | 'ATA'> = {
+export type PositionLine = 'PT' | 'DEF' | 'MED' | 'ATA';
+
+const POSITION_LINE: Record<string, PositionLine> = {
   PT: 'PT',
   LIB: 'DEF',
   CT: 'DEF',
@@ -70,6 +72,19 @@ const LINE_LABELS: Record<string, string> = {
   ATA: 'Ataque',
 };
 
+export function getPlayerPositions(player: DerivedPlayer): string[] {
+  const codes = DEMARCATION_COLUMNS.map((column) => player[column as keyof DerivedPlayer])
+    .filter(Boolean)
+    .map((code) => POSITION_TRANSLATION[code as string] || (code as string))
+    .filter((pos): pos is string => typeof pos === 'string');
+
+  return Array.from(new Set(codes));
+}
+
+export function getPositionLine(position: string): PositionLine {
+  return POSITION_LINE[position] || 'DEF';
+}
+
 interface PositionBadgesProps {
   player: DerivedPlayer;
   maxVisible?: number;
@@ -79,15 +94,7 @@ export function PositionBadges({ player, maxVisible = 4 }: PositionBadgesProps) 
   const [showTooltip, setShowTooltip] = useState(false);
 
   const positions = useMemo(() => {
-    const codes = DEMARCATION_COLUMNS.map(
-      (column) => player[column as keyof DerivedPlayer],
-    )
-      .filter(Boolean)
-      .map((code) => POSITION_TRANSLATION[code as string] || (code as string))
-      .filter((pos): pos is string => typeof pos === 'string');
-
-    // Eliminar duplicados manteniendo orden
-    return Array.from(new Set(codes));
+    return getPlayerPositions(player);
   }, [player]);
 
   const visiblePositions = positions.slice(0, maxVisible);
@@ -113,7 +120,7 @@ export function PositionBadges({ player, maxVisible = 4 }: PositionBadgesProps) 
   return (
     <div className="position-badges-container">
       {visiblePositions.map((position, index) => {
-        const line = POSITION_LINE[position] || 'DEF';
+        const line = getPositionLine(position);
         const isPrimary = index === 0;
         return (
           <span

@@ -1,17 +1,13 @@
-import type { DerivedPlayer } from '@anfpes/engine';
-import { useEffect, useMemo, useState, useRef } from 'react';
+﻿import type { DerivedPlayer } from '@anfpes/engine';
+import { useEffect, useMemo, useState } from 'react';
 import { useCacheStore } from '../store/cacheStore';
-import { usePreselectionStore } from '../store/preselectionStore';
 import {
   DEFAULT_TABLE_COLUMNS,
   FIELD_GROUPS,
   getTableHeaderLabel,
-  getSortedColumns,
 } from '../constants/playerFields';
 import { POSITION_COLORS, type SortConfig } from '../types/table';
 import { TableCell } from './TableCell';
-import { PositionBadges } from './PositionBadges';
-import { AddToPreselectionModal } from './AddToPreselectionModal';
 import {
   formatClub,
   formatNationality,
@@ -25,7 +21,6 @@ import {
 import { usePlayerViews, type FilterCondition } from '../hooks/usePlayerViews';
 import { getNationalityInfo } from '../data/nationalities';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
-import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 
 type FilterOperator = 'eq' | 'contains' | 'gte' | 'lte' | 'between';
 
@@ -33,19 +28,15 @@ const POSITION_CODES = [
   { code: 'GK', label: 'PT', color: POSITION_COLORS.PT },
   { code: 'SWP', label: 'LIB', color: POSITION_COLORS.LIB },
   { code: 'CB', label: 'CT', color: POSITION_COLORS.CT },
-  { code: 'SB', label: 'SA', color: POSITION_COLORS.SA },
   { code: 'RB', label: 'DD', color: POSITION_COLORS.DD },
   { code: 'LB', label: 'DI', color: POSITION_COLORS.DI },
   { code: 'DMF', label: 'CCD', color: POSITION_COLORS.CCD },
-  { code: 'WB', label: 'LA', color: POSITION_COLORS.LA },
   { code: 'RWB', label: 'DLD', color: POSITION_COLORS.DLD },
   { code: 'LWB', label: 'DLI', color: POSITION_COLORS.DLI },
   { code: 'CMF', label: 'CC', color: POSITION_COLORS.CC },
-  { code: 'SMF', label: 'VOL', color: POSITION_COLORS.VOL },
   { code: 'RMF', label: 'CDR', color: POSITION_COLORS.CDR },
   { code: 'LMF', label: 'CIZ', color: POSITION_COLORS.CIZ },
   { code: 'AMF', label: 'MP', color: POSITION_COLORS.MP },
-  { code: 'WF', label: 'EX', color: POSITION_COLORS.EX },
   { code: 'RWF', label: 'ED', color: POSITION_COLORS.ED },
   { code: 'LWF', label: 'EI', color: POSITION_COLORS.EI },
   { code: 'SS', label: 'SD', color: POSITION_COLORS.SD },
@@ -66,6 +57,555 @@ const DEMARCATION_COLUMNS = [
   'N',
 ] as const;
 
+// Lista de clubes ANFPES
+const ANFPES_CLUBS = new Set([
+  'A.C. Milan',
+  'A.S. Roma',
+  'Ajax',
+  'Arsenal',
+  'Athletic Club',
+  'Bayern M├╝nchen',
+  'Boca Juniors',
+  'Celtic',
+  'Chelsea FC',
+  'Chievo Verona',
+  'Dynamo Kiev',
+  'F.C. Barcelona',
+  'Fiorentina',
+  'Girondins de Bordeaux',
+  'Inter',
+  'Juventus',
+  'Lazio',
+  'Liverpool FC',
+  'Manchester City',
+  'Manchester United',
+  'Newcastle United FC',
+  'Olympique de Marseille',
+  'Olympique Lyonnais',
+  'Paris Saint-Germain',
+  'Parma',
+  'R. Madrid',
+  'R. Sociedad',
+  'R.C. Celta',
+  'Roda JC',
+  'Sevilla F.C.',
+  'Sporting Lisbon',
+  'Villarreal C.F.',
+]);
+
+// Lista de Jugadores Leyenda (Selecciones Cl├ísicas + Shop Leyendas)
+const LEGEND_PLAYERS = new Set([
+  'Jack Charlton',
+  'J├║nior',
+  'K. Andersson',
+  'Bobby Robson',
+  'Fran',
+  'Paul Ince',
+  'Ronald Koeman',
+  'Berry van Aerle',
+  'Jan Wouters',
+  'W. Overath',
+  'A. Tarantini',
+  'Am├®rico Gallego',
+  'D. Passarella',
+  'Daniel Bertoni',
+  'Diego Maradona',
+  'F. Redondo',
+  'G. Batistuta',
+  'J. Burruchaga',
+  'Jorge Valdano',
+  'Jos├® Cuciuffo',
+  'Jos├® Luis Brown',
+  'Leopoldo Luque',
+  'Luis Galv├ín',
+  'Mario Kempes',
+  'Nery Pumpido',
+  'Olarticoechea',
+  '├ôscar Ruggeri',
+  'Osvaldo Ardiles',
+  'Sergio Batista',
+  'Ubaldo Fillol',
+  'Bebeto',
+  'Brito',
+  'C. Taffarel',
+  'Careca',
+  'Clodoaldo',
+  'Dunga',
+  'F├®lix',
+  'Gerson',
+  'Jairzinho',
+  'Leonardo',
+  'Luiz Pereira',
+  'Paulo Falcao',
+  'Pel├®',
+  'Piazza',
+  'R. Rivelino',
+  'Ra├¡',
+  'S├│crates',
+  'Toninho Cerezo',
+  'Tostao',
+  'Zico',
+  'Alan Ball',
+  'Bobby Charlton',
+  'Bobby Moore',
+  'David Seaman',
+  'Gary Lineker',
+  'Geoff Hurst',
+  'Gordon Banks',
+  'Ian Wright',
+  'John Barnes',
+  'Kevin Keegan',
+  'Martin Keown',
+  'Martin Peters',
+  'Nobby Stiles',
+  'Paul Gascoigne',
+  'Peter Shilton',
+  'Ray Wilson',
+  'Tom Hoodle',
+  'Tony Adams',
+  'Alain Giresse',
+  'D. Rocheteau',
+  'David Ginola',
+  'Didier Six',
+  'Emmanuel Petit',
+  '├ëric Cantona',
+  'Jean M. Ferreri',
+  'Jean P. Papin',
+  'Jean Tigana',
+  'Jean-Luc Ettori',
+  'Jo├½l Bats',
+  'Laurent Blanc',
+  'Luis Fern├índez',
+  'Manuel Amor├│s',
+  'Marius Tr├®sor',
+  'Maxime Bossis',
+  'Michel Platini',
+  'Thierry Tusseau',
+  'Andreas Brehme',
+  'B. H├Âlzenbein',
+  'Bernd Schuster',
+  'Berti Vogts',
+  'Bodo Illgner',
+  'F. Beckenbauer',
+  'Gerd M├╝ller',
+  'Guido Buchwald',
+  'J. Grabowski',
+  'J. Klinsmann',
+  'J├╝rgen Kohler',
+  'K-H Rummenigge',
+  'Lothar Matth├ñus',
+  'Matthias Sammer',
+  'Oliver Bierhoff',
+  'P. Littbarski',
+  'Paul Breitner',
+  'Rainer Bonhof',
+  'Rudi V├Âller',
+  'Schwarzenbeck',
+  'Sepp Maier',
+  'Antonio Cabrini',
+  'Bruno Conti',
+  'Claudio Gentile',
+  'D. Albertini',
+  'Dino Zoff',
+  'F. Collovati',
+  'Franco Baresi',
+  'G. Bergomi',
+  'Gabriele Oriali',
+  'Gaetano Scirea',
+  'Gianfranco Zola',
+  'Gianluca Vialli',
+  'Gianni Rivera',
+  'Marco Tardelli',
+  'P. Vierchowod',
+  'Paolo Rossi',
+  'R. Donadoni',
+  'Roberto Baggio',
+  'Roberto Mancini',
+  'S. Schillaci',
+  'Walter Zenga',
+  'A. van Tiggelen',
+  'Arie Haan',
+  'Arnold M├╝hren',
+  'Frank Rijkaard',
+  'G. Vanenburg',
+  'Jan Jongbloed',
+  'Johan Cruyff',
+  'Johan Neeskens',
+  'Johnny Rep',
+  'M. van Basten',
+  'Piet Keizer',
+  'Rob Rensenbrink',
+  'Ruud Gullit',
+  'Ruud Krol',
+  'Van Breukelen',
+  'W. van Hanegem',
+  'Wim Jansen',
+  'Wim Suurbier',
+  'Everaldo',
+  'H├®ctor Enrique',
+  'Mat├¡as Almeyda',
+  'Carlos Alberto',
+  'F. Ravanelli',
+  'Mauro Silva',
+  'F. Asprilla',
+  'George Cohen',
+  'Wim Rijsbergen',
+  'Frank Leboeuf',
+  'Tony Yeboah',
+  'C. Alberto',
+  'F. Graziani',
+  'Angelo Di Livio',
+  'Ricardo Giusti',
+  'B. Genghini',
+  'Roger Hunt',
+  'Bruno Bellone',
+  'G├®rard Janvion',
+  'Erwin Koeman',
+  'Uli H├Âeness',
+  'A. Mostov├│i',
+  'Alen Boksic',
+  'C. Caniggia',
+  'C. Valderrama',
+  'E. Francescoli',
+  'Enzo Scifo',
+  'Eus├®bio',
+  'Fernando Hierro',
+  'G. Popescu',
+  'Garrincha',
+  'Gheorghe Hagi',
+  'Hugo S├ínchez',
+  'Ian Rush',
+  'Iv├ín Zamorano',
+  'Jamie Redknapp',
+  'Kenny Dalglish',
+  'Oleg Blokhin',
+  'Roger Milla',
+  'S├índor Kocsis',
+  'Valeri Karpin',
+  'A. Di St├®fano',
+  'D. Stojkovic',
+  'Davor Suker',
+  'Dejan Savicevic',
+  'Denis Law',
+  'Dragan Dzajic',
+  'G. Giannini',
+  'G. Lentini',
+  'George Best',
+  'George Weah',
+  'K. Balakov',
+  'P. Andersson',
+  'P. Schmeichel',
+  "Patrick M'Boma",
+  'Paulo Sousa',
+  'Thomas Ravelli',
+  'Tomas Brolin',
+  'Zvonimir Boban',
+  'Billy Bremner',
+  'Brian Laudrup',
+  'E. Butrague├▒o',
+  'Ferenc Pusk├ís',
+  'G. Signori',
+  'H. Stoichkov',
+  'J. Chilavert',
+  'Jorge Campos',
+  'Jos├® M. Bakero',
+  'Lev Yashin',
+  'Luis Enrique',
+  'Marc Overmars',
+  'Mark Hughes',
+  'Martin Dahlin',
+  'Matt Le Tissier',
+  'Michael Laudrup',
+  'P. Mijatovic',
+  'Ren├® Higuita',
+  'Thomas H├ñssler',
+  'Adrian Ilie',
+  'Allan Simonsen',
+  'Andreas Herzog',
+  'Denis Irwin',
+  'Djalminha',
+  'Falcao',
+  'Haim Revivo',
+  'Igor Protti',
+  '├ìhor Bel├ínov',
+  'Luis Su├írez M.',
+  "M. Preud'homme",
+  'Magrao',
+  'Marc-Vivien Fo├®',
+  'Pat Jennings',
+  'Preben Elkjaer',
+  'Rub├®n Sosa',
+  'S. Matthews',
+  'T. Begiristain',
+  'Zbigniew Boniek',
+  'Ciro Ferrara',
+  'Jens Jeremies',
+  'Mauro Tassotti',
+  'R. Prosinecki',
+  'D. Deschamps',
+  'Sergi Barjuan',
+  'Christian Ziege',
+]);
+
+// Lista de Jugadores ML (Master League)
+const ML_PLAYERS = new Set([
+  'Boyano',
+  'Metelger',
+  'Andre',
+  'Burchet',
+  'Ceciu',
+  'Dodo',
+  'Espimas',
+  'Fouque',
+  'Giersen',
+  'Hamsun',
+  'Huylens',
+  'Iouga',
+  'Ivarov',
+  'Jaric',
+  'Libermann',
+  'Lothar',
+  'Macco',
+  'Minanda',
+  'Ordaz',
+  'Ruskin',
+  'Stein',
+  'Stremer',
+  'Valeny',
+  'Ximelez',
+  'Zamenhof',
+  'Barota',
+  'Celnili',
+  'Dulic',
+  'Edingson',
+  'Harty',
+  'Kelsen',
+  'Nachdecal',
+  'Njorgo',
+  'Ostwaut',
+  'Vornander',
+  'Aaltonen',
+  'Abdel Salam',
+  'Acosta',
+  'Adam',
+  'Ahmet',
+  'Alexeev',
+  'Andrews',
+  'Arts',
+  'Baker',
+  'Barth',
+  'Baumann',
+  'Benon',
+  'Berger',
+  'Bianchi',
+  'Bilic',
+  'Boffa',
+  'Borges',
+  'Bos',
+  'Bosnjak',
+  'Bouquet',
+  'Bradley',
+  'Buchanan',
+  'Buga',
+  'Bustos',
+  'Cabrera',
+  'Camacho',
+  'Carter',
+  'Cem',
+  'Cervantes',
+  'Chacon',
+  'Chapi',
+  'Che Hyon Hon',
+  'Cho Jin Wha',
+  'Clarke',
+  'Clement',
+  'Cocio',
+  'Conwey',
+  'Cooper',
+  'Cuypers',
+  'Delios',
+  'Dietrich',
+  'Doesburg',
+  'Dupont',
+  'Eckstein',
+  'El Moubarki',
+  'Engin',
+  'Ettori',
+  'Fatecha',
+  'Fernandez',
+  'Feurer',
+  'Fischer',
+  'Franovic',
+  'Frederiksen',
+  'Fredriksson',
+  'Gambino',
+  'Gibson',
+  'Gottwald',
+  'Graham',
+  'Griffiths',
+  'Guegan',
+  'Guimaraes',
+  'Gunther',
+  'Gutierrez',
+  'Herrero',
+  'Hoekstra',
+  'Hoffmann',
+  'Holzer',
+  'Hong Yon Nam',
+  'Hugo',
+  'I Chol Yon',
+  'I Gyon Fun',
+  'Ioannidis',
+  'Jackson',
+  'Jacobs',
+  'Jacobsen',
+  'Jasinski',
+  'Jean',
+  'Jovancevic',
+  'Juarez',
+  'Khumalo',
+  'Kim Cyun Hi',
+  'Kim Jon Yoru',
+  'Kim Myon U',
+  'Kim U Don',
+  'Kobayashi',
+  'Koeman',
+  'Komol',
+  'Kooistra',
+  'Kremer',
+  'Kruger',
+  'Leclerc',
+  'Lindner',
+  'Lorenz',
+  'Machado',
+  'Marchand',
+  'Martel',
+  'Matic',
+  'Matsumoto',
+  'Mattsson',
+  'McKenzie',
+  'Menendez',
+  'Merino',
+  'Mertens',
+  'Mitchell',
+  'Mokrani',
+  'Moulin',
+  'Murray',
+  'Nascimento',
+  'Navarro',
+  'Newman',
+  'Nijkamp',
+  'Nikolic',
+  'Nikolov',
+  'Noushevar',
+  'Oliver',
+  'Oscar',
+  "O'Sullivan",
+  'Palmieri',
+  'Park Jyun Hi',
+  'Pelaez',
+  'Perrin',
+  'Postma',
+  'Prandini',
+  'Prieto',
+  'Ramon',
+  'Reeves',
+  'Renard',
+  'Ribeiro',
+  'Riou',
+  'Rivero',
+  'Rolong',
+  'Rowland',
+  'Rubio',
+  'Sahafi',
+  'Samuels',
+  'Sanz',
+  'Sasaki',
+  'Schmidt',
+  'Serrano',
+  'Shaw',
+  'Shittu',
+  'Shubin',
+  'Siegl',
+  'Simpson',
+  'Soares',
+  'Soler',
+  'Sousa',
+  'Spencer',
+  'Stoyanov',
+  'Szalai',
+  'Takahashi',
+  'Thijs',
+  'Traore',
+  'Van den Berg',
+  'Van der Meer',
+  'Van Dijk',
+  'Wang Mingwei',
+  'Weber',
+  'Wiart',
+  'Wilkins',
+  'Wolf',
+  'Wood',
+  'Yamada',
+  'Yegorov',
+  'Zakharov',
+  'Zarate',
+  'Sarto',
+  'Como',
+  'Solimar',
+  'Nzom Gole',
+  'R. Acuna',
+  'Cejumi',
+  'Walton',
+  'Kmou',
+  'Sutto',
+  'Otam',
+  'Ranow',
+  'Chigrat',
+  'Dogue',
+  'Heycory',
+  'Marsatto',
+  'Virota',
+  'Boanerm',
+  'Sirojuntle',
+  'Pjinatnigh',
+  'Kaiser',
+  'Kondelenan',
+  'Cinu Santiku',
+  'Ciurmira',
+  'Jaromton',
+  'Agata',
+  'Alnenda',
+  'Romaldinho',
+  'De Kaam',
+  'Nirimorf',
+  'Huber',
+  'Espinosa',
+  'Rodiguez',
+  'Rane',
+  'Azara',
+  'Van Heert',
+  'Iujimano',
+  'Razetow',
+  'Schwarz',
+  'Orellano',
+  'Sariw',
+  'Jig',
+  'Castolo',
+  'Footyn',
+  'Ita',
+  'Houtmael',
+  'Duffy',
+  'Shimizu',
+  'Pas Chiton',
+  'Fillco',
+  'Lanalkiss',
+  'Legus',
+  'Bag',
+  'Sazi',
+  'Aunugi',
+]);
+
 const STATIC_FIELD_OPTIONS: Record<string, string[]> = {
   PIE: ['Derecho', 'Izquierdo', 'Ambos'],
   'FAVOURED SIDE': ['Derecho', 'Izquierdo', 'Ambos'],
@@ -75,7 +615,7 @@ const STATIC_FIELD_OPTIONS: Record<string, string[]> = {
   'CONDICI\u00D3N FITNESS': ['1', '2', '3', '4', '5', '6', '7', '8'],
   'PRECICI\u00D3N PIE MALO': ['1', '2', '3', '4', '5', '6', '7', '8'],
   'FRECUENCIA PIE MALO': ['1', '2', '3', '4', '5', '6', '7', '8'],
-  'nro selección': ['Si', 'No'],
+  'nro selecci├│n': ['Si', 'No'],
   'nro clasico': ['Si', 'No'],
   ANFPES: ['Si', 'No'],
 };
@@ -145,20 +685,7 @@ export function PlayerSearch() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(50);
 
-  // Preselection states
-  const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
-  const selectPlayer = usePreselectionStore((state) => state.selectPlayer);
-  const deselectPlayer = usePreselectionStore((state) => state.deselectPlayer);
-  const selectAllPlayers = usePreselectionStore((state) => state.selectAllPlayers);
-  const clearSelection = usePreselectionStore((state) => state.clearSelection);
-  const getPlayerPreselections = usePreselectionStore(
-    (state) => state.getPlayerPreselections,
-  );
-  const [addToPreselectionModalOpen, setAddToPreselectionModalOpen] = useState(false);
-  const [lastSelectedPlayerId, setLastSelectedPlayerId] = useState<string | null>(null);
-  const floatingButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Cargar el último estado al iniciar
+  // Cargar el ├║ltimo estado al iniciar
   useEffect(() => {
     const lastState = loadLastViewState();
     if (lastState) {
@@ -183,12 +710,7 @@ export function PlayerSearch() {
     return () => clearTimeout(timeoutId);
   }, [filters, positionsFilter, sortConfig, visibleColumns, saveLastViewState]);
 
-  const normalizedQuery = normalize(query.trim());
-
-  // Columnas visibles ordenadas según FIELD_ORDER
-  const sortedVisibleColumns = useMemo(() => {
-    return getSortedColumns(visibleColumns);
-  }, [visibleColumns]);
+  const normalizedQuery = query.trim().toLowerCase();
 
   const fieldOptions = useMemo(() => {
     if (!players || !players.length) {
@@ -322,67 +844,6 @@ export function PlayerSearch() {
     }
   }, [paginatedResults, selectedId, setSelectedPlayer]);
 
-  // Position floating button near last selected player
-  useEffect(() => {
-    if (!lastSelectedPlayerId || selectedPlayerIds.size === 0) {
-      return;
-    }
-
-    const updateButtonPosition = () => {
-      const rowElement = document.querySelector(
-        `tr[data-player-id="${lastSelectedPlayerId}"]`,
-      ) as HTMLElement;
-      const buttonElement = floatingButtonRef.current;
-
-      if (rowElement && buttonElement) {
-        const rect = rowElement.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const buttonWidth = buttonElement.offsetWidth || 300;
-        const buttonHeight = buttonElement.offsetHeight || 60;
-
-        // Calculate desired position (left of the row)
-        let left = rect.left - buttonWidth - 15;
-        let top = rect.top + rect.height / 2;
-
-        // Keep button within viewport
-        if (left + buttonWidth > viewportWidth) {
-          left = viewportWidth - buttonWidth - 15; // 15px margin from right edge
-        }
-        if (left < 15) {
-          left = 15; // 15px margin from left edge
-        }
-        if (top - buttonHeight / 2 < 15) {
-          top = buttonHeight / 2 + 15;
-        }
-        if (top + buttonHeight / 2 > viewportHeight - 15) {
-          top = viewportHeight - buttonHeight / 2 - 15;
-        }
-
-        buttonElement.style.position = 'fixed';
-        buttonElement.style.top = `${top}px`;
-        buttonElement.style.left = `${left}px`;
-        buttonElement.style.bottom = 'auto';
-        buttonElement.style.right = 'auto';
-        buttonElement.style.transform = 'translateY(-50%)';
-        buttonElement.style.zIndex = '1000';
-      }
-    };
-
-    // Use requestAnimationFrame to ensure DOM is updated
-    requestAnimationFrame(() => {
-      updateButtonPosition();
-    });
-
-    window.addEventListener('scroll', updateButtonPosition);
-    window.addEventListener('resize', updateButtonPosition);
-
-    return () => {
-      window.removeEventListener('scroll', updateButtonPosition);
-      window.removeEventListener('resize', updateButtonPosition);
-    };
-  }, [lastSelectedPlayerId, selectedPlayerIds.size, paginatedResults]);
-
   const loading = status === 'idle' || status === 'loading';
 
   const handleAddFilter = () => {
@@ -456,7 +917,7 @@ export function PlayerSearch() {
 
   const handleDeleteView = (viewId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm('¿Estás seguro de que quieres eliminar esta vista?')) {
+    if (confirm('┬┐Est├ís seguro de que quieres eliminar esta vista?')) {
       deleteView(viewId);
     }
   };
@@ -466,37 +927,6 @@ export function PlayerSearch() {
     setPositionsFilter([]);
     setSortConfig([{ key: 'PROMEDIO', direction: 'desc' }]);
     setVisibleColumns(new Set(DEFAULT_TABLE_COLUMNS));
-  };
-
-  const handleTogglePlayerSelection = (playerId: string) => {
-    if (selectedPlayerIds.has(playerId)) {
-      deselectPlayer(playerId);
-      // Si era el último seleccionado y lo deseleccionamos, limpiar
-      if (lastSelectedPlayerId === playerId) {
-        setLastSelectedPlayerId(null);
-      }
-    } else {
-      selectPlayer(playerId);
-      setLastSelectedPlayerId(playerId);
-    }
-  };
-
-  const handleToggleAllVisible = () => {
-    const visibleIds = paginatedResults.map((p) => p.ID);
-    const allSelected = visibleIds.every((id) => selectedPlayerIds.has(id));
-
-    if (allSelected) {
-      // Deseleccionar todos los visibles
-      visibleIds.forEach((id) => deselectPlayer(id));
-      setLastSelectedPlayerId(null);
-    } else {
-      // Seleccionar todos los visibles
-      visibleIds.forEach((id) => selectPlayer(id));
-      // Actualizar al último jugador visible como el último seleccionado
-      if (visibleIds.length > 0) {
-        setLastSelectedPlayerId(visibleIds[visibleIds.length - 1]);
-      }
-    }
   };
 
   const handleSort = (key: keyof DerivedPlayer, multi: boolean) => {
@@ -541,7 +971,7 @@ export function PlayerSearch() {
   ): 'text' | 'number' | 'stat' | 'rating' | 'injury' => {
     if (field === 'TOLERANCIA LESIONES') return 'injury';
 
-    // Ratings de posición (promedios con barras)
+    // Ratings de posici├│n (promedios con barras)
     if (
       [
         'PT',
@@ -578,24 +1008,24 @@ export function PlayerSearch() {
         'DEFENSA',
         'ESTABILIDAD',
         'RESISTENCIA',
-        'VELOCIDAD MÁXIMA',
-        'ACELERACIÓN',
+        'VELOCIDAD M├üXIMA',
+        'ACELERACI├ôN',
         'REPUESTA',
         'AGILIDAD',
-        'PRECISIÓN DRIBBLE',
+        'PRECISI├ôN DRIBBLE',
         'VELOCIDAD DRIBBLE',
-        'PRECISIÓN   P CORTO',
+        'PRECISI├ôN   P CORTO',
         'VELOCIDAD  P CORTO',
-        'PRECISIÓN       P LARGO',
+        'PRECISI├ôN       P LARGO',
         'VELOCIDAD     P LARGO',
-        'PRECISIÓN DISPARO',
+        'PRECISI├ôN DISPARO',
         'POTENCIA DISPARO',
-        'TÉCNICA DISPARO',
-        'PRECISIÓN TIRO LIBRE',
+        'T├ëCNICA DISPARO',
+        'PRECISI├ôN TIRO LIBRE',
         'EFECTO',
         'CABEZAZO',
         'SALTO',
-        'TÉCNICA',
+        'T├ëCNICA',
         'AGRESIVIDAD',
         'MENTALIDAD',
         'ARQUERO',
@@ -605,7 +1035,7 @@ export function PlayerSearch() {
       return 'stat';
     }
 
-    // Métricas (con barras)
+    // M├®tricas (con barras)
     if (
       [
         'DESTREZA ATAQUE',
@@ -615,7 +1045,7 @@ export function PlayerSearch() {
         'EXPLOSIVIDAD',
         'PROMEDIO AGILIDADES',
         'POTENCIA DE PATADA',
-        'RECUPERACION DE BALÓN',
+        'RECUPERACION DE BAL├ôN',
         'ALETISMO',
         'JUEGO AEREO',
         'CREATIVIDAD',
@@ -624,19 +1054,19 @@ export function PlayerSearch() {
       return 'stat';
     }
 
-    // Atributos físicos numéricos (con color pero sin barras)
+    // Atributos f├¡sicos num├®ricos (con color pero sin barras)
     if (
       [
         'CONSISTENCIA',
-        'CONDICIÓN FITNESS',
-        'PRECICIÓN PIE MALO',
+        'CONDICI├ôN FITNESS',
+        'PRECICI├ôN PIE MALO',
         'FRECUENCIA PIE MALO',
       ].includes(field)
     ) {
       return 'number';
     }
 
-    // Campos numéricos básicos
+    // Campos num├®ricos b├ísicos
     if (field === 'EDAD' || field === 'ALTURA' || field === 'PESO') {
       return 'number';
     }
@@ -662,7 +1092,7 @@ export function PlayerSearch() {
             className="secondary-button"
             onClick={() => setViewsMenuOpen((open) => !open)}
           >
-            Vistas {viewsMenuOpen ? '▲' : '▼'}
+            Vistas {viewsMenuOpen ? 'Ôû▓' : 'Ôû╝'}
           </button>
           <button
             type="button"
@@ -676,7 +1106,7 @@ export function PlayerSearch() {
             className="secondary-button"
             onClick={() => setColumnsMenuOpen((open) => !open)}
           >
-            Columnas {columnsMenuOpen ? '▲' : '▼'}
+            Columnas {columnsMenuOpen ? 'Ôû▓' : 'Ôû╝'}
           </button>
           <button
             type="button"
@@ -723,7 +1153,7 @@ export function PlayerSearch() {
                     onClick={(e) => handleDeleteView(view.id, e)}
                     aria-label="Eliminar vista"
                   >
-                    ×
+                    ├ù
                   </button>
                 </div>
               ))}
@@ -825,7 +1255,7 @@ export function PlayerSearch() {
                             disabled
                             className="field-group-header"
                           >
-                            ── {option.label} ──
+                            ÔöÇÔöÇ {option.label} ÔöÇÔöÇ
                           </option>
                         ) : (
                           <option key={option.value} value={option.value}>
@@ -918,7 +1348,7 @@ export function PlayerSearch() {
                       onClick={() => handleRemoveFilter(filter.id)}
                       aria-label="Eliminar filtro"
                     >
-                      ×
+                      ├ù
                     </button>
                   </div>
                 );
@@ -946,7 +1376,7 @@ export function PlayerSearch() {
             <div className="search-info">
               <span>
                 <strong>{results.length}</strong> jugadores encontrados
-                {totalPages > 1 && ` (página ${currentPage} de ${totalPages})`}
+                {totalPages > 1 && ` (p├ígina ${currentPage} de ${totalPages})`}
               </span>
             </div>
             {totalPages > 1 && (
@@ -956,18 +1386,18 @@ export function PlayerSearch() {
                   className="pagination-button"
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  title="Página anterior"
+                  title="P├ígina anterior"
                 >
-                  ←
+                  ÔåÉ
                 </button>
                 <button
                   type="button"
                   className="pagination-button"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  title="Página siguiente"
+                  title="P├ígina siguiente"
                 >
-                  →
+                  ÔåÆ
                 </button>
               </div>
             )}
@@ -979,7 +1409,7 @@ export function PlayerSearch() {
               {FIELD_GROUPS.map((group) => {
                 const excludedFromSelector = new Set([
                   'NOMBRE',
-                  'nro selección',
+                  'nro selecci├│n',
                   'nro clasico',
                   'ANFPES',
                 ]);
@@ -1019,18 +1449,7 @@ export function PlayerSearch() {
                 <table className="player-table">
                   <thead className="sticky-header">
                     <tr>
-                      <th className="checkbox-column">
-                        <input
-                          type="checkbox"
-                          onChange={handleToggleAllVisible}
-                          checked={
-                            paginatedResults.length > 0 &&
-                            paginatedResults.every((p) => selectedPlayerIds.has(p.ID))
-                          }
-                          title="Seleccionar todos los visibles"
-                        />
-                      </th>
-                      {sortedVisibleColumns.map((column) => {
+                      {Array.from(visibleColumns).map((column) => {
                         const sortIndex = sortConfig.findIndex((s) => s.key === column);
                         const sortDir =
                           sortIndex >= 0 ? sortConfig[sortIndex].direction : null;
@@ -1038,12 +1457,11 @@ export function PlayerSearch() {
                         const isNameColumn = column === 'NOMBRE';
                         const isImageColumn =
                           column === 'NACIONALIDAD' || column === 'CLUB';
-                        const isPositionsColumn = column === 'POSICIONES';
                         const columnType = getColumnType(column);
                         return (
                           <th
                             key={column}
-                            className={`sortable${isNameColumn ? ' player-name-header' : ''}${isImageColumn ? ' image-header' : ''}${isPositionsColumn ? ' positions-header' : ''}`}
+                            className={`sortable${isNameColumn ? ' player-name-header' : ''}${isImageColumn ? ' image-header' : ''}`}
                             data-type={columnType}
                             onClick={(e) =>
                               handleSort(column as keyof DerivedPlayer, e.shiftKey)
@@ -1054,7 +1472,7 @@ export function PlayerSearch() {
                               <span>{headerLabel}</span>
                               {sortDir && (
                                 <span className="sort-indicator">
-                                  {sortDir === 'asc' ? '▲' : '▼'}
+                                  {sortDir === 'asc' ? 'Ôû▓' : 'Ôû╝'}
                                   {sortConfig.length > 1 && sortIndex >= 0 && (
                                     <sup>{sortIndex + 1}</sup>
                                   )}
@@ -1067,191 +1485,120 @@ export function PlayerSearch() {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedResults.map((player) => {
-                      const playerPreselections = getPlayerPreselections(player.ID);
-
-                      return (
-                        <tr
-                          key={player.ID}
-                          data-player-id={player.ID}
-                          className={player.ID === selectedId ? 'selected' : undefined}
-                          onClick={() => setSelectedPlayer(player.ID as string)}
-                        >
-                          <td
-                            className="checkbox-column"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={selectedPlayerIds.has(player.ID)}
-                              onChange={() => handleTogglePlayerSelection(player.ID)}
-                            />
-                          </td>
-                          {sortedVisibleColumns.map((column) => {
-                            if (column === 'NOMBRE') {
-                              const rawNationality = player.NACIONALIDAD as string;
-                              const rawClub = player.CLUB as string;
-                              const playerName = player.NOMBRE as string;
-                              const hasNationalTeam = formatSelectionDisplay(
-                                player['nro selección'],
-                              );
-                              const hasClassic = formatSelectionDisplay(
-                                player['nro clasico'],
-                              );
-                              const isLegend =
-                                hasClassic !== 'No' || LEGEND_PLAYERS.has(playerName);
-                              const isMLPlayer = ML_PLAYERS.has(playerName);
-                              const isAnfpes = ANFPES_CLUBS.has(rawClub);
-
-                              return (
-                                <td key={column} className="player-name-cell">
-                                  <div className="player-name-primary">
-                                    <span className="player-name-text">
-                                      {player.NOMBRE}
-                                    </span>
-                                    <span className="player-badges">
-                                      {hasNationalTeam !== 'No' && (
-                                        <span
-                                          className="badge"
-                                          title="Seleccionado Nacional"
-                                        >
-                                          🌍
-                                        </span>
-                                      )}
-                                      {isLegend && (
-                                        <span
-                                          className="badge legend"
-                                          title="Jugador Leyenda"
-                                        >
-                                          ★
-                                        </span>
-                                      )}
-                                      {isMLPlayer && (
-                                        <span className="badge ml" title="Jugador ML">
-                                          ML
-                                        </span>
-                                      )}
-                                      {isAnfpes && (
-                                        <span
-                                          className="badge anfpes"
-                                          title="Afiliado a la ANFPES"
-                                        >
-                                          ANFPES
-                                        </span>
-                                      )}
-                                      {playerPreselections.length > 0 && (
-                                        <span
-                                          className="badge preselection"
-                                          title={`En ${playerPreselections.length} preselección${playerPreselections.length > 1 ? 'es' : ''}: ${playerPreselections.map((p) => p.name).join(', ')}`}
-                                        >
-                                          📋
-                                        </span>
-                                      )}
-                                    </span>
-                                  </div>
-                                </td>
-                              );
-                            }
-
-                            if (column === 'NACIONALIDAD') {
-                              const rawNationality = player.NACIONALIDAD as string;
-                              const flagPath = getFlagImagePath(rawNationality);
-                              const nationalityInfo = getNationalityInfo(rawNationality);
-                              const displayName = nationalityInfo?.name || rawNationality;
-
-                              return (
-                                <td
-                                  key={column}
-                                  className="image-cell"
-                                  title={displayName}
-                                >
-                                  {flagPath && (
-                                    <img src={flagPath} alt="" className="flag-icon" />
-                                  )}
-                                </td>
-                              );
-                            }
-
-                            if (column === 'CLUB') {
-                              const rawClub = player.CLUB as string;
-                              const shieldPath = getClubShieldPath(rawClub);
-                              const rawNationality = player.NACIONALIDAD as string;
-                              const clubDisplay = formatClub(rawClub, rawNationality);
-
-                              return (
-                                <td
-                                  key={column}
-                                  className="image-cell"
-                                  title={clubDisplay}
-                                >
-                                  {shieldPath ? (
-                                    <img
-                                      src={shieldPath}
-                                      alt=""
-                                      className="club-shield"
-                                    />
-                                  ) : (
-                                    <span className="club-icon">⚽</span>
-                                  )}
-                                </td>
-                              );
-                            }
-
-                            if (column === 'POSICIONES') {
-                              return (
-                                <td key={column}>
-                                  <PositionBadges player={player} />
-                                </td>
-                              );
-                            }
+                    {paginatedResults.map((player) => (
+                      <tr
+                        key={player.ID}
+                        className={player.ID === selectedId ? 'selected' : undefined}
+                        onClick={() => setSelectedPlayer(player.ID as string)}
+                      >
+                        {Array.from(visibleColumns).map((column) => {
+                          if (column === 'NOMBRE') {
+                            const rawNationality = player.NACIONALIDAD as string;
+                            const rawClub = player.CLUB as string;
+                            const playerName = player.NOMBRE as string;
+                            const hasNationalTeam = formatSelectionDisplay(
+                              player['nro selecci├│n'],
+                            );
+                            const hasClassic = formatSelectionDisplay(
+                              player['nro clasico'],
+                            );
+                            const isLegend =
+                              hasClassic !== 'No' || LEGEND_PLAYERS.has(playerName);
+                            const isMLPlayer = ML_PLAYERS.has(playerName);
+                            const isAnfpes = ANFPES_CLUBS.has(rawClub);
 
                             return (
-                              <td key={column} data-type={getColumnType(column)}>
-                                <TableCell
-                                  field={column as keyof DerivedPlayer}
-                                  player={player}
-                                  type={getColumnType(column)}
-                                />
+                              <td key={column} className="player-name-cell">
+                                <div className="player-name-primary">
+                                  <span className="player-name-text">
+                                    {player.NOMBRE}
+                                  </span>
+                                  <span className="player-badges">
+                                    {hasNationalTeam !== 'No' && (
+                                      <span
+                                        className="badge"
+                                        title="Seleccionado Nacional"
+                                      >
+                                        ­ƒîì
+                                      </span>
+                                    )}
+                                    {isLegend && (
+                                      <span
+                                        className="badge legend"
+                                        title="Jugador Leyenda"
+                                      >
+                                        Ôÿà
+                                      </span>
+                                    )}
+                                    {isMLPlayer && (
+                                      <span className="badge ml" title="Jugador ML">
+                                        ML
+                                      </span>
+                                    )}
+                                    {isAnfpes && (
+                                      <span
+                                        className="badge anfpes"
+                                        title="Afiliado a la ANFPES"
+                                      >
+                                        ANFPES
+                                      </span>
+                                    )}
+                                  </span>
+                                </div>
                               </td>
                             );
-                          })}
-                        </tr>
-                      );
-                    })}
+                          }
+
+                          if (column === 'NACIONALIDAD') {
+                            const rawNationality = player.NACIONALIDAD as string;
+                            const flagPath = getFlagImagePath(rawNationality);
+                            const nationalityInfo = getNationalityInfo(rawNationality);
+                            const displayName = nationalityInfo?.name || rawNationality;
+
+                            return (
+                              <td key={column} className="image-cell" title={displayName}>
+                                {flagPath && (
+                                  <img src={flagPath} alt="" className="flag-icon" />
+                                )}
+                              </td>
+                            );
+                          }
+
+                          if (column === 'CLUB') {
+                            const rawClub = player.CLUB as string;
+                            const shieldPath = getClubShieldPath(rawClub);
+                            const rawNationality = player.NACIONALIDAD as string;
+                            const clubDisplay = formatClub(rawClub, rawNationality);
+
+                            return (
+                              <td key={column} className="image-cell" title={clubDisplay}>
+                                {shieldPath ? (
+                                  <img src={shieldPath} alt="" className="club-shield" />
+                                ) : (
+                                  <span className="club-icon">ÔÜ¢</span>
+                                )}
+                              </td>
+                            );
+                          }
+
+                          return (
+                            <td key={column} data-type={getColumnType(column)}>
+                              <TableCell
+                                field={column as keyof DerivedPlayer}
+                                player={player}
+                                type={getColumnType(column)}
+                              />
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
             </>
           )}
         </>
-      )}
-
-      {/* Floating button for adding to preselection */}
-      {selectedPlayerIds.size > 0 && (
-        <button
-          ref={floatingButtonRef}
-          type="button"
-          className="floating-action-button"
-          onClick={() => setAddToPreselectionModalOpen(true)}
-          data-last-selected={lastSelectedPlayerId}
-        >
-          <span className="fab-icon">📋</span>
-          <span className="fab-text">
-            Agregar {selectedPlayerIds.size} jugador
-            {selectedPlayerIds.size > 1 ? 'es' : ''} a preselección
-          </span>
-        </button>
-      )}
-
-      {/* Modal for adding to preselection */}
-      {addToPreselectionModalOpen && (
-        <AddToPreselectionModal
-          selectedPlayerIds={selectedPlayerIds}
-          onClose={() => setAddToPreselectionModalOpen(false)}
-          onSuccess={() => {
-            clearSelection();
-          }}
-        />
       )}
     </section>
   );
@@ -1333,14 +1680,6 @@ function toNumber(value: unknown): number | null {
   return null;
 }
 
-// Mapeo de posiciones ambidiestras a sus variantes laterales
-const AMBIDEXTROUS_EQUIVALENCE: Record<string, string[]> = {
-  SB: ['RB', 'LB'],
-  WB: ['RWB', 'LWB'],
-  SMF: ['RMF', 'LMF'],
-  WF: ['RWF', 'LWF'],
-};
-
 function matchesPositions(player: DerivedPlayer, positions: string[]): boolean {
   if (!positions.length) {
     return true;
@@ -1351,21 +1690,7 @@ function matchesPositions(player: DerivedPlayer, positions: string[]): boolean {
   if (!playerPositions.length) {
     return false;
   }
-
-  return playerPositions.some((playerCode) => {
-    // Coincidencia exacta
-    if (positions.includes(playerCode)) {
-      return true;
-    }
-
-    // Si el jugador tiene posición ambidiestra, verificar si buscan sus variantes laterales
-    const lateralVariants = AMBIDEXTROUS_EQUIVALENCE[playerCode];
-    if (lateralVariants) {
-      return lateralVariants.some((variant) => positions.includes(variant));
-    }
-
-    return false;
-  });
+  return playerPositions.some((code) => positions.includes(code));
 }
 
 function togglePosition(

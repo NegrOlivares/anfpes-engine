@@ -1,21 +1,30 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useCacheLoader } from './store/cacheStore';
 import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
 import { DashboardModule } from './modules/DashboardModule';
 import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
 import { PreselectionModule } from './modules/PreselectionModule';
+import { SimilarPlayersModule } from './modules/SimilarPlayersModule';
+import { useModuleStore, MODULE_IDS } from './store/moduleStore';
+import { PlayerActionsOverlay } from './components/PlayerActionsOverlay';
 
 const modules: ModuleDefinition[] = [
-  { id: 'dashboard', label: 'Dashboard', component: DashboardModule },
-  { id: 'search', label: 'Buscador', component: PlayerSearch },
-  { id: 'preselections', label: 'Preselecciones', component: PreselectionModule },
-  { id: 'profile', label: 'Perfil', component: PlayerProfile },
+  { id: MODULE_IDS.dashboard, label: 'Dashboard', component: DashboardModule },
+  { id: MODULE_IDS.search, label: 'Buscador', component: PlayerSearch },
+  {
+    id: MODULE_IDS.preselections,
+    label: 'Preselecciones',
+    component: PreselectionModule,
+  },
+  { id: MODULE_IDS.similar, label: 'Similares', component: SimilarPlayersModule },
+  { id: MODULE_IDS.profile, label: 'Perfil', component: PlayerProfile },
 ];
 
 export default function App() {
   useCacheLoader();
-  const [activeModuleId, setActiveModuleId] = useState(modules[0].id);
+  const activeModuleId = useModuleStore((state) => state.activeModuleId);
+  const setActiveModuleId = useModuleStore((state) => state.setActiveModuleId);
 
   const ActiveModule = useMemo(() => {
     const target = modules.find((module) => module.id === activeModuleId);
@@ -32,6 +41,7 @@ export default function App() {
       <main className="app-main">
         <ActiveModule />
       </main>
+      <PlayerActionsOverlay />
     </div>
   );
 }

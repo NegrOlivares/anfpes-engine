@@ -158,3 +158,20 @@
 - **[Copilot]** Configuré estilos CSS extensivos (700+ líneas nuevas en styles.css): sección "PRESELECTION SYSTEM" con checkbox-column, badge.preselection, floating-action-button (@keyframes fab-appear), modal-backdrop (@keyframes modal-fade-in), modal-content (@keyframes modal-slide-up), form-group, preselection-select/name-input, preselection-tabs, preselection-toolbar, tag-filters, actions-column, note-editor-row/inline, tag-manager-row/inline, player-tag-mini, has-tag row styles.
 - **[Copilot]** Agregué tab "Preselecciones" a `App.tsx`: importado `PreselectionModule`, agregado a array `modules` con id='preselections' label='Preselecciones' component={PreselectionModule}, posición 3 entre Buscador y Perfil.
 - **[Copilot]** Validé integración completa del sistema de preselecciones con lint y build exitosos, confirmado funcionamiento de: creación/edición/eliminación de preselecciones, agregar/quitar jugadores desde buscador, filtrado por tags, notas inline, persistencia en localStorage, sincronización entre PlayerSearch y PreselectionModule.
+
+## 2025-11-13
+
+- Incorporé un overlay contextual en todas las tablas: al pulsar el nombre del jugador aparece un menú con acciones rápidas (agregar a preselección o abrir el buscador de similares) reutilizando el modal existente.
+- Creé el módulo **Similares** con controles de macrostats, modo proporcional/directo, tolerancia y bonus opcional por promedios posicionales; reutiliza la tabla base (columnas configurables) y muestra el porcentaje de similitud de los mejores candidatos.
+- Añadí stores globales para la pestaña activa y para recordar el jugador base de similitud, permitiendo que cualquier componente cambie de módulo y dispare el flujo de "jugadores similares".
+
+## 2025-11-14
+
+- **[Codex]** Rediseñé el módulo **Similares** con tarjeta compacta del jugador base (badges especiales, bandera, escudo, promedio coloreado y badge de posición principal) y controles reorganizados en una sola fila (botones tipo píldora, slider de porcentaje y toggle para promedios). Los helpers `getPlayerPositions`/`getPositionLine` se exportaron desde `PositionBadges.tsx` y se agregaron nuevas reglas en `styles.css` (`.base-player-card`, `.toggle-pill`, `.slider-chip`, etc.).
+- **[Codex]** Centralicé las listas `ANFPES_CLUBS`, `ML_PLAYERS`, `LEGEND_PLAYERS` en `apps/ui/src/data/playerStatus.ts` e importé esos sets en PlayerSearch y PreselectionModule. **Problema:** el script usado para copiar/pegar grabó los archivos en ASCII y se corrompieron todos los textos con acentos (se ven `Ã`, `�`, `??` en la UI).
+- **[Codex]** La corrupción afecta `playerStatus.ts`, `PlayerSearch.tsx`, `PreselectionModule.tsx`, `styles.css`, `PositionBadges.tsx`, `SimilarPlayersModule.tsx` y `playerDisplay.ts`. Intentos posteriores de reemplazo automático (incluyendo emojis 🌍/★/📋) dejaron caracteres inválidos y más de 60 errores de lint en `PlayerSearch.tsx`.
+- **[Codex]** Se necesitará restaurar los archivos desde el commit estable anterior (ff49ab3) o reescribir manualmente los textos con UTF‑8 antes de continuar. Hasta entonces, los badges en Buscador y Preselecciones siguen rotos y `npm run lint --workspace @anfpes/ui` falla.
+- **PENDIENTE PARA COPILOT**
+  1. Recuperar versiones limpias (UTF‑8) de todos los archivos afectados y volver a aplicar el refactor solo cuando sea seguro.
+  2. Confirmar visualmente que los badges muestran 🌍/★/ML/ANFPES/📋 y que toda la UI vuelve a tener acentos correctos.
+  3. Reejecutar lint/build para garantizar que no queden caracteres corruptos antes de retomar el trabajo en Similares o nuevas features.
