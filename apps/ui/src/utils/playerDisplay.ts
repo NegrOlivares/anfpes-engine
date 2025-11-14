@@ -9,11 +9,13 @@ const FIELD_ALIASES: Record<string, string> = {
 };
 
 const FIELD_LABEL_OVERRIDES: Record<string, string> = {
+  NACIONALIDAD: 'País',
   DORSAL: 'Número Dorsal',
   'SKIN COLOR': 'Tono de Piel',
   'nro selección': 'Seleccionado Nacional',
   'nro clasico': 'Selección Clásica',
   'FAVOURED SIDE': 'Lado Preferido',
+  POSICIONES: 'Posiciones',
   'VELOCIDAD MÁXIMA': 'Velocidad Máxima',
   ACELERACIÓN: 'Aceleración',
   'PRECISIÓN DRIBBLE': 'Precisión Dribble',

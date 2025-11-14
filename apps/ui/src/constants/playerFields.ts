@@ -49,6 +49,7 @@ export const FIELD_GROUPS = [
     fields: [
       'NACIONALIDAD',
       'CLUB',
+      'POSICIONES',
       'ANFPES',
       'nro selección',
       'nro clasico',
@@ -176,6 +177,7 @@ export const DEFAULT_TABLE_COLUMNS = [
   'NOMBRE',
   'NACIONALIDAD',
   'CLUB',
+  'POSICIONES',
   'PROMEDIO',
   'ATAQUE',
   'DEFENSA',
@@ -200,9 +202,18 @@ export function getTableHeaderLabel(field: string): string {
   return fullLabel;
 }
 
+// Función para ordenar columnas según FIELD_ORDER
+export function getSortedColumns(columns: Iterable<string>): string[] {
+  const columnSet = new Set(columns);
+  return FIELD_ORDER.filter((field) => columnSet.has(field));
+}
+
 // Mantiene el orden original de la Hoja 1 (excluyendo columnas ocultas)
 export const FIELD_ORDER = [
+  'NOMBRE',
   'NACIONALIDAD',
+  'CLUB',
+  'POSICIONES',
   'nro selección',
   'nro clasico',
   'DORSAL',
@@ -213,7 +224,6 @@ export const FIELD_ORDER = [
   'EDAD',
   'PIE',
   'FAVOURED SIDE',
-  'CLUB',
   'PROMEDIO',
   'MEJOR PROMEDIO',
   'PT',

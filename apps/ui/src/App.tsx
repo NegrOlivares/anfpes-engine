@@ -4,10 +4,12 @@ import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
 import { DashboardModule } from './modules/DashboardModule';
 import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
+import { PreselectionModule } from './modules/PreselectionModule';
 
 const modules: ModuleDefinition[] = [
   { id: 'dashboard', label: 'Dashboard', component: DashboardModule },
   { id: 'search', label: 'Buscador', component: PlayerSearch },
+  { id: 'preselections', label: 'Preselecciones', component: PreselectionModule },
   { id: 'profile', label: 'Perfil', component: PlayerProfile },
 ];
 

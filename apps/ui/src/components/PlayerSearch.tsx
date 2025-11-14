@@ -1,13 +1,17 @@
 import type { DerivedPlayer } from '@anfpes/engine';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useCacheStore } from '../store/cacheStore';
+import { usePreselectionStore } from '../store/preselectionStore';
 import {
   DEFAULT_TABLE_COLUMNS,
   FIELD_GROUPS,
   getTableHeaderLabel,
+  getSortedColumns,
 } from '../constants/playerFields';
 import { POSITION_COLORS, type SortConfig } from '../types/table';
 import { TableCell } from './TableCell';
+import { PositionBadges } from './PositionBadges';
+import { AddToPreselectionModal } from './AddToPreselectionModal';
 import {
   formatClub,
   formatNationality,
@@ -28,15 +32,19 @@ const POSITION_CODES = [
   { code: 'GK', label: 'PT', color: POSITION_COLORS.PT },
   { code: 'SWP', label: 'LIB', color: POSITION_COLORS.LIB },
   { code: 'CB', label: 'CT', color: POSITION_COLORS.CT },
+  { code: 'SB', label: 'SA', color: POSITION_COLORS.SA },
   { code: 'RB', label: 'DD', color: POSITION_COLORS.DD },
   { code: 'LB', label: 'DI', color: POSITION_COLORS.DI },
   { code: 'DMF', label: 'CCD', color: POSITION_COLORS.CCD },
+  { code: 'WB', label: 'LA', color: POSITION_COLORS.LA },
   { code: 'RWB', label: 'DLD', color: POSITION_COLORS.DLD },
   { code: 'LWB', label: 'DLI', color: POSITION_COLORS.DLI },
   { code: 'CMF', label: 'CC', color: POSITION_COLORS.CC },
+  { code: 'SMF', label: 'VOL', color: POSITION_COLORS.VOL },
   { code: 'RMF', label: 'CDR', color: POSITION_COLORS.CDR },
   { code: 'LMF', label: 'CIZ', color: POSITION_COLORS.CIZ },
   { code: 'AMF', label: 'MP', color: POSITION_COLORS.MP },
+  { code: 'WF', label: 'EX', color: POSITION_COLORS.EX },
   { code: 'RWF', label: 'ED', color: POSITION_COLORS.ED },
   { code: 'LWF', label: 'EI', color: POSITION_COLORS.EI },
   { code: 'SS', label: 'SD', color: POSITION_COLORS.SD },
@@ -685,6 +693,19 @@ export function PlayerSearch() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(50);
 
+  // Preselection states
+  const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
+  const selectPlayer = usePreselectionStore((state) => state.selectPlayer);
+  const deselectPlayer = usePreselectionStore((state) => state.deselectPlayer);
+  const selectAllPlayers = usePreselectionStore((state) => state.selectAllPlayers);
+  const clearSelection = usePreselectionStore((state) => state.clearSelection);
+  const getPlayerPreselections = usePreselectionStore(
+    (state) => state.getPlayerPreselections,
+  );
+  const [addToPreselectionModalOpen, setAddToPreselectionModalOpen] = useState(false);
+  const [lastSelectedPlayerId, setLastSelectedPlayerId] = useState<string | null>(null);
+  const floatingButtonRef = useRef<HTMLButtonElement>(null);
+
   // Cargar el último estado al iniciar
   useEffect(() => {
     const lastState = loadLastViewState();
@@ -711,6 +732,11 @@ export function PlayerSearch() {
   }, [filters, positionsFilter, sortConfig, visibleColumns, saveLastViewState]);
 
   const normalizedQuery = query.trim().toLowerCase();
+
+  // Columnas visibles ordenadas según FIELD_ORDER
+  const sortedVisibleColumns = useMemo(() => {
+    return getSortedColumns(visibleColumns);
+  }, [visibleColumns]);
 
   const fieldOptions = useMemo(() => {
     if (!players || !players.length) {
@@ -844,6 +870,67 @@ export function PlayerSearch() {
     }
   }, [paginatedResults, selectedId, setSelectedPlayer]);
 
+  // Position floating button near last selected player
+  useEffect(() => {
+    if (!lastSelectedPlayerId || selectedPlayerIds.size === 0) {
+      return;
+    }
+
+    const updateButtonPosition = () => {
+      const rowElement = document.querySelector(
+        `tr[data-player-id="${lastSelectedPlayerId}"]`,
+      ) as HTMLElement;
+      const buttonElement = floatingButtonRef.current;
+
+      if (rowElement && buttonElement) {
+        const rect = rowElement.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const buttonWidth = buttonElement.offsetWidth || 300;
+        const buttonHeight = buttonElement.offsetHeight || 60;
+
+        // Calculate desired position (left of the row)
+        let left = rect.left - buttonWidth - 15;
+        let top = rect.top + rect.height / 2;
+
+        // Keep button within viewport
+        if (left + buttonWidth > viewportWidth) {
+          left = viewportWidth - buttonWidth - 15; // 15px margin from right edge
+        }
+        if (left < 15) {
+          left = 15; // 15px margin from left edge
+        }
+        if (top - buttonHeight / 2 < 15) {
+          top = buttonHeight / 2 + 15;
+        }
+        if (top + buttonHeight / 2 > viewportHeight - 15) {
+          top = viewportHeight - buttonHeight / 2 - 15;
+        }
+
+        buttonElement.style.position = 'fixed';
+        buttonElement.style.top = `${top}px`;
+        buttonElement.style.left = `${left}px`;
+        buttonElement.style.bottom = 'auto';
+        buttonElement.style.right = 'auto';
+        buttonElement.style.transform = 'translateY(-50%)';
+        buttonElement.style.zIndex = '1000';
+      }
+    };
+
+    // Use requestAnimationFrame to ensure DOM is updated
+    requestAnimationFrame(() => {
+      updateButtonPosition();
+    });
+
+    window.addEventListener('scroll', updateButtonPosition);
+    window.addEventListener('resize', updateButtonPosition);
+
+    return () => {
+      window.removeEventListener('scroll', updateButtonPosition);
+      window.removeEventListener('resize', updateButtonPosition);
+    };
+  }, [lastSelectedPlayerId, selectedPlayerIds.size, paginatedResults]);
+
   const loading = status === 'idle' || status === 'loading';
 
   const handleAddFilter = () => {
@@ -927,6 +1014,37 @@ export function PlayerSearch() {
     setPositionsFilter([]);
     setSortConfig([{ key: 'PROMEDIO', direction: 'desc' }]);
     setVisibleColumns(new Set(DEFAULT_TABLE_COLUMNS));
+  };
+
+  const handleTogglePlayerSelection = (playerId: string) => {
+    if (selectedPlayerIds.has(playerId)) {
+      deselectPlayer(playerId);
+      // Si era el último seleccionado y lo deseleccionamos, limpiar
+      if (lastSelectedPlayerId === playerId) {
+        setLastSelectedPlayerId(null);
+      }
+    } else {
+      selectPlayer(playerId);
+      setLastSelectedPlayerId(playerId);
+    }
+  };
+
+  const handleToggleAllVisible = () => {
+    const visibleIds = paginatedResults.map((p) => p.ID);
+    const allSelected = visibleIds.every((id) => selectedPlayerIds.has(id));
+
+    if (allSelected) {
+      // Deseleccionar todos los visibles
+      visibleIds.forEach((id) => deselectPlayer(id));
+      setLastSelectedPlayerId(null);
+    } else {
+      // Seleccionar todos los visibles
+      visibleIds.forEach((id) => selectPlayer(id));
+      // Actualizar al último jugador visible como el último seleccionado
+      if (visibleIds.length > 0) {
+        setLastSelectedPlayerId(visibleIds[visibleIds.length - 1]);
+      }
+    }
   };
 
   const handleSort = (key: keyof DerivedPlayer, multi: boolean) => {
@@ -1449,7 +1567,18 @@ export function PlayerSearch() {
                 <table className="player-table">
                   <thead className="sticky-header">
                     <tr>
-                      {Array.from(visibleColumns).map((column) => {
+                      <th className="checkbox-column">
+                        <input
+                          type="checkbox"
+                          onChange={handleToggleAllVisible}
+                          checked={
+                            paginatedResults.length > 0 &&
+                            paginatedResults.every((p) => selectedPlayerIds.has(p.ID))
+                          }
+                          title="Seleccionar todos los visibles"
+                        />
+                      </th>
+                      {sortedVisibleColumns.map((column) => {
                         const sortIndex = sortConfig.findIndex((s) => s.key === column);
                         const sortDir =
                           sortIndex >= 0 ? sortConfig[sortIndex].direction : null;
@@ -1457,11 +1586,12 @@ export function PlayerSearch() {
                         const isNameColumn = column === 'NOMBRE';
                         const isImageColumn =
                           column === 'NACIONALIDAD' || column === 'CLUB';
+                        const isPositionsColumn = column === 'POSICIONES';
                         const columnType = getColumnType(column);
                         return (
                           <th
                             key={column}
-                            className={`sortable${isNameColumn ? ' player-name-header' : ''}${isImageColumn ? ' image-header' : ''}`}
+                            className={`sortable${isNameColumn ? ' player-name-header' : ''}${isImageColumn ? ' image-header' : ''}${isPositionsColumn ? ' positions-header' : ''}`}
                             data-type={columnType}
                             onClick={(e) =>
                               handleSort(column as keyof DerivedPlayer, e.shiftKey)
@@ -1485,120 +1615,191 @@ export function PlayerSearch() {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedResults.map((player) => (
-                      <tr
-                        key={player.ID}
-                        className={player.ID === selectedId ? 'selected' : undefined}
-                        onClick={() => setSelectedPlayer(player.ID as string)}
-                      >
-                        {Array.from(visibleColumns).map((column) => {
-                          if (column === 'NOMBRE') {
-                            const rawNationality = player.NACIONALIDAD as string;
-                            const rawClub = player.CLUB as string;
-                            const playerName = player.NOMBRE as string;
-                            const hasNationalTeam = formatSelectionDisplay(
-                              player['nro selección'],
-                            );
-                            const hasClassic = formatSelectionDisplay(
-                              player['nro clasico'],
-                            );
-                            const isLegend =
-                              hasClassic !== 'No' || LEGEND_PLAYERS.has(playerName);
-                            const isMLPlayer = ML_PLAYERS.has(playerName);
-                            const isAnfpes = ANFPES_CLUBS.has(rawClub);
+                    {paginatedResults.map((player) => {
+                      const playerPreselections = getPlayerPreselections(player.ID);
+
+                      return (
+                        <tr
+                          key={player.ID}
+                          data-player-id={player.ID}
+                          className={player.ID === selectedId ? 'selected' : undefined}
+                          onClick={() => setSelectedPlayer(player.ID as string)}
+                        >
+                          <td
+                            className="checkbox-column"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedPlayerIds.has(player.ID)}
+                              onChange={() => handleTogglePlayerSelection(player.ID)}
+                            />
+                          </td>
+                          {sortedVisibleColumns.map((column) => {
+                            if (column === 'NOMBRE') {
+                              const rawNationality = player.NACIONALIDAD as string;
+                              const rawClub = player.CLUB as string;
+                              const playerName = player.NOMBRE as string;
+                              const hasNationalTeam = formatSelectionDisplay(
+                                player['nro selección'],
+                              );
+                              const hasClassic = formatSelectionDisplay(
+                                player['nro clasico'],
+                              );
+                              const isLegend =
+                                hasClassic !== 'No' || LEGEND_PLAYERS.has(playerName);
+                              const isMLPlayer = ML_PLAYERS.has(playerName);
+                              const isAnfpes = ANFPES_CLUBS.has(rawClub);
+
+                              return (
+                                <td key={column} className="player-name-cell">
+                                  <div className="player-name-primary">
+                                    <span className="player-name-text">
+                                      {player.NOMBRE}
+                                    </span>
+                                    <span className="player-badges">
+                                      {hasNationalTeam !== 'No' && (
+                                        <span
+                                          className="badge"
+                                          title="Seleccionado Nacional"
+                                        >
+                                          🌍
+                                        </span>
+                                      )}
+                                      {isLegend && (
+                                        <span
+                                          className="badge legend"
+                                          title="Jugador Leyenda"
+                                        >
+                                          ★
+                                        </span>
+                                      )}
+                                      {isMLPlayer && (
+                                        <span className="badge ml" title="Jugador ML">
+                                          ML
+                                        </span>
+                                      )}
+                                      {isAnfpes && (
+                                        <span
+                                          className="badge anfpes"
+                                          title="Afiliado a la ANFPES"
+                                        >
+                                          ANFPES
+                                        </span>
+                                      )}
+                                      {playerPreselections.length > 0 && (
+                                        <span
+                                          className="badge preselection"
+                                          title={`En ${playerPreselections.length} preselección${playerPreselections.length > 1 ? 'es' : ''}: ${playerPreselections.map((p) => p.name).join(', ')}`}
+                                        >
+                                          📋
+                                        </span>
+                                      )}
+                                    </span>
+                                  </div>
+                                </td>
+                              );
+                            }
+
+                            if (column === 'NACIONALIDAD') {
+                              const rawNationality = player.NACIONALIDAD as string;
+                              const flagPath = getFlagImagePath(rawNationality);
+                              const nationalityInfo = getNationalityInfo(rawNationality);
+                              const displayName = nationalityInfo?.name || rawNationality;
+
+                              return (
+                                <td
+                                  key={column}
+                                  className="image-cell"
+                                  title={displayName}
+                                >
+                                  {flagPath && (
+                                    <img src={flagPath} alt="" className="flag-icon" />
+                                  )}
+                                </td>
+                              );
+                            }
+
+                            if (column === 'CLUB') {
+                              const rawClub = player.CLUB as string;
+                              const shieldPath = getClubShieldPath(rawClub);
+                              const rawNationality = player.NACIONALIDAD as string;
+                              const clubDisplay = formatClub(rawClub, rawNationality);
+
+                              return (
+                                <td
+                                  key={column}
+                                  className="image-cell"
+                                  title={clubDisplay}
+                                >
+                                  {shieldPath ? (
+                                    <img
+                                      src={shieldPath}
+                                      alt=""
+                                      className="club-shield"
+                                    />
+                                  ) : (
+                                    <span className="club-icon">⚽</span>
+                                  )}
+                                </td>
+                              );
+                            }
+
+                            if (column === 'POSICIONES') {
+                              return (
+                                <td key={column}>
+                                  <PositionBadges player={player} />
+                                </td>
+                              );
+                            }
 
                             return (
-                              <td key={column} className="player-name-cell">
-                                <div className="player-name-primary">
-                                  <span className="player-name-text">
-                                    {player.NOMBRE}
-                                  </span>
-                                  <span className="player-badges">
-                                    {hasNationalTeam !== 'No' && (
-                                      <span
-                                        className="badge"
-                                        title="Seleccionado Nacional"
-                                      >
-                                        🌍
-                                      </span>
-                                    )}
-                                    {isLegend && (
-                                      <span
-                                        className="badge legend"
-                                        title="Jugador Leyenda"
-                                      >
-                                        ★
-                                      </span>
-                                    )}
-                                    {isMLPlayer && (
-                                      <span className="badge ml" title="Jugador ML">
-                                        ML
-                                      </span>
-                                    )}
-                                    {isAnfpes && (
-                                      <span
-                                        className="badge anfpes"
-                                        title="Afiliado a la ANFPES"
-                                      >
-                                        ANFPES
-                                      </span>
-                                    )}
-                                  </span>
-                                </div>
+                              <td key={column} data-type={getColumnType(column)}>
+                                <TableCell
+                                  field={column as keyof DerivedPlayer}
+                                  player={player}
+                                  type={getColumnType(column)}
+                                />
                               </td>
                             );
-                          }
-
-                          if (column === 'NACIONALIDAD') {
-                            const rawNationality = player.NACIONALIDAD as string;
-                            const flagPath = getFlagImagePath(rawNationality);
-                            const nationalityInfo = getNationalityInfo(rawNationality);
-                            const displayName = nationalityInfo?.name || rawNationality;
-
-                            return (
-                              <td key={column} className="image-cell" title={displayName}>
-                                {flagPath && (
-                                  <img src={flagPath} alt="" className="flag-icon" />
-                                )}
-                              </td>
-                            );
-                          }
-
-                          if (column === 'CLUB') {
-                            const rawClub = player.CLUB as string;
-                            const shieldPath = getClubShieldPath(rawClub);
-                            const rawNationality = player.NACIONALIDAD as string;
-                            const clubDisplay = formatClub(rawClub, rawNationality);
-
-                            return (
-                              <td key={column} className="image-cell" title={clubDisplay}>
-                                {shieldPath ? (
-                                  <img src={shieldPath} alt="" className="club-shield" />
-                                ) : (
-                                  <span className="club-icon">⚽</span>
-                                )}
-                              </td>
-                            );
-                          }
-
-                          return (
-                            <td key={column} data-type={getColumnType(column)}>
-                              <TableCell
-                                field={column as keyof DerivedPlayer}
-                                player={player}
-                                type={getColumnType(column)}
-                              />
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
+                          })}
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
             </>
           )}
         </>
+      )}
+
+      {/* Floating button for adding to preselection */}
+      {selectedPlayerIds.size > 0 && (
+        <button
+          ref={floatingButtonRef}
+          type="button"
+          className="floating-action-button"
+          onClick={() => setAddToPreselectionModalOpen(true)}
+          data-last-selected={lastSelectedPlayerId}
+        >
+          <span className="fab-icon">📋</span>
+          <span className="fab-text">
+            Agregar {selectedPlayerIds.size} jugador
+            {selectedPlayerIds.size > 1 ? 'es' : ''} a preselección
+          </span>
+        </button>
+      )}
+
+      {/* Modal for adding to preselection */}
+      {addToPreselectionModalOpen && (
+        <AddToPreselectionModal
+          selectedPlayerIds={selectedPlayerIds}
+          onClose={() => setAddToPreselectionModalOpen(false)}
+          onSuccess={() => {
+            clearSelection();
+          }}
+        />
       )}
     </section>
   );
@@ -1680,6 +1881,14 @@ function toNumber(value: unknown): number | null {
   return null;
 }
 
+// Mapeo de posiciones ambidiestras a sus variantes laterales
+const AMBIDEXTROUS_EQUIVALENCE: Record<string, string[]> = {
+  SB: ['RB', 'LB'],
+  WB: ['RWB', 'LWB'],
+  SMF: ['RMF', 'LMF'],
+  WF: ['RWF', 'LWF'],
+};
+
 function matchesPositions(player: DerivedPlayer, positions: string[]): boolean {
   if (!positions.length) {
     return true;
@@ -1690,7 +1899,21 @@ function matchesPositions(player: DerivedPlayer, positions: string[]): boolean {
   if (!playerPositions.length) {
     return false;
   }
-  return playerPositions.some((code) => positions.includes(code));
+
+  return playerPositions.some((playerCode) => {
+    // Coincidencia exacta
+    if (positions.includes(playerCode)) {
+      return true;
+    }
+
+    // Si el jugador tiene posición ambidiestra, verificar si buscan sus variantes laterales
+    const lateralVariants = AMBIDEXTROUS_EQUIVALENCE[playerCode];
+    if (lateralVariants) {
+      return lateralVariants.some((variant) => positions.includes(variant));
+    }
+
+    return false;
+  });
 }
 
 function togglePosition(
