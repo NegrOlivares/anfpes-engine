@@ -1,9 +1,11 @@
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { SyntheticEvent } from 'react';
 import { AddToPreselectionModal } from './AddToPreselectionModal';
 import { usePlayerActionsStore } from '../store/playerActionsStore';
 import { useModuleStore, MODULE_IDS } from '../store/moduleStore';
 import { useSimilarPlayersStore } from '../store/similarPlayersStore';
+import { usePreselectionStore } from '../store/preselectionStore';
 
 function usePlayerActions() {
   const isOpen = usePlayerActionsStore((state) => state.isOpen);
@@ -18,13 +20,22 @@ export function PlayerActionsOverlay() {
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
   const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
   const [showPreselectionModal, setShowPreselectionModal] = useState(false);
+  const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
+  const clearSelection = usePreselectionStore((state) => state.clearSelection);
 
-  const selectedPlayerIds = useMemo(() => {
-    if (!player) {
-      return new Set<string>();
+  const effectiveSelection = useMemo(() => {
+    if (selectedPlayerIds.size > 0) {
+      return new Set(selectedPlayerIds);
     }
-    return new Set<string>([player.ID as string]);
-  }, [player]);
+    if (player) {
+      return new Set<string>([player.ID as string]);
+    }
+    return new Set<string>();
+  }, [selectedPlayerIds, player]);
+
+  const selectionCount = effectiveSelection.size;
+  const soleSelectionId = selectionCount === 1 ? Array.from(effectiveSelection)[0] : null;
+  const canSearchSimilar = selectionCount === 1;
 
   const handleBackdropClick = useCallback(() => {
     if (!showPreselectionModal) {
@@ -58,11 +69,17 @@ export function PlayerActionsOverlay() {
   }
 
   const handlePreselection = () => {
+    if (selectionCount === 0) {
+      return;
+    }
     setShowPreselectionModal(true);
   };
 
   const handleSimilarPlayers = () => {
-    setBasePlayerId(player.ID as string);
+    if (!soleSelectionId) {
+      return;
+    }
+    setBasePlayerId(soleSelectionId);
     setActiveModule(MODULE_IDS.similar);
     close();
   };
@@ -76,28 +93,27 @@ export function PlayerActionsOverlay() {
     <>
       <div className="player-actions-backdrop" onClick={handleBackdropClick} />
       <div className="player-actions-menu" style={menuStyle}>
-        <header>
-          <p className="player-actions-name">{player.NOMBRE}</p>
-          <p className="player-actions-club">{player.CLUB as string}</p>
-        </header>
         <div className="player-actions-options">
           <button type="button" onClick={handlePreselection}>
             Agregar a preselección
           </button>
-          <button type="button" onClick={handleSimilarPlayers}>
-            Buscar jugadores similares
-          </button>
+          {canSearchSimilar && (
+            <button type="button" onClick={handleSimilarPlayers}>
+              Buscar jugadores similares
+            </button>
+          )}
         </div>
       </div>
 
       {showPreselectionModal && (
         <AddToPreselectionModal
-          selectedPlayerIds={selectedPlayerIds}
+          selectedPlayerIds={effectiveSelection}
           onClose={() => {
             setShowPreselectionModal(false);
             close();
           }}
           onSuccess={() => {
+            clearSelection();
             setShowPreselectionModal(false);
             close();
           }}
@@ -108,7 +124,7 @@ export function PlayerActionsOverlay() {
 }
 
 export function openPlayerActionsMenu(
-  event: React.MouseEvent<HTMLElement>,
+  event: SyntheticEvent<HTMLElement>,
   player: DerivedPlayer,
 ) {
   event.stopPropagation();
@@ -118,4 +134,8 @@ export function openPlayerActionsMenu(
     y: rect.bottom + 8,
   };
   usePlayerActionsStore.getState().open(player, anchor);
+}
+
+export function closePlayerActionsMenu() {
+  usePlayerActionsStore.getState().close();
 }

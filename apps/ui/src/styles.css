@@ -85,6 +85,27 @@ body {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.card.player-search + * {
+  margin-top: 0;
+}
+
+.player-search .table-container {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  min-height: calc(100vh - 160px);
+  max-height: calc(100vh - 160px);
+}
+
+.card.player-search .card-header {
+  margin-bottom: 0.35rem;
 }
 
 .card h2 {
@@ -504,28 +525,13 @@ tbody tr:hover {
 .player-actions-menu {
   position: fixed;
   z-index: 41;
-  transform: translate(-50%, 0);
+  transform: translate(0, -100%);
   min-width: 260px;
-  background: rgba(15, 18, 27, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 4, 14, 0.95);
+  border: 1px solid rgba(0, 0, 2, 0.95);
   border-radius: 0.85rem;
   padding: 1rem;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.player-actions-menu header {
-  margin-bottom: 0.75rem;
-}
-
-.player-actions-name {
-  margin: 0;
-  font-weight: 600;
-}
-
-.player-actions-club {
-  margin: 0;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 .player-actions-options {
@@ -539,7 +545,7 @@ tbody tr:hover {
   padding: 0.5rem 0.75rem;
   border-radius: 0.65rem;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(7, 35, 95, 0.432);
   color: inherit;
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease;
@@ -843,9 +849,9 @@ tbody tr:hover {
 .search-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  padding: 0.25rem 0;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin: 0.5rem;
 }
 
 .search-info {
@@ -1096,9 +1102,18 @@ tbody tr:hover {
 }
 
 .player-table th.positions-header {
-  width: 170px;
-  min-width: 170px;
-  max-width: 170x;
+  width: 175px;
+  min-width: 175px;
+  max-width: 175x;
+}
+
+.player-table th.nationality-column,
+.player-table th.club-column,
+.player-table td.nationality-column,
+.player-table td.club-column {
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
 }
 
 .player-table th.sortable {
@@ -1252,8 +1267,8 @@ tbody tr:hover {
 }
 
 .club-shield {
-  width: 1rem;
-  height: 1rem;
+  width: 1.8rem;
+  height: 1.8rem;
   object-fit: contain;
   flex-shrink: 0;
   vertical-align: middle;
@@ -1395,62 +1410,12 @@ tbody tr:hover {
 .badge.preselection {
   background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
   color: #ede9fe;
-  font-size: 0.95rem;
+  font-size: 0.7rem;
 }
 
 .badge.preselection:hover {
   background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
   transform: translateY(-1px);
-}
-
-/* Floating Action Button */
-.floating-action-button {
-  position: fixed;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  border: none;
-  border-radius: 2rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-  animation: fab-appear 0.3s ease;
-  pointer-events: auto;
-}
-
-@keyframes fab-appear {
-  from {
-    opacity: 0;
-    transform: translateY(-50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(-50%) scale(1);
-  }
-}
-
-.floating-action-button:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.floating-action-button:active {
-  transform: translateY(-50%) scale(0.98);
-}
-
-.fab-icon {
-  font-size: 1.25rem;
-  line-height: 1;
-}
-
-.fab-text {
-  white-space: nowrap;
 }
 
 /* Modal Backdrop */
@@ -2018,9 +1983,8 @@ tbody tr:hover {
 /* Primaria - Destacada */
 .position-badge.primary {
   font-weight: 700;
-  opacity: 1;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.6), 0 0 12px rgba(255, 215, 0, 0.3);
+  opacity: 0.85;
+  border: 2px solid rgb(119, 108, 3);
 }
 
 /* Secundarias - Opacidad reducida */
@@ -2031,7 +1995,7 @@ tbody tr:hover {
 
 /* Colores por línea */
 .position-PT {
-  background: #ffdd30;
+  background: #e9b407;
   color: #fff;
 }
 

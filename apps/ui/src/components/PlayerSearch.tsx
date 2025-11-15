@@ -1,5 +1,6 @@
 import type { DerivedPlayer } from '@anfpes/engine';
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import {
@@ -11,7 +12,6 @@ import {
 import { POSITION_COLORS, type SortConfig } from '../types/table';
 import { TableCell } from './TableCell';
 import { PositionBadges } from './PositionBadges';
-import { AddToPreselectionModal } from './AddToPreselectionModal';
 import {
   formatClub,
   formatNationality,
@@ -26,6 +26,7 @@ import { usePlayerViews, type FilterCondition } from '../hooks/usePlayerViews';
 import { getNationalityInfo } from '../data/nationalities';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
+import { openPlayerActionsMenu, closePlayerActionsMenu } from './PlayerActionsOverlay';
 
 type FilterOperator = 'eq' | 'contains' | 'gte' | 'lte' | 'between';
 
@@ -150,13 +151,9 @@ export function PlayerSearch() {
   const selectPlayer = usePreselectionStore((state) => state.selectPlayer);
   const deselectPlayer = usePreselectionStore((state) => state.deselectPlayer);
   const selectAllPlayers = usePreselectionStore((state) => state.selectAllPlayers);
-  const clearSelection = usePreselectionStore((state) => state.clearSelection);
   const getPlayerPreselections = usePreselectionStore(
     (state) => state.getPlayerPreselections,
   );
-  const [addToPreselectionModalOpen, setAddToPreselectionModalOpen] = useState(false);
-  const [lastSelectedPlayerId, setLastSelectedPlayerId] = useState<string | null>(null);
-  const floatingButtonRef = useRef<HTMLButtonElement>(null);
 
   // Cargar el último estado al iniciar
   useEffect(() => {
@@ -167,7 +164,6 @@ export function PlayerSearch() {
       setSortConfig(lastState.sortConfig);
       setVisibleColumns(new Set(lastState.visibleColumns));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Guardar el estado actual cuando cambie
@@ -322,67 +318,6 @@ export function PlayerSearch() {
     }
   }, [paginatedResults, selectedId, setSelectedPlayer]);
 
-  // Position floating button near last selected player
-  useEffect(() => {
-    if (!lastSelectedPlayerId || selectedPlayerIds.size === 0) {
-      return;
-    }
-
-    const updateButtonPosition = () => {
-      const rowElement = document.querySelector(
-        `tr[data-player-id="${lastSelectedPlayerId}"]`,
-      ) as HTMLElement;
-      const buttonElement = floatingButtonRef.current;
-
-      if (rowElement && buttonElement) {
-        const rect = rowElement.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const buttonWidth = buttonElement.offsetWidth || 300;
-        const buttonHeight = buttonElement.offsetHeight || 60;
-
-        // Calculate desired position (left of the row)
-        let left = rect.left - buttonWidth - 15;
-        let top = rect.top + rect.height / 2;
-
-        // Keep button within viewport
-        if (left + buttonWidth > viewportWidth) {
-          left = viewportWidth - buttonWidth - 15; // 15px margin from right edge
-        }
-        if (left < 15) {
-          left = 15; // 15px margin from left edge
-        }
-        if (top - buttonHeight / 2 < 15) {
-          top = buttonHeight / 2 + 15;
-        }
-        if (top + buttonHeight / 2 > viewportHeight - 15) {
-          top = viewportHeight - buttonHeight / 2 - 15;
-        }
-
-        buttonElement.style.position = 'fixed';
-        buttonElement.style.top = `${top}px`;
-        buttonElement.style.left = `${left}px`;
-        buttonElement.style.bottom = 'auto';
-        buttonElement.style.right = 'auto';
-        buttonElement.style.transform = 'translateY(-50%)';
-        buttonElement.style.zIndex = '1000';
-      }
-    };
-
-    // Use requestAnimationFrame to ensure DOM is updated
-    requestAnimationFrame(() => {
-      updateButtonPosition();
-    });
-
-    window.addEventListener('scroll', updateButtonPosition);
-    window.addEventListener('resize', updateButtonPosition);
-
-    return () => {
-      window.removeEventListener('scroll', updateButtonPosition);
-      window.removeEventListener('resize', updateButtonPosition);
-    };
-  }, [lastSelectedPlayerId, selectedPlayerIds.size, paginatedResults]);
-
   const loading = status === 'idle' || status === 'loading';
 
   const handleAddFilter = () => {
@@ -468,34 +403,43 @@ export function PlayerSearch() {
     setVisibleColumns(new Set(DEFAULT_TABLE_COLUMNS));
   };
 
-  const handleTogglePlayerSelection = (playerId: string) => {
-    if (selectedPlayerIds.has(playerId)) {
-      deselectPlayer(playerId);
-      // Si era el último seleccionado y lo deseleccionamos, limpiar
-      if (lastSelectedPlayerId === playerId) {
-        setLastSelectedPlayerId(null);
+  const handleTogglePlayerSelection = (
+    event: ChangeEvent<HTMLInputElement>,
+    player: DerivedPlayer,
+  ) => {
+    event.stopPropagation();
+    if (selectedPlayerIds.has(player.ID)) {
+      deselectPlayer(player.ID);
+      if (usePreselectionStore.getState().selectedPlayerIds.size === 0) {
+        closePlayerActionsMenu();
       }
-    } else {
-      selectPlayer(playerId);
-      setLastSelectedPlayerId(playerId);
+      return;
     }
+    selectPlayer(player.ID);
+    openPlayerActionsMenu(event, player);
   };
 
-  const handleToggleAllVisible = () => {
+  const handleToggleAllVisible = (event: ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
     const visibleIds = paginatedResults.map((p) => p.ID);
+    if (visibleIds.length === 0) {
+      return;
+    }
     const allSelected = visibleIds.every((id) => selectedPlayerIds.has(id));
 
     if (allSelected) {
-      // Deseleccionar todos los visibles
       visibleIds.forEach((id) => deselectPlayer(id));
-      setLastSelectedPlayerId(null);
-    } else {
-      // Seleccionar todos los visibles
-      visibleIds.forEach((id) => selectPlayer(id));
-      // Actualizar al último jugador visible como el último seleccionado
-      if (visibleIds.length > 0) {
-        setLastSelectedPlayerId(visibleIds[visibleIds.length - 1]);
+      if (usePreselectionStore.getState().selectedPlayerIds.size === 0) {
+        closePlayerActionsMenu();
       }
+      return;
+    }
+
+    const combinedIds = Array.from(new Set([...selectedPlayerIds, ...visibleIds]));
+    selectAllPlayers(combinedIds);
+    const anchorPlayer = paginatedResults[0];
+    if (anchorPlayer) {
+      openPlayerActionsMenu(event, anchorPlayer);
     }
   };
 
@@ -1040,10 +984,18 @@ export function PlayerSearch() {
                           column === 'NACIONALIDAD' || column === 'CLUB';
                         const isPositionsColumn = column === 'POSICIONES';
                         const columnType = getColumnType(column);
+                        const headerClasses = ['sortable'];
+                        if (isNameColumn) headerClasses.push('player-name-header');
+                        if (isImageColumn) headerClasses.push('image-header');
+                        if (isPositionsColumn) headerClasses.push('positions-header');
+                        if (column === 'NACIONALIDAD')
+                          headerClasses.push('nationality-column');
+                        if (column === 'CLUB') headerClasses.push('club-column');
+
                         return (
                           <th
                             key={column}
-                            className={`sortable${isNameColumn ? ' player-name-header' : ''}${isImageColumn ? ' image-header' : ''}${isPositionsColumn ? ' positions-header' : ''}`}
+                            className={headerClasses.join(' ')}
                             data-type={columnType}
                             onClick={(e) =>
                               handleSort(column as keyof DerivedPlayer, e.shiftKey)
@@ -1084,12 +1036,13 @@ export function PlayerSearch() {
                             <input
                               type="checkbox"
                               checked={selectedPlayerIds.has(player.ID)}
-                              onChange={() => handleTogglePlayerSelection(player.ID)}
+                              onChange={(event) =>
+                                handleTogglePlayerSelection(event, player)
+                              }
                             />
                           </td>
                           {sortedVisibleColumns.map((column) => {
                             if (column === 'NOMBRE') {
-                              const rawNationality = player.NACIONALIDAD as string;
                               const rawClub = player.CLUB as string;
                               const playerName = player.NOMBRE as string;
                               const hasNationalTeam = formatSelectionDisplay(
@@ -1106,9 +1059,17 @@ export function PlayerSearch() {
                               return (
                                 <td key={column} className="player-name-cell">
                                   <div className="player-name-primary">
-                                    <span className="player-name-text">
-                                      {player.NOMBRE}
-                                    </span>
+                                    <button
+                                      type="button"
+                                      className="player-name-button"
+                                      onClick={(event) =>
+                                        openPlayerActionsMenu(event, player)
+                                      }
+                                    >
+                                      <span className="player-name-text">
+                                        {player.NOMBRE}
+                                      </span>
+                                    </button>
                                     <span className="player-badges">
                                       {hasNationalTeam !== 'No' && (
                                         <span
@@ -1162,7 +1123,7 @@ export function PlayerSearch() {
                               return (
                                 <td
                                   key={column}
-                                  className="image-cell"
+                                  className="image-cell nationality-column"
                                   title={displayName}
                                 >
                                   {flagPath && (
@@ -1181,7 +1142,7 @@ export function PlayerSearch() {
                               return (
                                 <td
                                   key={column}
-                                  className="image-cell"
+                                  className="image-cell club-column"
                                   title={clubDisplay}
                                 >
                                   {shieldPath ? (
@@ -1224,34 +1185,6 @@ export function PlayerSearch() {
             </>
           )}
         </>
-      )}
-
-      {/* Floating button for adding to preselection */}
-      {selectedPlayerIds.size > 0 && (
-        <button
-          ref={floatingButtonRef}
-          type="button"
-          className="floating-action-button"
-          onClick={() => setAddToPreselectionModalOpen(true)}
-          data-last-selected={lastSelectedPlayerId}
-        >
-          <span className="fab-icon">📋</span>
-          <span className="fab-text">
-            Agregar {selectedPlayerIds.size} jugador
-            {selectedPlayerIds.size > 1 ? 'es' : ''} a preselección
-          </span>
-        </button>
-      )}
-
-      {/* Modal for adding to preselection */}
-      {addToPreselectionModalOpen && (
-        <AddToPreselectionModal
-          selectedPlayerIds={selectedPlayerIds}
-          onClose={() => setAddToPreselectionModalOpen(false)}
-          onSuccess={() => {
-            clearSelection();
-          }}
-        />
       )}
     </section>
   );

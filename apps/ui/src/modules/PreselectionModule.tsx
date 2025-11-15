@@ -1,5 +1,6 @@
-import type { DerivedPlayer } from '@anfpes/engine';
+﻿import type { DerivedPlayer } from '@anfpes/engine';
 import { useEffect, useMemo, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import {
@@ -8,63 +9,22 @@ import {
   getTableHeaderLabel,
   getSortedColumns,
 } from '../constants/playerFields';
-import { POSITION_COLORS, type SortConfig } from '../types/table';
+import { type SortConfig } from '../types/table';
 import { TableCell } from '../components/TableCell';
 import { PositionBadges } from '../components/PositionBadges';
 import {
   formatClub,
-  formatNationality,
   formatSelectionDisplay,
   getFieldLabel,
   shouldDisplayField,
 } from '../utils/playerDisplay';
 import { getNationalityInfo } from '../data/nationalities';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
-
-const POSITION_CODES = [
-  { code: 'GK', label: 'PT', color: POSITION_COLORS.PT },
-  { code: 'SWP', label: 'LIB', color: POSITION_COLORS.LIB },
-  { code: 'CB', label: 'CT', color: POSITION_COLORS.CT },
-  { code: 'SB', label: 'SA', color: POSITION_COLORS.SA },
-  { code: 'RB', label: 'DD', color: POSITION_COLORS.DD },
-  { code: 'LB', label: 'DI', color: POSITION_COLORS.DI },
-  { code: 'DMF', label: 'CCD', color: POSITION_COLORS.CCD },
-  { code: 'WB', label: 'LA', color: POSITION_COLORS.LA },
-  { code: 'RWB', label: 'DLD', color: POSITION_COLORS.DLD },
-  { code: 'LWB', label: 'DLI', color: POSITION_COLORS.DLI },
-  { code: 'CMF', label: 'CC', color: POSITION_COLORS.CC },
-  { code: 'SMF', label: 'VOL', color: POSITION_COLORS.VOL },
-  { code: 'RMF', label: 'CDR', color: POSITION_COLORS.CDR },
-  { code: 'LMF', label: 'CIZ', color: POSITION_COLORS.CIZ },
-  { code: 'AMF', label: 'MP', color: POSITION_COLORS.MP },
-  { code: 'WF', label: 'EX', color: POSITION_COLORS.EX },
-  { code: 'RWF', label: 'ED', color: POSITION_COLORS.ED },
-  { code: 'LWF', label: 'EI', color: POSITION_COLORS.EI },
-  { code: 'SS', label: 'SD', color: POSITION_COLORS.SD },
-  { code: 'CF', label: 'DC', color: POSITION_COLORS.DC },
-];
-
-const LEGEND_PLAYERS = new Set([
-  'Jack Charlton',
-  'Júnior',
-  'K. Andersson',
-  'Bobby Robson',
-  // ... (incluir la lista completa como en PlayerSearch)
-]);
-
-const ML_PLAYERS = new Set([
-  'Castolo',
-  'Stremer',
-  'Iouga',
-  // ... (incluir la lista completa como en PlayerSearch)
-]);
-
-const ANFPES_CLUBS = new Set([
-  'A.C. Milan',
-  'A.S. Roma',
-  'Ajax',
-  // ... (incluir la lista completa como en PlayerSearch)
-]);
+import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
+import {
+  openPlayerActionsMenu,
+  closePlayerActionsMenu,
+} from '../components/PlayerActionsOverlay';
 
 export function PreselectionModule() {
   const players = useCacheStore((state) => state.players);
@@ -84,7 +44,6 @@ export function PreselectionModule() {
   const addPlayerTag = usePreselectionStore((state) => state.addPlayerTag);
   const removePlayerTag = usePreselectionStore((state) => state.removePlayerTag);
   const availableTags = usePreselectionStore((state) => state.availableTags);
-  const createTag = usePreselectionStore((state) => state.createTag);
 
   const [activePreselectionId, setActivePreselectionId] = useState(
     preselections[0]?.id || '',
@@ -98,7 +57,11 @@ export function PreselectionModule() {
   const [columnsMenuOpen, setColumnsMenuOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(50);
-  const [selectedPlayerIds, setSelectedPlayerIds] = useState<Set<string>>(new Set());
+  const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
+  const selectPlayer = usePreselectionStore((state) => state.selectPlayer);
+  const deselectPlayer = usePreselectionStore((state) => state.deselectPlayer);
+  const selectAllPlayers = usePreselectionStore((state) => state.selectAllPlayers);
+  const clearSelection = usePreselectionStore((state) => state.clearSelection);
   const [editingNoteForPlayer, setEditingNoteForPlayer] = useState<string | null>(null);
   const [noteText, setNoteText] = useState('');
   const [managingTagsForPlayer, setManagingTagsForPlayer] = useState<string | null>(null);
@@ -238,28 +201,43 @@ export function PreselectionModule() {
     return 'text';
   };
 
-  const handleTogglePlayerSelection = (playerId: string) => {
-    setSelectedPlayerIds((current) => {
-      const next = new Set(current);
-      if (next.has(playerId)) {
-        next.delete(playerId);
-      } else {
-        next.add(playerId);
+  const handleTogglePlayerSelection = (
+    event: ChangeEvent<HTMLInputElement>,
+    player: DerivedPlayer,
+  ) => {
+    event.stopPropagation();
+    if (selectedPlayerIds.has(player.ID)) {
+      deselectPlayer(player.ID);
+      if (usePreselectionStore.getState().selectedPlayerIds.size === 0) {
+        closePlayerActionsMenu();
       }
-      return next;
-    });
+      return;
+    }
+    selectPlayer(player.ID);
+    openPlayerActionsMenu(event, player);
   };
 
-  const handleToggleAllVisible = () => {
+  const handleToggleAllVisible = (event: ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
     const visibleIds = paginatedResults.map((p) => p.ID);
+    if (visibleIds.length === 0) {
+      return;
+    }
     const allSelected = visibleIds.every((id) => selectedPlayerIds.has(id));
 
     if (allSelected) {
-      setSelectedPlayerIds(
-        (current) => new Set([...current].filter((id) => !visibleIds.includes(id))),
-      );
-    } else {
-      setSelectedPlayerIds((current) => new Set([...current, ...visibleIds]));
+      visibleIds.forEach((id) => deselectPlayer(id));
+      if (usePreselectionStore.getState().selectedPlayerIds.size === 0) {
+        closePlayerActionsMenu();
+      }
+      return;
+    }
+
+    const combinedIds = Array.from(new Set([...selectedPlayerIds, ...visibleIds]));
+    selectAllPlayers(combinedIds);
+    const anchorPlayer = paginatedResults[0];
+    if (anchorPlayer) {
+      openPlayerActionsMenu(event, anchorPlayer);
     }
   };
 
@@ -267,7 +245,8 @@ export function PreselectionModule() {
     if (selectedPlayerIds.size === 0) return;
 
     removePlayersFromPreselection(activePreselectionId, Array.from(selectedPlayerIds));
-    setSelectedPlayerIds(new Set());
+    clearSelection();
+    closePlayerActionsMenu();
   };
 
   const handleDeletePreselection = () => {
@@ -532,10 +511,18 @@ export function PreselectionModule() {
                         column === 'NACIONALIDAD' || column === 'CLUB';
                       const isPositionsColumn = column === 'POSICIONES';
                       const columnType = getColumnType(column);
+                      const headerClasses = ['sortable'];
+                      if (isNameColumn) headerClasses.push('player-name-header');
+                      if (isImageColumn) headerClasses.push('image-header');
+                      if (isPositionsColumn) headerClasses.push('positions-header');
+                      if (column === 'NACIONALIDAD')
+                        headerClasses.push('nationality-column');
+                      if (column === 'CLUB') headerClasses.push('club-column');
+
                       return (
                         <th
                           key={column}
-                          className={`sortable${isNameColumn ? ' player-name-header' : ''}${isImageColumn ? ' image-header' : ''}${isPositionsColumn ? ' positions-header' : ''}`}
+                          className={headerClasses.join(' ')}
                           data-type={columnType}
                           onClick={(e) =>
                             handleSort(column as keyof DerivedPlayer, e.shiftKey)
@@ -594,19 +581,20 @@ export function PreselectionModule() {
                             <input
                               type="checkbox"
                               checked={selectedPlayerIds.has(player.ID)}
-                              onChange={() => handleTogglePlayerSelection(player.ID)}
+                              onChange={(event) =>
+                                handleTogglePlayerSelection(event, player)
+                              }
                             />
                           </td>
                           {sortedVisibleColumns.map((column) => {
                             if (column === 'NOMBRE') {
-                              const rawNationality = player.NACIONALIDAD as string;
                               const rawClub = player.CLUB as string;
                               const playerName = player.NOMBRE as string;
                               const hasNationalTeam = formatSelectionDisplay(
                                 player['nro selección'],
                               );
                               const hasClassic = formatSelectionDisplay(
-                                player['nro clasico'],
+                                player['nro clásico'],
                               );
                               const isLegend =
                                 hasClassic !== 'No' || LEGEND_PLAYERS.has(playerName);
@@ -616,16 +604,24 @@ export function PreselectionModule() {
                               return (
                                 <td key={column} className="player-name-cell">
                                   <div className="player-name-primary">
-                                    <span
-                                      className="player-name-text"
-                                      style={
-                                        primaryTag
-                                          ? { color: primaryTag.color }
-                                          : undefined
+                                    <button
+                                      type="button"
+                                      className="player-name-button"
+                                      onClick={(event) =>
+                                        openPlayerActionsMenu(event, player)
                                       }
                                     >
-                                      {player.NOMBRE}
-                                    </span>
+                                      <span
+                                        className="player-name-text"
+                                        style={
+                                          primaryTag
+                                            ? { color: primaryTag.color }
+                                            : undefined
+                                        }
+                                      >
+                                        {player.NOMBRE}
+                                      </span>
+                                    </button>
                                     <span className="player-badges">
                                       {hasNationalTeam !== 'No' && (
                                         <span
@@ -671,7 +667,7 @@ export function PreselectionModule() {
                               return (
                                 <td
                                   key={column}
-                                  className="image-cell"
+                                  className="image-cell nationality-column"
                                   title={displayName}
                                 >
                                   {flagPath && (
@@ -690,7 +686,7 @@ export function PreselectionModule() {
                               return (
                                 <td
                                   key={column}
-                                  className="image-cell"
+                                  className="image-cell club-column"
                                   title={clubDisplay}
                                 >
                                   {shieldPath ? (

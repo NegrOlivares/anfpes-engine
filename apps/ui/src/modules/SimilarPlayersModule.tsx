@@ -499,12 +499,17 @@ export function SimilarPlayersModule() {
                     const isImageColumn = column === 'NACIONALIDAD' || column === 'CLUB';
                     const isPositionsColumn = column === 'POSICIONES';
                     const columnType = getColumnType(column);
+                    const headerClasses: string[] = [];
+                    if (isImageColumn) headerClasses.push('image-header');
+                    if (isPositionsColumn) headerClasses.push('positions-header');
+                    if (column === 'NACIONALIDAD')
+                      headerClasses.push('nationality-column');
+                    if (column === 'CLUB') headerClasses.push('club-column');
+
                     return (
                       <th
                         key={column}
-                        className={`${isImageColumn ? 'image-header' : ''}${
-                          isPositionsColumn ? 'positions-header' : ''
-                        }`}
+                        className={headerClasses.join(' ')}
                         data-type={columnType}
                         title={headerLabel}
                       >
@@ -551,7 +556,11 @@ export function SimilarPlayersModule() {
                           const displayName = nationalityInfo?.name || rawNationality;
 
                           return (
-                            <td key={column} className="image-cell" title={displayName}>
+                            <td
+                              key={column}
+                              className="image-cell nationality-column"
+                              title={displayName}
+                            >
                               {flagPath && (
                                 <img src={flagPath} alt="" className="flag-icon" />
                               )}
@@ -566,7 +575,11 @@ export function SimilarPlayersModule() {
                           const clubDisplay = formatClub(rawClub, rawNationality);
 
                           return (
-                            <td key={column} className="image-cell" title={clubDisplay}>
+                            <td
+                              key={column}
+                              className="image-cell club-column"
+                              title={clubDisplay}
+                            >
                               {shieldPath ? (
                                 <img src={shieldPath} alt="" className="club-shield" />
                               ) : (
