@@ -175,3 +175,9 @@
   1. Recuperar versiones limpias (UTF‑8) de todos los archivos afectados y volver a aplicar el refactor solo cuando sea seguro.
   2. Confirmar visualmente que los badges muestran 🌍/★/ML/ANFPES/📋 y que toda la UI vuelve a tener acentos correctos.
   3. Reejecutar lint/build para garantizar que no queden caracteres corruptos antes de retomar el trabajo en Similares o nuevas features.
+
+## 2025-11-17
+
+- Ajust� el m�dulo de Similares para homologue su tabla con las otras vistas: clase fija para la columna de nombre, tooltip y estilo del % de similitud, botones alineados y sticky headers.
+- Cre� componentes reutilizables para filtros (pps/ui/src/utils/playerFilters.ts, pps/ui/src/components/FiltersPanel.tsx) con cat�logos, operadores, evaluadores y UI compartible.
+- Integr� esos filtros al flujo del m�dulo (estado, handlers, panel visual, bot�n de limpieza) y actualic� el c�lculo de similitud para descartar previamente jugadores que no cumplan los filtros o posiciones, dejando el slider con m�nimo 95%.

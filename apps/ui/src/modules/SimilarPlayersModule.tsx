@@ -17,9 +17,20 @@ import {
 import {
   formatClub,
   formatSelectionDisplay,
+  getFieldFilterValue,
   getFieldLabel,
+  normalizeFieldKey,
   shouldDisplayField,
 } from '../utils/playerDisplay';
+import {
+  DYNAMIC_OPTION_FIELDS,
+  STATIC_FIELD_OPTIONS,
+  evaluateFilter,
+  matchesPositions,
+  togglePosition,
+} from '../utils/playerFilters';
+import { FiltersPanel } from '../components/FiltersPanel';
+import type { FilterCondition } from '../hooks/usePlayerViews';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { getNationalityInfo } from '../data/nationalities';
 import { openPlayerActionsMenu } from '../components/PlayerActionsOverlay';
@@ -138,6 +149,9 @@ export function SimilarPlayersModule() {
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
     new Set(DEFAULT_TABLE_COLUMNS),
   );
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterCondition[]>([]);
+  const [positionsFilter, setPositionsFilter] = useState<string[]>([]);
 
   const sortedVisibleColumns = useMemo(
     () => getSortedColumns(visibleColumns),
@@ -147,6 +161,109 @@ export function SimilarPlayersModule() {
     () => MACRO_KEYS.filter((key) => macroSelection[key]),
     [macroSelection],
   );
+  const fieldOptions = useMemo(() => {
+    if (!players || !players.length) {
+      return [];
+    }
+
+    const options: Array<{ value: string; label: string; isGroup?: boolean }> = [];
+
+    FIELD_GROUPS.forEach((group) => {
+      options.push({
+        value: `__group_${group.label}`,
+        label: group.label,
+        isGroup: true,
+      });
+
+      group.fields.forEach((field) => {
+        if (shouldDisplayField(field)) {
+          options.push({
+            value: field,
+            label: getFieldLabel(field),
+          });
+        }
+      });
+    });
+
+    return options;
+  }, [players]);
+
+  const fieldValueOptions = useMemo(() => {
+    const base: Record<string, string[]> = { ...STATIC_FIELD_OPTIONS };
+    if (!players) {
+      return base;
+    }
+
+    const collectors = new Map<string, Set<string>>();
+    DYNAMIC_OPTION_FIELDS.forEach((field) => collectors.set(field, new Set<string>()));
+
+    players.forEach((player) => {
+      Object.keys(player).forEach((rawField) => {
+        const canonical = normalizeFieldKey(rawField);
+        const bucket = collectors.get(canonical);
+        if (!bucket) {
+          return;
+        }
+        const value = getFieldFilterValue(rawField as keyof DerivedPlayer, player);
+        if (value && value !== '-') {
+          bucket.add(value);
+        }
+      });
+    });
+
+    collectors.forEach((set, field) => {
+      base[field] = Array.from(set).sort((a, b) => a.localeCompare(b, 'es'));
+    });
+
+    return base;
+  }, [players]);
+
+  const handleAddFilter = () => {
+    if (!fieldOptions.length) {
+      return;
+    }
+    const firstValid = fieldOptions.find((option) => !option.isGroup);
+    if (!firstValid) {
+      return;
+    }
+    const newFilter: FilterCondition = {
+      id: crypto.randomUUID(),
+      field: firstValid.value,
+      operator: 'eq',
+      value: '',
+    };
+    setFilters((current) => [...current, newFilter]);
+    setFiltersOpen(true);
+  };
+
+  const handleUpdateFilter = (id: string, partial: Partial<FilterCondition>) => {
+    setFilters((current) =>
+      current.map((filter) => {
+        if (filter.id !== id) {
+          return filter;
+        }
+        const next: FilterCondition = { ...filter, ...partial };
+        if (partial.field) {
+          next.value = '';
+          next.secondaryValue = undefined;
+        }
+        return next;
+      }),
+    );
+  };
+
+  const handleRemoveFilter = (id: string) => {
+    setFilters((current) => current.filter((filter) => filter.id !== id));
+  };
+
+  const handleClearFilters = () => {
+    setFilters([]);
+    setPositionsFilter([]);
+  };
+
+  const handleTogglePosition = (code: string) => {
+    togglePosition(code, setPositionsFilter);
+  };
 
   const similarEntries = useMemo<SimilarEntry[]>(() => {
     if (!players || !basePlayer || activeMacroKeys.length === 0) {
@@ -158,8 +275,23 @@ export function SimilarPlayersModule() {
       ? buildVector(basePlayer, POSITION_RATING_KEYS)
       : null;
 
-    return players
-      .filter((candidate) => candidate.ID !== basePlayer.ID)
+    const filteredCandidates = players.filter((candidate) => {
+      if (candidate.ID === basePlayer.ID) {
+        return false;
+      }
+      if (
+        filters.length &&
+        !filters.every((filter) => evaluateFilter(filter, candidate))
+      ) {
+        return false;
+      }
+      if (!matchesPositions(candidate, positionsFilter)) {
+        return false;
+      }
+      return true;
+    });
+
+    return filteredCandidates
       .map((candidate) => {
         const candidateMacroVector = buildVector(candidate, activeMacroKeys);
         const macroDistance =
@@ -193,7 +325,16 @@ export function SimilarPlayersModule() {
       .filter((entry) => entry.similarity >= minSimilarity)
       .sort((a, b) => b.similarity - a.similarity)
       .slice(0, 200);
-  }, [players, basePlayer, activeMacroKeys, includePositions, mode, minSimilarity]);
+  }, [
+    players,
+    basePlayer,
+    activeMacroKeys,
+    includePositions,
+    mode,
+    minSimilarity,
+    filters,
+    positionsFilter,
+  ]);
   const sortedSimilarEntries = useMemo(() => {
     if (!similarEntries.length) {
       return similarEntries;
@@ -520,14 +661,44 @@ export function SimilarPlayersModule() {
               similitud.
             </p>
           </div>
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() => setColumnsMenuOpen((prev) => !prev)}
-          >
-            Columnas {columnsMenuOpen ? '▲' : '▼'}
-          </button>
+          <div className="search-actions">
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setFiltersOpen((prev) => !prev)}
+            >
+              Filtros
+            </button>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setColumnsMenuOpen((prev) => !prev)}
+            >
+              Columnas {columnsMenuOpen ? '▲' : '▼'}
+            </button>
+            <button
+              type="button"
+              className="secondary-button ghost"
+              onClick={handleClearFilters}
+              disabled={!filters.length && !positionsFilter.length}
+            >
+              Limpiar filtros
+            </button>
+          </div>
         </header>
+
+        {filtersOpen && (
+          <FiltersPanel
+            filters={filters}
+            positionsFilter={positionsFilter}
+            fieldOptions={fieldOptions}
+            fieldValueOptions={fieldValueOptions}
+            onAddFilter={handleAddFilter}
+            onUpdateFilter={handleUpdateFilter}
+            onRemoveFilter={handleRemoveFilter}
+            onTogglePosition={handleTogglePosition}
+          />
+        )}
 
         {columnsMenuOpen && (
           <div className="columns-menu">
