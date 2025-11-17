@@ -1,4 +1,4 @@
-﻿import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useCacheStore } from '../store/cacheStore';
 import { useSimilarPlayersStore } from '../store/similarPlayersStore';
@@ -23,7 +23,7 @@ import {
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { getNationalityInfo } from '../data/nationalities';
 import { openPlayerActionsMenu } from '../components/PlayerActionsOverlay';
-import { getStatColor } from '../types/table';
+import { getStatColor, type SortDirection } from '../types/table';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 
 const MACRO_KEYS = ['ATK', 'TEC', 'RES', 'DEF', 'FUE', 'VEL'] as const;
@@ -63,8 +63,14 @@ const STATUS_BADGES: StatusBadge[] = [
   },
 ];
 
+type SimilarSortKey = keyof DerivedPlayer | 'SIMILARITY';
+interface SimilarSortConfig {
+  key: SimilarSortKey;
+  direction: SortDirection;
+}
+
 function getStatusBadges(player: DerivedPlayer): StatusBadge[] {
-  const selectionValue = formatSelectionDisplay(player['nro selecci��n'] as string);
+  const selectionValue = formatSelectionDisplay(player['nro selecci??n'] as string);
   const classicValue = formatSelectionDisplay(player['nro clasico'] as string);
   const playerName = String(player.NOMBRE ?? '').trim();
   const rawClub = String(player.CLUB ?? '').trim();
@@ -121,11 +127,14 @@ export function SimilarPlayersModule() {
     VEL: true,
   });
   const [mode, setMode] = useState<'proportional' | 'direct'>('proportional');
-  const [minSimilarity, setMinSimilarity] = useState(80);
+  const [minSimilarity, setMinSimilarity] = useState(95);
   const [includePositions, setIncludePositions] = useState(false);
   const [manualLookup, setManualLookup] = useState('');
   const [lookupError, setLookupError] = useState('');
   const [columnsMenuOpen, setColumnsMenuOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState<SimilarSortConfig[]>([
+    { key: 'SIMILARITY', direction: 'desc' },
+  ]);
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
     new Set(DEFAULT_TABLE_COLUMNS),
   );
@@ -155,16 +164,16 @@ export function SimilarPlayersModule() {
         const candidateMacroVector = buildVector(candidate, activeMacroKeys);
         const macroDistance =
           mode === 'proportional'
-            ? proportionalDistance(baseMacroVector, candidateMacroVector)
+            ? scaledProportionalDistance(baseMacroVector, candidateMacroVector)
             : directDistance(baseMacroVector, candidateMacroVector);
 
         let positionDistance: number | null = null;
         if (includePositions && basePositionVector) {
           const candidatePositionVector = buildVector(candidate, POSITION_RATING_KEYS);
-          positionDistance = proportionalDistance(
-            basePositionVector,
-            candidatePositionVector,
-          );
+          positionDistance =
+            mode === 'proportional'
+              ? scaledProportionalDistance(basePositionVector, candidatePositionVector)
+              : directDistance(basePositionVector, candidatePositionVector);
         }
 
         const combinedDistance =
@@ -185,6 +194,44 @@ export function SimilarPlayersModule() {
       .sort((a, b) => b.similarity - a.similarity)
       .slice(0, 200);
   }, [players, basePlayer, activeMacroKeys, includePositions, mode, minSimilarity]);
+  const sortedSimilarEntries = useMemo(() => {
+    if (!similarEntries.length) {
+      return similarEntries;
+    }
+    const rows = [...similarEntries];
+    const activeSorts = sortConfig.length
+      ? sortConfig
+      : ([
+          { key: 'SIMILARITY', direction: 'desc' as SortDirection },
+        ] as SimilarSortConfig[]);
+
+    rows.sort((a, b) => {
+      for (const sort of activeSorts) {
+        let comparison = 0;
+        if (sort.key === 'SIMILARITY') {
+          comparison = a.similarity - b.similarity;
+        } else {
+          const aValue = a.player[sort.key];
+          const bValue = b.player[sort.key];
+
+          if (typeof aValue === 'number' && typeof bValue === 'number') {
+            comparison = aValue - bValue;
+          } else {
+            const aStr = String(aValue ?? '');
+            const bStr = String(bValue ?? '');
+            comparison = aStr.localeCompare(bStr, 'es');
+          }
+        }
+
+        if (comparison !== 0) {
+          return sort.direction === 'asc' ? comparison : -comparison;
+        }
+      }
+      return 0;
+    });
+
+    return rows;
+  }, [similarEntries, sortConfig]);
 
   const tableRows = useMemo(() => {
     if (!basePlayer) return [];
@@ -196,15 +243,40 @@ export function SimilarPlayersModule() {
         positionDistance: 0,
         isBase: true,
       },
-      ...similarEntries,
+      ...sortedSimilarEntries,
     ];
-  }, [basePlayer, similarEntries]);
+  }, [basePlayer, sortedSimilarEntries]);
 
   const handleMacroToggle = (key: MacroKey) => {
     setMacroSelection((prev) => {
       const activeCount = Object.values(prev).filter(Boolean).length;
       if (prev[key] && activeCount === 1) return prev;
       return { ...prev, [key]: !prev[key] };
+    });
+  };
+
+  const handleSort = (key: SimilarSortKey, multi: boolean) => {
+    setSortConfig((current) => {
+      if (multi) {
+        const existing = current.find((s) => s.key === key);
+        if (existing) {
+          if (existing.direction === 'desc') {
+            return current.map((s) =>
+              s.key === key ? { ...s, direction: 'asc' as SortDirection } : s,
+            );
+          }
+          return current.filter((s) => s.key !== key);
+        }
+        return [...current, { key, direction: 'desc' }];
+      }
+      const existing = current.find((s) => s.key === key);
+      if (existing && existing.direction === 'desc') {
+        return [{ key, direction: 'asc' }];
+      }
+      if (existing && existing.direction === 'asc') {
+        return [];
+      }
+      return [{ key, direction: 'desc' }];
     });
   };
 
@@ -247,6 +319,7 @@ export function SimilarPlayersModule() {
   };
 
   const baseStatusBadges = basePlayer ? getStatusBadges(basePlayer) : [];
+  const similaritySortConfig = sortConfig.find((config) => config.key === 'SIMILARITY');
   const basePrimaryPosition = basePlayer ? getPrimaryPositionBadge(basePlayer) : null;
   const baseFlagPath = basePlayer
     ? getFlagImagePath(basePlayer.NACIONALIDAD as string)
@@ -399,7 +472,7 @@ export function SimilarPlayersModule() {
           <div className="control-block stack-block">
             <p
               className="control-title"
-              title="Incluye los promedios por posici�n dentro del c�lculo de similitud."
+              title="Incluye los promedios por posición dentro del cálculo de similitud."
             >
               Promedios
             </p>
@@ -438,7 +511,7 @@ export function SimilarPlayersModule() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card similar-results-card">
         <header className="card-header compact-header">
           <div>
             <h2>Resultados</h2>
@@ -491,132 +564,197 @@ export function SimilarPlayersModule() {
         {basePlayer && (
           <div className="table-container">
             <table className="player-table similar-table">
-              <thead>
+              <thead className="sticky-header">
                 <tr>
-                  <th className="similarity-column">%</th>
+                  <th
+                    className="similarity-column sortable"
+                    onClick={(e) => handleSort('SIMILARITY', e.shiftKey)}
+                    title="Porcentaje de similitud respecto al jugador base."
+                  >
+                    <div className="th-content">
+                      <span>
+                        <strong>%</strong>
+                      </span>
+                      {similaritySortConfig && (
+                        <span className="sort-indicator">
+                          {similaritySortConfig.direction === 'asc' ? '↑' : '↓'}
+                        </span>
+                      )}
+                    </div>
+                  </th>
                   {sortedVisibleColumns.map((column) => {
                     const headerLabel = getTableHeaderLabel(column);
                     const isImageColumn = column === 'NACIONALIDAD' || column === 'CLUB';
                     const isPositionsColumn = column === 'POSICIONES';
                     const columnType = getColumnType(column);
-                    const headerClasses: string[] = [];
+                    const headerClasses = ['sortable'];
                     if (isImageColumn) headerClasses.push('image-header');
                     if (isPositionsColumn) headerClasses.push('positions-header');
                     if (column === 'NACIONALIDAD')
                       headerClasses.push('nationality-column');
                     if (column === 'CLUB') headerClasses.push('club-column');
+                    if (column === 'NOMBRE') headerClasses.push('player-name-header');
+
+                    const sortIndex = sortConfig.findIndex(
+                      (s) => s.key === (column as keyof DerivedPlayer),
+                    );
+                    const sortDir =
+                      sortIndex >= 0 ? sortConfig[sortIndex].direction : null;
 
                     return (
                       <th
                         key={column}
                         className={headerClasses.join(' ')}
                         data-type={columnType}
+                        onClick={(e) =>
+                          handleSort(column as keyof DerivedPlayer, e.shiftKey)
+                        }
                         title={headerLabel}
                       >
-                        {headerLabel}
+                        <div className="th-content">
+                          <span>{headerLabel}</span>
+                          {sortDir && (
+                            <span className="sort-indicator">
+                              {sortDir === 'asc' ? '↑' : '↓'}
+                              {sortConfig.length > 1 && sortIndex >= 0 && (
+                                <sup>{sortIndex + 1}</sup>
+                              )}
+                            </span>
+                          )}
+                        </div>
                       </th>
                     );
                   })}
                 </tr>
               </thead>
               <tbody>
-                {tableRows.map(({ player, similarity, isBase }, index) => (
-                  <Fragment key={`${player.ID}-${isBase ? 'base' : `similar-${index}`}`}>
-                    <tr
-                      data-player-id={player.ID}
-                      className={`${player.ID === selectedId ? 'selected' : ''} ${
-                        isBase ? 'base-player-row' : ''
-                      }`}
-                      onClick={() => setSelectedPlayer(player.ID as string)}
+                {tableRows.map(({ player, similarity, isBase }, index) => {
+                  const rowClasses = ['similar-row'];
+                  if (player.ID === selectedId) {
+                    rowClasses.push('selected');
+                  }
+                  if (isBase) {
+                    rowClasses.push('similar-base-row');
+                  }
+
+                  return (
+                    <Fragment
+                      key={`${player.ID}-${isBase ? 'base' : `similar-${index}`}`}
                     >
-                      <td className="similarity-column">
-                        <span className={`similarity-badge ${isBase ? 'base' : ''}`}>
-                          {similarity}%
-                        </span>
-                      </td>
-                      {sortedVisibleColumns.map((column) => {
-                        if (column === 'NOMBRE') {
-                          return (
-                            <td key={column} className="player-name-cell">
-                              <button
-                                type="button"
-                                className="player-name-button"
-                                onClick={(event) => openPlayerActionsMenu(event, player)}
-                              >
-                                <span className="player-name-text">{player.NOMBRE}</span>
-                              </button>
-                            </td>
-                          );
-                        }
-
-                        if (column === 'NACIONALIDAD') {
-                          const rawNationality = player.NACIONALIDAD as string;
-                          const flagPath = getFlagImagePath(rawNationality);
-                          const nationalityInfo = getNationalityInfo(rawNationality);
-                          const displayName = nationalityInfo?.name || rawNationality;
-
-                          return (
-                            <td
-                              key={column}
-                              className="image-cell nationality-column"
-                              title={displayName}
-                            >
-                              {flagPath && (
-                                <img src={flagPath} alt="" className="flag-icon" />
-                              )}
-                            </td>
-                          );
-                        }
-
-                        if (column === 'CLUB') {
-                          const rawClub = player.CLUB as string;
-                          const shieldPath = getClubShieldPath(rawClub);
-                          const rawNationality = player.NACIONALIDAD as string;
-                          const clubDisplay = formatClub(rawClub, rawNationality);
-
-                          return (
-                            <td
-                              key={column}
-                              className="image-cell club-column"
-                              title={clubDisplay}
-                            >
-                              {shieldPath ? (
-                                <img src={shieldPath} alt="" className="club-shield" />
-                              ) : (
-                                <span className="club-icon">⚽</span>
-                              )}
-                            </td>
-                          );
-                        }
-
-                        if (column === 'POSICIONES') {
-                          return (
-                            <td key={column}>
-                              <PositionBadges player={player} />
-                            </td>
-                          );
-                        }
-
-                        return (
-                          <td key={column} data-type={getColumnType(column)}>
-                            <TableCell
-                              field={column as keyof DerivedPlayer}
-                              player={player}
-                              type={getColumnType(column)}
-                            />
-                          </td>
-                        );
-                      })}
-                    </tr>
-                    {isBase && tableRows.length > 1 && (
-                      <tr className="base-divider-row">
-                        <td colSpan={sortedVisibleColumns.length + 1}>
-                          Resultados similares
+                      <tr
+                        data-player-id={player.ID}
+                        className={rowClasses.join(' ')}
+                        onClick={() => setSelectedPlayer(player.ID as string)}
+                      >
+                        <td className="similarity-column">
+                          <span className={`similarity-badge ${isBase ? 'base' : ''}`}>
+                            {similarity}%
+                          </span>
                         </td>
+                        {sortedVisibleColumns.map((column) => {
+                          if (column === 'NOMBRE') {
+                            const rowStatusBadges = getStatusBadges(player);
+                            return (
+                              <td key={column} className="player-name-cell">
+                                <div className="player-name-primary">
+                                  <button
+                                    type="button"
+                                    className="player-name-button"
+                                    onClick={(event) =>
+                                      openPlayerActionsMenu(event, player)
+                                    }
+                                  >
+                                    <span className="player-name-text">
+                                      {player.NOMBRE}
+                                    </span>
+                                  </button>
+                                  {rowStatusBadges.length > 0 && (
+                                    <span className="player-badges">
+                                      {rowStatusBadges.map((badge) => (
+                                        <span
+                                          key={badge.key}
+                                          className={badge.className}
+                                          title={badge.title}
+                                        >
+                                          {badge.label}
+                                        </span>
+                                      ))}
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+                            );
+                          }
+
+                          if (column === 'NACIONALIDAD') {
+                            const rawNationality = player.NACIONALIDAD as string;
+                            const flagPath = getFlagImagePath(rawNationality);
+                            const nationalityInfo = getNationalityInfo(rawNationality);
+                            const displayName = nationalityInfo?.name || rawNationality;
+
+                            return (
+                              <td
+                                key={column}
+                                className="image-cell nationality-column"
+                                title={displayName}
+                              >
+                                {flagPath && (
+                                  <img src={flagPath} alt="" className="flag-icon" />
+                                )}
+                              </td>
+                            );
+                          }
+
+                          if (column === 'CLUB') {
+                            const rawClub = player.CLUB as string;
+                            const shieldPath = getClubShieldPath(rawClub);
+                            const rawNationality = player.NACIONALIDAD as string;
+                            const clubDisplay = formatClub(rawClub, rawNationality);
+
+                            return (
+                              <td
+                                key={column}
+                                className="image-cell club-column"
+                                title={clubDisplay}
+                              >
+                                {shieldPath ? (
+                                  <img src={shieldPath} alt="" className="club-shield" />
+                                ) : (
+                                  <span className="club-icon">⚽</span>
+                                )}
+                              </td>
+                            );
+                          }
+
+                          if (column === 'POSICIONES') {
+                            return (
+                              <td key={column}>
+                                <PositionBadges player={player} />
+                              </td>
+                            );
+                          }
+
+                          return (
+                            <td key={column} data-type={getColumnType(column)}>
+                              <TableCell
+                                field={column as keyof DerivedPlayer}
+                                player={player}
+                                type={getColumnType(column)}
+                              />
+                            </td>
+                          );
+                        })}
                       </tr>
-                    )}
-                  </Fragment>
-                ))}
+                      {isBase && tableRows.length > 1 && (
+                        <tr className="similar-divider-row">
+                          <td colSpan={sortedVisibleColumns.length + 1}>
+                            Resultados similares
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -633,18 +771,19 @@ function buildVector(player: DerivedPlayer, keys: readonly string[]) {
   });
 }
 
-function normalize(values: number[]) {
-  const sum = values.reduce((acc, value) => acc + value, 0);
-  if (sum === 0) return values.map(() => 0);
-  return values.map((value) => value / sum);
-}
+function scaledProportionalDistance(base: number[], candidate: number[]) {
+  if (!base.length || !candidate.length) return 1;
+  const numerator = candidate.reduce((acc, value, index) => acc + value * base[index], 0);
+  const denominator = candidate.reduce((acc, value) => acc + value * value, 0);
+  const scale = denominator === 0 ? 1 : numerator / denominator;
 
-function proportionalDistance(a: number[], b: number[]) {
-  if (!a.length || !b.length) return 1;
-  const na = normalize(a);
-  const nb = normalize(b);
   const delta =
-    na.reduce((acc, value, index) => acc + Math.abs(value - nb[index]), 0) / na.length;
+    base.reduce((acc, baseValue, index) => {
+      const scaledCandidate = candidate[index] * scale;
+      const reference = Math.max(Math.abs(baseValue), 1);
+      return acc + Math.abs(scaledCandidate - baseValue) / reference;
+    }, 0) / base.length;
+
   return clamp01(delta);
 }
 
