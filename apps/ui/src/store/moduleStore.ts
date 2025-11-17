@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 
-export type ModuleId = 'dashboard' | 'search' | 'preselections' | 'profile' | 'similar';
+export type ModuleId =
+  | 'dashboard'
+  | 'search'
+  | 'preselections'
+  | 'profile'
+  | 'similar'
+  | 'comparator';
 
 interface ModuleState {
   activeModuleId: ModuleId;
@@ -13,6 +19,7 @@ export const MODULE_IDS: Record<string, ModuleId> = {
   preselections: 'preselections',
   profile: 'profile',
   similar: 'similar',
+  comparator: 'comparator',
 };
 
 export const useModuleStore = create<ModuleState>((set) => ({

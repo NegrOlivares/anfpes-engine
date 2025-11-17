@@ -6,6 +6,7 @@ import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
 import { PreselectionModule } from './modules/PreselectionModule';
 import { SimilarPlayersModule } from './modules/SimilarPlayersModule';
+import { ComparatorModule } from './modules/ComparatorModule';
 import { useModuleStore, MODULE_IDS } from './store/moduleStore';
 import { PlayerActionsOverlay } from './components/PlayerActionsOverlay';
 
@@ -18,6 +19,7 @@ const modules: ModuleDefinition[] = [
     component: PreselectionModule,
   },
   { id: MODULE_IDS.similar, label: 'Similares', component: SimilarPlayersModule },
+  { id: MODULE_IDS.comparator, label: 'Comparador', component: ComparatorModule },
   { id: MODULE_IDS.profile, label: 'Perfil', component: PlayerProfile },
 ];
 

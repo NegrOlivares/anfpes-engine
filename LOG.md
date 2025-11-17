@@ -181,3 +181,4 @@
 - Ajust� el m�dulo de Similares para homologue su tabla con las otras vistas: clase fija para la columna de nombre, tooltip y estilo del % de similitud, botones alineados y sticky headers.
 - Cre� componentes reutilizables para filtros (pps/ui/src/utils/playerFilters.ts, pps/ui/src/components/FiltersPanel.tsx) con cat�logos, operadores, evaluadores y UI compartible.
 - Integr� esos filtros al flujo del m�dulo (estado, handlers, panel visual, bot�n de limpieza) y actualic� el c�lculo de similitud para descartar previamente jugadores que no cumplan los filtros o posiciones, dejando el slider con m�nimo 95%.
+- Constru� el m�dulo Comparador en la UI: selector de jugadores con sugerencias, vista duelo (cards espejo, tabla de stats destacadas, radar doble) y vista multi (cards compactas, tabla por jugador, radares individuales). El layout cambia autom�ticamente cuando hay 3+ jugadores y reutiliza la cach� existente.
