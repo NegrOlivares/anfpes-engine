@@ -17,43 +17,46 @@ export interface ColumnConfig {
 }
 
 export const POSITION_COLORS: Record<string, string> = {
-  PT: '#ffd700', // Amarillo
-  GK: '#ffd700',
-  LIB: '#87ceeb', // Azul claro
-  SWP: '#87ceeb',
-  CT: '#87ceeb',
-  CB: '#87ceeb',
-  DD: '#87ceeb',
-  RB: '#87ceeb',
-  DI: '#87ceeb',
-  LB: '#87ceeb',
-  SA: '#87ceeb',
-  SB: '#87ceeb',
-  CCD: '#90ee90', // Verde
-  DMF: '#90ee90',
-  CC: '#90ee90',
-  CMF: '#90ee90',
-  CIZ: '#90ee90',
-  LMF: '#90ee90',
-  CDR: '#90ee90',
-  RMF: '#90ee90',
-  MP: '#90ee90',
-  AMF: '#90ee90',
-  DLD: '#87ceeb',
-  RWB: '#87ceeb',
-  DLI: '#87ceeb',
-  LWB: '#87ceeb',
-  VOL: '#90ee90',
-  SD: '#ff6b6b', // Rojo
-  SS: '#ff6b6b',
-  EI: '#ff6b6b',
-  LWF: '#ff6b6b',
-  ED: '#ff6b6b',
-  RWF: '#ff6b6b',
-  DC: '#ff6b6b',
-  CF: '#ff6b6b',
-  EX: '#90ee90',
-  LA: '#87ceeb',
+  PT: '#e9b407', // Amarillo
+  GK: '#e9b407',
+  LIB: '#1975d2', // Azul claro
+  SWP: '#1975d2',
+  CT: '#1975d2',
+  CB: '#1975d2',
+  DD: '#1975d2',
+  RB: '#1975d2',
+  DI: '#1975d2',
+  LB: '#1975d2',
+  SA: '#1975d2',
+  SB: '#1975d2',
+  CCD: '#09a959', // Verde
+  DMF: '#09a959',
+  DLD: '#09a959',
+  RWB: '#09a959',
+  DLI: '#09a959',
+  LWB: '#09a959',
+  LA: '#09a959',
+  WB: '#09a959',
+  CC: '#09a959',
+  CMF: '#09a959',
+  CIZ: '#09a959',
+  LMF: '#09a959',
+  CDR: '#09a959',
+  RMF: '#09a959',
+  VOL: '#09a959',
+  SMF: '#09a959',
+  MP: '#09a959',
+  AMF: '#09a959',
+  SD: '#fc2626', // Rojo
+  SS: '#fc2626',
+  EI: '#fc2626',
+  LWF: '#fc2626',
+  ED: '#fc2626',
+  RWF: '#fc2626',
+  EX: '#fc2626',
+  WF: '#fc2626',
+  DC: '#fc2626',
+  CF: '#fc2626',
 };
 
 export function getStatColor(value: number | string | null | undefined): string | null {
@@ -67,11 +70,12 @@ export function getStatColor(value: number | string | null | undefined): string 
   }
 
   // Rango 30-99
-  if (numValue >= 30 && numValue <= 99) {
+  if (numValue >= 10 && numValue <= 99) {
     if (numValue >= 95) return '#ff4444'; // Rojo más intenso
     if (numValue >= 90) return '#ff8800'; // Naranja intenso
     if (numValue >= 80) return '#ffdd00'; // Amarillo brillante
     if (numValue >= 75) return '#00ff00'; // Verde brillante
+    if (numValue >= 1) return '#ffffffff'; // Blanco
     return null; // Sin color hasta 74
   }
 
@@ -91,7 +95,7 @@ export function getInjuryColor(value: string | null | undefined): string | null 
 
   const upper = String(value).toUpperCase();
   if (upper === 'A') return '#ff4444'; // Rojo más intenso
-  if (upper === 'B') return '#ffd700'; // Amarillo
+  if (upper === 'B') return '#e9b407'; // Amarillo
   // C sin color
   return null;
 }

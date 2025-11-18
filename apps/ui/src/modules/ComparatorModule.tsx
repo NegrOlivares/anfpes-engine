@@ -1,4 +1,12 @@
-import { useMemo, useState } from 'react';
+import {
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from 'react';
+import type { CSSProperties } from 'react';
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useCacheStore } from '../store/cacheStore';
 import { RadarChart } from '../components/RadarChart';
@@ -10,13 +18,14 @@ import {
   formatNationality,
   formatSelectionDisplay,
   getFieldLabel,
+  SPECIAL_SKILL_FIELDS,
 } from '../utils/playerDisplay';
 import { ensureNumber, formatPlayerValue } from '../utils/format';
 import { getPlayerPositions, getPositionLine } from '../components/PositionBadges';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
-import { PositionBadges } from '../components/PositionBadges';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { getNationalityInfo } from '../data/nationalities';
+import { getStatColor, getInjuryColor } from '../types/table';
 
 const MAX_PLAYERS = 4;
 const COLOR_PALETTE = ['#7ac9ff', '#f472b6', '#a78bfa', '#34d399'];
@@ -59,6 +68,98 @@ const CORE_STATS: Array<keyof DerivedPlayer> = [
 
 const NATIONAL_SELECTION_FIELD = 'nro selección' as keyof DerivedPlayer;
 
+const DEMARCATION_COLUMNS = [
+  'D',
+  'E',
+  'M',
+  'A',
+  'R',
+  'C',
+  'A_1',
+  'C_1',
+  'I',
+  'O',
+  'N',
+] as const;
+
+const DEMARCATION_TRANSLATION: Record<string, string> = {
+  GK: 'PT',
+  SWP: 'LIB',
+  CB: 'CT',
+  SB: 'SA',
+  RB: 'DD',
+  LB: 'DI',
+  DMF: 'CCD',
+  WB: 'LA',
+  RWB: 'DLD',
+  LWB: 'DLI',
+  CMF: 'CC',
+  SMF: 'VOL',
+  RMF: 'CDR',
+  LMF: 'CIZ',
+  AMF: 'MP',
+  WF: 'EX',
+  RWF: 'ED',
+  LWF: 'EI',
+  SS: 'SD',
+  CF: 'DC',
+};
+
+type PositionCellConfig = {
+  label: string;
+  valueKey: keyof DerivedPlayer;
+  row: number;
+  col: number;
+  rowSpan?: number;
+  colSpan?: number;
+};
+
+const POSITION_FIELD_CELLS: PositionCellConfig[] = [
+  { label: 'EI', valueKey: 'EX', row: 1, col: 1, rowSpan: 2 },
+  { label: 'DC', valueKey: 'DC', row: 1, col: 2, rowSpan: 2 },
+  { label: 'ED', valueKey: 'EX', row: 1, col: 3, rowSpan: 2 },
+  { label: 'CIZ', valueKey: 'VOL', row: 3, col: 1, rowSpan: 2 },
+  { label: 'SD', valueKey: 'SD', row: 3, col: 2 },
+  { label: 'CDR', valueKey: 'VOL', row: 3, col: 3, rowSpan: 2 },
+  { label: 'MP', valueKey: 'MP', row: 4, col: 2 },
+  { label: 'DLI', valueKey: 'LA', row: 5, col: 1, rowSpan: 2 },
+  { label: 'CC', valueKey: 'CC', row: 5, col: 2 },
+  { label: 'DLD', valueKey: 'LA', row: 5, col: 3, rowSpan: 2 },
+  { label: 'CCD', valueKey: 'CCD', row: 6, col: 2 },
+  { label: 'DI', valueKey: 'SA', row: 7, col: 1, rowSpan: 2 },
+  { label: 'CT', valueKey: 'CT', row: 7, col: 2 },
+  { label: 'DD', valueKey: 'SA', row: 7, col: 3, rowSpan: 2 },
+  { label: 'LIB', valueKey: 'LIB', row: 8, col: 2 },
+  { label: 'PT', valueKey: 'PT', row: 9, col: 1, colSpan: 3 },
+];
+
+const POSITION_CELL_ALIASES: Record<string, string[]> = {
+  EX: ['EI', 'ED'],
+  EI: ['EI'],
+  ED: ['ED'],
+  VOL: ['CIZ', 'CDR'],
+  CIZ: ['CIZ'],
+  CDR: ['CDR'],
+  LA: ['DLI', 'DLD'],
+  DLI: ['DLI'],
+  DLD: ['DLD'],
+  SA: ['DI', 'DD'],
+  DI: ['DI'],
+  DD: ['DD'],
+  LIB: ['LIB'],
+  CT: ['CT'],
+  CCD: ['CCD'],
+  CC: ['CC'],
+  MP: ['MP'],
+  SD: ['SD'],
+  DC: ['DC'],
+  PT: ['PT'],
+};
+
+const POSITION_CELL_SET = new Set(
+  POSITION_FIELD_CELLS.map((cell) => cell.label.toUpperCase()),
+);
+
 const DETAIL_FIELDS: Array<keyof DerivedPlayer> = [
   'ALTURA',
   'PESO',
@@ -71,6 +172,13 @@ const DETAIL_FIELDS: Array<keyof DerivedPlayer> = [
   'PRECICIÓN PIE MALO' as keyof DerivedPlayer,
   'FRECUENCIA PIE MALO' as keyof DerivedPlayer,
 ];
+
+const SCALE_DETAIL_FIELDS = new Set<keyof DerivedPlayer>([
+  'CONSISTENCIA',
+  FITNESS_FIELD,
+  'PRECICIÓN PIE MALO' as keyof DerivedPlayer,
+  'FRECUENCIA PIE MALO' as keyof DerivedPlayer,
+]);
 
 interface StatusBadge {
   key: string;
@@ -194,6 +302,78 @@ export function ComparatorModule() {
   }, [selectedPlayers]);
 
   const duelMode = selectedPlayers.length <= 2;
+  const headerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [minHeaderHeight, setMinHeaderHeight] = useState<number | null>(null);
+
+  const registerHeader = useCallback((index: number, node: HTMLDivElement | null) => {
+    headerRefs.current[index] = node;
+  }, []);
+
+  // Calcular altura máxima de headers usando useLayoutEffect
+  useLayoutEffect(() => {
+    if (headerRefs.current.length === 0) {
+      setMinHeaderHeight(null);
+      return;
+    }
+
+    // Resetear min-height temporalmente para medir alturas naturales
+    headerRefs.current.forEach((header) => {
+      if (header) {
+        header.style.minHeight = '';
+      }
+    });
+
+    // Medir alturas naturales
+    const heights = headerRefs.current
+      .filter((header): header is HTMLDivElement => header !== null)
+      .map((header) => header.offsetHeight);
+
+    if (heights.length === 0) {
+      setMinHeaderHeight(null);
+      return;
+    }
+
+    // Encontrar la altura máxima
+    const maxHeight = Math.max(...heights);
+    setMinHeaderHeight(maxHeight);
+  }, [selectedPlayers]);
+
+  // Re-calcular en resize de ventana
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        // Forzar recálculo limpiando y volviendo a medir
+        setMinHeaderHeight(null);
+        requestAnimationFrame(() => {
+          const heights = headerRefs.current
+            .filter((header): header is HTMLDivElement => header !== null)
+            .map((header) => {
+              const temp = header.style.minHeight;
+              header.style.minHeight = '';
+              const height = header.offsetHeight;
+              header.style.minHeight = temp;
+              return height;
+            });
+          if (heights.length > 0) {
+            setMinHeaderHeight(Math.max(...heights));
+          }
+        });
+      }, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    headerRefs.current.length = selectedPlayers.length;
+  }, [selectedPlayers.length]);
 
   const handleAddPlayer = (player: DerivedPlayer | undefined) => {
     if (!player) {
@@ -237,7 +417,6 @@ export function ComparatorModule() {
     <section className="card comparator-module">
       <header className="card-header comparator-header">
         <div className="comparator-header-left">
-          <h2>Comparador</h2>
           <form className="comparator-form" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -289,7 +468,6 @@ export function ComparatorModule() {
                 }
                 onClick={() => handleAddPlayer(player)}
               >
-                <span className="suggestion-id">{player.ID}</span>
                 <span className="suggestion-name">{player.NOMBRE}</span>
                 <span className="suggestion-club">
                   {formatClub(player.CLUB as string, player.NACIONALIDAD as string)}
@@ -325,7 +503,7 @@ export function ComparatorModule() {
 
       {!loading && !error && selectedPlayers.length === 0 && (
         <p className="muted">
-          Agrega jugadores usando el buscador superior para iniciar la comparación.
+          Agrega jugadores usando el buscador superior para iniciar la comparaciÓn.
         </p>
       )}
 
@@ -336,12 +514,16 @@ export function ComparatorModule() {
               players={selectedPlayers}
               statsRows={statsRows}
               datasets={macroDatasets}
+              registerHeader={registerHeader}
+              minHeaderHeight={minHeaderHeight}
             />
           ) : (
             <MultiComparison
               players={selectedPlayers}
               statsRows={statsRows}
               datasets={macroDatasets}
+              registerHeader={registerHeader}
+              minHeaderHeight={minHeaderHeight}
             />
           )}
         </div>
@@ -358,20 +540,32 @@ interface ComparisonProps {
     values: Array<number | undefined>;
   }>;
   datasets: RadarChartDataset[];
+  registerHeader: (index: number, node: HTMLDivElement | null) => void;
+  minHeaderHeight: number | null;
 }
 
-function DuelComparison({ players, statsRows, datasets }: ComparisonProps) {
+function DuelComparison({
+  players,
+  statsRows,
+  datasets,
+  registerHeader,
+  minHeaderHeight,
+}: ComparisonProps) {
   const [left, right] = players;
+
   return (
     <div className="comparator-duel">
-      <ComparatorPlayerCard player={left} accentColor={getPlayerColor(0)} />
+      <ComparatorPlayerCard
+        player={left}
+        accentColor={getPlayerColor(0)}
+        headerIndex={0}
+        registerHeader={registerHeader}
+        minHeaderHeight={minHeaderHeight}
+      />
       <div className="duel-center">
         <section className="duel-stats">
           <header>
-            <h3>Stats destacados</h3>
-            <p className="muted">
-              En verde se resalta el valor más alto por cada atributo.
-            </p>
+            <h3>STATS</h3>
           </header>
           <div className="duel-stats-list">
             {statsRows.map((row) => (
@@ -380,6 +574,7 @@ function DuelComparison({ players, statsRows, datasets }: ComparisonProps) {
                 label={row.label}
                 leftValue={row.values[0]}
                 rightValue={row.values[1]}
+                showBars
               />
             ))}
           </div>
@@ -399,6 +594,9 @@ function DuelComparison({ players, statsRows, datasets }: ComparisonProps) {
           player={right}
           accentColor={getPlayerColor(1)}
           align="right"
+          headerIndex={1}
+          registerHeader={registerHeader}
+          minHeaderHeight={minHeaderHeight}
         />
       ) : (
         <div className="comparator-player-card placeholder">
@@ -409,7 +607,13 @@ function DuelComparison({ players, statsRows, datasets }: ComparisonProps) {
   );
 }
 
-function MultiComparison({ players, statsRows, datasets }: ComparisonProps) {
+function MultiComparison({
+  players,
+  statsRows,
+  datasets,
+  registerHeader,
+  minHeaderHeight,
+}: ComparisonProps) {
   return (
     <div className="comparator-multi">
       <div className="multi-cards">
@@ -419,6 +623,9 @@ function MultiComparison({ players, statsRows, datasets }: ComparisonProps) {
             player={player}
             accentColor={getPlayerColor(index)}
             compact
+            headerIndex={index}
+            registerHeader={registerHeader}
+            minHeaderHeight={minHeaderHeight}
           />
         ))}
       </div>
@@ -451,7 +658,15 @@ function MultiComparison({ players, statsRows, datasets }: ComparisonProps) {
                           value !== undefined && value === max ? 'stat-winner' : undefined
                         }
                       >
-                        {value !== undefined ? formatPlayerValue(value, 0) : '-'}
+                        <span
+                          style={
+                            value !== undefined
+                              ? { color: getStatColor(value) ?? undefined }
+                              : undefined
+                          }
+                        >
+                          {value !== undefined ? formatPlayerValue(value, 0) : '-'}
+                        </span>
                       </td>
                     ))}
                   </tr>
@@ -494,9 +709,10 @@ interface DuelStatRowProps {
   label: string;
   leftValue?: number;
   rightValue?: number;
+  showBars?: boolean;
 }
 
-function DuelStatRow({ label, leftValue, rightValue }: DuelStatRowProps) {
+function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProps) {
   const winner =
     leftValue !== undefined && rightValue !== undefined
       ? leftValue > rightValue
@@ -509,11 +725,17 @@ function DuelStatRow({ label, leftValue, rightValue }: DuelStatRowProps) {
     leftValue !== undefined && rightValue !== undefined
       ? leftValue - rightValue
       : undefined;
+  const leftColor =
+    leftValue !== undefined ? (getStatColor(leftValue) ?? undefined) : undefined;
+  const rightColor =
+    rightValue !== undefined ? (getStatColor(rightValue) ?? undefined) : undefined;
 
   return (
     <div className="duel-stat-row">
       <div className={`player-value ${winner === 'left' ? 'winner' : ''}`}>
-        {leftValue !== undefined ? formatPlayerValue(leftValue, 0) : '-'}
+        <span style={leftColor ? { color: leftColor } : undefined}>
+          {leftValue !== undefined ? formatPlayerValue(leftValue, 0) : '-'}
+        </span>
       </div>
       <div className="stat-label">
         <span>{label}</span>
@@ -524,9 +746,27 @@ function DuelStatRow({ label, leftValue, rightValue }: DuelStatRowProps) {
             {diff > 0 ? `+${formatPlayerValue(diff, 0)}` : formatPlayerValue(diff, 0)}
           </span>
         )}
+        {showBars && (
+          <div className="stat-bars">
+            <div className="stat-bar">
+              <div
+                className="stat-bar-fill left"
+                style={{ width: `${leftValue ?? 0}%` }}
+              />
+            </div>
+            <div className="stat-bar">
+              <div
+                className="stat-bar-fill right"
+                style={{ width: `${rightValue ?? 0}%` }}
+              />
+            </div>
+          </div>
+        )}
       </div>
       <div className={`player-value ${winner === 'right' ? 'winner' : ''}`}>
-        {rightValue !== undefined ? formatPlayerValue(rightValue, 0) : '-'}
+        <span style={rightColor ? { color: rightColor } : undefined}>
+          {rightValue !== undefined ? formatPlayerValue(rightValue, 0) : '-'}
+        </span>
       </div>
     </div>
   );
@@ -537,6 +777,9 @@ interface ComparatorPlayerCardProps {
   accentColor: string;
   compact?: boolean;
   align?: 'left' | 'right';
+  headerIndex: number;
+  registerHeader: (index: number, node: HTMLDivElement | null) => void;
+  minHeaderHeight: number | null;
 }
 
 function ComparatorPlayerCard({
@@ -544,53 +787,297 @@ function ComparatorPlayerCard({
   accentColor,
   compact,
   align = 'left',
+  headerIndex,
+  registerHeader,
+  minHeaderHeight,
 }: ComparatorPlayerCardProps) {
   const positions = getPlayerPositions(player);
+  const primaryPosition = positions[0];
   const badges = getStatusBadges(player);
   const nationalityInfo = getNationalityInfo(player.NACIONALIDAD as string);
   const flagPath = getFlagImagePath(player.NACIONALIDAD as string);
   const clubShield = getClubShieldPath(player.CLUB as string);
+  const promedioValue = ensureNumber(player.PROMEDIO);
+  const promedio = formatPlayerValue(promedioValue, 1);
+  const activePositionCells = getActivePositionCells(player);
+  const promedioColor =
+    promedioValue !== undefined ? (getStatColor(promedioValue) ?? '#ffd166') : '#ffd166';
+  const primaryLine = primaryPosition ? getPositionLine(primaryPosition) : undefined;
+
+  const identityBlock = (
+    <div className="player-identity">
+      <div className="player-identity-header">
+        <h3>{player.NOMBRE}</h3>
+        <div className="player-badges">
+          {badges.map((badge) => (
+            <span key={badge.key} className={badge.className} title={badge.title}>
+              {badge.label}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const overviewBlock = (
+    <div className="player-overview">
+      <div className="player-average">
+        <strong style={{ color: promedioColor }}>{promedio}</strong>
+      </div>
+      {primaryPosition && (
+        <span
+          className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
+        >
+          {primaryPosition}
+        </span>
+      )}
+      <div className="player-flags">
+        {clubShield && <img src={clubShield} alt="" className="club-shield" />}
+        {flagPath && <img src={flagPath} alt="" title={nationalityInfo?.name} />}
+      </div>
+    </div>
+  );
 
   return (
     <div
       className={`comparator-player-card ${compact ? 'compact' : ''} ${align === 'right' ? 'align-right' : ''}`}
       style={{ borderColor: accentColor }}
     >
-      <header>
-        <div>
-          <p className="eyebrow">ID {player.ID}</p>
-          <h3>{player.NOMBRE}</h3>
-          <p className="muted">
-            {formatClub(player.CLUB as string, player.NACIONALIDAD as string)}
-          </p>
-          <div className="player-badges">
-            {badges.map((badge) => (
-              <span key={badge.key} className={badge.className} title={badge.title}>
-                {badge.label}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="player-flags">
-          {flagPath && <img src={flagPath} alt="" title={nationalityInfo?.name} />}
-          {clubShield && <img src={clubShield} alt="" />}
-        </div>
+      <header
+        ref={(node) => registerHeader(headerIndex, node as HTMLDivElement | null)}
+        className={`player-card-header ${align === 'right' ? 'right' : ''}`}
+        style={minHeaderHeight ? { minHeight: `${minHeaderHeight}px` } : undefined}
+      >
+        {align === 'right' ? (
+          <>
+            {overviewBlock}
+            {identityBlock}
+          </>
+        ) : (
+          <>
+            {identityBlock}
+            {overviewBlock}
+          </>
+        )}
       </header>
       <div className="player-meta-grid">
         {DETAIL_FIELDS.map((field) => (
-          <div key={field as string}>
-            <small>{getFieldLabel(field as string)}</small>
-            <p>
-              {field === 'PIE' || field === FAV_SIDE_FIELD
-                ? formatFoot(player[field] as string)
-                : formatPlayerValue(player[field], 0)}
-            </p>
-          </div>
+          <DetailField
+            key={field as string}
+            label={getFieldLabel(field as string)}
+            value={formatDetailFieldValue(field, player)}
+          />
         ))}
       </div>
-      <div className="player-positions">
-        <PositionBadges player={player} />
+      <div className="player-extra">
+        <PlayerSkills player={player} />
+        <PositionMap
+          player={player}
+          activeCells={activePositionCells}
+          primaryPosition={primaryPosition}
+        />
       </div>
     </div>
   );
+}
+
+type DetailValue = {
+  text: string;
+  color?: string;
+};
+
+function DetailField({ label, value }: { label: string; value: DetailValue }) {
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [scrollDistance, setScrollDistance] = useState(0);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (!el) return undefined;
+    const update = () => {
+      const diff = el.scrollWidth - el.clientWidth;
+      setScrollDistance(diff > 4 ? diff : 0);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('resize', update);
+    };
+  }, [label]);
+
+  const scrollable = scrollDistance > 0;
+  const spanStyle: CSSProperties | undefined = scrollable
+    ? ({
+        '--scroll-distance': `${scrollDistance}px`,
+        '--scroll-duration': `${Math.min(6, Math.max(3, scrollDistance / 30))}s`,
+      } as CSSProperties)
+    : undefined;
+
+  return (
+    <div>
+      <small className={`meta-label ${scrollable ? 'scrollable' : ''}`}>
+        <span ref={textRef} style={spanStyle}>
+          {label}
+        </span>
+      </small>
+      <p style={value.color ? ({ color: value.color } as CSSProperties) : undefined}>
+        {value.text}
+      </p>
+    </div>
+  );
+}
+
+function formatDetailFieldValue(
+  field: keyof DerivedPlayer,
+  player: DerivedPlayer,
+): DetailValue {
+  if (field === 'PIE' || field === FAV_SIDE_FIELD) {
+    return { text: formatFoot(player[field] as string) };
+  }
+  if (field === INJURY_FIELD) {
+    const text = formatInjuryLevel(player[field]);
+    return { text, color: getInjuryColor(text) ?? undefined };
+  }
+  if (SCALE_DETAIL_FIELDS.has(field)) {
+    return formatScaleDetail(field, player[field]);
+  }
+  return { text: formatPlayerValue(player[field], 0) };
+}
+
+function formatInjuryLevel(value: DerivedPlayer[keyof DerivedPlayer]): string {
+  if (value === null || value === undefined) return '-';
+  const text = String(value).trim().toUpperCase();
+  if (!text) return '-';
+  if (text === '1') return 'A';
+  if (text === '2') return 'B';
+  if (text === '3') return 'C';
+  return text;
+}
+
+function formatScaleDetail(
+  field: keyof DerivedPlayer,
+  value: DerivedPlayer[keyof DerivedPlayer],
+): DetailValue {
+  const numeric = ensureNumber(value);
+  if (numeric === undefined || Number.isNaN(numeric)) {
+    return { text: '-' };
+  }
+  const text = formatPlayerValue(numeric, 0);
+  const shouldColor =
+    field === 'CONSISTENCIA' ||
+    field === FITNESS_FIELD ||
+    field === ('PRECICI?N PIE MALO' as keyof DerivedPlayer) ||
+    field === ('FRECUENCIA PIE MALO' as keyof DerivedPlayer);
+  const color = shouldColor ? (getStatColor(numeric) ?? undefined) : undefined;
+  return { text, color };
+}
+
+function PlayerSkills({ player }: { player: DerivedPlayer }) {
+  const skillEntries = Array.from(SPECIAL_SKILL_FIELDS).map((field) => {
+    const value = player[field as keyof DerivedPlayer];
+    return {
+      field,
+      label: getFieldLabel(field),
+      active: isSkillActive(value),
+    };
+  });
+  const activeSkills = skillEntries.filter((entry) => entry.active);
+  if (!activeSkills.length) {
+    return null;
+  }
+
+  return (
+    <div className="player-skills">
+      <h4>Habilidades Especiales</h4>
+      <div className="skills-grid">
+        {activeSkills.map((skill) => (
+          <span key={skill.field} className="skill-pill active">
+            ★ {skill.label}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function isSkillActive(value: DerivedPlayer[keyof DerivedPlayer]): boolean {
+  if (value === null || value === undefined) return false;
+  const normalized = String(value)
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  return normalized === 'si' || normalized === '1' || normalized === 'true';
+}
+
+function PositionMap({
+  player,
+  activeCells,
+  primaryPosition,
+}: {
+  player: DerivedPlayer;
+  activeCells: Set<string>;
+  primaryPosition?: string;
+}) {
+  const primaryCellTargets = resolveCellAliases(primaryPosition);
+  return (
+    <div className="position-map">
+      <h4>Posiciones</h4>
+      <div className="position-map-grid">
+        {POSITION_FIELD_CELLS.map((cell) => {
+          const isActive = activeCells.has(cell.label.toUpperCase());
+          const isPrimary = primaryCellTargets.includes(cell.label.toUpperCase());
+          const value = valueFromPositionField(cell.valueKey, player);
+          const style = {
+            gridColumn: `${cell.col} / span ${cell.colSpan ?? 1}`,
+            gridRow: `${cell.row} / span ${cell.rowSpan ?? 1}`,
+          };
+          return (
+            <div
+              key={`${cell.label}-${cell.row}-${cell.col}`}
+              className={`position-node ${isActive ? 'active' : ''} ${isPrimary ? 'primary' : ''}`}
+              style={style}
+            >
+              <span>{cell.label}</span>
+              <strong>{value !== undefined ? formatPlayerValue(value, 0) : '-'}</strong>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function getActivePositionCells(player: DerivedPlayer): Set<string> {
+  const active = new Set<string>();
+
+  DEMARCATION_COLUMNS.forEach((column) => {
+    const rawValue = player[column as keyof DerivedPlayer];
+    if (!rawValue) return;
+    const normalized = String(rawValue).trim().toUpperCase();
+    const translated = DEMARCATION_TRANSLATION[normalized] ?? normalized;
+    const targets = resolveCellAliases(translated);
+    targets.forEach((cell) => active.add(cell));
+  });
+
+  return active;
+}
+
+function resolveCellAliases(code?: string): string[] {
+  if (!code) return [];
+  const normalized = code.trim().toUpperCase();
+  if (POSITION_CELL_ALIASES[normalized]) {
+    return POSITION_CELL_ALIASES[normalized].map((label) => label.toUpperCase());
+  }
+  if (POSITION_CELL_SET.has(normalized)) {
+    return [normalized];
+  }
+  return [];
+}
+
+function valueFromPositionField(
+  field: keyof DerivedPlayer,
+  player: DerivedPlayer,
+): number | undefined {
+  const value = player[field];
+  return typeof value === 'number' ? value : undefined;
 }
