@@ -488,7 +488,7 @@ export function ComparatorModule() {
 
       {!loading && !error && selectedPlayers.length === 0 && (
         <p className="muted">
-          Agrega jugadores usando el buscador superior para iniciar la comparaciÓn.
+          Agrega jugadores usando el buscador superior para iniciar la comparación.
         </p>
       )}
 
@@ -554,9 +554,7 @@ function DuelComparison({
       />
       <div className="duel-center">
         <section className="duel-stats">
-          <header>
-            <h3>STATS</h3>
-          </header>
+          <header>STATS</header>
           <div className="duel-stats-list">
             {statsRows.map((row) => (
               <DuelStatRow
@@ -570,9 +568,7 @@ function DuelComparison({
           </div>
         </section>
         <section className="duel-radar">
-          <header>
-            <h3>Macrostats</h3>
-          </header>
+          <header>RADAR</header>
           <RadarChart
             labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
             datasets={datasets.slice(0, 2)}
@@ -606,6 +602,28 @@ function MultiComparison({
   minHeaderHeight,
   onRemovePlayer,
 }: ComparisonProps) {
+  // Calcular máximos y segundos mejores para cada stat
+  const { maxValues, secondBestValues } = useMemo(() => {
+    const maxes = new Map<keyof DerivedPlayer, number>();
+    const secondBests = new Map<keyof DerivedPlayer, number>();
+
+    statsRows.forEach((row) => {
+      const numericValues = row.values.filter((v): v is number => v !== undefined);
+
+      if (numericValues.length > 0) {
+        // Obtener valores únicos ordenados descendentemente
+        const uniqueValues = [...new Set(numericValues)].sort((a, b) => b - a);
+
+        maxes.set(row.field, uniqueValues[0]);
+        if (uniqueValues.length > 1) {
+          secondBests.set(row.field, uniqueValues[1]); // Primer valor diferente
+        }
+      }
+    });
+
+    return { maxValues: maxes, secondBestValues: secondBests };
+  }, [statsRows]);
+
   return (
     <div className="comparator-multi">
       <div className="multi-cards">
@@ -619,81 +637,19 @@ function MultiComparison({
             registerHeader={registerHeader}
             minHeaderHeight={minHeaderHeight}
             onRemove={onRemovePlayer}
+            statsRows={statsRows}
+            maxValues={maxValues}
+            secondBestValues={secondBestValues}
+            radarDataset={{
+              id: String(player.ID),
+              label: player.NOMBRE as string,
+              values: MACRO_FIELDS.map((field) => ensureNumber(player[field]) ?? 0),
+              color: getPlayerColor(index),
+              fillOpacity: 0.15,
+            }}
           />
         ))}
       </div>
-
-      <section className="multi-stats-table">
-        <header>
-          <h3>Stats comparados</h3>
-        </header>
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Stat</th>
-                {players.map((player) => (
-                  <th key={player.ID as string}>{player.NOMBRE}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {statsRows.map((row) => {
-                const numericValues = row.values.map((value) => value ?? -Infinity);
-                const max = Math.max(...numericValues);
-                return (
-                  <tr key={row.field as string}>
-                    <td>{row.label}</td>
-                    {row.values.map((value, index) => (
-                      <td
-                        key={`${row.field as string}-${players[index].ID as string}`}
-                        className={
-                          value !== undefined && value === max ? 'stat-winner' : undefined
-                        }
-                      >
-                        <span
-                          style={
-                            value !== undefined
-                              ? { color: getStatColor(value) ?? undefined }
-                              : undefined
-                          }
-                        >
-                          {value !== undefined ? formatPlayerValue(value, 0) : '-'}
-                        </span>
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="multi-radars">
-        <header>
-          <h3>Macrostats (por jugador)</h3>
-        </header>
-        <div className="multi-radars-grid">
-          {players.map((player, index) => (
-            <RadarChart
-              key={player.ID as string}
-              labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
-              datasets={[
-                {
-                  id: String(player.ID),
-                  label: player.NOMBRE as string,
-                  values: MACRO_FIELDS.map((field) => ensureNumber(player[field]) ?? 0),
-                  color: getPlayerColor(index),
-                  fillOpacity: 0.15,
-                },
-              ]}
-              size={180}
-              showLegend={false}
-            />
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
@@ -774,6 +730,14 @@ interface ComparatorPlayerCardProps {
   registerHeader: (index: number, node: HTMLDivElement | null) => void;
   minHeaderHeight: number | null;
   onRemove?: (playerId: string) => void;
+  statsRows?: Array<{
+    field: keyof DerivedPlayer;
+    label: string;
+    values: Array<number | undefined>;
+  }>;
+  maxValues?: Map<keyof DerivedPlayer, number>;
+  secondBestValues?: Map<keyof DerivedPlayer, number>;
+  radarDataset?: RadarChartDataset;
 }
 
 function ComparatorPlayerCard({
@@ -785,6 +749,10 @@ function ComparatorPlayerCard({
   registerHeader,
   minHeaderHeight,
   onRemove,
+  statsRows,
+  maxValues,
+  secondBestValues,
+  radarDataset,
 }: ComparatorPlayerCardProps) {
   const positions = getPlayerPositions(player);
   const primaryPosition = positions[0];
@@ -895,6 +863,66 @@ function ComparatorPlayerCard({
           primaryPosition={primaryPosition}
         />
       </div>
+      {statsRows && maxValues && (
+        <>
+          <h4 className="stats-section-title">STATS</h4>
+          <div className="player-stats-list">
+            {statsRows.map((row) => {
+              const playerValue = ensureNumber(player[row.field]);
+              const maxValue = maxValues.get(row.field);
+              const secondBest = secondBestValues?.get(row.field);
+              const isMax =
+                playerValue !== undefined &&
+                maxValue !== undefined &&
+                maxValue === playerValue;
+
+              // Si es el máximo, comparar con el segundo mejor; si no, comparar con el máximo
+              const compareValue = isMax ? secondBest : maxValue;
+              const diff =
+                playerValue !== undefined && compareValue !== undefined
+                  ? playerValue - compareValue
+                  : undefined;
+              const showDiff = diff !== undefined && diff !== 0;
+
+              return (
+                <div key={row.field as string} className="stat-row">
+                  <span className="stat-label">{row.label}</span>
+                  <span
+                    className={`stat-value ${isMax ? 'stat-winner' : ''}`}
+                    style={
+                      playerValue !== undefined
+                        ? { color: getStatColor(playerValue) ?? undefined }
+                        : undefined
+                    }
+                  >
+                    <span className="stat-number">
+                      {playerValue !== undefined
+                        ? formatPlayerValue(playerValue, 0)
+                        : '-'}
+                    </span>
+                    {showDiff && (
+                      <span className={`stat-diff ${diff > 0 ? 'positive' : 'negative'}`}>
+                        {diff > 0 ? '+' : ''}
+                        {formatPlayerValue(diff, 0)}
+                      </span>
+                    )}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+      {radarDataset && (
+        <div className="player-radar">
+          <RadarChart
+            labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
+            datasets={[radarDataset]}
+            size={180}
+            showLegend={false}
+          />
+        </div>
+      )}
     </div>
   );
 }
