@@ -413,6 +413,9 @@ export function ComparatorModule() {
     });
   };
 
+  const showSuggestions = Boolean(query.trim() && suggestions.length > 0);
+  const showSelector = Boolean(lookupError || showSuggestions);
+
   return (
     <section className="card comparator-module">
       <header className="card-header comparator-header">
@@ -453,50 +456,32 @@ export function ComparatorModule() {
         </div>
       </header>
 
-      <div className="comparator-selector">
-        {lookupError && <p className="error">{lookupError}</p>}
-        {query.trim() && suggestions.length > 0 && (
-          <div className="comparator-suggestions">
-            {suggestions.map((player) => (
-              <button
-                key={player.ID as string}
-                type="button"
-                className="suggestion-button"
-                disabled={
-                  selectedIds.includes(String(player.ID)) ||
-                  selectedIds.length >= MAX_PLAYERS
-                }
-                onClick={() => handleAddPlayer(player)}
-              >
-                <span className="suggestion-name">{player.NOMBRE}</span>
-                <span className="suggestion-club">
-                  {formatClub(player.CLUB as string, player.NACIONALIDAD as string)}
-                </span>
-              </button>
-            ))}
-          </div>
-        )}
-        {selectedPlayers.length > 0 && (
-          <div className="comparator-selected-tags">
-            {selectedPlayers.map((player, index) => (
-              <span
-                key={player.ID as string}
-                className="selected-tag"
-                style={{ borderColor: getPlayerColor(index) }}
-              >
-                <span>{player.NOMBRE}</span>
+      {showSelector && (
+        <div className="comparator-selector">
+          {lookupError && <p className="error">{lookupError}</p>}
+          {showSuggestions && (
+            <div className="comparator-suggestions">
+              {suggestions.map((player) => (
                 <button
+                  key={player.ID as string}
                   type="button"
-                  onClick={() => handleRemovePlayer(String(player.ID))}
-                  aria-label="Eliminar"
+                  className="suggestion-button"
+                  disabled={
+                    selectedIds.includes(String(player.ID)) ||
+                    selectedIds.length >= MAX_PLAYERS
+                  }
+                  onClick={() => handleAddPlayer(player)}
                 >
-                  ×
+                  <span className="suggestion-name">{player.NOMBRE}</span>
+                  <span className="suggestion-club">
+                    {formatClub(player.CLUB as string, player.NACIONALIDAD as string)}
+                  </span>
                 </button>
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {loading && <p className="loading">Leyendo jugadores...</p>}
       {error && <p className="error">{error}</p>}
@@ -516,6 +501,7 @@ export function ComparatorModule() {
               datasets={macroDatasets}
               registerHeader={registerHeader}
               minHeaderHeight={minHeaderHeight}
+              onRemovePlayer={handleRemovePlayer}
             />
           ) : (
             <MultiComparison
@@ -524,6 +510,7 @@ export function ComparatorModule() {
               datasets={macroDatasets}
               registerHeader={registerHeader}
               minHeaderHeight={minHeaderHeight}
+              onRemovePlayer={handleRemovePlayer}
             />
           )}
         </div>
@@ -542,6 +529,7 @@ interface ComparisonProps {
   datasets: RadarChartDataset[];
   registerHeader: (index: number, node: HTMLDivElement | null) => void;
   minHeaderHeight: number | null;
+  onRemovePlayer: (playerId: string) => void;
 }
 
 function DuelComparison({
@@ -550,6 +538,7 @@ function DuelComparison({
   datasets,
   registerHeader,
   minHeaderHeight,
+  onRemovePlayer,
 }: ComparisonProps) {
   const [left, right] = players;
 
@@ -561,6 +550,7 @@ function DuelComparison({
         headerIndex={0}
         registerHeader={registerHeader}
         minHeaderHeight={minHeaderHeight}
+        onRemove={onRemovePlayer}
       />
       <div className="duel-center">
         <section className="duel-stats">
@@ -597,6 +587,7 @@ function DuelComparison({
           headerIndex={1}
           registerHeader={registerHeader}
           minHeaderHeight={minHeaderHeight}
+          onRemove={onRemovePlayer}
         />
       ) : (
         <div className="comparator-player-card placeholder">
@@ -613,6 +604,7 @@ function MultiComparison({
   datasets,
   registerHeader,
   minHeaderHeight,
+  onRemovePlayer,
 }: ComparisonProps) {
   return (
     <div className="comparator-multi">
@@ -626,6 +618,7 @@ function MultiComparison({
             headerIndex={index}
             registerHeader={registerHeader}
             minHeaderHeight={minHeaderHeight}
+            onRemove={onRemovePlayer}
           />
         ))}
       </div>
@@ -780,6 +773,7 @@ interface ComparatorPlayerCardProps {
   headerIndex: number;
   registerHeader: (index: number, node: HTMLDivElement | null) => void;
   minHeaderHeight: number | null;
+  onRemove?: (playerId: string) => void;
 }
 
 function ComparatorPlayerCard({
@@ -790,6 +784,7 @@ function ComparatorPlayerCard({
   headerIndex,
   registerHeader,
   minHeaderHeight,
+  onRemove,
 }: ComparatorPlayerCardProps) {
   const positions = getPlayerPositions(player);
   const primaryPosition = positions[0];
@@ -797,6 +792,7 @@ function ComparatorPlayerCard({
   const nationalityInfo = getNationalityInfo(player.NACIONALIDAD as string);
   const flagPath = getFlagImagePath(player.NACIONALIDAD as string);
   const clubShield = getClubShieldPath(player.CLUB as string);
+  const clubLabel = formatClub(player.CLUB as string, player.NACIONALIDAD as string);
   const promedioValue = ensureNumber(player.PROMEDIO);
   const promedio = formatPlayerValue(promedioValue, 1);
   const activePositionCells = getActivePositionCells(player);
@@ -822,7 +818,12 @@ function ComparatorPlayerCard({
   const overviewBlock = (
     <div className="player-overview">
       <div className="player-average">
-        <strong style={{ color: promedioColor }}>{promedio}</strong>
+        <strong
+          style={{ color: promedioColor }}
+          title={`Promedio principal: ${promedio}`}
+        >
+          {promedio}
+        </strong>
       </div>
       {primaryPosition && (
         <span
@@ -832,7 +833,14 @@ function ComparatorPlayerCard({
         </span>
       )}
       <div className="player-flags">
-        {clubShield && <img src={clubShield} alt="" className="club-shield" />}
+        {clubShield && (
+          <img
+            src={clubShield}
+            alt={clubLabel}
+            title={clubLabel}
+            className="club-shield"
+          />
+        )}
         {flagPath && <img src={flagPath} alt="" title={nationalityInfo?.name} />}
       </div>
     </div>
@@ -848,6 +856,16 @@ function ComparatorPlayerCard({
         className={`player-card-header ${align === 'right' ? 'right' : ''}`}
         style={minHeaderHeight ? { minHeight: `${minHeaderHeight}px` } : undefined}
       >
+        {onRemove && (
+          <button
+            type="button"
+            className="player-card-remove"
+            aria-label={`Quitar a ${player.NOMBRE}`}
+            onClick={() => onRemove(String(player.ID))}
+          >
+            ×
+          </button>
+        )}
         {align === 'right' ? (
           <>
             {overviewBlock}
