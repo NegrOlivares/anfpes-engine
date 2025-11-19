@@ -116,21 +116,21 @@ type PositionCellConfig = {
 
 const POSITION_FIELD_CELLS: PositionCellConfig[] = [
   { label: 'EI', valueKey: 'EX', row: 1, col: 1, rowSpan: 2 },
-  { label: 'DC', valueKey: 'DC', row: 1, col: 2, rowSpan: 2 },
+  { label: 'DC', valueKey: 'DC', row: 1, col: 2 },
+  { label: 'SD', valueKey: 'SD', row: 2, col: 2 },
   { label: 'ED', valueKey: 'EX', row: 1, col: 3, rowSpan: 2 },
   { label: 'CIZ', valueKey: 'VOL', row: 3, col: 1, rowSpan: 2 },
-  { label: 'SD', valueKey: 'SD', row: 3, col: 2 },
+  { label: 'MP', valueKey: 'MP', row: 3, col: 2 },
+  { label: 'CC', valueKey: 'CC', row: 4, col: 2 },
   { label: 'CDR', valueKey: 'VOL', row: 3, col: 3, rowSpan: 2 },
-  { label: 'MP', valueKey: 'MP', row: 4, col: 2 },
   { label: 'DLI', valueKey: 'LA', row: 5, col: 1, rowSpan: 2 },
-  { label: 'CC', valueKey: 'CC', row: 5, col: 2 },
+  { label: 'CCD', valueKey: 'CCD', row: 5, col: 2 },
+  { label: 'CT', valueKey: 'CT', row: 6, col: 2 },
   { label: 'DLD', valueKey: 'LA', row: 5, col: 3, rowSpan: 2 },
-  { label: 'CCD', valueKey: 'CCD', row: 6, col: 2 },
   { label: 'DI', valueKey: 'SA', row: 7, col: 1, rowSpan: 2 },
-  { label: 'CT', valueKey: 'CT', row: 7, col: 2 },
+  { label: 'LIB', valueKey: 'LIB', row: 7, col: 2 },
+  { label: 'PT', valueKey: 'PT', row: 8, col: 2 },
   { label: 'DD', valueKey: 'SA', row: 7, col: 3, rowSpan: 2 },
-  { label: 'LIB', valueKey: 'LIB', row: 8, col: 2 },
-  { label: 'PT', valueKey: 'PT', row: 9, col: 1, colSpan: 3 },
 ];
 
 const POSITION_CELL_ALIASES: Record<string, string[]> = {
@@ -159,6 +159,25 @@ const POSITION_CELL_ALIASES: Record<string, string[]> = {
 const POSITION_CELL_SET = new Set(
   POSITION_FIELD_CELLS.map((cell) => cell.label.toUpperCase()),
 );
+
+const POSITION_NAME_MAP: Record<string, string> = {
+  PT: 'Portero',
+  LIB: 'Líbero',
+  DI: 'Defensa Izquierdo',
+  DD: 'Defensa Derecho',
+  CT: 'Defensa Central',
+  CCD: 'Centrocampista Defensivo',
+  DLI: 'Defensa Lateral Izquierdo',
+  DLD: 'Defensa Lateral Derecho',
+  CC: 'Centrocampista',
+  MP: 'Mediapunta',
+  CIZ: 'Centrocampista Izquierdo',
+  CDR: 'Centrocampista Derecho',
+  SD: 'Segundo Delantero',
+  DC: 'Delantero Centro',
+  EI: 'Extremo Izquierdo',
+  ED: 'Extremo Derecho',
+};
 
 const DETAIL_FIELDS: Array<keyof DerivedPlayer> = [
   'ALTURA',
@@ -1067,27 +1086,60 @@ function PositionMap({
   const primaryCellTargets = resolveCellAliases(primaryPosition);
   return (
     <div className="position-map">
-      <h4>Posiciones</h4>
-      <div className="position-map-grid">
-        {POSITION_FIELD_CELLS.map((cell) => {
-          const isActive = activeCells.has(cell.label.toUpperCase());
-          const isPrimary = primaryCellTargets.includes(cell.label.toUpperCase());
-          const value = valueFromPositionField(cell.valueKey, player);
-          const style = {
-            gridColumn: `${cell.col} / span ${cell.colSpan ?? 1}`,
-            gridRow: `${cell.row} / span ${cell.rowSpan ?? 1}`,
-          };
-          return (
-            <div
-              key={`${cell.label}-${cell.row}-${cell.col}`}
-              className={`position-node ${isActive ? 'active' : ''} ${isPrimary ? 'primary' : ''}`}
-              style={style}
-            >
-              <span>{cell.label}</span>
-              <strong>{value !== undefined ? formatPlayerValue(value, 0) : '-'}</strong>
-            </div>
-          );
-        })}
+      <div className="position-map-header">
+        <h4>Posiciones</h4>
+      </div>
+      <div className="position-map-inner">
+        <div className="position-map-grid">
+          {POSITION_FIELD_CELLS.map((cell) => {
+            const isActive = activeCells.has(cell.label.toUpperCase());
+            const isPrimary = primaryCellTargets.includes(cell.label.toUpperCase());
+            const value = valueFromPositionField(cell.valueKey, player);
+            const displayValue = value !== undefined ? formatPlayerValue(value, 0) : '-';
+            const statColor =
+              value !== undefined ? (getStatColor(value) ?? undefined) : undefined;
+            const style = {
+              gridColumn: `${cell.col} / span ${cell.colSpan ?? 1}`,
+              gridRow: `${cell.row} / span ${cell.rowSpan ?? 1}`,
+            };
+            const positionLine = getPositionLine(cell.label);
+            const positionName = POSITION_NAME_MAP[cell.label] ?? cell.label;
+            return (
+              <div
+                key={`${cell.label}-${cell.row}-${cell.col}`}
+                className={`position-node ${isActive ? 'active' : ''} ${isPrimary ? 'primary' : ''}`}
+                style={style}
+              >
+                <span
+                  className={`position-chip position-${positionLine}`}
+                  aria-hidden="true"
+                >
+                  {cell.label}
+                </span>
+                <strong style={statColor ? { color: statColor } : undefined}>
+                  {displayValue}
+                </strong>
+                <div className="position-node-tooltip">
+                  <div className="position-node-tooltip-top">
+                    <span className={`position-chip position-${positionLine}`}>
+                      {cell.label}
+                    </span>
+                    <span className="position-node-tooltip-name">{positionName}</span>
+                  </div>
+                  <div className="position-node-tooltip-bottom">
+                    <span>Promedio:</span>
+                    <strong
+                      className="position-node-tooltip-value"
+                      style={statColor ? { color: statColor } : undefined}
+                    >
+                      {displayValue}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

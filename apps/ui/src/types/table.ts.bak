@@ -69,23 +69,21 @@ export function getStatColor(value: number | string | null | undefined): string 
     return null;
   }
 
-  const rounded = Math.round(numValue);
-
   // Rango 30-99
-  if (rounded >= 10 && rounded <= 99) {
-    if (rounded >= 95) return '#ff4444'; // Rojo más intenso
-    if (rounded >= 90) return '#ff8800'; // Naranja intenso
-    if (rounded >= 80) return '#ffdd00'; // Amarillo brillante
-    if (rounded >= 75) return '#00ff00'; // Verde brillante
-    if (rounded >= 10) return '#ffffffff'; // Blanco
+  if (numValue >= 10 && numValue <= 99) {
+    if (numValue >= 95) return '#ff4444'; // Rojo más intenso
+    if (numValue >= 90) return '#ff8800'; // Naranja intenso
+    if (numValue >= 80) return '#ffdd00'; // Amarillo brillante
+    if (numValue >= 75) return '#00ff00'; // Verde brillante
+    if (numValue >= 10) return '#ffffffff'; // Blanco
     return null; // Sin color hasta 74
   }
 
   // Rango 1-8
-  if (rounded >= 1 && rounded <= 8) {
-    if (rounded === 8) return '#ff4444'; // Rojo más intenso
-    if (rounded === 7) return '#ff8800'; // Naranja intenso
-    if (rounded === 6) return '#ffdd00'; // Amarillo brillante
+  if (numValue >= 1 && numValue <= 8) {
+    if (numValue === 8) return '#ff4444'; // Rojo más intenso
+    if (numValue === 7) return '#ff8800'; // Naranja intenso
+    if (numValue === 6) return '#ffdd00'; // Amarillo brillante
     return null; // Sin color hasta 5
   }
 
