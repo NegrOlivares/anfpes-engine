@@ -101,7 +101,7 @@ export function RadarChart({
       {items.map((dataset) => (
         <div key={dataset.id} className="radar-legend-item">
           <span className="radar-legend-swatch" style={{ background: dataset.color }} />
-          <span>{dataset.label}</span>
+          <span className="radar-legend-label">{dataset.label}</span>
         </div>
       ))}
     </div>
@@ -132,6 +132,28 @@ export function RadarChart({
     );
   });
 
+  const pointMarkers = datasets.map((dataset) =>
+    dataset.values.map((value, index) => {
+      const point = getPoint(value ?? 0, index);
+      const label = labels[index] ?? '';
+      const rounded = typeof value === 'number' ? Math.round(value) : (value ?? 0);
+      return (
+        <circle
+          key={`${dataset.id}-point-${index}`}
+          cx={point.x}
+          cy={point.y}
+          r={4}
+          className="radar-point"
+          style={{ fill: dataset.color }}
+        >
+          <title>
+            {dataset.label}: {label} {rounded}
+          </title>
+        </circle>
+      );
+    }),
+  );
+
   return (
     <div className={containerClassName}>
       {shouldShowLegend && leftLegend.length > 0 && renderLegend(leftLegend)}
@@ -140,6 +162,7 @@ export function RadarChart({
         <g>{axisLines}</g>
         <circle cx={center} cy={center} r={4} className="radar-center" />
         <g>{datasetPolygons}</g>
+        <g>{pointMarkers}</g>
         <g>{labelElements}</g>
       </svg>
       {shouldShowLegend && rightLegend.length > 0 && renderLegend(rightLegend)}

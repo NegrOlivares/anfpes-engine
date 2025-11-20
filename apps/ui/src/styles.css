@@ -2287,13 +2287,13 @@ tbody tr:hover {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2.5px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
   background: rgba(8, 12, 18, 0.6);
 }
 
 .comparator-player-card {
-  border: 1px solid rgba(122, 201, 255, 0.4);
+  border: 2.5px solid rgba(122, 201, 255, 0.4);
   border-radius: 1rem;
   padding: 1rem;
   background: rgba(6, 10, 16, 0.65);
@@ -2614,7 +2614,7 @@ tbody tr:hover {
   background: rgba(1, 8, 4, 0.5);
   color: rgb(255, 255, 255);
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.199);
-  opacity: 0.75;
+  opacity: 1;
   text-align: center;
   position: relative;
   overflow: visible;
@@ -2677,12 +2677,12 @@ tbody tr:hover {
 .position-node.active {
   opacity: 1;
   border-color: rgba(52, 211, 153, 0.9);
-  background: linear-gradient(145deg, rgba(10, 240, 110, 0.767), rgba(9, 28, 17, 0.8));
+  background: linear-gradient(145deg, rgba(18, 151, 76, 0.767), rgba(23, 58, 37, 0.8));
 }
 
 .position-node.primary {
   border-color: rgba(255, 215, 0, 0.9);
-  background: linear-gradient(145deg, rgba(180, 129, 10, 0.9), rgba(39, 25, 4, 0.85));
+  background: linear-gradient(145deg, rgba(180, 129, 10, 0.9), rgba(83, 56, 16, 0.85));
   color: #fff6d5;
 }
 
@@ -2692,8 +2692,8 @@ tbody tr:hover {
   left: 50%;
   transform: translateX(-50%) scale(0.95);
   border-radius: 0.65rem;
-  background: rgba(6, 11, 20, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #0b101a;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -2717,7 +2717,7 @@ tbody tr:hover {
   height: 0;
   border-style: solid;
   border-width: 8px 7px 0 7px;
-  border-color: rgba(6, 11, 20, 0.95) transparent transparent transparent;
+  border-color: #0b101a transparent transparent transparent;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
 }
 
@@ -2806,7 +2806,7 @@ tbody tr:hover {
 }
 
 .duel-stat-row:nth-child(odd) {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(148, 146, 146, 0.062);
 }
 
 .duel-stat-row .player-value {
@@ -3028,9 +3028,15 @@ tbody tr:hover {
 }
 
 .player-stats-list .stat-diff {
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+  text-align: left;
   font-size: 0.7rem;
   font-weight: 600;
-  padding: 0.1rem 0.3rem;
+  font-variant-numeric: tabular-nums;
+  padding: 0.08rem 0.35rem 0.08rem 0.2rem;
+  min-width: 28px;
   border-radius: 0.25rem;
   position: absolute;
   left: calc(50% + 20px);
@@ -3071,13 +3077,14 @@ tbody tr:hover {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  position: relative;
 }
 
 .radar-chart.with-legend {
-  flex-direction: row;
-  gap: 0.75rem;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 0 140px;
 }
 
 .radar-chart svg {
@@ -3115,18 +3122,35 @@ tbody tr:hover {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  min-width: 80px;
+  min-width: 120px;
   align-items: flex-start;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 2rem;
 }
 
 .radar-legend-side:last-child {
   align-items: flex-end;
+  right: 1rem;
 }
 
 .radar-legend-item {
-  display: inline-flex;
+  display: flex;
   gap: 0.35rem;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.radar-legend-label {
+  display: block;
+  width: 70px;
+  max-width: 70px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
+  line-height: 1.1;
+  font-weight: 600;
 }
 
 .radar-legend-swatch {
@@ -3137,6 +3161,13 @@ tbody tr:hover {
 
 .radar-dataset {
   stroke-width: 2;
+}
+
+.radar-point {
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 1;
+  pointer-events: all;
+  cursor: default;
 }
 
 .radar-label {

@@ -21,7 +21,11 @@ import {
   SPECIAL_SKILL_FIELDS,
 } from '../utils/playerDisplay';
 import { ensureNumber, formatPlayerValue } from '../utils/format';
-import { getPlayerPositions, getPositionLine } from '../components/PositionBadges';
+import {
+  getPlayerPositions,
+  getPositionLine,
+  getPositionFullName,
+} from '../components/PositionBadges';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { getNationalityInfo } from '../data/nationalities';
@@ -824,6 +828,7 @@ function ComparatorPlayerCard({
       {primaryPosition && (
         <span
           className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
+          title={getPositionFullName(primaryPosition)}
         >
           {primaryPosition}
         </span>
@@ -1189,3 +1194,5 @@ function valueFromPositionField(
   const value = player[field];
   return typeof value === 'number' ? value : undefined;
 }
+
+export default ComparatorModule;

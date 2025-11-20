@@ -72,6 +72,25 @@ const LINE_LABELS: Record<string, string> = {
   ATA: 'Ataque',
 };
 
+const POSITION_FULL_NAME: Record<string, string> = {
+  PT: 'Portero',
+  LIB: 'Líbero',
+  DI: 'Defensa Izquierdo',
+  DD: 'Defensa Derecho',
+  CT: 'Defensa Central',
+  CCD: 'Centrocampista Defensivo',
+  DLI: 'Defensa Lateral Izquierdo',
+  DLD: 'Defensa Lateral Derecho',
+  CC: 'Centrocampista',
+  MP: 'Mediapunta',
+  CIZ: 'Centrocampista Izquierdo',
+  CDR: 'Centrocampista Derecho',
+  SD: 'Segundo Delantero',
+  DC: 'Delantero Centro',
+  EI: 'Extremo Izquierdo',
+  ED: 'Extremo Derecho',
+};
+
 export function getPlayerPositions(player: DerivedPlayer): string[] {
   const codes = DEMARCATION_COLUMNS.map((column) => player[column as keyof DerivedPlayer])
     .filter(Boolean)
@@ -83,6 +102,11 @@ export function getPlayerPositions(player: DerivedPlayer): string[] {
 
 export function getPositionLine(position: string): PositionLine {
   return POSITION_LINE[position] || 'DEF';
+}
+
+export function getPositionFullName(position: string): string {
+  const normalized = position.trim().toUpperCase();
+  return POSITION_FULL_NAME[normalized] ?? position;
 }
 
 interface PositionBadgesProps {
