@@ -77,20 +77,43 @@ export function RadarChart({
     const y = center + (radius + 12) * Math.sin(angle);
     const textAnchor =
       Math.abs(Math.cos(angle)) < 0.1 ? 'middle' : Math.cos(angle) > 0 ? 'start' : 'end';
-    const dy = Math.sin(angle) > 0.1 ? '1em' : '-0.4em';
     return (
       <text
         key={`label-${label}`}
         x={x}
         y={y}
         textAnchor={textAnchor}
+        dominantBaseline="middle"
         className="radar-label"
-        dy={dy}
       >
         {label}
       </text>
     );
   });
+
+  const shouldShowLegend = showLegend && datasets.length > 0;
+  const legendSplitIndex = shouldShowLegend ? Math.ceil(datasets.length / 2) : 0;
+  const leftLegend = shouldShowLegend ? datasets.slice(0, legendSplitIndex) : [];
+  const rightLegend = shouldShowLegend ? datasets.slice(legendSplitIndex) : [];
+
+  const renderLegend = (items: RadarChartDataset[]) => (
+    <div className="radar-legend radar-legend-side">
+      {items.map((dataset) => (
+        <div key={dataset.id} className="radar-legend-item">
+          <span className="radar-legend-swatch" style={{ background: dataset.color }} />
+          <span>{dataset.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  const containerClassName = [
+    'radar-chart',
+    className ?? '',
+    shouldShowLegend ? 'with-legend' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const datasetPolygons = datasets.map((dataset) => {
     const path = dataset.values
@@ -110,7 +133,8 @@ export function RadarChart({
   });
 
   return (
-    <div className={`radar-chart ${className ?? ''}`.trim()}>
+    <div className={containerClassName}>
+      {shouldShowLegend && leftLegend.length > 0 && renderLegend(leftLegend)}
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img">
         <g>{gridPolygons}</g>
         <g>{axisLines}</g>
@@ -118,19 +142,7 @@ export function RadarChart({
         <g>{datasetPolygons}</g>
         <g>{labelElements}</g>
       </svg>
-      {showLegend && datasets.length > 0 && (
-        <div className="radar-legend">
-          {datasets.map((dataset) => (
-            <div key={dataset.id} className="radar-legend-item">
-              <span
-                className="radar-legend-swatch"
-                style={{ background: dataset.color }}
-              />
-              <span>{dataset.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
+      {shouldShowLegend && rightLegend.length > 0 && renderLegend(rightLegend)}
     </div>
   );
 }

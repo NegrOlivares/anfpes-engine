@@ -693,6 +693,8 @@ function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProp
     leftValue !== undefined && rightValue !== undefined
       ? leftValue - rightValue
       : undefined;
+  const leftDiff = diff !== undefined && diff > 0 ? diff : undefined;
+  const rightDiff = diff !== undefined && diff < 0 ? Math.abs(diff) : undefined;
   const leftColor =
     leftValue !== undefined ? (getStatColor(leftValue) ?? undefined) : undefined;
   const rightColor =
@@ -701,19 +703,17 @@ function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProp
   return (
     <div className="duel-stat-row">
       <div className={`player-value ${winner === 'left' ? 'winner' : ''}`}>
+        <span className="diff-slot left">
+          {leftDiff !== undefined && (
+            <span className="stat-diff positive">+{formatPlayerValue(leftDiff, 0)}</span>
+          )}
+        </span>
         <span style={leftColor ? { color: leftColor } : undefined}>
           {leftValue !== undefined ? formatPlayerValue(leftValue, 0) : '-'}
         </span>
       </div>
       <div className="stat-label">
         <span>{label}</span>
-        {diff !== undefined && (
-          <span
-            className={`stat-diff ${diff > 0 ? 'positive' : diff < 0 ? 'negative' : ''}`}
-          >
-            {diff > 0 ? `+${formatPlayerValue(diff, 0)}` : formatPlayerValue(diff, 0)}
-          </span>
-        )}
         {showBars && (
           <div className="stat-bars">
             <div className="stat-bar">
@@ -734,6 +734,11 @@ function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProp
       <div className={`player-value ${winner === 'right' ? 'winner' : ''}`}>
         <span style={rightColor ? { color: rightColor } : undefined}>
           {rightValue !== undefined ? formatPlayerValue(rightValue, 0) : '-'}
+        </span>
+        <span className="diff-slot right">
+          {rightDiff !== undefined && (
+            <span className="stat-diff positive">+{formatPlayerValue(rightDiff, 0)}</span>
+          )}
         </span>
       </div>
     </div>
@@ -934,6 +939,7 @@ function ComparatorPlayerCard({
       )}
       {radarDataset && (
         <div className="player-radar">
+          <header>RADAR</header>
           <RadarChart
             labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
             datasets={[radarDataset]}
@@ -1107,7 +1113,7 @@ function PositionMap({
             return (
               <div
                 key={`${cell.label}-${cell.row}-${cell.col}`}
-                className={`position-node ${isActive ? 'active' : ''} ${isPrimary ? 'primary' : ''}`}
+                className={`position-node col-${cell.col} ${isActive ? 'active' : ''} ${isPrimary ? 'primary' : ''}`}
                 style={style}
               >
                 <span
