@@ -2383,6 +2383,10 @@ tbody tr:hover {
   font-size: 1.25rem;
 }
 
+.player-identity-header .clickable-name:hover {
+  text-decoration: underline;
+}
+
 .player-overview {
   display: flex;
   align-items: flex-start;

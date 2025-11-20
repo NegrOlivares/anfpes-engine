@@ -30,6 +30,8 @@ import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { getNationalityInfo } from '../data/nationalities';
 import { getStatColor, getInjuryColor } from '../types/table';
+import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
+import { openPlayerActionsMenu } from '../components/PlayerActionsOverlay';
 
 const MAX_PLAYERS = 4;
 const COLOR_PALETTE = ['#04b7d6ff', '#df2484ff', '#f78c00ff', '#16c450ff'];
@@ -278,6 +280,10 @@ export function ComparatorModule() {
   const [query, setQuery] = useState('');
   const [lookupError, setLookupError] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const pendingComparatorId = useComparatorLaunchStore((state) => state.pendingId);
+  const consumeComparatorPending = useComparatorLaunchStore(
+    (state) => state.consumePending,
+  );
 
   const selectedPlayers = useMemo(() => {
     if (!players) return [];
@@ -313,6 +319,20 @@ export function ComparatorModule() {
       values: selectedPlayers.map((player) => ensureNumber(player[field])),
     }));
   }, [selectedPlayers]);
+
+  useEffect(() => {
+    if (!pendingComparatorId || !players) return;
+    const exists = players.some((p) => String(p.ID) === String(pendingComparatorId));
+    if (!exists) {
+      consumeComparatorPending();
+      return;
+    }
+    setSelectedIds((current) => {
+      if (current.includes(String(pendingComparatorId))) return current;
+      return [String(pendingComparatorId), ...current].slice(0, MAX_PLAYERS);
+    });
+    consumeComparatorPending();
+  }, [pendingComparatorId, players, consumeComparatorPending]);
 
   const macroDatasets = useMemo(() => {
     return selectedPlayers.map((player, index) => ({
@@ -803,7 +823,13 @@ function ComparatorPlayerCard({
   const identityBlock = (
     <div className="player-identity">
       <div className="player-identity-header">
-        <h3>{player.NOMBRE}</h3>
+        <h3
+          className="clickable-name"
+          style={{ cursor: 'pointer' }}
+          onClick={(e) => openPlayerActionsMenu(e, player, { hideCompare: true })}
+        >
+          {player.NOMBRE}
+        </h3>
         <div className="player-badges">
           {badges.map((badge) => (
             <span key={badge.key} className={badge.className} title={badge.title}>

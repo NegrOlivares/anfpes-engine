@@ -6,6 +6,7 @@ import { usePlayerActionsStore } from '../store/playerActionsStore';
 import { useModuleStore, MODULE_IDS } from '../store/moduleStore';
 import { useSimilarPlayersStore } from '../store/similarPlayersStore';
 import { usePreselectionStore } from '../store/preselectionStore';
+import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 
 function usePlayerActions() {
   const isOpen = usePlayerActionsStore((state) => state.isOpen);
@@ -19,6 +20,8 @@ export function PlayerActionsOverlay() {
   const { isOpen, player, anchor, close } = usePlayerActions();
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
   const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
+  const setComparatorPending = useComparatorLaunchStore((state) => state.setPending);
+  const hideCompare = usePlayerActionsStore((state) => state.hideCompare);
   const [showPreselectionModal, setShowPreselectionModal] = useState(false);
   const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
   const clearSelection = usePreselectionStore((state) => state.clearSelection);
@@ -69,18 +72,21 @@ export function PlayerActionsOverlay() {
   }
 
   const handlePreselection = () => {
-    if (selectionCount === 0) {
-      return;
-    }
+    if (selectionCount === 0) return;
     setShowPreselectionModal(true);
   };
 
   const handleSimilarPlayers = () => {
-    if (!soleSelectionId) {
-      return;
-    }
+    if (!soleSelectionId) return;
     setBasePlayerId(soleSelectionId);
     setActiveModule(MODULE_IDS.similar);
+    close();
+  };
+
+  const handleComparePlayer = () => {
+    if (!soleSelectionId) return;
+    setComparatorPending(soleSelectionId);
+    setActiveModule(MODULE_IDS.comparator);
     close();
   };
 
@@ -95,11 +101,16 @@ export function PlayerActionsOverlay() {
       <div className="player-actions-menu" style={menuStyle}>
         <div className="player-actions-options">
           <button type="button" onClick={handlePreselection}>
-            Agregar a preselección
+            Agregar a preseleccion
           </button>
           {canSearchSimilar && (
             <button type="button" onClick={handleSimilarPlayers}>
               Buscar jugadores similares
+            </button>
+          )}
+          {canSearchSimilar && !hideCompare && (
+            <button type="button" onClick={handleComparePlayer}>
+              Comparar jugador
             </button>
           )}
         </div>
@@ -126,6 +137,7 @@ export function PlayerActionsOverlay() {
 export function openPlayerActionsMenu(
   event: SyntheticEvent<HTMLElement>,
   player: DerivedPlayer,
+  opts?: { hideCompare?: boolean },
 ) {
   event.stopPropagation();
   const rect = event.currentTarget.getBoundingClientRect();
@@ -133,7 +145,7 @@ export function openPlayerActionsMenu(
     x: rect.left + rect.width / 2,
     y: rect.bottom + 8,
   };
-  usePlayerActionsStore.getState().open(player, anchor);
+  usePlayerActionsStore.getState().open(player, anchor, opts);
 }
 
 export function closePlayerActionsMenu() {
