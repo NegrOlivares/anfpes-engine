@@ -1394,15 +1394,47 @@ tbody tr:hover {
 .stat-bar-bg {
   height: 100%;
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 0.25rem;
+  border-radius: 0.15rem;
   overflow: hidden;
 }
 
 .stat-bar-fill {
   height: 100%;
   transition: width 0.3s ease, background-color 0.3s ease;
-  border-radius: 0.25rem;
-  opacity: 0.4;
+  border-radius: 0.15rem;
+  opacity: 0.7;
+}
+
+.duel-stat-row .stat-bar-fill.left {
+  background: #04b7d6ff;
+}
+
+.duel-stat-row .stat-bar-fill.right {
+  background: #df2484ff;
+}
+
+.duel-stat-row .player-value:last-child .stat-bar-fill {
+  position: absolute;
+  right: 0;
+  left: auto;
+  transform-origin: center right;
+}
+
+.duel-stat-row .player-value:last-child .stat-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.duel-stat-row .stat-bar.mini {
+  width: 70px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 0.15rem;
+  overflow: hidden;
+}
+
+.duel-stat-row .stat-bar-fill.muted {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .table-cell-value {
@@ -2791,6 +2823,13 @@ tbody tr:hover {
   justify-content: flex-end;
   margin-left: 0;
   margin-right: 0.1rem;
+}
+
+.duel-stat-row .player-value .stat-number {
+  display: inline-block;
+  width: 2.6ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .duel-stat-row .stat-label {

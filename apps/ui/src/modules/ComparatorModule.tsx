@@ -28,7 +28,7 @@ import { getNationalityInfo } from '../data/nationalities';
 import { getStatColor, getInjuryColor } from '../types/table';
 
 const MAX_PLAYERS = 4;
-const COLOR_PALETTE = ['#7ac9ff', '#f472b6', '#a78bfa', '#34d399'];
+const COLOR_PALETTE = ['#04b7d6ff', '#df2484ff', '#f78c00ff', '#16c450ff'];
 const MACRO_FIELDS: Array<keyof DerivedPlayer> = [
   'ATK',
   'TEC',
@@ -699,6 +699,8 @@ function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProp
     leftValue !== undefined ? (getStatColor(leftValue) ?? undefined) : undefined;
   const rightColor =
     rightValue !== undefined ? (getStatColor(rightValue) ?? undefined) : undefined;
+  const leftBarWidth = Math.max(0, Math.min(leftValue ?? 0, 99));
+  const rightBarWidth = Math.max(0, Math.min(rightValue ?? 0, 99));
 
   return (
     <div className="duel-stat-row">
@@ -708,31 +710,33 @@ function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProp
             <span className="stat-diff positive">+{formatPlayerValue(leftDiff, 0)}</span>
           )}
         </span>
-        <span style={leftColor ? { color: leftColor } : undefined}>
+        <span
+          className="stat-number"
+          style={leftColor ? { color: leftColor } : undefined}
+        >
           {leftValue !== undefined ? formatPlayerValue(leftValue, 0) : '-'}
         </span>
+        <div className="stat-bar mini">
+          <div
+            className={`stat-bar-fill ${winner === 'left' ? 'left' : 'muted'}`}
+            style={{ width: `${leftBarWidth}%` }}
+          />
+        </div>
       </div>
       <div className="stat-label">
         <span>{label}</span>
-        {showBars && (
-          <div className="stat-bars">
-            <div className="stat-bar">
-              <div
-                className="stat-bar-fill left"
-                style={{ width: `${leftValue ?? 0}%` }}
-              />
-            </div>
-            <div className="stat-bar">
-              <div
-                className="stat-bar-fill right"
-                style={{ width: `${rightValue ?? 0}%` }}
-              />
-            </div>
-          </div>
-        )}
       </div>
       <div className={`player-value ${winner === 'right' ? 'winner' : ''}`}>
-        <span style={rightColor ? { color: rightColor } : undefined}>
+        <div className="stat-bar mini">
+          <div
+            className={`stat-bar-fill ${winner === 'right' ? 'right' : 'muted'}`}
+            style={{ width: `${rightBarWidth}%` }}
+          />
+        </div>
+        <span
+          className="stat-number"
+          style={rightColor ? { color: rightColor } : undefined}
+        >
           {rightValue !== undefined ? formatPlayerValue(rightValue, 0) : '-'}
         </span>
         <span className="diff-slot right">
