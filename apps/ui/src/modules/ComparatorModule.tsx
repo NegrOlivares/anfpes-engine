@@ -1,4 +1,4 @@
-import {
+﻿import {
   useMemo,
   useRef,
   useState,
@@ -345,78 +345,7 @@ export function ComparatorModule() {
   }, [selectedPlayers]);
 
   const duelMode = selectedPlayers.length <= 2;
-  const headerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [minHeaderHeight, setMinHeaderHeight] = useState<number | null>(null);
-
-  const registerHeader = useCallback((index: number, node: HTMLDivElement | null) => {
-    headerRefs.current[index] = node;
-  }, []);
-
-  // Calcular altura máxima de headers usando useLayoutEffect
-  useLayoutEffect(() => {
-    if (headerRefs.current.length === 0) {
-      setMinHeaderHeight(null);
-      return;
-    }
-
-    // Resetear min-height temporalmente para medir alturas naturales
-    headerRefs.current.forEach((header) => {
-      if (header) {
-        header.style.minHeight = '';
-      }
-    });
-
-    // Medir alturas naturales
-    const heights = headerRefs.current
-      .filter((header): header is HTMLDivElement => header !== null)
-      .map((header) => header.offsetHeight);
-
-    if (heights.length === 0) {
-      setMinHeaderHeight(null);
-      return;
-    }
-
-    // Encontrar la altura máxima
-    const maxHeight = Math.max(...heights);
-    setMinHeaderHeight(maxHeight);
-  }, [selectedPlayers]);
-
-  // Re-calcular en resize de ventana
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        // Forzar recálculo limpiando y volviendo a medir
-        setMinHeaderHeight(null);
-        requestAnimationFrame(() => {
-          const heights = headerRefs.current
-            .filter((header): header is HTMLDivElement => header !== null)
-            .map((header) => {
-              const temp = header.style.minHeight;
-              header.style.minHeight = '';
-              const height = header.offsetHeight;
-              header.style.minHeight = temp;
-              return height;
-            });
-          if (heights.length > 0) {
-            setMinHeaderHeight(Math.max(...heights));
-          }
-        });
-      }, 150);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useLayoutEffect(() => {
-    headerRefs.current.length = selectedPlayers.length;
-  }, [selectedPlayers.length]);
+  // Lógica de igualación de altura de headers eliminada para reconstruirla luego
 
   const handleAddPlayer = (player: DerivedPlayer | undefined) => {
     if (!player) {
@@ -542,8 +471,6 @@ export function ComparatorModule() {
               players={selectedPlayers}
               statsRows={statsRows}
               datasets={macroDatasets}
-              registerHeader={registerHeader}
-              minHeaderHeight={minHeaderHeight}
               onRemovePlayer={handleRemovePlayer}
             />
           ) : (
@@ -551,8 +478,6 @@ export function ComparatorModule() {
               players={selectedPlayers}
               statsRows={statsRows}
               datasets={macroDatasets}
-              registerHeader={registerHeader}
-              minHeaderHeight={minHeaderHeight}
               onRemovePlayer={handleRemovePlayer}
             />
           )}
@@ -570,8 +495,6 @@ interface ComparisonProps {
     values: Array<number | undefined>;
   }>;
   datasets: RadarChartDataset[];
-  registerHeader: (index: number, node: HTMLDivElement | null) => void;
-  minHeaderHeight: number | null;
   onRemovePlayer: (playerId: string) => void;
 }
 
@@ -579,8 +502,6 @@ function DuelComparison({
   players,
   statsRows,
   datasets,
-  registerHeader,
-  minHeaderHeight,
   onRemovePlayer,
 }: ComparisonProps) {
   const [left, right] = players;
@@ -591,8 +512,6 @@ function DuelComparison({
         player={left}
         accentColor={getPlayerColor(0)}
         headerIndex={0}
-        registerHeader={registerHeader}
-        minHeaderHeight={minHeaderHeight}
         onRemove={onRemovePlayer}
       />
       <div className="duel-center">
@@ -624,8 +543,6 @@ function DuelComparison({
           accentColor={getPlayerColor(1)}
           align="right"
           headerIndex={1}
-          registerHeader={registerHeader}
-          minHeaderHeight={minHeaderHeight}
           onRemove={onRemovePlayer}
         />
       ) : (
@@ -641,8 +558,6 @@ function MultiComparison({
   players,
   statsRows,
   datasets,
-  registerHeader,
-  minHeaderHeight,
   onRemovePlayer,
 }: ComparisonProps) {
   // Calcular máximos y segundos mejores para cada stat
@@ -677,8 +592,6 @@ function MultiComparison({
             accentColor={getPlayerColor(index)}
             compact
             headerIndex={index}
-            registerHeader={registerHeader}
-            minHeaderHeight={minHeaderHeight}
             onRemove={onRemovePlayer}
             statsRows={statsRows}
             maxValues={maxValues}
@@ -779,8 +692,6 @@ interface ComparatorPlayerCardProps {
   compact?: boolean;
   align?: 'left' | 'right';
   headerIndex: number;
-  registerHeader: (index: number, node: HTMLDivElement | null) => void;
-  minHeaderHeight: number | null;
   onRemove?: (playerId: string) => void;
   statsRows?: Array<{
     field: keyof DerivedPlayer;
@@ -798,8 +709,6 @@ function ComparatorPlayerCard({
   compact,
   align = 'left',
   headerIndex,
-  registerHeader,
-  minHeaderHeight,
   onRemove,
   statsRows,
   maxValues,
@@ -878,11 +787,7 @@ function ComparatorPlayerCard({
       className={`comparator-player-card ${compact ? 'compact' : ''} ${align === 'right' ? 'align-right' : ''}`}
       style={{ borderColor: accentColor }}
     >
-      <header
-        ref={(node) => registerHeader(headerIndex, node as HTMLDivElement | null)}
-        className={`player-card-header ${align === 'right' ? 'right' : ''}`}
-        style={minHeaderHeight ? { minHeight: `${minHeaderHeight}px` } : undefined}
-      >
+      <header className={`player-card-header ${align === 'right' ? 'right' : ''}`}>
         {onRemove && (
           <button
             type="button"

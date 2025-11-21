@@ -2265,6 +2265,8 @@ tbody tr:hover {
   grid-column: span 2;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
+}
+
 .comparator-content {
   display: flex;
   flex-direction: column;
@@ -2272,8 +2274,6 @@ tbody tr:hover {
   min-height: 0;
   gap: 1rem;
   padding-bottom: 1rem;
-} flex-direction: column;
-  gap: 1rem;
 }
 
 .comparator-duel {
@@ -2312,7 +2312,11 @@ tbody tr:hover {
 }
 
 .player-card-header.right {
-  flex-direction: row-reverse;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  position: relative;
 }
 
 .player-flags {
@@ -2320,6 +2324,11 @@ tbody tr:hover {
   gap: 0.5rem;
   align-items: center;
 }
+
+.player-card-header.right .player-overview .player-flags{
+  flex-direction: row-reverse;
+}
+
 .player-flags img {
   height: 26px;
   width: auto;
@@ -2334,16 +2343,6 @@ tbody tr:hover {
   border: none;
   border-radius: 0;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
-}
-
-.comparator-player-card .player-identity,
-.comparator-player-card .player-overview {
-  min-height: auto;
-}
-
-.player-card-header.has-wrap .player-identity,
-.player-card-header.has-wrap .player-overview {
-  min-height: 67px;
 }
 
 .player-card-remove {
@@ -2374,8 +2373,15 @@ tbody tr:hover {
 .player-identity-header {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 0.4rem;
   flex-wrap: wrap;
+}
+
+.player-card-header.right .player-identity-header {
+  justify-content: flex-end;
+  align-items: flex-end;
+  align-content: flex-end;
 }
 
 .player-identity h3 {
@@ -2397,9 +2403,7 @@ tbody tr:hover {
 }
 
 .player-card-header.right .player-overview {
-  justify-content: flex-start;
-  align-items: flex-start;
-  align-content: flex-start;
+  flex-direction: row-reverse;
 }
 
 .player-average {
@@ -2426,6 +2430,10 @@ tbody tr:hover {
 
 .primary-position-tag {
   margin-left: 0.05rem;
+  min-width: 2.6rem;
+  max-width: 2.6rem;
+  width: 2.6rem;
+  text-align: center;
 }
 
 .player-meta-grid {

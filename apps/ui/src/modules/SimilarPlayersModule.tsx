@@ -81,7 +81,7 @@ interface SimilarSortConfig {
 }
 
 function getStatusBadges(player: DerivedPlayer): StatusBadge[] {
-  const selectionValue = formatSelectionDisplay(player['nro selecci??n'] as string);
+  const selectionValue = formatSelectionDisplay(player['nro selección'] as string);
   const classicValue = formatSelectionDisplay(player['nro clasico'] as string);
   const playerName = String(player.NOMBRE ?? '').trim();
   const rawClub = String(player.CLUB ?? '').trim();
