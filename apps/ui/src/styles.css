@@ -2406,6 +2406,46 @@ tbody tr:hover {
   flex-direction: row-reverse;
 }
 
+/* Cuando hay wrap, forzar que player-flags baje a nueva línea */
+.player-card-header.has-wrap .player-overview .player-flags {
+  flex-basis: 100%;
+  width: 100%;
+}
+
+.player-card-header.has-wrap .player-flags {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* En duel mode left, mantener orden normal */
+
+.comparator-duel .player-card-header.has-wrap .player-average {
+  order: 1;
+}
+
+.comparator-duel .player-card-header.has-wrap .primary-position-tag {
+  order: 2;
+}
+
+.comparator-duel .player-card-header.has-wrap .player-flags {
+  order: 3;
+}
+
+/* En duel mode right, mismo orden pero con justify-content al final */
+
+.comparator-duel .player-card-header.has-wrap.right .player-average {
+  order: 1;
+}
+
+.comparator-duel .player-card-header.has-wrap.right .primary-position-tag {
+  order: 2;
+}
+
+.comparator-duel .player-card-header.has-wrap.right .player-flags {
+  order: 3;
+  justify-content: flex-end;
+}
+
 .player-average {
   display: flex;
   flex-direction: column;

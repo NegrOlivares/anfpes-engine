@@ -345,7 +345,47 @@ export function ComparatorModule() {
   }, [selectedPlayers]);
 
   const duelMode = selectedPlayers.length <= 2;
-  // Lógica de igualación de altura de headers eliminada para reconstruirla luego
+
+  // Detectar si algún header tiene wrap y aplicar clase a todos
+  useLayoutEffect(() => {
+    if (selectedPlayers.length === 0) return;
+
+    const checkWrap = () => {
+      const headers = document.querySelectorAll('.comparator-module .player-card-header');
+      if (headers.length === 0) return;
+
+      let anyHasWrap = false;
+
+      headers.forEach((header) => {
+        const identityHeader = header.querySelector('.player-identity-header');
+        if (identityHeader && identityHeader.clientHeight > 40) {
+          anyHasWrap = true;
+          console.log('🔍 Wrap detectado:', {
+            headerClasses: header.className,
+            identityHeight: identityHeader.clientHeight,
+          });
+        }
+      });
+
+      console.log('🎯 anyHasWrap:', anyHasWrap, 'headers:', headers.length);
+
+      headers.forEach((header) => {
+        if (anyHasWrap) {
+          header.classList.add('has-wrap');
+        } else {
+          header.classList.remove('has-wrap');
+        }
+      });
+    };
+
+    setTimeout(checkWrap, 0);
+
+    const observer = new ResizeObserver(checkWrap);
+    const headers = document.querySelectorAll('.comparator-module .player-card-header');
+    headers.forEach((h) => observer.observe(h));
+
+    return () => observer.disconnect();
+  }, [selectedPlayers]);
 
   const handleAddPlayer = (player: DerivedPlayer | undefined) => {
     if (!player) {
