@@ -967,22 +967,24 @@ function MultiComparison({
     <div className="comparator-multi">
       <div className="multi-cards">
         {players.map((player, index) => (
-          <ComparatorPlayerCard
-            key={player.ID as string}
-            player={player}
-            accentColor={getPlayerColor(index)}
-            compact
-            headerIndex={index}
-            onRemove={onRemovePlayer}
-            statsRows={statsRows}
-            maxValues={maxValues}
-            secondBestValues={secondBestValues}
-            radarDataset={
-              datasets.find((d) => d.id === String(player.ID)) ?? datasets[index]
-            }
-            formState={formById[String(player.ID)] ?? DEFAULT_FORM_STATE}
-            onChangeForm={onChangeForm}
-          />
+          <div key={player.ID as string} className="multi-card-shell">
+            <ComparatorPlayerCard
+              player={player}
+              accentColor={getPlayerColor(index)}
+              compact
+              headerIndex={index}
+              onRemove={onRemovePlayer}
+              statsRows={statsRows}
+              maxValues={maxValues}
+              secondBestValues={secondBestValues}
+              radarDataset={
+                datasets.find((d) => d.id === String(player.ID)) ?? datasets[index]
+              }
+              formState={formById[String(player.ID)] ?? DEFAULT_FORM_STATE}
+              onChangeForm={onChangeForm}
+              detachHeader
+            />
+          </div>
         ))}
       </div>
     </div>
@@ -1089,6 +1091,7 @@ interface ComparatorPlayerCardProps {
   maxValues?: Map<keyof DerivedPlayer, number>;
   secondBestValues?: Map<keyof DerivedPlayer, number>;
   radarDataset?: RadarChartDataset;
+  detachHeader?: boolean;
 }
 
 function ComparatorPlayerCard({
@@ -1104,6 +1107,7 @@ function ComparatorPlayerCard({
   radarDataset,
   formState = DEFAULT_FORM_STATE,
   onChangeForm,
+  detachHeader = false,
 }: ComparatorPlayerCardProps) {
   const [formOpen, setFormOpen] = useState(false);
   const positions = getPlayerPositions(player);
@@ -1210,117 +1214,139 @@ function ComparatorPlayerCard({
     </div>
   );
 
-  return (
-    <div
-      className={`comparator-player-card ${compact ? 'compact' : ''} ${align === 'right' ? 'align-right' : ''}`}
-      style={{ borderColor: accentColor }}
+  const headerEl = (
+    <header
+      className={`player-card-header ${align === 'right' ? 'right' : ''} ${detachHeader ? 'detached' : ''}`}
+      style={detachHeader ? { borderColor: accentColor } : undefined}
     >
-      <header className={`player-card-header ${align === 'right' ? 'right' : ''}`}>
-        {onRemove && (
-          <button
-            type="button"
-            className="player-card-remove"
-            aria-label={`Quitar a ${player.NOMBRE}`}
-            onClick={() => onRemove(String(player.ID))}
-          >
-            ×
-          </button>
-        )}
-        {align === 'right' ? (
-          <>
-            {overviewBlock}
-            {identityBlock}
-          </>
-        ) : (
-          <>
-            {identityBlock}
-            {overviewBlock}
-          </>
-        )}
-      </header>
-      <div className="player-meta-grid">
-        {DETAIL_FIELDS.map((field) => (
-          <DetailField
-            key={field as string}
-            label={getFieldLabel(field as string)}
-            value={formatDetailFieldValue(field, player)}
-          />
-        ))}
-      </div>
-      <div className="player-extra">
-        <PlayerSkills player={player} />
-        <PositionMap
-          player={player}
-          activeCells={activePositionCells}
-          primaryPosition={primaryPosition}
-        />
-      </div>
-      {statsRows && maxValues && (
+      {onRemove && (
+        <button
+          type="button"
+          className="player-card-remove"
+          aria-label={`Quitar a ${player.NOMBRE}`}
+          onClick={() => onRemove(String(player.ID))}
+        >
+          ×
+        </button>
+      )}
+      {align === 'right' ? (
         <>
-          <h4 className="stats-section-title">STATS</h4>
-          <div className="player-stats-list">
-            {statsRows.map((row) => {
-              const playerValue = applyFormMultiplier(
-                ensureNumber(player[row.field]),
-                row.field as any,
-                formState,
-              );
-              const maxValue = maxValues.get(row.field);
-              const secondBest = secondBestValues?.get(row.field);
-              const isMax =
-                playerValue !== undefined &&
-                maxValue !== undefined &&
-                maxValue === playerValue;
-
-              // Si es el máximo, comparar con el segundo mejor; si no, comparar con el máximo
-              const compareValue = isMax ? secondBest : maxValue;
-              const diff =
-                playerValue !== undefined && compareValue !== undefined
-                  ? playerValue - compareValue
-                  : undefined;
-              const showDiff = diff !== undefined && diff !== 0;
-
-              return (
-                <div key={row.field as string} className="stat-row">
-                  <span className="stat-label">{row.label}</span>
-                  <span
-                    className={`stat-value ${isMax ? 'stat-winner' : ''}`}
-                    style={
-                      playerValue !== undefined
-                        ? { color: getStatColor(playerValue) ?? undefined }
-                        : undefined
-                    }
-                  >
-                    <span className="stat-number">
-                      {playerValue !== undefined
-                        ? formatPlayerValue(playerValue, 0)
-                        : '-'}
-                    </span>
-                    {showDiff && (
-                      <span className={`stat-diff ${diff > 0 ? 'positive' : 'negative'}`}>
-                        {diff > 0 ? '+' : ''}
-                        {formatPlayerValue(diff, 0)}
-                      </span>
-                    )}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          {overviewBlock}
+          {identityBlock}
+        </>
+      ) : (
+        <>
+          {identityBlock}
+          {overviewBlock}
         </>
       )}
-      {radarDataset && (
-        <div className="player-radar">
-          <header>RADAR</header>
-          <RadarChart
-            labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
-            datasets={[radarDataset]}
-            size={180}
-            showLegend={false}
-          />
+    </header>
+  );
+
+  const bodyClasses = [
+    'comparator-player-card',
+    compact ? 'compact' : '',
+    align === 'right' ? 'align-right' : '',
+    detachHeader ? 'detached-body' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  return (
+    <>
+      {detachHeader && (
+        <div className="player-card-top-wrapper" style={{ borderColor: accentColor }}>
+          {headerEl}
         </div>
       )}
-    </div>
+      <div className={bodyClasses} style={{ borderColor: accentColor }}>
+        {!detachHeader && headerEl}
+        <div className="player-meta-grid">
+          {DETAIL_FIELDS.map((field) => (
+            <DetailField
+              key={field as string}
+              label={getFieldLabel(field as string)}
+              value={formatDetailFieldValue(field, player)}
+            />
+          ))}
+        </div>
+        <div className="player-extra">
+          <PlayerSkills player={player} />
+          <PositionMap
+            player={player}
+            activeCells={activePositionCells}
+            primaryPosition={primaryPosition}
+          />
+        </div>
+        {statsRows && maxValues && (
+          <>
+            <h4 className="stats-section-title">STATS</h4>
+            <div className="player-stats-list">
+              {statsRows.map((row) => {
+                const playerValue = applyFormMultiplier(
+                  ensureNumber(player[row.field]),
+                  row.field as any,
+                  formState,
+                );
+                const maxValue = maxValues.get(row.field);
+                const secondBest = secondBestValues?.get(row.field);
+                const isMax =
+                  playerValue !== undefined &&
+                  maxValue !== undefined &&
+                  maxValue === playerValue;
+
+                // Si es el máximo, comparar con el segundo mejor; si no, comparar con el máximo
+                const compareValue = isMax ? secondBest : maxValue;
+                const diff =
+                  playerValue !== undefined && compareValue !== undefined
+                    ? playerValue - compareValue
+                    : undefined;
+                const showDiff = diff !== undefined && diff !== 0;
+
+                return (
+                  <div key={row.field as string} className="stat-row">
+                    <span className="stat-label">{row.label}</span>
+                    <span
+                      className={`stat-value ${isMax ? 'stat-winner' : ''}`}
+                      style={
+                        playerValue !== undefined
+                          ? { color: getStatColor(playerValue) ?? undefined }
+                          : undefined
+                      }
+                    >
+                      <span className="stat-number">
+                        {playerValue !== undefined
+                          ? formatPlayerValue(playerValue, 0)
+                          : '-'}
+                      </span>
+                      {showDiff && (
+                        <span
+                          className={`stat-diff ${diff > 0 ? 'positive' : 'negative'}`}
+                        >
+                          {diff > 0 ? '+' : ''}
+                          {formatPlayerValue(diff, 0)}
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+        {radarDataset && (
+          <div className="player-radar">
+            <header>RADAR</header>
+            <RadarChart
+              labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
+              datasets={[radarDataset]}
+              size={180}
+              showLegend={false}
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
