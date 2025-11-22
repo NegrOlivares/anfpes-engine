@@ -846,6 +846,7 @@ function DuelComparison({
                   <button
                     type="button"
                     className={`pos-trigger ${selectedPosition ? 'active' : ''}`}
+                    title="Destacar Stats para la Posición"
                     onClick={() => setShowPositions((v: boolean) => !v)}
                     style={{
                       background: chipColor,

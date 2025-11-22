@@ -38,7 +38,6 @@ body {
 .module-tabs {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 0.4rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding-bottom: 0.5rem;
 }
@@ -68,12 +67,12 @@ body {
 }
 
 .module-stack {
+  margin-top: 0.4rem;
   display: flex;
   flex-direction: column;
 }
 
 .card {
-  padding: 0.2rem;
   box-shadow: 0 25px 50px rgba(12, 17, 27, 0.158);
   backdrop-filter: blur(12px);
 }
@@ -84,6 +83,7 @@ body {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  margin-top: 0.4rem;
   padding: 0;
   border-radius: 0;
   border: none;
@@ -2232,7 +2232,9 @@ tbody tr:hover {
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  margin-top: 0.4rem;
   gap: 1rem;
+  background: fixed rgba(10, 13, 20, 0.85);
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -2377,17 +2379,27 @@ tbody tr:hover {
 }
 
 .player-card-top-wrapper {
-  border: 2.5px solid rgba(122, 201, 255, 0.4);
-  border-radius: 1rem 1rem 0 0;
-  border-bottom: none;
-  background: rgba(6, 10, 16, 0.65);
+  background: rgba(10, 13, 20, 0.85);
+  z-index: 3;
 }
 
 .player-card-header.detached {
-  border: none;
+  border: 2.5px solid rgba(122, 201, 255, 0.4);
+  border-bottom: none;
   border-radius: 1rem 1rem 0 0;
-  background: transparent;
+  background: fixed rgb(10, 13, 20);
   padding: 0.75rem 1rem 0.25rem;
+}
+
+.multi-card-shell {
+  display: flex;
+  flex-direction: column;
+}
+
+.comparator-multi .player-card-top-wrapper {
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 
 .player-card-header {
@@ -2466,8 +2478,10 @@ tbody tr:hover {
 }
 
 .player-card-header.right .player-identity-header {
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-content: flex-end;
+  flex-direction: row-reverse;
+
 }
 
 .player-identity h3 {
@@ -3213,8 +3227,8 @@ tbody tr:hover {
 
 .player-stats-list .stat-label {
   position: absolute;
-  left: 0.5rem;
-  font-size: 0.65rem;
+  left: 0.3rem;
+  font-size: 0.54rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: rgba(255, 255, 255, 0.15);
