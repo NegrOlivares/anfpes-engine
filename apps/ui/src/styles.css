@@ -1403,6 +1403,74 @@ tbody tr:hover {
   opacity: 0.7;
 }
 
+.stats-header-with-selector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-header-with-selector h3 {
+  margin: 0;
+  text-align: center;
+  align-items: center;
+}
+
+.position-selector {
+  position: absolute;
+  right: 30%;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.pos-trigger {
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.4rem;
+  min-width: 2.4rem;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  display: inline-flex;
+  color: rgb(255, 255, 255);
+  border: 2px solid rgba(0, 0, 0, 0.75);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.pos-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.3rem;
+  background: rgba(8,12,18,0.97);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 0.4rem;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+  z-index: 10;
+}
+.pos-option {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0.3rem 0.5rem;
+  color: rgb(255, 255, 255);
+  border: 2px solid rgba(0, 0, 0);
+  cursor: pointer;
+  border-radius: 0.3rem;
+  font-size: 0.72rem;
+}
+.pos-option.active { background: rgba(255,255,255,0.08); }
+
+.pos-option.none {
+  color: #ccc;
+  background: rgb(0, 0, 0);
+}
+.pos-option.none.active {
+  background: rgb(0, 0, 0);
+}
+
+
 .duel-stat-row .stat-bar-fill.left {
   background: #04b7d6ff;
 }
@@ -2212,7 +2280,7 @@ tbody tr:hover {
 .comparator-form {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.35rem;
+  margin-top: 0.15rem;
 }
 
 .comparator-form input {
@@ -2932,6 +3000,11 @@ tbody tr:hover {
 
 .duel-stat-row:nth-child(odd) {
   background: rgba(148, 146, 146, 0.062);
+}
+
+.duel-stat-row.highlighted {
+  background: rgba(153, 132, 62, 0.404);
+  border-radius: 4px;
 }
 
 .duel-stat-row .player-value {

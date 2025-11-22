@@ -41,7 +41,7 @@ import {
 } from '../data/formModifiers';
 
 const MAX_PLAYERS = 4;
-const COLOR_PALETTE = ['#04b7d6ff', '#df2484ff', '#f78c00ff', '#16c450ff'];
+const COLOR_PALETTE = ['#04b7d6ff', '#fc2626ff', '#f78c00ff', '#16c450ff'];
 const MACRO_FIELDS: Array<keyof DerivedPlayer> = [
   'ATK',
   'TEC',
@@ -78,6 +78,215 @@ const CORE_STATS: Array<keyof DerivedPlayer> = [
   'ARQUERO',
   'TRABAJO EN EQUIPO',
 ] as Array<keyof DerivedPlayer>;
+
+type PositionHighlightId =
+  | 'PT'
+  | 'LIB'
+  | 'CT'
+  | 'SA'
+  | 'CCD'
+  | 'LA'
+  | 'CC'
+  | 'VOL'
+  | 'MP'
+  | 'SD'
+  | 'EX'
+  | 'DC'
+  | 'PTL'
+  | 'LAI'
+  | 'MCI'
+  | 'BTB'
+  | 'F9';
+
+type PositionHighlight = {
+  id: PositionHighlightId;
+  label: string;
+  color: string;
+  stats: Array<keyof DerivedPlayer>;
+};
+
+const POSITION_HIGHLIGHTS: PositionHighlight[] = [
+  {
+    id: 'PT',
+    label: 'PT',
+    color: '#e9b407',
+    stats: ['DEFENSA', 'ESTABILIDAD', 'REPUESTA', 'SALTO', 'ARQUERO'],
+  },
+  {
+    id: 'LIB',
+    label: 'LIB',
+    color: '#1975d2',
+    stats: ['DEFENSA', 'ESTABILIDAD', 'REPUESTA', 'CABEZAZO', 'SALTO'],
+  },
+  {
+    id: 'CT',
+    label: 'CT',
+    color: '#1975d2',
+    stats: ['DEFENSA', 'ESTABILIDAD', 'REPUESTA', 'CABEZAZO', 'SALTO'],
+  },
+  {
+    id: 'SA',
+    label: 'SA',
+    color: '#1975d2',
+    stats: [
+      'DEFENSA',
+      'VELOCIDAD MÁXIMA',
+      'PRECISIÓN DRIBBLE',
+      'VELOCIDAD DRIBBLE',
+      'PRECISIÓN       P LARGO',
+    ],
+  },
+  {
+    id: 'CCD',
+    label: 'CCD',
+    color: '#1975d2',
+    stats: [
+      'DEFENSA',
+      'ESTABILIDAD',
+      'PRECISIÓN   P CORTO',
+      'PRECISIÓN       P LARGO',
+      'TÉCNICA',
+    ],
+  },
+  {
+    id: 'LA',
+    label: 'LA',
+    color: '#1975d2',
+    stats: [
+      'DEFENSA',
+      'VELOCIDAD MÁXIMA',
+      'PRECISIÓN DRIBBLE',
+      'VELOCIDAD DRIBBLE',
+      'PRECISIÓN       P LARGO',
+    ],
+  },
+  {
+    id: 'CC',
+    label: 'CC',
+    color: '#09a959',
+    stats: [
+      'RESISTENCIA',
+      'PRECISIÓN DRIBBLE',
+      'PRECISIÓN   P CORTO',
+      'PRECISIÓN       P LARGO',
+      'TÉCNICA',
+    ],
+  },
+  {
+    id: 'VOL',
+    label: 'VOL',
+    color: '#09a959',
+    stats: [
+      'VELOCIDAD MÁXIMA',
+      'PRECISIÓN DRIBBLE',
+      'VELOCIDAD DRIBBLE',
+      'PRECISIÓN       P LARGO',
+      'TÉCNICA',
+    ],
+  },
+  {
+    id: 'MP',
+    label: 'MP',
+    color: '#09a959',
+    stats: [
+      'PRECISIÓN DRIBBLE',
+      'PRECISIÓN   P CORTO',
+      'PRECISIÓN       P LARGO',
+      'PRECISIÓN DISPARO',
+      'TÉCNICA',
+    ],
+  },
+  {
+    id: 'SD',
+    label: 'SD',
+    color: '#fc2626',
+    stats: ['ATAQUE', 'AGILIDAD', 'PRECISIÓN DRIBBLE', 'PRECISIÓN DISPARO', 'TÉCNICA'],
+  },
+  {
+    id: 'EX',
+    label: 'EX',
+    color: '#fc2626',
+    stats: [
+      'ATAQUE',
+      'VELOCIDAD MÁXIMA',
+      'PRECISIÓN DRIBBLE',
+      'VELOCIDAD DRIBBLE',
+      'TÉCNICA',
+    ],
+  },
+  {
+    id: 'DC',
+    label: 'DC',
+    color: '#fc2626',
+    stats: ['ATAQUE', 'ESTABILIDAD', 'REPUESTA', 'PRECISIÓN DISPARO', 'TÉCNICA'],
+  },
+  // Inventadas
+  {
+    id: 'PTL',
+    label: 'PTL',
+    color: '#e9b407',
+    stats: [
+      'ACELERACIÓN',
+      'REPUESTA',
+      'AGILIDAD',
+      'PRECISIÓN   P CORTO',
+      'PRECISIÓN       P LARGO',
+      'TÉCNICA',
+      'AGRESIVIDAD',
+      'ARQUERO',
+    ],
+  },
+  {
+    id: 'LAI',
+    label: 'LAI',
+    color: '#1975d2',
+    stats: [
+      'DEFENSA',
+      'ESTABILIDAD',
+      'REPUESTA',
+      'PRECISIÓN   P CORTO',
+      'PRECISIÓN       P LARGO',
+      'TÉCNICA',
+      'TRABAJO EN EQUIPO',
+    ],
+  },
+  {
+    id: 'MCI',
+    label: 'MCI',
+    color: '#09a959',
+    stats: ['DEFENSA', 'ESTABILIDAD', 'RESISTENCIA', 'ACELERACIÓN', 'REPUESTA', 'SALTO'],
+  },
+  {
+    id: 'BTB',
+    label: 'BTB',
+    color: '#09a959',
+    stats: [
+      'ATAQUE',
+      'DEFENSA',
+      'ESTABILIDAD',
+      'RESISTENCIA',
+      'ACELERACIÓN',
+      'REPUESTA',
+      'POTENCIA DISPARO',
+      'AGRESIVIDAD',
+    ],
+  },
+  {
+    id: 'F9',
+    label: 'F9',
+    color: '#fc2626',
+    stats: [
+      'ATAQUE',
+      'AGILIDAD',
+      'PRECISIÓN DRIBBLE',
+      'PRECISIÓN   P CORTO',
+      'PRECISIÓN DISPARO',
+      'TÉCNICA DISPARO',
+      'TÉCNICA',
+      'TRABAJO EN EQUIPO',
+    ],
+  },
+];
 
 const NATIONAL_SELECTION_FIELD = 'nro selección' as keyof DerivedPlayer;
 
@@ -609,6 +818,10 @@ function DuelComparison({
   onChangeForm,
 }: ComparisonProps) {
   const [left, right] = players;
+  const [selectedPosition, setSelectedPosition] = useState<PositionHighlightId | null>(
+    null,
+  );
+  const [showPositions, setShowPositions] = useState(false);
 
   return (
     <div className="comparator-duel">
@@ -622,7 +835,59 @@ function DuelComparison({
       />
       <div className="duel-center">
         <section className="duel-stats">
-          <header>STATS</header>
+          <header className="stats-header-with-selector">
+            <h3>STATS</h3>
+            <div className="position-selector">
+              {(() => {
+                const meta = POSITION_HIGHLIGHTS.find((p) => p.id === selectedPosition);
+                const chipColor = meta?.color ?? 'rgba(0, 0, 0, 1)';
+                const chipLabel = meta?.label ?? 'NO';
+                return (
+                  <button
+                    type="button"
+                    className={`pos-trigger ${selectedPosition ? 'active' : ''}`}
+                    onClick={() => setShowPositions((v: boolean) => !v)}
+                    style={{
+                      background: chipColor,
+                    }}
+                  >
+                    {chipLabel}
+                  </button>
+                );
+              })()}
+              {showPositions && (
+                <div className="pos-menu">
+                  <button
+                    type="button"
+                    className={`pos-option none ${!selectedPosition ? 'active' : ''}`}
+                    onClick={() => {
+                      setSelectedPosition(null);
+                      setShowPositions(false);
+                    }}
+                  >
+                    NO
+                  </button>
+
+                  {POSITION_HIGHLIGHTS.map((pos) => (
+                    <button
+                      key={pos.id}
+                      type="button"
+                      className={`pos-option ${selectedPosition === pos.id ? 'active' : ''}`}
+                      style={{
+                        background: pos.color,
+                      }}
+                      onClick={() => {
+                        setSelectedPosition(pos.id);
+                        setShowPositions(false);
+                      }}
+                    >
+                      {pos.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </header>
           <div className="duel-stats-list">
             {statsRows.map((row) => (
               <DuelStatRow
@@ -631,6 +896,12 @@ function DuelComparison({
                 leftValue={row.values[0]}
                 rightValue={row.values[1]}
                 showBars
+                highlighted={
+                  !!selectedPosition &&
+                  POSITION_HIGHLIGHTS.find(
+                    (p) => p.id === selectedPosition,
+                  )?.stats.includes(row.field as any)
+                }
               />
             ))}
           </div>
@@ -723,9 +994,16 @@ interface DuelStatRowProps {
   leftValue?: number;
   rightValue?: number;
   showBars?: boolean;
+  highlighted?: boolean;
 }
 
-function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProps) {
+function DuelStatRow({
+  label,
+  leftValue,
+  rightValue,
+  showBars,
+  highlighted,
+}: DuelStatRowProps) {
   const winner =
     leftValue !== undefined && rightValue !== undefined
       ? leftValue > rightValue
@@ -748,7 +1026,7 @@ function DuelStatRow({ label, leftValue, rightValue, showBars }: DuelStatRowProp
   const rightBarWidth = Math.max(0, Math.min(rightValue ?? 0, 99));
 
   return (
-    <div className="duel-stat-row">
+    <div className={`duel-stat-row ${highlighted ? 'highlighted' : ''}`}>
       <div className={`player-value ${winner === 'left' ? 'winner' : ''}`}>
         <span className="diff-slot left">
           {leftDiff !== undefined && (
@@ -1130,7 +1408,7 @@ function formatScaleDetail(
   const shouldColor =
     field === 'CONSISTENCIA' ||
     field === FITNESS_FIELD ||
-    field === ('PRECICI?N PIE MALO' as keyof DerivedPlayer) ||
+    field === ('PRECICIÓN PIE MALO' as keyof DerivedPlayer) ||
     field === ('FRECUENCIA PIE MALO' as keyof DerivedPlayer);
   const color = shouldColor ? (getStatColor(numeric) ?? undefined) : undefined;
   return { text, color };
