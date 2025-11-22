@@ -1285,8 +1285,6 @@ tbody tr:hover {
 }
 
 .player-badges {
-  display: flex;
-  gap: 0.25rem;
   flex-shrink: 0;
 }
 
@@ -2380,7 +2378,6 @@ tbody tr:hover {
 
 .player-card-header.right .player-identity-header {
   justify-content: flex-end;
-  align-items: flex-end;
   align-content: flex-end;
 }
 
@@ -2400,6 +2397,80 @@ tbody tr:hover {
   flex-wrap: wrap;
   justify-content: flex-end;
   align-content: flex-start;
+}
+
+.form-state-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: nowrap;
+}
+
+.form-dropdown {
+  position: relative;
+}
+
+.form-trigger {
+  min-width: 1.4rem;
+  min-height: 1.4rem;
+  text-align: center;
+  border: 1px solid currentColor;
+  background: rgba(255, 255, 255, 0.04);
+  color: currentColor;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.form-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.25rem;
+  background: rgba(8, 12, 18, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.4rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  padding: 0.3rem;
+  z-index: 10;
+  min-width: 7.5rem;
+}
+
+.form-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: currentColor;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 0.3rem 0.35rem;
+  border-radius: 0.35rem;
+  cursor: pointer;
+}
+
+.form-option:hover,
+.form-option.active {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.form-option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  border: 1px solid currentColor;
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.25rem;
+  font-size: 0.75rem;
+}
+
+.form-option-label {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .player-card-header.right .player-overview {

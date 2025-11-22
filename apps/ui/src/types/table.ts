@@ -72,7 +72,8 @@ export function getStatColor(value: number | string | null | undefined): string 
   const rounded = Math.round(numValue);
 
   // Rango 30-99
-  if (rounded >= 10 && rounded <= 99) {
+  if (rounded >= 10 && rounded <= 120) {
+    if (rounded >= 100) return '#d167dfff'; // Purpura más intenso
     if (rounded >= 95) return '#ff4444'; // Rojo más intenso
     if (rounded >= 90) return '#ff8800'; // Naranja intenso
     if (rounded >= 80) return '#ffdd00'; // Amarillo brillante

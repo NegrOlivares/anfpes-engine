@@ -32,6 +32,13 @@ import { getNationalityInfo } from '../data/nationalities';
 import { getStatColor, getInjuryColor } from '../types/table';
 import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 import { openPlayerActionsMenu } from '../components/PlayerActionsOverlay';
+import {
+  applyFormMultiplier,
+  DEFAULT_FORM_STATE,
+  FORM_MULTIPLIERS,
+  FORM_STATES,
+  type FormStateId,
+} from '../data/formModifiers';
 
 const MAX_PLAYERS = 4;
 const COLOR_PALETTE = ['#04b7d6ff', '#df2484ff', '#f78c00ff', '#16c450ff'];
@@ -280,6 +287,7 @@ export function ComparatorModule() {
   const [query, setQuery] = useState('');
   const [lookupError, setLookupError] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [formById, setFormById] = useState<Record<string, FormStateId>>({});
   const pendingComparatorId = useComparatorLaunchStore((state) => state.pendingId);
   const consumeComparatorPending = useComparatorLaunchStore(
     (state) => state.consumePending,
@@ -316,9 +324,13 @@ export function ComparatorModule() {
     return CORE_STATS.map((field) => ({
       field,
       label: getFieldLabel(field as string),
-      values: selectedPlayers.map((player) => ensureNumber(player[field])),
+      values: selectedPlayers.map((player) => {
+        const formState = formById[String(player.ID)] ?? DEFAULT_FORM_STATE;
+        const baseValue = ensureNumber(player[field]);
+        return applyFormMultiplier(baseValue, field as any, formState);
+      }),
     }));
-  }, [selectedPlayers]);
+  }, [selectedPlayers, formById]);
 
   useEffect(() => {
     if (!pendingComparatorId || !players) return;
@@ -334,17 +346,55 @@ export function ComparatorModule() {
     consumeComparatorPending();
   }, [pendingComparatorId, players, consumeComparatorPending]);
 
+  const computeMacrosWithForm = useCallback(
+    (player: DerivedPlayer, formState: FormStateId) => {
+      const get = (key: keyof DerivedPlayer | string) =>
+        applyFormMultiplier(
+          ensureNumber((player as any)[key]),
+          key as string,
+          formState,
+        ) ?? 0;
+      const atk = get('ATAQUE') * 0.75 + get('PRECISIÓN DISPARO') * 0.25;
+      const tec =
+        get('TÉCNICA') * 0.4 +
+        get('PRECISIÓN DRIBBLE') * 0.3 +
+        get('PRECISIÓN   P CORTO') * 0.1 +
+        get('PRECISIÓN       P LARGO') * 0.05 +
+        get('PRECISIÓN TIRO LIBRE') * 0.1 +
+        get('EFECTO') * 0.05;
+      const res = get('RESISTENCIA');
+      const def = get('DEFENSA');
+      const fue =
+        get('ESTABILIDAD') * 0.6 + get('SALTO') * 0.3 + get('POTENCIA DISPARO') * 0.1;
+      const vel =
+        get('VELOCIDAD MÁXIMA') * 0.2 +
+        get('ACELERACIÓN') * 0.3 +
+        get('REPUESTA') * 0.2 +
+        get('VELOCIDAD DRIBBLE') * 0.3;
+      return { ATK: atk, TEC: tec, RES: res, DEF: def, FUE: fue, VEL: vel };
+    },
+    [],
+  );
+
   const macroDatasets = useMemo(() => {
-    return selectedPlayers.map((player, index) => ({
-      id: String(player.ID),
-      label: player.NOMBRE as string,
-      values: MACRO_FIELDS.map((field) => ensureNumber(player[field]) ?? 0),
-      color: getPlayerColor(index),
-      fillOpacity: selectedPlayers.length > 2 ? 0.08 : 0.2,
-    }));
-  }, [selectedPlayers]);
+    return selectedPlayers.map((player, index) => {
+      const formState = formById[String(player.ID)] ?? DEFAULT_FORM_STATE;
+      const macros = computeMacrosWithForm(player, formState);
+      return {
+        id: String(player.ID),
+        label: player.NOMBRE as string,
+        values: MACRO_FIELDS.map((field) => (macros as any)[field] ?? 0),
+        color: getPlayerColor(index),
+        fillOpacity: selectedPlayers.length > 2 ? 0.08 : 0.2,
+      };
+    });
+  }, [selectedPlayers, formById, computeMacrosWithForm]);
 
   const duelMode = selectedPlayers.length <= 2;
+
+  const handleChangeForm = useCallback((playerId: string, form: FormStateId) => {
+    setFormById((prev) => ({ ...prev, [playerId]: form }));
+  }, []);
 
   // Detectar si algún header tiene wrap y aplicar clase a todos
   useLayoutEffect(() => {
@@ -411,11 +461,17 @@ export function ComparatorModule() {
 
   const handleRemovePlayer = (id: string) => {
     setSelectedIds((current) => current.filter((playerId) => playerId !== id));
+    setFormById((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   };
 
   const handleClear = () => {
     setSelectedIds([]);
     setLookupError('');
+    setFormById({});
   };
 
   const handleSwap = () => {
@@ -512,6 +568,8 @@ export function ComparatorModule() {
               statsRows={statsRows}
               datasets={macroDatasets}
               onRemovePlayer={handleRemovePlayer}
+              formById={formById}
+              onChangeForm={handleChangeForm}
             />
           ) : (
             <MultiComparison
@@ -519,6 +577,8 @@ export function ComparatorModule() {
               statsRows={statsRows}
               datasets={macroDatasets}
               onRemovePlayer={handleRemovePlayer}
+              formById={formById}
+              onChangeForm={handleChangeForm}
             />
           )}
         </div>
@@ -536,6 +596,8 @@ interface ComparisonProps {
   }>;
   datasets: RadarChartDataset[];
   onRemovePlayer: (playerId: string) => void;
+  formById: Record<string, FormStateId>;
+  onChangeForm: (playerId: string, form: FormStateId) => void;
 }
 
 function DuelComparison({
@@ -543,6 +605,8 @@ function DuelComparison({
   statsRows,
   datasets,
   onRemovePlayer,
+  formById,
+  onChangeForm,
 }: ComparisonProps) {
   const [left, right] = players;
 
@@ -553,6 +617,8 @@ function DuelComparison({
         accentColor={getPlayerColor(0)}
         headerIndex={0}
         onRemove={onRemovePlayer}
+        formState={formById[String(left?.ID)] ?? DEFAULT_FORM_STATE}
+        onChangeForm={onChangeForm}
       />
       <div className="duel-center">
         <section className="duel-stats">
@@ -584,6 +650,8 @@ function DuelComparison({
           align="right"
           headerIndex={1}
           onRemove={onRemovePlayer}
+          formState={formById[String(right?.ID)] ?? DEFAULT_FORM_STATE}
+          onChangeForm={onChangeForm}
         />
       ) : (
         <div className="comparator-player-card placeholder">
@@ -599,6 +667,8 @@ function MultiComparison({
   statsRows,
   datasets,
   onRemovePlayer,
+  formById,
+  onChangeForm,
 }: ComparisonProps) {
   // Calcular máximos y segundos mejores para cada stat
   const { maxValues, secondBestValues } = useMemo(() => {
@@ -636,13 +706,11 @@ function MultiComparison({
             statsRows={statsRows}
             maxValues={maxValues}
             secondBestValues={secondBestValues}
-            radarDataset={{
-              id: String(player.ID),
-              label: player.NOMBRE as string,
-              values: MACRO_FIELDS.map((field) => ensureNumber(player[field]) ?? 0),
-              color: getPlayerColor(index),
-              fillOpacity: 0.15,
-            }}
+            radarDataset={
+              datasets.find((d) => d.id === String(player.ID)) ?? datasets[index]
+            }
+            formState={formById[String(player.ID)] ?? DEFAULT_FORM_STATE}
+            onChangeForm={onChangeForm}
           />
         ))}
       </div>
@@ -733,6 +801,8 @@ interface ComparatorPlayerCardProps {
   align?: 'left' | 'right';
   headerIndex: number;
   onRemove?: (playerId: string) => void;
+  formState?: FormStateId;
+  onChangeForm?: (playerId: string, form: FormStateId) => void;
   statsRows?: Array<{
     field: keyof DerivedPlayer;
     label: string;
@@ -754,7 +824,10 @@ function ComparatorPlayerCard({
   maxValues,
   secondBestValues,
   radarDataset,
+  formState = DEFAULT_FORM_STATE,
+  onChangeForm,
 }: ComparatorPlayerCardProps) {
+  const [formOpen, setFormOpen] = useState(false);
   const positions = getPlayerPositions(player);
   const primaryPosition = positions[0];
   const badges = getStatusBadges(player);
@@ -779,6 +852,43 @@ function ComparatorPlayerCard({
         >
           {player.NOMBRE}
         </h3>
+        {onChangeForm && (
+          <div className="form-dropdown" title="Forma del jugador">
+            {FORM_STATES.map(
+              (st) =>
+                st.id === formState && (
+                  <button
+                    key={st.id}
+                    type="button"
+                    className="form-trigger"
+                    style={{ color: st.color, borderColor: st.color }}
+                    onClick={() => setFormOpen((v) => !v)}
+                  >
+                    {st.icon}
+                  </button>
+                ),
+            )}
+            {formOpen && (
+              <div className="form-menu">
+                {FORM_STATES.map((state) => (
+                  <button
+                    key={state.id}
+                    type="button"
+                    className={`form-option ${formState === state.id ? 'active' : ''}`}
+                    style={{ color: state.color, borderColor: state.color }}
+                    onClick={() => {
+                      onChangeForm(String(player.ID), state.id);
+                      setFormOpen(false);
+                    }}
+                  >
+                    <span className="form-option-icon">{state.icon}</span>
+                    <span className="form-option-label">{state.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         <div className="player-badges">
           {badges.map((badge) => (
             <span key={badge.key} className={badge.className} title={badge.title}>
@@ -872,7 +982,11 @@ function ComparatorPlayerCard({
           <h4 className="stats-section-title">STATS</h4>
           <div className="player-stats-list">
             {statsRows.map((row) => {
-              const playerValue = ensureNumber(player[row.field]);
+              const playerValue = applyFormMultiplier(
+                ensureNumber(player[row.field]),
+                row.field as any,
+                formState,
+              );
               const maxValue = maxValues.get(row.field);
               const secondBest = secondBestValues?.get(row.field);
               const isMax =
