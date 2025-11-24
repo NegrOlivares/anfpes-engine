@@ -182,3 +182,13 @@
 - Cre� componentes reutilizables para filtros (pps/ui/src/utils/playerFilters.ts, pps/ui/src/components/FiltersPanel.tsx) con cat�logos, operadores, evaluadores y UI compartible.
 - Integr� esos filtros al flujo del m�dulo (estado, handlers, panel visual, bot�n de limpieza) y actualic� el c�lculo de similitud para descartar previamente jugadores que no cumplan los filtros o posiciones, dejando el slider con m�nimo 95%.
 - Constru� el m�dulo Comparador en la UI: selector de jugadores con sugerencias, vista duelo (cards espejo, tabla de stats destacadas, radar doble) y vista multi (cards compactas, tabla por jugador, radares individuales). El layout cambia autom�ticamente cuando hay 3+ jugadores y reutiliza la cach� existente.
+
+## 2025-11-21
+
+- Módulo Comparador finalizado (duelo y multi): cards separadas con header destacado (sticky en multi) y cuerpo con stats, radar, habilidades y mapa de posiciones.
+- Comparación de stats con barras y diffs izquierda/derecha; resaltado opcional por posición vía selector junto a "STATS" (incluye posiciones inventadas) y chips coloreados.
+- Selector de forma física (flechas ↑ ↗ → ↘ ↓ y lesionado) por jugador: aplica multiplicadores a todos los stats, recalcula radar y se resetea al quitar/limpiar jugador; promedio y posiciones no cambian.
+- Mapa de posiciones estilo cancha con fondo field, colores por posición primaria/secundaria, tooltips completos y badges con halo para posición principal.
+- Integración con PlayerActions (overlay en nombre) y tooltips de posición/club en el header; chips con formato consistente en selector y botón "NO".
+- Headers multi desprendidos del cuerpo con borde/fondo coordinado; grid multi ajustada para 2-4 jugadores; scroll central independiente.
+- Ajustes visuales: barras simétricas, radar centrado, hover-scroll en labels largos, badges y flags alineados al desborde, top-wrapper cubierto para evitar filtrado de bordes.

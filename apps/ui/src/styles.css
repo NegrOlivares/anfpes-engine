@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: dark;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
@@ -2141,7 +2141,7 @@ tbody tr:hover {
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Colores por lí­nea */
+/* Colores por l��nea */
 .position-PT {
   background: #e9b407;
   color: #fff;
@@ -2580,7 +2580,7 @@ tbody tr:hover {
   flex-direction: row-reverse;
 }
 
-/* Cuando hay wrap, forzar que player-flags baje a nueva línea */
+/* Cuando hay wrap, forzar que player-flags baje a nueva l�nea */
 .player-card-header.has-wrap .player-overview .player-flags {
   flex-basis: 100%;
   width: 100%;
@@ -2761,6 +2761,7 @@ tbody tr:hover {
 
 .skill-pill.active {
   border-color: rgba(255, 215, 0, 0.7);
+    font-size: 0.6rem;
   color: #ffd166;
 }
 
@@ -3420,5 +3421,228 @@ tbody tr:hover {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 9px;
   padding: 0.1rem 0.45rem;
+}
+
+/* Perfil (FM-like) */
+.profile-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(122, 201, 255, 0.2);
+  border-radius: 1rem;
+  background: rgba(12, 17, 25, 0.9);
+}
+
+.photo-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-identity h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.profile-sub {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.profile-tags {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  margin-top: 0.35rem;
+}
+
+.profile-tags .chip {
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.45rem;
+  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.profile-tags .chip.gold {
+  background: rgba(255, 207, 68, 0.15);
+  color: #ffcf44;
+  border-color: rgba(255, 207, 68, 0.35);
+}
+
+.profile-tags .primary-pos {
+  background: rgba(122, 201, 255, 0.15);
+  color: #7ac9ff;
+  border-color: rgba(122, 201, 255, 0.35);
+}
+
+.profile-flags {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.profile-flags img.flag {
+  width: 32px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-flags img.club-shield {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+}
+
+.profile-grid.three-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.profile-panel {
+  background: rgba(12, 17, 25, 0.8);
+  border: 1px solid rgba(122, 201, 255, 0.12);
+  border-radius: 1rem;
+  padding: 0.75rem 0.9rem;
+}
+
+.profile-panel h3 {
+  margin: 0 0 0.55rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.profile-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.6rem;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.info-row .strong {
+  font-weight: 700;
+  color: #e7ecf5;
+}
+
+.profile-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.profile-summary .big {
+  margin: 0.1rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.profile-panel.tall {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-radar-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.profile-positions-compact h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.profile-panel.full {
+  grid-column: span 3;
+}
+
+.profile-panel.stats-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.profile-stats-grid.compact {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.25rem 0.5rem;
+}
+
+.stat-block.row.compact {
+  display: grid;
+  grid-template-columns: 1.2fr 1.8fr auto;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.82rem;
+}
+
+.stat-bar.compact {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.skill-pill {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.skill-pill.active {
+  background: rgba(255, 207, 68, 0.12);
+  color: #ffcf44;
+  border-color: rgba(255, 207, 68, 0.35);
 }
 
