@@ -1,4 +1,4 @@
-import type { DerivedPlayer } from '@anfpes/engine';
+﻿import type { DerivedPlayer } from '@anfpes/engine';
 import { RadarChart } from './RadarChart';
 import { PositionBadges, getPlayerPositions } from './PositionBadges';
 import { PositionMap, getActivePositionCells } from './PositionMap';
@@ -18,6 +18,594 @@ import { getStatColor } from '../types/table';
 
 const NATIONAL_SELECTION_FIELD = 'nro selección' as keyof DerivedPlayer;
 const CLASSIC_SELECTION_FIELD = 'nro clasico' as keyof DerivedPlayer;
+
+function normalizeName(raw: string): string {
+  return (raw || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function aliasName(raw: string): string {
+  const n = normalizeName(raw);
+  const aliases: Array<{ find: RegExp; to: string }> = [
+    { find: /\br m\b|\br madrid\b|\breal m\b/, to: 'real madrid' },
+    { find: /\bman utd\b|\bmanchester u\b/, to: 'manchester united' },
+    { find: /\bman city\b/, to: 'manchester city' },
+    { find: /\batletico\b|\batletico madrid\b|\bat madrid\b/, to: 'atlético madrid' },
+    { find: /\binter milan\b/, to: 'inter' },
+    { find: /\bbarca\b/, to: 'barcelona' },
+    { find: /\bdep la coruna\b|\bdeportivo\b/, to: 'deportivo' },
+    { find: /\bsaint etienne\b/, to: 'saint-étienne' },
+    { find: /\bnec nijmegen\b/, to: 'nec' },
+    { find: /\bbetis\b/, to: 'betis' },
+    { find: /\bnewcastle u\b/, to: 'newcastle' },
+    { find: /\bparis sg\b|\bpsg\b/, to: 'psg' },
+  ];
+  for (const a of aliases) {
+    if (a.find.test(n)) return a.to;
+  }
+  return n;
+}
+
+function getShirtStyle(
+  origin: 'club' | 'seleccion' | 'clasica' | 'shop' | 'libre',
+  clubName: string,
+  nationality: string,
+) {
+  const name = aliasName(clubName || nationality || '');
+
+  // Paleta por clubes/selecciones (tokens de búsqueda en minúsculas)
+  const patterns: Array<{ token: string; background: string; color: string }> = [
+    {
+      token: 'milan',
+      background: 'repeating-linear-gradient(90deg,#b00 0 18%,#111 18% 36%)',
+      color: '#f2f2f2',
+    },
+    {
+      token: 'barcelona',
+      background: 'linear-gradient(90deg,#00205b 0 50%,#b20032 50% 100%)',
+      color: '#ffd700',
+    },
+    {
+      token: 'boca',
+      background: 'linear-gradient(#0b1a44 0 40%,#f6c800 40% 60%,#0b1a44 60% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'river',
+      background: 'linear-gradient(135deg,#fff 0 46%,#d00000 46% 54%,#fff 54% 100%)',
+      color: '#111',
+    },
+    { token: 'real madrid', background: '#f7f7f7', color: '#5b2ba8' },
+    {
+      token: 'ajax',
+      background: 'linear-gradient(90deg,#fff 0 35%,#c00 35% 65%,#fff 65% 100%)',
+      color: '#222',
+    },
+    {
+      token: 'arsenal',
+      background: 'linear-gradient(90deg,#c00000 0 70%,#fff 70% 100%)',
+      color: '#002244',
+    },
+    {
+      token: 'monaco',
+      background: 'linear-gradient(135deg,#c00 0 50%,#fff 50% 100%)',
+      color: '#111',
+    },
+    { token: 'saint-étienne', background: '#0b7d3c', color: '#fefefe' },
+    { token: 'saint-etienne', background: '#0b7d3c', color: '#fefefe' },
+    {
+      token: 'ascoli',
+      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
+      color: '#000',
+    },
+    {
+      token: 'aston villa',
+      background: 'linear-gradient(90deg,#6a1b4d 0 70%,#6ec6ff 70% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'atalanta',
+      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 33%,#111 33% 66%)',
+      color: '#fefefe',
+    },
+    {
+      token: 'athletic',
+      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
+      color: '#111',
+    },
+    { token: 'az ', background: '#c00', color: '#fefefe' },
+    { token: 'bayern', background: '#c00', color: '#fff' },
+    { token: 'benfica', background: '#c00', color: '#fff' },
+    {
+      token: 'besiktas',
+      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
+      color: '#000',
+    },
+    {
+      token: 'blackburn',
+      background: 'linear-gradient(90deg,#0b3b8c 0 50%,#fff 50% 100%)',
+      color: '#e4002b',
+    },
+    { token: 'bolton', background: '#fff', color: '#0b1a44' },
+    {
+      token: 'atlético madrid',
+      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
+      color: '#00205b',
+    },
+    {
+      token: 'atlético',
+      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
+      color: '#00205b',
+    },
+    { token: 'gimnastic', background: '#c00', color: '#fefefe' },
+    { token: 'osasuna', background: '#b00', color: '#0b1a44' },
+    {
+      token: 'cagliari',
+      background: 'linear-gradient(90deg,#b00 0 50%,#001437 50% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'catania',
+      background:
+        'repeating-linear-gradient(90deg,#55bbee 0 50%,#c00 50% 70%,#55bbee 70% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'celtic',
+      background: 'repeating-linear-gradient(90deg,#0b7d3c 0 16%,#fff 16% 32%)',
+      color: '#111',
+    },
+    { token: 'charlton', background: '#c00', color: '#fff' },
+    { token: 'chelsea', background: '#0033a0', color: '#fff' },
+    { token: 'chievo', background: '#ffda00', color: '#0b3b8c' },
+    {
+      token: 'classic argentina',
+      background: 'repeating-linear-gradient(90deg,#6ec6ff 0 33%,#fff 33% 66%)',
+      color: '#111',
+    },
+    {
+      token: 'classic brazil',
+      background: 'linear-gradient(#f6c800 0 45%,#198a43 45% 55%,#f6c800 55% 100%)',
+      color: '#0b1a44',
+    },
+    { token: 'classic england', background: '#fff', color: '#0b1a44' },
+    { token: 'classic france', background: '#00205b', color: '#fff' },
+    { token: 'classic germany', background: '#fff', color: '#000' },
+    { token: 'classic italy', background: '#0b3b8c', color: '#fff' },
+    { token: 'classic netherlands', background: '#f58025', color: '#111' },
+    {
+      token: 'club brugge',
+      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 33%,#111 33% 66%)',
+      color: '#fefefe',
+    },
+    {
+      token: 'sedan',
+      background: 'linear-gradient(90deg,#0b7d3c 0 60%,#b00 60% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'djurgardens',
+      background: 'repeating-linear-gradient(90deg,#7fbde9 0 33%,#003c7d 33% 66%)',
+      color: '#d4af37',
+    },
+    { token: 'dynamo kiev', background: '#fff', color: '#0033a0' },
+    { token: 'empoli', background: '#0b3b8c', color: '#fff' },
+    { token: 'everton', background: '#0033a0', color: '#fff' },
+    { token: 'fc copenhagen', background: '#fff', color: '#0033a0' },
+    {
+      token: 'fc groningen',
+      background: 'linear-gradient(90deg,#fff 0 33%,#0b7d3c 33% 66%,#fff 66% 100%)',
+      color: '#111',
+    },
+    { token: 'lorient', background: '#f58025', color: '#000' },
+    { token: 'nantes', background: '#ffda00', color: '#0b7d3c' },
+    {
+      token: 'porto',
+      background:
+        'repeating-linear-gradient(90deg,#0033a0 0 50%,#fff 50% 70%,#0033a0 70% 100%)',
+      color: '#fefefe',
+    },
+    {
+      token: 'psg',
+      background: 'linear-gradient(90deg,#0a1445 0 40%,#c00 40% 60%,#0a1445 60% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'feyenoord',
+      background: 'linear-gradient(90deg,#c00 0 50%,#fff 50% 100%)',
+      color: '#000',
+    },
+    { token: 'fiorentina', background: '#5e2d8a', color: '#fff' },
+    {
+      token: 'fulham',
+      background: 'linear-gradient(90deg,#fff 0 70%,#000 70% 100%)',
+      color: '#c00',
+    },
+    {
+      token: 'galatasaray',
+      background: 'linear-gradient(90deg,#c00 0 50%,#f6c800 50% 100%)',
+      color: '#000',
+    },
+    { token: 'getafe', background: '#0033a0', color: '#fff' },
+    {
+      token: 'bordeaux',
+      background: 'linear-gradient(180deg,#0a1445 0 75%,#fff 75% 100%)',
+      color: '#e4002b',
+    },
+    {
+      token: 'inter',
+      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 33%,#111 33% 66%)',
+      color: '#d4af37',
+    },
+    {
+      token: 'juventus',
+      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
+      color: '#000',
+    },
+    { token: 'lazio', background: '#7fbde9', color: '#111' },
+    {
+      token: 'levante',
+      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 50%,#6a1b4d 50% 100%)',
+      color: '#ffd700',
+    },
+    { token: 'lille', background: '#c00', color: '#0a1445' },
+    { token: 'liverpool', background: '#c00', color: '#fff' },
+    { token: 'livorno', background: '#6a1b4d', color: '#fff' },
+    { token: 'manchester city', background: '#7fbde9', color: '#111' },
+    {
+      token: 'manchester united',
+      background: 'linear-gradient(90deg,#c00 0 70%,#fff 70% 100%)',
+      color: '#000',
+    },
+    {
+      token: 'messina',
+      background: 'linear-gradient(90deg,#ffda00 0 50%,#c00 50% 100%)',
+      color: '#111',
+    },
+    {
+      token: 'middlesbrough',
+      background: 'linear-gradient(180deg,#c00 0 60%,#fff 60% 70%,#c00 70% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'nec ',
+      background: 'linear-gradient(90deg,#c00 0 33%,#0b7d3c 33% 66%,#000 66% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'nac breda',
+      background: 'linear-gradient(135deg,#ffda00 0 60%,#000 60% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'newcastle',
+      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
+      color: '#000',
+    },
+    {
+      token: 'nice',
+      background: 'repeating-linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'olympiacos',
+      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
+      color: '#111',
+    },
+    { token: 'marseille', background: '#fff', color: '#00a3e0' },
+    {
+      token: 'lyon',
+      background: 'linear-gradient(90deg,#fff 0 33%,#0033a0 33% 66%,#c00 66% 100%)',
+      color: '#111',
+    },
+    { token: 'palermo', background: '#f5c1d1', color: '#000' },
+    { token: 'panathinaikos', background: '#0b7d3c', color: '#fff' },
+    {
+      token: 'paris saint-germain',
+      background: 'linear-gradient(90deg,#0a1445 0 40%,#c00 40% 60%,#0a1445 60% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'parma',
+      background: 'linear-gradient(90deg,#ffda00 0 50%,#0033a0 50% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'pes united',
+      background: 'linear-gradient(#ffda00 0 50%,#0a1445 50% 100%)',
+      color: '#fff',
+    },
+    { token: 'portsmouth', background: '#0033a0', color: '#ffd700' },
+    {
+      token: 'psv',
+      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
+      color: '#000',
+    },
+    {
+      token: 'betis',
+      background: 'repeating-linear-gradient(90deg,#0b7d3c 0 33%,#fff 33% 66%)',
+      color: '#111',
+    },
+    {
+      token: 'racing',
+      background: 'linear-gradient(90deg,#fff 0 50%,#0b7d3c 50% 100%)',
+      color: '#000',
+    },
+    {
+      token: 'real sociedad',
+      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
+      color: '#111',
+    },
+    {
+      token: 'real zaragoza',
+      background: 'linear-gradient(90deg,#fff 0 70%,#0033a0 70% 100%)',
+      color: '#c00',
+    },
+    { token: 'celta', background: '#7fbde9', color: '#111' },
+    {
+      token: 'deportivo',
+      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
+      color: '#111',
+    },
+    {
+      token: 'espanyol',
+      background: 'repeating-linear-gradient(90deg,#fff 0 33%,#0033a0 33% 66%)',
+      color: '#111',
+    },
+    {
+      token: 'mallorca',
+      background: 'linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
+      color: '#ffda00',
+    },
+    {
+      token: 'rangers',
+      background: 'linear-gradient(90deg,#0033a0 0 70%,#fff 70% 100%)',
+      color: '#c00',
+    },
+    {
+      token: 'lens',
+      background:
+        'repeating-linear-gradient(90deg,#ffda00 0 50%,#c00 50% 70%,#ffda00 70% 100%)',
+      color: '#000',
+    },
+    {
+      token: 'reading',
+      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
+      color: '#c00',
+    },
+    { token: 'reggina', background: '#6a1b4d', color: '#fff' },
+    {
+      token: 'rkc',
+      background: 'linear-gradient(90deg,#ffda00 0 60%,#0033a0 60% 100%)',
+      color: '#111',
+    },
+    {
+      token: 'roda',
+      background: 'linear-gradient(90deg,#ffda00 0 60%,#000 60% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'rosenborg',
+      background: 'linear-gradient(90deg,#fff 0 70%,#000 70% 100%)',
+      color: '#000',
+    },
+    { token: 'anderlecht', background: '#5e2d8a', color: '#fff' },
+    {
+      token: 'sampdoria',
+      background:
+        'linear-gradient(#0033a0 0 35%,#fff 35% 42%,#c00 42% 49%,#000 49% 56%,#fff 56% 63%,#0033a0 63% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'sao paulo',
+      background: 'linear-gradient(#fff 0 50%,#c00 50% 55%,#111 55% 60%,#fff 60% 100%)',
+      color: '#111',
+    },
+    {
+      token: 'excelsior',
+      background: 'repeating-linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'heerenveen',
+      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
+      color: '#c00',
+    },
+    { token: 'sevilla', background: '#fff', color: '#c00' },
+    {
+      token: 'sheffield united',
+      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
+      color: '#000',
+    },
+    {
+      token: 'siena',
+      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
+      color: '#000',
+    },
+    {
+      token: 'sparta rotterdam',
+      background: 'repeating-linear-gradient(90deg,#c00 0 33%,#fff 33% 66%)',
+      color: '#000',
+    },
+    {
+      token: 'sporting lisbon',
+      background: 'repeating-linear-gradient(90deg,#0b7d3c 0 33%,#fff 33% 66%)',
+      color: '#111',
+    },
+    {
+      token: 'stade rennais',
+      background: 'linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
+      color: '#fff',
+    },
+    { token: 'torino', background: '#6a1b4d', color: '#fff' },
+    {
+      token: 'tottenham',
+      background: 'linear-gradient(90deg,#fff 0 70%,#0a1445 70% 100%)',
+      color: '#ffda00',
+    },
+    { token: 'toulouse', background: '#7e57c2', color: '#fff' },
+    {
+      token: 'udinese',
+      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
+      color: '#000',
+    },
+    {
+      token: 'valencia',
+      background: 'linear-gradient(90deg,#fff 0 70%,#000 70% 100%)',
+      color: '#f58025',
+    },
+    { token: 'valenciennes', background: '#c00', color: '#fff' },
+    { token: 'villarreal', background: '#ffda00', color: '#0033a0' },
+    {
+      token: 'vitesse',
+      background:
+        'repeating-linear-gradient(90deg,#ffda00 0 50%,#000 50% 70%,#ffda00 70% 100%)',
+      color: '#000',
+    },
+    {
+      token: 'watford',
+      background: 'linear-gradient(90deg,#ffda00 0 60%,#000 60% 80%,#c00 80% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'west ham',
+      background: 'linear-gradient(90deg,#6a1b4d 0 70%,#7fbde9 70% 100%)',
+      color: '#fff',
+    },
+    {
+      token: 'wigan',
+      background: 'repeating-linear-gradient(90deg,#0033a0 0 50%,#fff 50% 100%)',
+      color: '#000',
+    },
+    {
+      token: 'willem ii',
+      background:
+        'repeating-linear-gradient(90deg,#c00 0 33%,#fff 33% 66%,#0033a0 66% 100%)',
+      color: '#000',
+    },
+    { token: 'sevilla f.c', background: '#fff', color: '#c00' },
+  ];
+
+  const match = patterns.find((p) => name.includes(p.token));
+  if (match) return { background: match.background, color: match.color };
+
+  // Selecciones conocidas (genéricas por país si no matchea club)
+  if (name.includes('argentina'))
+    return {
+      background: 'repeating-linear-gradient(90deg,#6ec6ff 0 33%,#fff 33% 66%)',
+      color: '#111',
+    };
+  if (name.includes('brasil') || name.includes('brazil'))
+    return {
+      background: 'linear-gradient(#f6c800 0 50%,#198a43 50% 100%)',
+      color: '#0b1a44',
+    };
+  if (name.includes('chile'))
+    return {
+      background: 'linear-gradient(135deg,#c00 0 60%,#0033a0 60% 100%)',
+      color: '#fff',
+    };
+  if (name.includes('alemania') || name.includes('germany'))
+    return { background: '#fff', color: '#000' };
+  if (name.includes('italia') || name.includes('italy'))
+    return { background: '#0b3b8c', color: '#fff' };
+  if (name.includes('francia') || name.includes('france'))
+    return { background: '#00205b', color: '#fff' };
+  if (name.includes('inglaterra') || name.includes('england'))
+    return { background: '#fff', color: '#0b1a44' };
+  if (name.includes('uruguay'))
+    return { background: 'linear-gradient(#7fbde9 0 70%,#000 70% 100%)', color: '#fff' };
+  if (name.includes('paraguay'))
+    return {
+      background: 'repeating-linear-gradient(90deg,#c00 0 33%,#fff 33% 66%)',
+      color: '#0033a0',
+    };
+  if (name.includes('peru'))
+    return {
+      background: 'linear-gradient(135deg,#fff 0 60%,#c00 60% 100%)',
+      color: '#111',
+    };
+  if (name.includes('portugal'))
+    return {
+      background: 'linear-gradient(90deg,#6a1b4d 0 70%,#0b7d3c 70% 100%)',
+      color: '#ffd700',
+    };
+  if (name.includes('colombia'))
+    return {
+      background: 'linear-gradient(90deg,#ffda00 0 50%,#0033a0 50% 100%)',
+      color: '#c00',
+    };
+  if (name.includes('mexico') || name.includes('méxico'))
+    return {
+      background: 'linear-gradient(90deg,#0b7d3c 0 60%,#fff 60% 100%)',
+      color: '#c00',
+    };
+
+  // Shop / Libre fallback
+  if (origin === 'shop') return { background: '#fff', color: '#111' };
+  if (origin === 'libre') return { background: '#111', color: '#f7f7f7' };
+
+  // Genérico
+  return { background: '#0f2238', color: '#f7f7f7' };
+}
+
+function resolveDorsal(player: DerivedPlayer): {
+  dorsal: string;
+  dorsalName: string;
+  origin: 'club' | 'seleccion' | 'clasica' | 'shop' | 'libre';
+} {
+  const clubDorsal = player.DORSAL;
+  const seleccionDorsal = player[
+    'DORSAL SELECCION'
+  ] as DerivedPlayer[keyof DerivedPlayer];
+  const clasicaDorsal = player['DORSAL CLASICO'] as DerivedPlayer[keyof DerivedPlayer];
+
+  const originClub = player.CLUB && String(player.CLUB).trim() !== '';
+  const originSel =
+    player[NATIONAL_SELECTION_FIELD] &&
+    String(player[NATIONAL_SELECTION_FIELD]).trim() !== '';
+  const originClasica =
+    player[CLASSIC_SELECTION_FIELD] &&
+    String(player[CLASSIC_SELECTION_FIELD]).trim() !== '';
+
+  let dorsalVal: DerivedPlayer[keyof DerivedPlayer] = undefined;
+  let origin: 'club' | 'seleccion' | 'clasica' | 'shop' | 'libre' = 'libre';
+
+  if (originClub) {
+    dorsalVal = clubDorsal;
+    origin = 'club';
+  } else if (originSel) {
+    dorsalVal = seleccionDorsal;
+    origin = 'seleccion';
+  } else if (originClasica) {
+    dorsalVal = clasicaDorsal;
+    origin = 'clasica';
+  }
+
+  const dorsal =
+    dorsalVal !== undefined && dorsalVal !== null && String(dorsalVal).trim() !== ''
+      ? String(dorsalVal)
+      : '';
+  const dorsalNameRaw = player.DORSAL_1 ?? '';
+  const dorsalName =
+    dorsalNameRaw !== null && dorsalNameRaw !== undefined
+      ? String(dorsalNameRaw).trim()
+      : '';
+
+  if (origin === 'libre' && dorsal === '') {
+    origin =
+      player.CLUB && String(player.CLUB).toLowerCase().includes('shop')
+        ? 'shop'
+        : 'libre';
+  }
+
+  return { dorsal, dorsalName, origin };
+}
 
 const MACRO_FIELDS: (keyof DerivedPlayer)[] = ['ATK', 'TEC', 'RES', 'DEF', 'FUE', 'VEL'];
 const CORE_STATS: Array<keyof DerivedPlayer> = [
@@ -76,7 +664,7 @@ export function PlayerProfile() {
     return (
       <section className="profile-shell">
         <p className="muted">
-          Usa la pestaña <strong>Buscador</strong> para seleccionar un jugador.
+          Usa la pestaña <strong>Buscador</strong> para selecciónar un jugador.
         </p>
       </section>
     );
@@ -86,6 +674,15 @@ export function PlayerProfile() {
   const flagPath = getFlagImagePath(player.NACIONALIDAD as string);
   const positions = getPlayerPositions(player);
   const promedioValue = ensureNumber(player.PROMEDIO);
+  const { dorsal, dorsalName, origin: shirtOrigin } = resolveDorsal(player);
+  const shirtStyle = getShirtStyle(
+    shirtOrigin,
+    player.CLUB as string,
+    player.NACIONALIDAD as string,
+  );
+  const dorsalDisplay = dorsal;
+  const dorsalNameDisplay =
+    dorsalName || (player.DORSAL_1 ? String(player.DORSAL_1) : '');
   const macroDataset = {
     id: String(player.ID),
     label: player.NOMBRE as string,
@@ -98,29 +695,54 @@ export function PlayerProfile() {
     <section className="profile-shell">
       <header className="profile-header">
         <div className="profile-identity">
-          <div className="photo-placeholder">IMG</div>
-          <div className="profile-name">
-            <h2>{player.NOMBRE}</h2>
-            <div className="profile-sub">
-              <span>{formatNationality(player.NACIONALIDAD as string)}</span>
-              <span>·</span>
-              <span>
-                {formatClub(player.CLUB as string, player.NACIONALIDAD as string)}
-              </span>
-              <span>· ID {player.ID}</span>
-            </div>
-            <div className="profile-tags">
-              <span className="chip gold">{promedioValue ?? '-'}</span>
-              {positions.length > 0 && (
-                <span className="chip primary-pos">{positions[0]}</span>
-              )}
-              <PositionBadges player={player} maxVisible={4} />
-            </div>
+          <div
+            className="profile-shirt"
+            data-shirt-origin={shirtOrigin}
+            style={
+              {
+                color: shirtStyle.color,
+                '--shirt-overlay': shirtStyle.background || '#0f2238',
+              } as React.CSSProperties
+            }
+          >
+            <div className="shirt-name">{dorsalNameDisplay}</div>
+            <div className="shirt-number">{dorsalDisplay}</div>
           </div>
+          <div className="profile-face"></div>
         </div>
-        <div className="profile-flags">
+
+        <div className="profile-club-flag">
           {clubShield && <img src={clubShield} alt="" className="club-shield" />}
           {flagPath && <img src={flagPath} alt="" className="flag" />}
+        </div>
+
+        <div className="profile-main-info">
+          <div className="profile-name">
+            <header>{player.NOMBRE}</header>
+            <div className="profile-sub muted">
+              <span>&lt;Nombre completo&gt;</span>
+            </div>
+          </div>
+
+          <div className="profile-main-data">
+            <span>{formatPlayerValue(player.EDAD, 0)} años</span>
+            <span>·</span>
+            <span>{formatPlayerValue(player.ALTURA, 0)} cm</span>
+            <span>·</span>
+            <span>{formatPlayerValue(player.PESO, 0)} kg</span>
+            <span>·</span>
+            <span>{formatSkinTone(player['SKIN COLOR'])} </span>
+          </div>
+
+          <div className="profile-main-row">
+            <div className="profile-rating">
+              <span className="profile-rating-value">{promedioValue ?? '-'}</span>
+              <span className="chip primary-pos">{positions[0] ?? '-'}</span>
+            </div>
+            <div className="profile-tags">
+              <PositionBadges player={player} maxVisible={3} />
+            </div>
+          </div>
         </div>
       </header>
 
@@ -265,7 +887,7 @@ function PlayerSkills({ player }: { player: DerivedPlayer }) {
     <div className="skills-grid">
       {activeSkills.map((skill) => (
         <span key={skill.field} className="skill-pill active">
-          ? {skill.label}
+          {skill.label}
         </span>
       ))}
     </div>
@@ -281,3 +903,5 @@ function isSkillActive(value: DerivedPlayer[keyof DerivedPlayer]): boolean {
     .replace(/[\u0300-\u036f]/g, '');
   return normalized === 'si' || normalized === '1' || normalized === 'true';
 }
+
+export default PlayerProfile;
