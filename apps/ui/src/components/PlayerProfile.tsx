@@ -1,6 +1,11 @@
-﻿import type { DerivedPlayer } from '@anfpes/engine';
+import type { DerivedPlayer } from '@anfpes/engine';
 import { RadarChart } from './RadarChart';
-import { PositionBadges, getPlayerPositions } from './PositionBadges';
+import {
+  PositionBadges,
+  getPlayerPositions,
+  getPositionLine,
+  getPositionFullName,
+} from './PositionBadges';
 import { PositionMap, getActivePositionCells } from './PositionMap';
 import { useCacheStore, useSelectedPlayer } from '../store/cacheStore';
 import { formatPlayerValue, ensureNumber } from '../utils/format';
@@ -13,8 +18,10 @@ import {
   getFieldLabel,
   SPECIAL_SKILL_FIELDS,
 } from '../utils/playerDisplay';
+import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { getStatColor } from '../types/table';
+import { getNationalityInfo } from '../data/nationalities';
 
 const NATIONAL_SELECTION_FIELD = 'nro selección' as keyof DerivedPlayer;
 const CLASSIC_SELECTION_FIELD = 'nro clasico' as keyof DerivedPlayer;
@@ -39,7 +46,7 @@ function aliasName(raw: string): string {
     { find: /\binter milan\b/, to: 'inter' },
     { find: /\bbarca\b/, to: 'barcelona' },
     { find: /\bdep la coruna\b|\bdeportivo\b/, to: 'deportivo' },
-    { find: /\bsaint etienne\b/, to: 'saint-étienne' },
+    { find: /\bsaint etienne\b/, to: 'saint-etienne' },
     { find: /\bnec nijmegen\b/, to: 'nec' },
     { find: /\bbetis\b/, to: 'betis' },
     { find: /\bnewcastle u\b/, to: 'newcastle' },
@@ -58,7 +65,7 @@ function getShirtStyle(
 ) {
   const name = aliasName(clubName || nationality || '');
 
-  // Paleta por clubes/selecciones (tokens de búsqueda en minúsculas)
+  // Paleta por clubes/selecciones (tokens de bÃºsqueda en minÃºsculas)
   const patterns: Array<{ token: string; background: string; color: string }> = [
     {
       token: 'milan',
@@ -96,7 +103,6 @@ function getShirtStyle(
       background: 'linear-gradient(135deg,#c00 0 50%,#fff 50% 100%)',
       color: '#111',
     },
-    { token: 'saint-étienne', background: '#0b7d3c', color: '#fefefe' },
     { token: 'saint-etienne', background: '#0b7d3c', color: '#fefefe' },
     {
       token: 'ascoli',
@@ -165,19 +171,24 @@ function getShirtStyle(
     { token: 'chievo', background: '#ffda00', color: '#0b3b8c' },
     {
       token: 'classic argentina',
-      background: 'repeating-linear-gradient(90deg,#6ec6ff 0 33%,#fff 33% 66%)',
+      background:
+        'linear-gradient( #fff 0% 4.5%, transparent 4.5% 100%),repeating-linear-gradient(90deg, transparent 0 23%, 	#6ec6ff 23% 27.5%, 	#FFF 27.5% 36.5%, 	#6ec6ff 36.5% 45.5%, 	#FFF 45.5% 54.5%, 	#6ec6ff 54.5% 63.5%, 	#FFF 63.5% 72.5%, 	#6ec6ff 72.5% 77%, 	transparent 77% 100%),linear-gradient(60deg, transparent 0 60%, #fff 60% 73%, #6ec6ff 73% 82%, #fff 82% 100%),linear-gradient(300deg, transparent 0 60%, #fff 60% 73%, #6ec6ff 73% 82%, #fff 82% 100%)',
       color: '#111',
     },
     {
       token: 'classic brazil',
-      background: 'linear-gradient(#f6c800 0 45%,#198a43 45% 55%,#f6c800 55% 100%)',
-      color: '#0b1a44',
+      background: 'linear-gradient( #198a43 0% 4.5%, #f6c800 4.5% 100%)',
+      color: '#198a43',
     },
     { token: 'classic england', background: '#fff', color: '#0b1a44' },
     { token: 'classic france', background: '#00205b', color: '#fff' },
     { token: 'classic germany', background: '#fff', color: '#000' },
     { token: 'classic italy', background: '#0b3b8c', color: '#fff' },
-    { token: 'classic netherlands', background: '#f58025', color: '#111' },
+    {
+      token: 'classic netherlands',
+      background: 'linear-gradient( #111 0% 4.5%, #f58025 4.5% 100%)',
+      color: '#111',
+    },
     {
       token: 'club brugge',
       background: 'repeating-linear-gradient(90deg,#0b3b8c 0 33%,#111 33% 66%)',
@@ -494,7 +505,7 @@ function getShirtStyle(
   const match = patterns.find((p) => name.includes(p.token));
   if (match) return { background: match.background, color: match.color };
 
-  // Selecciones conocidas (genéricas por país si no matchea club)
+  // Selecciones conocidas (genÃ©ricas por paÃ­s si no matchea club)
   if (name.includes('argentina'))
     return {
       background: 'repeating-linear-gradient(90deg,#6ec6ff 0 33%,#fff 33% 66%)',
@@ -540,7 +551,7 @@ function getShirtStyle(
       background: 'linear-gradient(90deg,#ffda00 0 50%,#0033a0 50% 100%)',
       color: '#c00',
     };
-  if (name.includes('mexico') || name.includes('méxico'))
+  if (name.includes('mexico') || name.includes('mÃ©xico'))
     return {
       background: 'linear-gradient(90deg,#0b7d3c 0 60%,#fff 60% 100%)',
       color: '#c00',
@@ -550,7 +561,7 @@ function getShirtStyle(
   if (origin === 'shop') return { background: '#fff', color: '#111' };
   if (origin === 'libre') return { background: '#111', color: '#f7f7f7' };
 
-  // Genérico
+  // GenÃ©rico
   return { background: '#0f2238', color: '#f7f7f7' };
 }
 
@@ -561,17 +572,27 @@ function resolveDorsal(player: DerivedPlayer): {
 } {
   const clubDorsal = player.DORSAL;
   const seleccionDorsal = player[
-    'DORSAL SELECCION'
+    NATIONAL_SELECTION_FIELD
   ] as DerivedPlayer[keyof DerivedPlayer];
-  const clasicaDorsal = player['DORSAL CLASICO'] as DerivedPlayer[keyof DerivedPlayer];
+  const clasicaDorsal = player[
+    CLASSIC_SELECTION_FIELD
+  ] as DerivedPlayer[keyof DerivedPlayer];
 
-  const originClub = player.CLUB && String(player.CLUB).trim() !== '';
+  const isValidDorsal = (v: DerivedPlayer[keyof DerivedPlayer]) => {
+    const num = Number(v);
+    return !Number.isNaN(num) && num >= 1;
+  };
+
+  const originClub =
+    player.CLUB && String(player.CLUB).trim() !== '' && isValidDorsal(clubDorsal);
   const originSel =
     player[NATIONAL_SELECTION_FIELD] &&
-    String(player[NATIONAL_SELECTION_FIELD]).trim() !== '';
+    String(player[NATIONAL_SELECTION_FIELD]).trim() !== '' &&
+    isValidDorsal(seleccionDorsal);
   const originClasica =
     player[CLASSIC_SELECTION_FIELD] &&
-    String(player[CLASSIC_SELECTION_FIELD]).trim() !== '';
+    String(player[CLASSIC_SELECTION_FIELD]).trim() !== '' &&
+    isValidDorsal(clasicaDorsal);
 
   let dorsalVal: DerivedPlayer[keyof DerivedPlayer] = undefined;
   let origin: 'club' | 'seleccion' | 'clasica' | 'shop' | 'libre' = 'libre';
@@ -637,6 +658,47 @@ const CORE_STATS: Array<keyof DerivedPlayer> = [
   'TRABAJO EN EQUIPO',
 ] as Array<keyof DerivedPlayer>;
 
+interface StatusBadge {
+  key: string;
+  label: string;
+  className: string;
+  title: string;
+}
+
+const STATUS_BADGES: StatusBadge[] = [
+  { key: 'national', label: '🌍', className: 'badge', title: 'Seleccionado Nacional' },
+  { key: 'legend', label: '★', className: 'badge legend', title: 'Jugador Leyenda' },
+  { key: 'ml', label: 'ML', className: 'badge ml', title: 'Jugador ML' },
+  {
+    key: 'anfpes',
+    label: 'ANFPES',
+    className: 'badge anfpes',
+    title: 'Afiliado a la ANFPES',
+  },
+];
+
+function getStatusBadges(player: DerivedPlayer): StatusBadge[] {
+  const selectionValue = formatSelectionDisplay(
+    player[NATIONAL_SELECTION_FIELD] as string,
+  );
+  const classicValue = formatSelectionDisplay(player['nro clasico'] as string);
+  const playerName = String(player.NOMBRE ?? '').trim();
+  const rawClub = String(player.CLUB ?? '').trim();
+
+  const hasNationalTeam = selectionValue !== 'No';
+  const isLegend = classicValue !== 'No' || LEGEND_PLAYERS.has(playerName);
+  const isMLPlayer = ML_PLAYERS.has(playerName);
+  const isAnfpes = ANFPES_CLUBS.has(rawClub);
+
+  return STATUS_BADGES.filter((badge) => {
+    if (badge.key === 'national') return hasNationalTeam;
+    if (badge.key === 'legend') return isLegend;
+    if (badge.key === 'ml') return isMLPlayer;
+    if (badge.key === 'anfpes') return isAnfpes;
+    return false;
+  });
+}
+
 export function PlayerProfile() {
   const player = useSelectedPlayer();
   const status = useCacheStore((state) => state.status);
@@ -664,7 +726,7 @@ export function PlayerProfile() {
     return (
       <section className="profile-shell">
         <p className="muted">
-          Usa la pestaña <strong>Buscador</strong> para selecciónar un jugador.
+          Usa la pestaña <strong>Buscador</strong> para seleccionar un jugador.
         </p>
       </section>
     );
@@ -672,8 +734,17 @@ export function PlayerProfile() {
 
   const clubShield = getClubShieldPath(player.CLUB as string);
   const flagPath = getFlagImagePath(player.NACIONALIDAD as string);
+  const nationalityInfo = getNationalityInfo(player.NACIONALIDAD as string);
+  const clubLabel = formatClub(player.CLUB as string, player.NACIONALIDAD as string);
   const positions = getPlayerPositions(player);
+  const primaryPosition = positions[0];
+  const badges = getStatusBadges(player);
   const promedioValue = ensureNumber(player.PROMEDIO);
+  const promedio = formatPlayerValue(promedioValue, 1);
+  const promedioColor =
+    promedioValue !== undefined ? (getStatColor(promedioValue) ?? '#ffd166') : '#ffd166';
+  const primaryLine = primaryPosition ? getPositionLine(primaryPosition) : undefined;
+
   const { dorsal, dorsalName, origin: shirtOrigin } = resolveDorsal(player);
   const shirtStyle = getShirtStyle(
     shirtOrigin,
@@ -711,17 +782,47 @@ export function PlayerProfile() {
           <div className="profile-face"></div>
         </div>
 
+        <div className="profile-average-position">
+          <div
+            className="player-average"
+            style={{ color: promedioColor }}
+            title={`Promedio principal: ${promedio}`}
+          >
+            {promedio}
+          </div>
+          {primaryPosition && (
+            <span
+              className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
+              title={`Posición Principal: ${getPositionFullName(primaryPosition)}`}
+            >
+              {primaryPosition}
+            </span>
+          )}
+        </div>
+
         <div className="profile-club-flag">
-          {clubShield && <img src={clubShield} alt="" className="club-shield" />}
-          {flagPath && <img src={flagPath} alt="" className="flag" />}
+          {clubShield && (
+            <img src={clubShield} title={clubLabel} alt="" className="club-shield" />
+          )}
+          {flagPath && (
+            <img src={flagPath} alt="" title={nationalityInfo?.name} className="flag" />
+          )}
         </div>
 
         <div className="profile-main-info">
           <div className="profile-name">
             <header>{player.NOMBRE}</header>
-            <div className="profile-sub muted">
-              <span>&lt;Nombre completo&gt;</span>
+            <div className="player-badges">
+              {badges.map((badge) => (
+                <span key={badge.key} className={badge.className} title={badge.title}>
+                  {badge.label}
+                </span>
+              ))}
             </div>
+          </div>
+
+          <div className="profile-sub muted">
+            <span>&lt;Nombre completo&gt;</span>
           </div>
 
           <div className="profile-main-data">
@@ -731,17 +832,7 @@ export function PlayerProfile() {
             <span>·</span>
             <span>{formatPlayerValue(player.PESO, 0)} kg</span>
             <span>·</span>
-            <span>{formatSkinTone(player['SKIN COLOR'])} </span>
-          </div>
-
-          <div className="profile-main-row">
-            <div className="profile-rating">
-              <span className="profile-rating-value">{promedioValue ?? '-'}</span>
-              <span className="chip primary-pos">{positions[0] ?? '-'}</span>
-            </div>
-            <div className="profile-tags">
-              <PositionBadges player={player} maxVisible={3} />
-            </div>
+            <span>Tono {formatSkinTone(player['SKIN COLOR'])} </span>
           </div>
         </div>
       </header>
@@ -756,7 +847,7 @@ export function PlayerProfile() {
             <InfoRow label="Pie" value={formatFoot(player.PIE as string)} />
             <InfoRow
               label="Lado Preferido"
-              value={formatFoot(player['LADO PREFERIDO'] as string)}
+              value={formatFoot(player['FAVOURED SIDE'] as string)}
             />
             <InfoRow
               label="Selección Nacional"
@@ -800,7 +891,7 @@ export function PlayerProfile() {
             </div>
             <div>
               <small>Condición Física</small>
-              <p>{formatPlayerValue(player['CONDICIÓN FÍSICA'], 0)}</p>
+              <p>{formatPlayerValue(player['CONDICIÓN FITNESS'], 0)}</p>
             </div>
           </div>
         </div>

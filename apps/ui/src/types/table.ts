@@ -73,8 +73,8 @@ export function getStatColor(value: number | string | null | undefined): string 
 
   // Rango 30-99
   if (rounded >= 10 && rounded <= 120) {
-    if (rounded >= 100) return '#d167dfff'; // Purpura más intenso
-    if (rounded >= 95) return '#ff4444'; // Rojo más intenso
+    if (rounded >= 100) return '#dc32f3ff'; // Purpura más intenso
+    if (rounded >= 95) return '#fc2626'; // Rojo más intenso
     if (rounded >= 90) return '#ff8800'; // Naranja intenso
     if (rounded >= 80) return '#ffdd00'; // Amarillo brillante
     if (rounded >= 75) return '#00ff00'; // Verde brillante
@@ -84,7 +84,7 @@ export function getStatColor(value: number | string | null | undefined): string 
 
   // Rango 1-8
   if (rounded >= 1 && rounded <= 8) {
-    if (rounded === 8) return '#ff4444'; // Rojo más intenso
+    if (rounded === 8) return '#fc2626'; // Rojo más intenso
     if (rounded === 7) return '#ff8800'; // Naranja intenso
     if (rounded === 6) return '#ffdd00'; // Amarillo brillante
     return null; // Sin color hasta 5
@@ -97,7 +97,7 @@ export function getInjuryColor(value: string | null | undefined): string | null 
   if (!value) return null;
 
   const upper = String(value).toUpperCase();
-  if (upper === 'A') return '#ff4444'; // Rojo más intenso
+  if (upper === 'A') return '#fc2626'; // Rojo más intenso
   if (upper === 'B') return '#e9b407'; // Amarillo
   // C sin color
   return null;
