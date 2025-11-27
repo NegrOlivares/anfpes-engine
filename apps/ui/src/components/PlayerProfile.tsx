@@ -186,7 +186,7 @@ function getShirtStyle(
     { token: 'classic italy', background: '#0b3b8c', color: '#fff' },
     {
       token: 'classic netherlands',
-      background: 'linear-gradient( #111 0% 4.5%, #f58025 4.5% 100%)',
+      background: 'linear-gradient( #111 -5% 4.5%, #f58025 4.5% 100%)',
       color: '#111',
     },
     {
@@ -766,47 +766,22 @@ export function PlayerProfile() {
     <section className="profile-shell">
       <header className="profile-header">
         <div className="profile-identity">
-          <div
-            className="profile-shirt"
-            data-shirt-origin={shirtOrigin}
-            style={
-              {
-                color: shirtStyle.color,
-                '--shirt-overlay': shirtStyle.background || '#0f2238',
-              } as React.CSSProperties
-            }
-          >
-            <div className="shirt-name">{dorsalNameDisplay}</div>
-            <div className="shirt-number">{dorsalDisplay}</div>
+          <div className="contenedor-borde">
+            <div
+              className="profile-shirt"
+              data-shirt-origin={shirtOrigin}
+              style={
+                {
+                  color: shirtStyle.color,
+                  '--shirt-overlay': shirtStyle.background || '#0f2238',
+                } as React.CSSProperties
+              }
+            >
+              <div className="shirt-name">{dorsalNameDisplay}</div>
+              <div className="shirt-number">{dorsalDisplay}</div>
+            </div>
           </div>
           <div className="profile-face"></div>
-        </div>
-
-        <div className="profile-average-position">
-          <div
-            className="player-average"
-            style={{ color: promedioColor }}
-            title={`Promedio principal: ${promedio}`}
-          >
-            {promedio}
-          </div>
-          {primaryPosition && (
-            <span
-              className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
-              title={`Posición Principal: ${getPositionFullName(primaryPosition)}`}
-            >
-              {primaryPosition}
-            </span>
-          )}
-        </div>
-
-        <div className="profile-club-flag">
-          {clubShield && (
-            <img src={clubShield} title={clubLabel} alt="" className="club-shield" />
-          )}
-          {flagPath && (
-            <img src={flagPath} alt="" title={nationalityInfo?.name} className="flag" />
-          )}
         </div>
 
         <div className="profile-main-info">
@@ -835,6 +810,34 @@ export function PlayerProfile() {
             <span>Tono {formatSkinTone(player['SKIN COLOR'])} </span>
           </div>
         </div>
+
+        <div className="profile-average-position">
+          <div
+            className="player-average"
+            style={{ color: promedioColor }}
+            title={`Promedio principal: ${promedio}`}
+          >
+            {promedio}
+          </div>
+          {primaryPosition && (
+            <span
+              className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
+              title={`Posición Principal: ${getPositionFullName(primaryPosition)}`}
+            >
+              {primaryPosition}
+            </span>
+          )}
+        </div>
+
+        <div className="profile-club-flag">
+          {clubShield && (
+            <img src={clubShield} title={clubLabel} alt="" className="club-shield" />
+          )}
+          {flagPath && (
+            <img src={flagPath} alt="" title={nationalityInfo?.name} className="flag" />
+          )}
+        </div>
+        <div className="profile-foot"></div>
       </header>
 
       <div className="profile-grid three-cols">
