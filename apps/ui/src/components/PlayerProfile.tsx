@@ -87,7 +87,12 @@ function getShirtStyle(
       background: 'linear-gradient(135deg,#fff 0 46%,#d00000 46% 54%,#fff 54% 100%)',
       color: '#111',
     },
-    { token: 'real madrid', background: '#f7f7f7', color: '#5b2ba8' },
+    {
+      token: 'real madrid',
+      background:
+        'linear-gradient( #5b2ba8 0 4.5%, transparent 4.5% 100%), linear-gradient(#f7f7f7)',
+      color: '#5b2ba8',
+    },
     {
       token: 'ajax',
       background: 'linear-gradient(90deg,#fff 0 35%,#c00 35% 65%,#fff 65% 100%)',
