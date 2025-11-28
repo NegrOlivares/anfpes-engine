@@ -87,6 +87,7 @@ export function getStatColor(value: number | string | null | undefined): string 
     if (rounded === 8) return '#fc2626'; // Rojo más intenso
     if (rounded === 7) return '#ff8800'; // Naranja intenso
     if (rounded === 6) return '#ffdd00'; // Amarillo brillante
+    if (rounded <= 5) return '#ffffffff'; // Blanco
     return null; // Sin color hasta 5
   }
 

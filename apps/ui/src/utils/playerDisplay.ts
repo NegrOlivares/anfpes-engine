@@ -39,6 +39,10 @@ const FIELD_LABEL_OVERRIDES: Record<string, string> = {
   'JUEGO AEREO': 'Juego Aéreo',
   'HAB REGATE': 'Habilidad de Regate',
   'CAP MANDO': 'Capacidad de Mando',
+  PIE: 'Pie Hábil',
+  ALETISMO: 'Atletismo',
+  REACCION: 'Reacción',
+
   PROMEDIO: 'Promedio Principal',
   PT: 'Promedio PT',
   LIB: 'Promedio LIB',

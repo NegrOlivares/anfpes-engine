@@ -961,7 +961,7 @@ tbody tr:hover {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 4rem;
   background: rgba(5, 9, 15, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.75rem;
@@ -971,7 +971,7 @@ tbody tr:hover {
 }
 
 .columns-menu h4 {
-  margin: 0 0 0.5rem 0;
+  margin: -3rem 0 0.5rem 0;
   font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.9);
 }
@@ -3446,8 +3446,9 @@ tbody tr:hover {
 .profile-shell {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .profile-header {
@@ -3459,11 +3460,11 @@ tbody tr:hover {
   padding: 0.75rem 1rem;
   position: relative;
   background:
-  radial-gradient(110% 70% at 0% 30%, color-mix(in srgb, #0f2238 55%, #ffffff 10%) 0%, transparent 100%),
-    radial-gradient(240% 20% at 100% 20%, color-mix(in srgb, #0f2238 55%, #111111 10%) 0%, transparent 85%),
+  radial-gradient(110% 40% at 0% 30%, color-mix(in srgb, #0f2238 55%, #ffffff 10%) 0%, transparent 100%),
+    radial-gradient(240% 20% at 100% 20%, color-mix(in srgb, #0f2238 55%, #3f3f41 10%) 0%, transparent 85%),
       linear-gradient(
       rgba(0, 0, 0, 0.35),   /* aquí controlas qué tan oscuro */
-      rgba(0, 0, 0, 0.35)
+      rgba(29, 30, 39, 0.226)
     )
 }
 
@@ -3483,6 +3484,7 @@ tbody tr:hover {
   mask-repeat: no-repeat;
   mask-size: cover;
   background-color: #0000006c;
+  filter: drop-shadow(0 0 12px #ffffff50);
   padding: 1.5px;
   width: 182.4px;
   height: 142.5px;
@@ -3599,6 +3601,40 @@ tbody tr:hover {
   height: 66.71px;
 }
 
+.profile-foot {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  position: relative;
+  margin-left: 1rem;
+}
+
+.profile-foot-left {
+  background-color: #157715;
+  width: 28px;
+  height: 85px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot2.svg);
+  -webkit-mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot2.svg);
+  mask-repeat: no-repeat;
+  mask-size: cover;
+}
+
+.profile-foot-right {
+  background-color: #00c400;
+  width: 28px;
+  height: 85px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot.svg);
+  -webkit-mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot.svg);
+  mask-repeat: no-repeat;
+  mask-size: cover;
+}
+
 .profile-main-info {
   display: flex;
   flex-direction: column;
@@ -3662,22 +3698,35 @@ tbody tr:hover {
 
 .profile-grid.three-cols {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: 280px 440PX 220px 350px 1fr;
 }
 
 .profile-panel {
-  background: rgba(12, 17, 25, 0.8);
-  border: 1px solid rgba(122, 201, 255, 0.12);
-  border-radius: 1rem;
-  padding: 0.75rem 0.9rem;
+  padding: 0 0.35rem;
 }
 
 .profile-panel h3 {
-  margin: 0 0 0.55rem;
+  margin: 0 0 0.5rem;
   font-size: 0.95rem;
   letter-spacing: 0.06rem;
+  text-align: center;
   color: rgba(255, 255, 255, 0.65);
+}
+
+.profile-panel .position-map {
+  margin-top: auto;
+  border: 0;
+  border-radius: 0.75rem;
+  background: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-panel .position-map-header h4 {
+  display: none;
+  color: transparent;
 }
 
 .profile-info-grid {
@@ -3712,21 +3761,22 @@ tbody tr:hover {
 .profile-panel.tall {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2.5rem;
 }
 
 .profile-radar-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
-  align-items: center;
+  scale: 1.7;
+  margin-top: 0.95rem;
 }
 
-.profile-positions-compact h4 {
-  margin: 0 0 0.35rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.75);
+.profile-radar-row .radar-chart .radar-dataset { 
+  stroke:rgb(255, 191, 0)!important;
+  fill: rgb(255, 191, 0)!important;
+fill-opacity: 0.16!important
+}
+
+.profile-radar-row .radar-chart .radar-point { 
+  fill: rgb(255, 191, 0)!important;
 }
 
 .profile-panel.full {
@@ -3741,32 +3791,36 @@ tbody tr:hover {
 
 .profile-stats-grid.compact {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.25rem 0.5rem;
+  /* En vez de columnas fijas, definimos 3 FILAS */
+  grid-template-rows: repeat(13, auto);
+  /* Que vaya llenando por columnas */
+  grid-auto-flow: column;
+  /* Todas las columnas que se vayan creando tendrán el mismo ancho */
+  grid-auto-columns: minmax(0, 1fr);
+
 }
+
 
 .stat-block.row.compact {
   display: grid;
-  grid-template-columns: 1.2fr 1.8fr auto;
+  grid-template-columns: 1.2fr 0.1fr;
   align-items: center;
   gap: 0.35rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0.5rem;
-  padding: 0.35rem 0.45rem;
+  padding: 0.05rem 0.45rem;
   font-size: 0.82rem;
 }
 
-.stat-bar.compact {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 999px;
-  overflow: hidden;
+.stat-block.row.compact .stat-label {
+  font-weight: 600;
+  width: 10rem;
+  color: #e7ecf5;
 }
 
-.stat-bar-fill {
-  height: 100%;
-  border-radius: 999px;
+.stat-block.row.compact .stat-value {
+  font-weight: 600;
 }
 
 .skills-grid {

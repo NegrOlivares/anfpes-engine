@@ -17,10 +17,11 @@ import {
   formatSkinTone,
   getFieldLabel,
   SPECIAL_SKILL_FIELDS,
+  getFieldDisplayValue,
 } from '../utils/playerDisplay';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
-import { getStatColor } from '../types/table';
+import { getStatColor, getInjuryColor } from '../types/table';
 import { getNationalityInfo } from '../data/nationalities';
 
 const NATIONAL_SELECTION_FIELD = 'nro selección' as keyof DerivedPlayer;
@@ -566,8 +567,54 @@ function getShirtStyle(
   if (origin === 'shop') return { background: '#fff', color: '#111' };
   if (origin === 'libre') return { background: '#111', color: '#f7f7f7' };
 
-  // GenÃ©rico
+  // Genérico
   return { background: '#0f2238', color: '#f7f7f7' };
+}
+
+function getFootColor(player: DerivedPlayer, side: 'left' | 'right'): string {
+  const strongFoot = String(player.PIE ?? '')
+    .trim()
+    .toUpperCase();
+  const weakAcc = ensureNumber(player['PRECICIÓN PIE MALO']);
+
+  // Paleta base
+  const BRIGHT_GREEN = '#1dc40eff'; // verde brillante
+  const DULL_GREEN = '#0d5811ff'; // verde opaco
+  const YELLOW = '#e0ae07ff';
+  const ORANGE = '#cc7a00ff';
+  const RED = '#972922ff';
+  const NEUTRAL = '#555555';
+
+  // Si no hay pie declarado, devolvemos neutro
+  if (!strongFoot) return NEUTRAL;
+
+  // Ambos pies fuertes => ambos verdes brillantes
+  if (strongFoot === 'B') return BRIGHT_GREEN;
+
+  // Pie fuerte por lado
+  if (side === 'left' && strongFoot === 'L') return BRIGHT_GREEN;
+  if (side === 'right' && strongFoot === 'R') return BRIGHT_GREEN;
+
+  // Desde aquí, estamos mirando el pie "débil" para ese lado
+  if (weakAcc === undefined || weakAcc === null) return NEUTRAL;
+
+  if (weakAcc >= 8) return BRIGHT_GREEN; // 8
+  if (weakAcc === 7) return DULL_GREEN; // 7
+  if (weakAcc === 5 || weakAcc === 6) return YELLOW; // 5–6
+  if (weakAcc === 3 || weakAcc === 4) return ORANGE; // 3–4
+  if (weakAcc >= 1 && weakAcc <= 2) return RED; // 1–2
+
+  return NEUTRAL;
+}
+
+function getFootStyle(
+  player: DerivedPlayer,
+  side: 'left' | 'right',
+): React.CSSProperties {
+  const color = getFootColor(player, side);
+  return {
+    background: color,
+  };
 }
 
 function resolveDorsal(player: DerivedPlayer): {
@@ -641,7 +688,7 @@ const CORE_STATS: Array<keyof DerivedPlayer> = [
   'RESISTENCIA',
   'VELOCIDAD MÁXIMA',
   'ACELERACIÓN',
-  'RESPUESTA',
+  'REPUESTA',
   'AGILIDAD',
   'PRECISIÓN DRIBBLE',
   'VELOCIDAD DRIBBLE',
@@ -661,6 +708,22 @@ const CORE_STATS: Array<keyof DerivedPlayer> = [
   'MENTALIDAD',
   'ARQUERO',
   'TRABAJO EN EQUIPO',
+] as Array<keyof DerivedPlayer>;
+
+const CONDITION_STATS: Array<keyof DerivedPlayer> = [
+  'DESTREZA ATAQUE',
+  'FINIQUITO',
+  'DESTREZA DEFENSA',
+  'RECUPERACION DE BALÓN',
+  'PROMEDIO AGILIDADES',
+  'EXPLOSIVIDAD',
+  'POTENCIA DE PATADA',
+  'JUEGO AEREO',
+  'ALETISMO',
+  'CREATIVIDAD',
+  'TOLERANCIA LESIONES',
+  'CONSISTENCIA',
+  'CONDICIÓN FITNESS',
 ] as Array<keyof DerivedPlayer>;
 
 interface StatusBadge {
@@ -842,70 +905,79 @@ export function PlayerProfile() {
             <img src={flagPath} alt="" title={nationalityInfo?.name} className="flag" />
           )}
         </div>
-        <div className="profile-foot"></div>
+        <div className="profile-foot">
+          <div className="profile-foot-left" style={getFootStyle(player, 'left')} />
+          <div className="profile-foot-right" style={getFootStyle(player, 'right')} />
+        </div>
       </header>
 
       <div className="profile-grid three-cols">
         <div className="profile-panel">
-          <h3>Bio</h3>
-          <div className="profile-info-grid">
-            <InfoRow label="Altura" value={`${formatPlayerValue(player.ALTURA, 0)} cm`} />
-            <InfoRow label="Peso" value={`${formatPlayerValue(player.PESO, 0)} kg`} />
-            <InfoRow label="Edad" value={formatPlayerValue(player.EDAD, 0)} />
-            <InfoRow label="Pie" value={formatFoot(player.PIE as string)} />
-            <InfoRow
-              label="Lado Preferido"
-              value={formatFoot(player['FAVOURED SIDE'] as string)}
-            />
-            <InfoRow
-              label="Selección Nacional"
-              value={formatSelectionDisplay(player[NATIONAL_SELECTION_FIELD] as string)}
-            />
-            <InfoRow
-              label="Selección Clásica"
-              value={formatSelectionDisplay(player[CLASSIC_SELECTION_FIELD] as string)}
-            />
-            <InfoRow label="Tono de Piel" value={formatSkinTone(player['SKIN COLOR'])} />
-            <InfoRow label="Número Dorsal" value={formatPlayerValue(player.DORSAL, 0)} />
-            <InfoRow
-              label="Nombre Dorsal"
-              value={formatPlayerValue(player.DORSAL_1, 0)}
-            />
-          </div>
+          <h3>POSICIONES</h3>
+          <PositionMap
+            player={player}
+            activeCells={getActivePositionCells(player)}
+            primaryPosition={positions[0]}
+          />
         </div>
 
         <div className="profile-panel">
-          <h3>Resumen</h3>
-          <div className="profile-summary">
-            <div>
-              <small>Promedio Principal</small>
-              <p className="big">{formatPlayerValue(player.PROMEDIO, 1)}</p>
-            </div>
-            <div>
-              <small>Posición Principal</small>
-              <p className="big">{positions[0] ?? '-'}</p>
-            </div>
-            <div>
-              <small>Club</small>
-              <p>{formatClub(player.CLUB as string, player.NACIONALIDAD as string)}</p>
-            </div>
-            <div>
-              <small>Tolerancia Lesiones</small>
-              <p>{player['TOLERANCIA LESIONES'] ?? '-'}</p>
-            </div>
-            <div>
-              <small>Consistencia</small>
-              <p>{formatPlayerValue(player['CONSISTENCIA'], 0)}</p>
-            </div>
-            <div>
-              <small>Condición Física</small>
-              <p>{formatPlayerValue(player['CONDICIÓN FITNESS'], 0)}</p>
-            </div>
+          <h3>STATS</h3>
+          <div className="profile-stats-grid compact">
+            {CORE_STATS.map((field) => {
+              const value = ensureNumber(player[field]) ?? 0;
+              const color = getStatColor(value) ?? '#7ac9ff';
+              return (
+                <div key={field as string} className="stat-block row compact">
+                  <span className="stat-label">{getFieldLabel(field as string)}</span>
+                  <span className="stat-value" style={{ color }}>
+                    {formatPlayerValue(value, 0)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="profile-panel">
+          <h3>MÉTRICAS</h3>
+          <div className="profile-metric-grid compact">
+            {CONDITION_STATS.map((field) => {
+              const rawValue = player[field];
+              const displayValue = getFieldDisplayValue(field as string, player);
+
+              // Caso especial: TOLERANCIA LESIONES (usa letras A/B/C y color propio)
+              if (field === 'TOLERANCIA LESIONES') {
+                const injuryCode = String(rawValue ?? '').trim();
+                const color = getInjuryColor(injuryCode) ?? '#7ac9ff';
+
+                return (
+                  <div key={field as string} className="stat-block row compact">
+                    <span className="stat-label">{getFieldLabel(field as string)}</span>
+                    <span className="stat-value" style={{ color }}>
+                      {displayValue}
+                    </span>
+                  </div>
+                );
+              }
+
+              // Resto de stats: siguen siendo numéricos
+              const value = ensureNumber(rawValue) ?? 0;
+              const color = getStatColor(value) ?? '#7ac9ff';
+
+              return (
+                <div key={field as string} className="stat-block row compact">
+                  <span className="stat-label">{getFieldLabel(field as string)}</span>
+                  <span className="stat-value" style={{ color }}>
+                    {formatPlayerValue(value, 0)}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         <div className="profile-panel tall">
-          <h3>Radar & Posiciones</h3>
+          <h3>RADAR</h3>
           <div className="profile-radar-row">
             <RadarChart
               labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
@@ -913,39 +985,54 @@ export function PlayerProfile() {
               size={220}
               showLegend={false}
             />
-            <div className="profile-positions-compact">
-              <h4>Posiciones</h4>
-              <PositionBadges player={player} maxVisible={6} />
-              <PositionMap
-                player={player}
-                activeCells={getActivePositionCells(player)}
-                primaryPosition={positions[0]}
-              />
-            </div>
           </div>
         </div>
       </div>
 
       <div className="profile-panel full stats-card">
-        <h3>Stats</h3>
-        <div className="profile-stats-grid compact">
-          {CORE_STATS.map((field) => {
-            const value = ensureNumber(player[field]) ?? 0;
-            const color = getStatColor(value) ?? '#7ac9ff';
-            const width = Math.max(0, Math.min(100, (value / 99) * 100));
-            return (
-              <div key={field as string} className="stat-block row compact">
-                <span className="stat-label">{getFieldLabel(field as string)}</span>
-                <div className="stat-bar compact">
-                  <div
-                    className="stat-bar-fill"
-                    style={{ width: `${width}%`, background: color }}
-                  />
-                </div>
-                <span className="stat-value">{formatPlayerValue(value, 0)}</span>
-              </div>
-            );
-          })}
+        <h3>Resumen</h3>
+        <div className="profile-summary">
+          <div>
+            <small>Promedio Principal</small>
+            <p>{formatPlayerValue(player.PROMEDIO, 1)}</p>
+          </div>
+          <div>
+            <small>Posición Principal</small>
+            <p>{positions[0] ?? '-'}</p>
+          </div>
+          <div>
+            <small>Club</small>
+            <p>{formatClub(player.CLUB as string, player.NACIONALIDAD as string)}</p>
+          </div>
+          <div>
+            <small>Tolerancia Lesiones</small>
+            <p>{player['TOLERANCIA LESIONES'] ?? '-'}</p>
+          </div>
+          <div>
+            <small>Consistencia</small>
+            <p>{formatPlayerValue(player['CONSISTENCIA'], 0)}</p>
+          </div>
+          <div>
+            <small>Condición Física</small>
+            <p>{formatPlayerValue(player['CONDICIÓN FITNESS'], 0)}</p>
+          </div>
+          <div>
+            <small>Pie</small>
+            <p>{formatFoot(player.PIE as string)}</p>
+          </div>
+          <div>
+            <small>Lado Preferido</small>
+            <p>{formatFoot(player['FAVOURED SIDE'] as string)}</p>
+          </div>
+
+          <div>
+            <small>Precisión de Pie Malo</small>
+            <p>{formatPlayerValue(player['PRECICIÓN PIE MALO'], 0)}</p>
+          </div>
+          <div>
+            <small>Frecuencia de Pie Malo</small>
+            <p>{formatPlayerValue(player['FRECUENCIA PIE MALO'], 0)}</p>
+          </div>
         </div>
         <h4>Habilidades Especiales</h4>
         <PlayerSkills player={player} />
