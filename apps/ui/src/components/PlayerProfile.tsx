@@ -617,6 +617,41 @@ function getFootStyle(
   };
 }
 
+function getFootTitle(player: DerivedPlayer, side: 'left' | 'right'): string {
+  const strongFoot = String(player.PIE ?? '')
+    .trim()
+    .toUpperCase();
+  const weakAcc = ensureNumber(player['PRECICIÓN PIE MALO']);
+  const weakFreq = ensureNumber(player['FRECUENCIA PIE MALO']);
+  const sideName = side === 'left' ? 'Izquierdo' : 'Derecho';
+
+  if (!strongFoot) return `Pie ${sideName}`;
+
+  const isBoth = strongFoot === 'B';
+  const isStrongSide =
+    isBoth ||
+    (side === 'left' && strongFoot === 'L') ||
+    (side === 'right' && strongFoot === 'R');
+
+  // Caso pie hábil
+  if (isStrongSide) {
+    const label = isBoth ? 'Ambidiestro' : sideName;
+    return `Pie Hábil: ${label}`;
+  }
+
+  // Caso pie torpe: queremos precisión + frecuencia
+  const accPart =
+    weakAcc != null && !Number.isNaN(weakAcc)
+      ? `Precisión de Pie Torpe: ${weakAcc}`
+      : 'Precisión de Pie Torpe: -';
+
+  const freqPart =
+    weakFreq != null && !Number.isNaN(weakFreq)
+      ? `Frecuencia de Pie Torpe: ${weakFreq}`
+      : 'Frecuencia de Pie Torpe: -';
+
+  return `${accPart} · ${freqPart}`;
+}
 function resolveDorsal(player: DerivedPlayer): {
   dorsal: string;
   dorsalName: string;
@@ -715,7 +750,7 @@ const CONDITION_STATS: Array<keyof DerivedPlayer> = [
   'FINIQUITO',
   'DESTREZA DEFENSA',
   'RECUPERACION DE BALÓN',
-  'PROMEDIO AGILIDADES',
+  'VELOCIDAD',
   'EXPLOSIVIDAD',
   'POTENCIA DE PATADA',
   'JUEGO AEREO',
@@ -906,19 +941,30 @@ export function PlayerProfile() {
           )}
         </div>
         <div className="profile-foot">
-          <div className="profile-foot-left" style={getFootStyle(player, 'left')} />
-          <div className="profile-foot-right" style={getFootStyle(player, 'right')} />
+          <div
+            className="profile-foot-left"
+            title={getFootTitle(player, 'left')}
+            style={getFootStyle(player, 'left')}
+          />
+          <div
+            className="profile-foot-right"
+            title={getFootTitle(player, 'right')}
+            style={getFootStyle(player, 'right')}
+          />
         </div>
       </header>
 
       <div className="profile-grid three-cols">
-        <div className="profile-panel">
-          <h3>POSICIONES</h3>
-          <PositionMap
-            player={player}
-            activeCells={getActivePositionCells(player)}
-            primaryPosition={positions[0]}
-          />
+        <div className="profile-panel tall">
+          <h3>RADAR</h3>
+          <div className="profile-radar-row">
+            <RadarChart
+              labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
+              datasets={[macroDataset]}
+              size={220}
+              showLegend={false}
+            />
+          </div>
         </div>
 
         <div className="profile-panel">
@@ -976,82 +1022,26 @@ export function PlayerProfile() {
           </div>
         </div>
 
-        <div className="profile-panel tall">
-          <h3>RADAR</h3>
-          <div className="profile-radar-row">
-            <RadarChart
-              labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
-              datasets={[macroDataset]}
-              size={220}
-              showLegend={false}
-            />
-          </div>
+        <div className="profile-panel">
+          <h3>POSICIONES</h3>
+          <PositionMap
+            player={player}
+            activeCells={getActivePositionCells(player)}
+            primaryPosition={positions[0]}
+          />
         </div>
       </div>
 
       <div className="profile-panel full stats-card">
-        <h3>Resumen</h3>
-        <div className="profile-summary">
-          <div>
-            <small>Promedio Principal</small>
-            <p>{formatPlayerValue(player.PROMEDIO, 1)}</p>
-          </div>
-          <div>
-            <small>Posición Principal</small>
-            <p>{positions[0] ?? '-'}</p>
-          </div>
-          <div>
-            <small>Club</small>
-            <p>{formatClub(player.CLUB as string, player.NACIONALIDAD as string)}</p>
-          </div>
-          <div>
-            <small>Tolerancia Lesiones</small>
-            <p>{player['TOLERANCIA LESIONES'] ?? '-'}</p>
-          </div>
-          <div>
-            <small>Consistencia</small>
-            <p>{formatPlayerValue(player['CONSISTENCIA'], 0)}</p>
-          </div>
-          <div>
-            <small>Condición Física</small>
-            <p>{formatPlayerValue(player['CONDICIÓN FITNESS'], 0)}</p>
-          </div>
-          <div>
-            <small>Pie</small>
-            <p>{formatFoot(player.PIE as string)}</p>
-          </div>
-          <div>
-            <small>Lado Preferido</small>
-            <p>{formatFoot(player['FAVOURED SIDE'] as string)}</p>
-          </div>
-
-          <div>
-            <small>Precisión de Pie Malo</small>
-            <p>{formatPlayerValue(player['PRECICIÓN PIE MALO'], 0)}</p>
-          </div>
-          <div>
-            <small>Frecuencia de Pie Malo</small>
-            <p>{formatPlayerValue(player['FRECUENCIA PIE MALO'], 0)}</p>
-          </div>
+        <div className="profile-special-skills">
+          <h3>HABILIDADES ESPECIALES</h3>
+          <PlayerSkills player={player} />
         </div>
-        <h4>Habilidades Especiales</h4>
-        <PlayerSkills player={player} />
+        <div className="profile-stadistics">
+          <h3>HISTORIAL ESTADÍSTICO</h3>
+        </div>
       </div>
     </section>
-  );
-}
-
-interface InfoRowProps {
-  label: string;
-  value: string;
-}
-
-function InfoRow({ label, value }: InfoRowProps) {
-  return (
-    <div className="info-row">
-      <span className="muted">{label}</span>
-      <span className="strong">{value}</span>
-    </div>
   );
 }
 
@@ -1060,7 +1050,7 @@ function PlayerSkills({ player }: { player: DerivedPlayer }) {
     const value = player[field as keyof DerivedPlayer];
     return {
       field,
-      label: getFieldLabel(field),
+      label: '★ ' + getFieldLabel(field),
       active: isSkillActive(value),
     };
   });

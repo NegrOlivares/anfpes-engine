@@ -5,6 +5,12 @@
   font-style: normal;
 }
 @font-face {
+  font-family: 'RubberNippleFactoryBlack';
+  src: url('./assets/RubberNippleFactoryBlack.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
   font-family: 'GreatLakesNF';
   src: url('./assets/GreatLakesNF.ttf') format('truetype');
   font-weight: 500;
@@ -3449,15 +3455,16 @@ tbody tr:hover {
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  background: radial-gradient(circle at bottom, #1d273a, #090b10 65%);
 }
 
 .profile-header {
   display: grid;
-  grid-template-columns: 240px 450px 220px 220px 200px 1fr;
-  gap: 0.05rem;
+  grid-template-columns: 15.5vw auto auto auto auto 1fr;
+  gap: 0.15rem;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 0.01rem 0.3em;
   position: relative;
   background:
   radial-gradient(110% 40% at 0% 30%, color-mix(in srgb, #0f2238 55%, #ffffff 10%) 0%, transparent 100%),
@@ -3486,8 +3493,8 @@ tbody tr:hover {
   background-color: #0000006c;
   filter: drop-shadow(0 0 12px #ffffff50);
   padding: 1.5px;
-  width: 182.4px;
-  height: 142.5px;
+  width: 11.2298682284041vw ;
+  height: 8.78477306002928vw ;
   display:flex;
   align-items: center;
   justify-content: center;
@@ -3514,7 +3521,7 @@ tbody tr:hover {
 .shirt-number {
   position: relative;
   text-align: center;
-  font-size: 70px;
+  font-size: 60px;
   font-family: 'SoccerLeague', system-ui, sans-serif;
   line-height: 1.25;
   transform: scaleY(1.35);      /* 1.5 = 50% más alto */
@@ -3525,14 +3532,13 @@ tbody tr:hover {
 .shirt-name {
   position: relative;
   text-align: center;
-  font-size: 14px;
-  font-weight: 550;
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  transform: scaleY(1.3);      /* 1.5 = 50% más alto */
-  letter-spacing: -0.02rem;
-  margin-top: -6px;
-  -webkit-text-stroke: 0.3px #111111b9;
+  font-size: 8.5px;
+  font-family: 'RubberNippleFactoryBlack', system-ui, sans-serif;
+  transform: scaleY(1.4);      /* 1.5 = 50% más alto */
+  letter-spacing: 0.03em;
+  -webkit-text-stroke: 0.7px #11111196;
 }
+
 
 .profile-face {
   width: 90px;
@@ -3545,15 +3551,16 @@ tbody tr:hover {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.44);
   border: 1px solid rgba(255, 255, 255, 0.08);
   position: absolute;
-  top: 53px;               /* decides cuánto se desplaza */
-  left: 130px;
+  top: 28px;               /* decides cuánto se desplaza */
+  left: 108px;
   z-index: 2;              /* encima de A */
 }
 .profile-average-position{
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5vw;
+  margin-left: 1.5vw;
 }
 .profile-average-position .player-average {
   display: inline-flex;  /* que se ajuste al contenido */
@@ -3586,9 +3593,10 @@ tbody tr:hover {
 
 .profile-club-flag {
   display: flex;
-  gap: 1rem;
+  gap: 1.5vw;
   align-items: center;
   justify-content: center;
+  margin-left: 1.5vw;
 }
 
 .profile-club-flag .club-shield {
@@ -3606,7 +3614,7 @@ tbody tr:hover {
   gap: 1rem;
   align-items: center;
   position: relative;
-  margin-left: 1rem;
+  margin-left: 1.5vw;
 }
 
 .profile-foot-left {
@@ -3698,11 +3706,12 @@ tbody tr:hover {
 
 .profile-grid.three-cols {
   display: grid;
-  grid-template-columns: 280px 440PX 220px 350px 1fr;
+  grid-template-columns: 25.6vw 	34.4vw 	17.2vw 	21.7vw  1fr;
+  margin-top: 1.5vh;
 }
 
 .profile-panel {
-  padding: 0 0.35rem;
+  padding: 0 0.8rem;
 }
 
 .profile-panel h3 {
@@ -3729,44 +3738,33 @@ tbody tr:hover {
   color: transparent;
 }
 
-.profile-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.35rem 0.6rem;
-}
-
-.info-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.05rem;
-}
-
-.info-row .strong {
-  font-weight: 700;
-  color: #e7ecf5;
-}
-
-.profile-summary {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.35rem;
-}
-
-.profile-summary .big {
-  margin: 0.1rem 0 0;
-  font-size: 1.2rem;
-  font-weight: 800;
-}
-
 .profile-panel.tall {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
 }
 
 .profile-radar-row {
-  scale: 1.7;
-  margin-top: 0.95rem;
+  height: auto;
+}
+
+.profile-radar-row .radar-chart {
+    display: flex;
+    flex-direction:unset;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    position: relative;
+    height: auto;
+}
+
+.profile-radar-row .radar-chart svg {
+    display: block;
+    overflow: visible;
+    margin: 0 0;
+height: 39vh;
+width: 39vh;
+max-width: none;
+max-height: none;
 }
 
 .profile-radar-row .radar-chart .radar-dataset { 
@@ -3779,15 +3777,6 @@ fill-opacity: 0.16!important
   fill: rgb(255, 191, 0)!important;
 }
 
-.profile-panel.full {
-  grid-column: span 3;
-}
-
-.profile-panel.stats-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
 
 .profile-stats-grid.compact {
   display: grid;
@@ -3797,7 +3786,6 @@ fill-opacity: 0.16!important
   grid-auto-flow: column;
   /* Todas las columnas que se vayan creando tendrán el mismo ancho */
   grid-auto-columns: minmax(0, 1fr);
-
 }
 
 
@@ -3806,13 +3794,24 @@ fill-opacity: 0.16!important
   grid-template-columns: 1.2fr 0.1fr;
   align-items: center;
   gap: 0.35rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(150, 150, 150, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0.5rem;
   padding: 0.05rem 0.45rem;
   font-size: 0.82rem;
 }
 
+.profile-metric-grid.compact .stat-block.row.compact {
+  display: grid;
+  grid-template-columns: 1.2fr 0.1fr;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(235, 192, 0, 0.03);
+  border: 1px solid rgba(235, 192, 0, 0.096);
+  border-radius: 0.5rem;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.82rem;
+}
 .stat-block.row.compact .stat-label {
   font-weight: 600;
   width: 10rem;
@@ -3823,10 +3822,24 @@ fill-opacity: 0.16!important
   font-weight: 600;
 }
 
+.profile-panel.stats-card {
+  display: grid;
+  grid-template-columns: 25.6vw 1fr;
+  margin-top: 1.5vh;
+}
+
+.profile-special-skills  {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .skills-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
+  margin-right: 1rem;
 }
 
 .skill-pill {
@@ -3843,3 +3856,8 @@ fill-opacity: 0.16!important
   border-color: rgba(255, 207, 68, 0.35);
 }
 
+.profile-stadistics {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

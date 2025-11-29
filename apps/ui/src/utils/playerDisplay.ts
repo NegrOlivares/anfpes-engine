@@ -33,8 +33,8 @@ const FIELD_LABEL_OVERRIDES: Record<string, string> = {
   'TRABAJO EN EQUIPO': 'Trabajo en Equipo',
   'TOLERANCIA LESIONES': 'Tolerancia a las Lesiones',
   'CONDICIÓN FITNESS': 'Condición Física',
-  'PRECICIÓN PIE MALO': 'Precisión de Pie Malo',
-  'FRECUENCIA PIE MALO': 'Frecuencia de Pie Malo',
+  'PRECICIÓN PIE MALO': 'Precisión de Pie Torpe',
+  'FRECUENCIA PIE MALO': 'Frecuencia de Pie Torpe',
   'RECUPERACION DE BALÓN': 'Recuperación de Balón',
   'JUEGO AEREO': 'Juego Aéreo',
   'HAB REGATE': 'Habilidad de Regate',
@@ -42,6 +42,7 @@ const FIELD_LABEL_OVERRIDES: Record<string, string> = {
   PIE: 'Pie Hábil',
   ALETISMO: 'Atletismo',
   REACCION: 'Reacción',
+  VELOCIDAD: 'Rapidez',
 
   PROMEDIO: 'Promedio Principal',
   PT: 'Promedio PT',

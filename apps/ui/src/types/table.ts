@@ -100,6 +100,7 @@ export function getInjuryColor(value: string | null | undefined): string | null 
   const upper = String(value).toUpperCase();
   if (upper === 'A') return '#fc2626'; // Rojo más intenso
   if (upper === 'B') return '#e9b407'; // Amarillo
+  if (upper === 'C') return '#ffffffff'; // Amarillo
   // C sin color
   return null;
 }
