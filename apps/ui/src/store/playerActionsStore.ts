@@ -11,10 +11,11 @@ interface PlayerActionsState {
   player?: DerivedPlayer;
   anchor?: AnchorPosition;
   hideCompare?: boolean;
+  hideProfile?: boolean;
   open: (
     player: DerivedPlayer,
     anchor: AnchorPosition,
-    opts?: { hideCompare?: boolean },
+    opts?: { hideCompare?: boolean; hideProfile?: boolean },
   ) => void;
   close: () => void;
 }
@@ -22,7 +23,19 @@ interface PlayerActionsState {
 export const usePlayerActionsStore = create<PlayerActionsState>((set) => ({
   isOpen: false,
   open: (player, anchor, opts) =>
-    set({ isOpen: true, player, anchor, hideCompare: opts?.hideCompare ?? false }),
+    set({
+      isOpen: true,
+      player,
+      anchor,
+      hideCompare: opts?.hideCompare ?? false,
+      hideProfile: opts?.hideProfile ?? false,
+    }),
   close: () =>
-    set({ isOpen: false, player: undefined, anchor: undefined, hideCompare: false }),
+    set({
+      isOpen: false,
+      player: undefined,
+      anchor: undefined,
+      hideCompare: false,
+      hideProfile: false,
+    }),
 }));

@@ -7,6 +7,7 @@ import { useModuleStore, MODULE_IDS } from '../store/moduleStore';
 import { useSimilarPlayersStore } from '../store/similarPlayersStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
+import { useCacheStore } from '../store/cacheStore';
 
 function usePlayerActions() {
   const isOpen = usePlayerActionsStore((state) => state.isOpen);
@@ -21,7 +22,9 @@ export function PlayerActionsOverlay() {
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
   const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
   const setComparatorPending = useComparatorLaunchStore((state) => state.setPending);
+  const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
   const hideCompare = usePlayerActionsStore((state) => state.hideCompare);
+  const hideProfile = usePlayerActionsStore((state) => state.hideProfile);
   const [showPreselectionModal, setShowPreselectionModal] = useState(false);
   const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
   const clearSelection = usePreselectionStore((state) => state.clearSelection);
@@ -90,6 +93,13 @@ export function PlayerActionsOverlay() {
     close();
   };
 
+  const handleOpenProfile = () => {
+    if (!soleSelectionId) return;
+    setSelectedPlayer(soleSelectionId);
+    setActiveModule(MODULE_IDS.profile);
+    close();
+  };
+
   const menuStyle: React.CSSProperties = {
     top: anchor.y,
     left: anchor.x,
@@ -100,6 +110,11 @@ export function PlayerActionsOverlay() {
       <div className="player-actions-backdrop" onClick={handleBackdropClick} />
       <div className="player-actions-menu" style={menuStyle}>
         <div className="player-actions-options">
+          {canSearchSimilar && !hideProfile && (
+            <button type="button" onClick={handleOpenProfile}>
+              Abrir Perfil
+            </button>
+          )}
           <button type="button" onClick={handlePreselection}>
             Agregar a preseleccion
           </button>
@@ -137,7 +152,7 @@ export function PlayerActionsOverlay() {
 export function openPlayerActionsMenu(
   event: SyntheticEvent<HTMLElement>,
   player: DerivedPlayer,
-  opts?: { hideCompare?: boolean },
+  opts?: { hideCompare?: boolean; hideProfile?: boolean },
 ) {
   event.stopPropagation();
   const rect = event.currentTarget.getBoundingClientRect();

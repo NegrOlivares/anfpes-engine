@@ -1,4 +1,5 @@
 import type { DerivedPlayer } from '@anfpes/engine';
+import { useState, useMemo, useCallback } from 'react';
 import faceDefault from '../assets/115837.png';
 import { RadarChart } from './RadarChart';
 import {
@@ -8,9 +9,16 @@ import {
   getPositionFullName,
 } from './PositionBadges';
 import { PositionMap, getActivePositionCells } from './PositionMap';
-import { useCacheStore, useSelectedPlayer } from '../store/cacheStore';
+import { useCacheStore } from '../store/cacheStore';
 import { formatPlayerValue, ensureNumber } from '../utils/format';
 import goalStatsData from '../../../../data/processed/player-goal-stats.json';
+import {
+  applyFormMultiplier,
+  DEFAULT_FORM_STATE,
+  FORM_STATES,
+  type FormStateId,
+} from '../data/formModifiers';
+import { openPlayerActionsMenu } from './PlayerActionsOverlay';
 import {
   formatClub,
   formatFoot,
@@ -804,12 +812,130 @@ function getStatusBadges(player: DerivedPlayer): StatusBadge[] {
   });
 }
 
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function findPlayerByQuery(players: DerivedPlayer[] | undefined, query: string) {
+  if (!players) return undefined;
+  const normalized = normalize(query.trim());
+  if (!normalized) return undefined;
+
+  return (
+    players.find((player) => normalize(String(player.ID)) === normalized) ??
+    players.find((player) =>
+      normalize(String(player.NOMBRE ?? '')).includes(normalized),
+    ) ??
+    players.find((player) => normalize(String(player.CLUB ?? '')).includes(normalized))
+  );
+}
+
 export function PlayerProfile() {
-  const player = useSelectedPlayer();
+  const players = useCacheStore((state) => state.players);
+  const selectedPlayerId = useCacheStore((state) => state.selectedPlayerId);
+  const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
   const status = useCacheStore((state) => state.status);
   const error = useCacheStore((state) => state.error);
 
+  const [query, setQuery] = useState('');
+  const [lookupError, setLookupError] = useState('');
+  const [formState, setFormState] = useState<FormStateId>(DEFAULT_FORM_STATE);
+  const [formOpen, setFormOpen] = useState(false);
+
   const loading = status === 'idle' || status === 'loading';
+
+  const player = useMemo(() => {
+    if (!players || !selectedPlayerId) return undefined;
+    return players.find((p) => String(p.ID) === String(selectedPlayerId));
+  }, [players, selectedPlayerId]);
+
+  const suggestions = useMemo(() => {
+    if (!players) return [];
+    const normalized = normalize(query.trim());
+    if (!normalized) {
+      return [];
+    }
+    return players
+      .filter((player) => {
+        const name = normalize(String(player.NOMBRE ?? ''));
+        const id = normalize(String(player.ID ?? ''));
+        const club = normalize(String(player.CLUB ?? ''));
+        return (
+          name.includes(normalized) ||
+          id.includes(normalized) ||
+          club.includes(normalized)
+        );
+      })
+      .slice(0, 8);
+  }, [players, query]);
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent) => {
+      event.preventDefault();
+      if (!players) return;
+      const candidate = findPlayerByQuery(players, query);
+      if (!candidate) {
+        setLookupError('No encontramos un jugador con ese criterio');
+        return;
+      }
+      setLookupError('');
+      setQuery('');
+      setSelectedPlayer(String(candidate.ID));
+    },
+    [players, query, setSelectedPlayer],
+  );
+
+  const handleSelectSuggestion = useCallback(
+    (selectedPlayer: DerivedPlayer) => {
+      setQuery('');
+      setLookupError('');
+      setSelectedPlayer(String(selectedPlayer.ID));
+    },
+    [setSelectedPlayer],
+  );
+
+  const showSuggestions = Boolean(query.trim() && suggestions.length > 0);
+  const showSelector = Boolean(lookupError || showSuggestions);
+
+  // Aplicar form multipliers a los valores
+  const getAdjustedValue = useCallback(
+    (field: keyof DerivedPlayer) => {
+      if (!player) return undefined;
+      const baseValue = ensureNumber(player[field]);
+      return applyFormMultiplier(baseValue, field as any, formState);
+    },
+    [player, formState],
+  );
+
+  const computeMacrosWithForm = useCallback(() => {
+    if (!player) return { ATK: 0, TEC: 0, RES: 0, DEF: 0, FUE: 0, VEL: 0 };
+
+    const get = (key: keyof DerivedPlayer) =>
+      applyFormMultiplier(ensureNumber(player[key]), key as string, formState) ?? 0;
+
+    const atk = get('ATAQUE') * 0.75 + get('PRECISIÓN DISPARO') * 0.25;
+    const tec =
+      get('TÉCNICA') * 0.4 +
+      get('PRECISIÓN DRIBBLE') * 0.3 +
+      get('PRECISIÓN   P CORTO') * 0.1 +
+      get('PRECISIÓN       P LARGO') * 0.05 +
+      get('PRECISIÓN TIRO LIBRE') * 0.1 +
+      get('EFECTO') * 0.05;
+    const res = get('RESISTENCIA');
+    const def = get('DEFENSA');
+    const fue =
+      get('ESTABILIDAD') * 0.6 + get('SALTO') * 0.3 + get('POTENCIA DISPARO') * 0.1;
+    const vel =
+      get('VELOCIDAD MÁXIMA') * 0.2 +
+      get('ACELERACIÓN') * 0.3 +
+      get('REPUESTA') * 0.2 +
+      get('VELOCIDAD DRIBBLE') * 0.3;
+
+    return { ATK: atk, TEC: tec, RES: res, DEF: def, FUE: fue, VEL: vel };
+  }, [player, formState]);
 
   if (loading) {
     return (
@@ -830,9 +956,50 @@ export function PlayerProfile() {
   if (!player) {
     return (
       <section className="profile-shell">
-        <p className="muted">
-          Usa la pestaña <strong>Buscador</strong> para seleccionar un jugador.
-        </p>
+        <header className="profile-search-header">
+          <form className="profile-search-form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Buscar jugador por nombre, ID o club..."
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              autoFocus
+            />
+            <button type="submit" className="secondary-button" disabled={!query.trim()}>
+              Buscar
+            </button>
+          </form>
+        </header>
+
+        {showSelector && (
+          <div className="profile-selector">
+            {lookupError && <p className="error">{lookupError}</p>}
+            {showSuggestions && (
+              <div className="profile-suggestions">
+                {suggestions.map((suggestion) => (
+                  <button
+                    key={suggestion.ID as string}
+                    type="button"
+                    className="suggestion-button"
+                    onClick={() => handleSelectSuggestion(suggestion)}
+                  >
+                    <span className="suggestion-name">{suggestion.NOMBRE}</span>
+                    <span className="suggestion-club">
+                      {formatClub(
+                        suggestion.CLUB as string,
+                        suggestion.NACIONALIDAD as string,
+                      )}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {!showSelector && (
+          <p className="muted">Busca un jugador para ver su perfil completo.</p>
+        )}
       </section>
     );
   }
@@ -859,10 +1026,11 @@ export function PlayerProfile() {
   const dorsalDisplay = dorsal;
   const dorsalNameDisplay =
     dorsalName || (player.DORSAL_1 ? String(player.DORSAL_1) : '');
+  const macros = computeMacrosWithForm();
   const macroDataset = {
     id: String(player.ID),
     label: player.NOMBRE as string,
-    values: MACRO_FIELDS.map((field) => ensureNumber(player[field]) ?? 0),
+    values: MACRO_FIELDS.map((field) => (macros as any)[field] ?? 0),
     color: '#7ac9ff',
     fillOpacity: 0.16,
   };
@@ -893,13 +1061,54 @@ export function PlayerProfile() {
 
         <div className="profile-main-info">
           <div className="profile-name">
-            <header>{player.NOMBRE}</header>
+            <header
+              className="clickable-name"
+              style={{ cursor: 'pointer' }}
+              onClick={(e) => openPlayerActionsMenu(e, player, { hideProfile: true })}
+            >
+              {player.NOMBRE}
+            </header>
             <div className="player-badges">
               {badges.map((badge) => (
                 <span key={badge.key} className={badge.className} title={badge.title}>
                   {badge.label}
                 </span>
               ))}
+            </div>
+            <div className="form-dropdown profile-form" title="Forma del jugador">
+              {FORM_STATES.map(
+                (st) =>
+                  st.id === formState && (
+                    <button
+                      key={st.id}
+                      type="button"
+                      className="form-trigger"
+                      style={{ color: st.color, borderColor: st.color }}
+                      onClick={() => setFormOpen((v) => !v)}
+                    >
+                      {st.icon}
+                    </button>
+                  ),
+              )}
+              {formOpen && (
+                <div className="form-menu">
+                  {FORM_STATES.map((state) => (
+                    <button
+                      key={state.id}
+                      type="button"
+                      className={`form-option ${formState === state.id ? 'active' : ''}`}
+                      style={{ color: state.color, borderColor: state.color }}
+                      onClick={() => {
+                        setFormState(state.id);
+                        setFormOpen(false);
+                      }}
+                    >
+                      <span className="form-option-icon">{state.icon}</span>
+                      <span className="form-option-label">{state.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -956,6 +1165,14 @@ export function PlayerProfile() {
             style={getFootStyle(player, 'right')}
           />
         </div>
+        <button
+          type="button"
+          className="profile-clear-button"
+          aria-label="Limpiar jugador"
+          onClick={() => setSelectedPlayer(null)}
+        >
+          ×
+        </button>
       </header>
 
       <div className="profile-grid three-cols">
@@ -979,7 +1196,7 @@ export function PlayerProfile() {
           <h3>STATS</h3>
           <div className="profile-stats-grid compact">
             {CORE_STATS.map((field) => {
-              const value = ensureNumber(player[field]) ?? 0;
+              const value = getAdjustedValue(field) ?? 0;
               const color = getStatColor(value) ?? '#7ac9ff';
               return (
                 <div key={field as string} className="stat-block row compact">
@@ -1075,9 +1292,14 @@ interface SeasonStats {
 
 function PlayerStatsHistory({ player }: { player: DerivedPlayer }) {
   const playerName = normalizeName(String(player.NOMBRE || ''));
-  const records = (goalStatsData.records as GoalRecord[]).filter(
-    (r) => r.nameNormalized === playerName,
-  );
+  const records = (goalStatsData.records as GoalRecord[]).filter((r) => {
+    // Intentar match exacto con nameNormalized
+    if (r.nameNormalized === playerName) return true;
+
+    // Si no matchea, intentar normalizar el nombre original del JSON
+    const originalNormalized = normalizeName(r.name || '');
+    return originalNormalized === playerName;
+  });
 
   if (records.length === 0) {
     return <p className="stats-empty">Sin historial de goles registrado</p>;
