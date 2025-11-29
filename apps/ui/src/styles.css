@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'SoccerLeague';
-  src: url('./assets/SoccerLeague.ttf') format('truetype');
+  src: url('./assets/Double Pivot Personal Used.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
@@ -3521,11 +3521,9 @@ tbody tr:hover {
 .shirt-number {
   position: relative;
   text-align: center;
-  font-size: 60px;
+  font-size: 75px;
   font-family: 'SoccerLeague', system-ui, sans-serif;
-  line-height: 1.25;
-  transform: scaleY(1.35);      /* 1.5 = 50% más alto */
-  font-weight: 200;
+  line-height: 0.8;
   -webkit-text-stroke: 1px #111111b9;
 }
 
@@ -3541,20 +3539,24 @@ tbody tr:hover {
 
 
 .profile-face {
-  width: 90px;
-  height: 90px;
+  width: 110px;
+  height: 110px;
   border-radius: 18px;
-  background: radial-gradient(circle at 40% 35%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02) 60%),
-    rgba(10, 15, 24, 0.82);
   display: grid;
   place-items: center;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.44);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   position: absolute;
-  top: 28px;               /* decides cuánto se desplaza */
-  left: 108px;
+  top: 8px;               /* decides cuánto se desplaza */
+  left: 105px;
   z-index: 2;              /* encima de A */
 }
+
+.profile-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* o 'contain', según prefieras */
+  border-radius: 0.75rem; /* si quieres esquinas redondeadas */
+}
+
 .profile-average-position{
   display: flex;
   align-items: center;
@@ -3646,7 +3648,6 @@ tbody tr:hover {
 .profile-main-info {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
   align-self: center;
 }
 
@@ -3691,8 +3692,10 @@ tbody tr:hover {
   display: flex;
   gap: 0.35rem;
   align-items: center;
-  color: #ffffff;
-  font-size: 1rem;
+  color: #a8a7a7;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: -0.6rem;
 }
 
 .profile-main-data {
@@ -3706,8 +3709,8 @@ tbody tr:hover {
 
 .profile-grid.three-cols {
   display: grid;
-  grid-template-columns: 25.6vw 	34.4vw 	17.2vw 	21.7vw  1fr;
-  margin-top: 1.5vh;
+  grid-template-columns: 27.6vw 	34vw 	17.2vw 	21.7vw  1fr;
+  margin-top: 0.3vh;
 }
 
 .profile-panel {
@@ -3755,14 +3758,15 @@ tbody tr:hover {
     gap: 0.5rem;
     position: relative;
     height: auto;
+    margin-bottom: 0.3vh;
 }
 
 .profile-radar-row .radar-chart svg {
     display: block;
     overflow: visible;
     margin: 0 0;
-height: 39vh;
-width: 39vh;
+height: 24vh;
+width: 24vh;
 max-width: none;
 max-height: none;
 }
@@ -3823,9 +3827,7 @@ fill-opacity: 0.16!important
 }
 
 .profile-panel.stats-card {
-  display: grid;
-  grid-template-columns: 25.6vw 1fr;
-  margin-top: 1.5vh;
+  margin-top: 1vh;
 }
 
 .profile-special-skills  {
@@ -3839,7 +3841,6 @@ fill-opacity: 0.16!important
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-  margin-right: 1rem;
 }
 
 .skill-pill {
@@ -3859,5 +3860,333 @@ fill-opacity: 0.16!important
 .profile-stadistics {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  overflow: hidden;
+}
+
+.stats-empty {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  padding: 1.5rem 1rem;
+  font-style: italic;
+}
+
+.stats-history-wrapper {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-areas:
+    "summary topcomps table";
+  max-height: 100%;
+  overflow: hidden;
+}
+
+/* ===== PANEL DE RESUMEN ===== */
+.stats-summary-grid {
+  grid-area: summary;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.3rem;
+  padding: 0.3rem 0.4rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  height:2.9rem;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.stat-card.total {
+  background: rgba(76, 175, 80, 0.08);
+  border-color: rgba(76, 175, 80, 0.25);
+}
+
+.stat-card.total:hover {
+  background: rgba(76, 175, 80, 0.12);
+  border-color: rgba(76, 175, 80, 0.35);
+}
+
+.stat-card-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #4caf50;
+  font-family: 'Quantify', system-ui, sans-serif;
+  line-height: 1;
+  min-width: 40px;
+}
+
+.stat-card.total .stat-card-value {
+  font-size: 1.5rem;
+  color: #66bb6a;
+}
+
+.stat-card-label {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.stat-card-detail {
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+  line-height: 1;
+  display: block;
+  margin-top: 0.1rem;
+}
+
+/* ===== TOP COMPETICIONES (standalone) ===== */
+.stats-top-competitions {
+  grid-area: topcomps;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.4rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+  height: 12.85rem;
+}
+
+.stats-top-competitions h4 {
+  margin: 0;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.top-comp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.top-comp-item {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0.3rem;
+  transition: background 0.15s ease;
+}
+
+.top-comp-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.comp-rank {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #ffcf44;
+  text-align: center;
+}
+
+.comp-name {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.comp-goals {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4caf50;
+  min-width: 25px;
+  text-align: right;
+}
+
+/* ===== TABLA DETALLADA ===== */
+.stats-table-section {
+  grid-area: table;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  height: 12.85rem;
+}
+
+.stats-history-scroll {
+  max-height: 43vh;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.4rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.stats-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.7rem;
+  min-width: 600px;
+}
+
+.stats-history-table thead {
+  position: sticky;
+  top: 0;
+  background: rgba(20, 25, 35, 0.98);
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stats-history-table th {
+  padding: 0.4rem 0.4rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.75);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: 3rem;
+}
+
+/* Temporada, Liga, Copa, Selección, Amistoso, Total */
+.stats-history-table th:nth-child(n + 3) {
+  text-align: center;
+}
+
+.stats-history-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.15s ease;
+}
+
+.stats-history-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.stats-history-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.stats-history-table tbody tr:nth-child(even):hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.stats-history-table tbody tr.highlight-row {
+  background: rgba(76, 175, 80, 0.08);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.stats-history-table tbody tr.highlight-row:hover {
+  background: rgba(76, 175, 80, 0.12);
+}
+
+.stats-history-table td {
+  padding: 0.35rem 0.4rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.7rem;
+}
+
+.stats-history-table .dt-cell {
+  font-weight: 600;
+  color: rgba(255, 207, 68, 0.9);
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats-history-table .team-cell {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stats-history-table .season-cell {
+  text-align: center;
+  font-weight: 600;
+  color: rgba(150, 200, 255, 0.9);
+  width: 45px;
+}
+
+.stats-history-table .goal-cell {
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  width: 45px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.stats-history-table .goal-cell.total {
+  background: rgba(76, 175, 80, 0.12);
+  color: #66bb6a;
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+
+.stats-history-table tfoot {
+  position: sticky;
+  bottom: 0;
+  background: rgba(30, 35, 45, 0.98);
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.stats-history-table .total-row {
+  font-weight: 700;
+  font-size: 0.72rem;
+  border-top: 2px solid rgba(255, 207, 68, 0.4);
+}
+
+.stats-history-table .total-row td {
+  padding: 0.5rem 0.4rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.stats-history-table .total-label {
+  text-align: right;
+  letter-spacing: 0.05em;
+  color: #ffcf44;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding-right: 0.8rem;
+}
+
+/* Scrollbar personalizado */
+.stats-history-scroll::-webkit-scrollbar,
+.stats-top-competitions::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.stats-history-scroll::-webkit-scrollbar-track,
+.stats-top-competitions::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 3px;
+}
+
+.stats-history-scroll::-webkit-scrollbar-thumb,
+.stats-top-competitions::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.stats-history-scroll::-webkit-scrollbar-thumb:hover,
+.stats-top-competitions::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
 }

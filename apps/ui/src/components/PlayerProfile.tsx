@@ -1,4 +1,5 @@
 import type { DerivedPlayer } from '@anfpes/engine';
+import faceDefault from '../assets/115837.png';
 import { RadarChart } from './RadarChart';
 import {
   PositionBadges,
@@ -9,6 +10,7 @@ import {
 import { PositionMap, getActivePositionCells } from './PositionMap';
 import { useCacheStore, useSelectedPlayer } from '../store/cacheStore';
 import { formatPlayerValue, ensureNumber } from '../utils/format';
+import goalStatsData from '../../../../data/processed/player-goal-stats.json';
 import {
   formatClub,
   formatFoot,
@@ -884,7 +886,9 @@ export function PlayerProfile() {
               <div className="shirt-number">{dorsalDisplay}</div>
             </div>
           </div>
-          <div className="profile-face"></div>
+          <div className="profile-face">
+            <img src={faceDefault} alt="Foto del jugador" />
+          </div>
         </div>
 
         <div className="profile-main-info">
@@ -900,7 +904,7 @@ export function PlayerProfile() {
           </div>
 
           <div className="profile-sub muted">
-            <span>&lt;Nombre completo&gt;</span>
+            <span>Robin Nelisse · 25 de enero de 1978</span>
           </div>
 
           <div className="profile-main-data">
@@ -964,6 +968,10 @@ export function PlayerProfile() {
               size={220}
               showLegend={false}
             />
+          </div>
+          <div className="profile-special-skills">
+            <h3>HABILIDADES ESPECIALES</h3>
+            <PlayerSkills player={player} />
           </div>
         </div>
 
@@ -1033,15 +1041,232 @@ export function PlayerProfile() {
       </div>
 
       <div className="profile-panel full stats-card">
-        <div className="profile-special-skills">
-          <h3>HABILIDADES ESPECIALES</h3>
-          <PlayerSkills player={player} />
-        </div>
         <div className="profile-stadistics">
           <h3>HISTORIAL ESTADÍSTICO</h3>
+          <PlayerStatsHistory player={player} />
         </div>
       </div>
     </section>
+  );
+}
+
+interface GoalRecord {
+  name: string;
+  nameNormalized: string;
+  user: string | null;
+  team: string | null;
+  goals: number;
+  season: number | null;
+  type: string | null;
+  competition: string | null;
+}
+
+interface SeasonStats {
+  user: string;
+  team: string;
+  season: number;
+  liga: number;
+  copa: number;
+  seleccion: number;
+  amistosa: number;
+  total: number;
+  competitions: Map<string, number>;
+}
+
+function PlayerStatsHistory({ player }: { player: DerivedPlayer }) {
+  const playerName = normalizeName(String(player.NOMBRE || ''));
+  const records = (goalStatsData.records as GoalRecord[]).filter(
+    (r) => r.nameNormalized === playerName,
+  );
+
+  if (records.length === 0) {
+    return <p className="stats-empty">Sin historial de goles registrado</p>;
+  }
+
+  // Agrupar por DT + Club + Temporada
+  const grouped = new Map<string, SeasonStats>();
+
+  records.forEach((record) => {
+    const key = `${record.user || 'Sin DT'}_${record.team || 'Sin club'}_${record.season || 0}`;
+
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        user: record.user || 'Sin DT',
+        team: record.team || 'Sin club',
+        season: record.season || 0,
+        liga: 0,
+        copa: 0,
+        seleccion: 0,
+        amistosa: 0,
+        total: 0,
+        competitions: new Map(),
+      });
+    }
+
+    const row = grouped.get(key)!;
+    const goals = record.goals || 0;
+    const type = (record.type || '').trim();
+    const comp = record.competition || 'Sin especificar';
+
+    // Mapeo por TYPE (más confiable que competition)
+    if (type === 'Liga') {
+      row.liga += goals;
+    } else if (type === 'Copa') {
+      row.copa += goals;
+    } else if (type === 'Selección Nacional') {
+      row.seleccion += goals;
+    } else if (type === 'Copa Amistosa') {
+      row.amistosa += goals;
+    }
+
+    row.total += goals;
+
+    // Guardar también por competición específica para análisis
+    const currentComp = row.competitions.get(comp) || 0;
+    row.competitions.set(comp, currentComp + goals);
+  });
+
+  const seasons = Array.from(grouped.values()).sort(
+    (a, b) => a.season - b.season || a.user.localeCompare(b.user),
+  );
+
+  // Calcular estadísticas generales
+  const totals = {
+    liga: seasons.reduce((sum, s) => sum + s.liga, 0),
+    copa: seasons.reduce((sum, s) => sum + s.copa, 0),
+    seleccion: seasons.reduce((sum, s) => sum + s.seleccion, 0),
+    amistosa: seasons.reduce((sum, s) => sum + s.amistosa, 0),
+    total: seasons.reduce((sum, s) => sum + s.total, 0),
+  };
+
+  const uniqueSeasons = new Set(seasons.map((s) => s.season)).size;
+  const average = uniqueSeasons > 0 ? (totals.total / uniqueSeasons).toFixed(1) : '0';
+
+  // Encontrar récords
+  const bestSeason = seasons.reduce(
+    (max, s) => (s.total > max.total ? s : max),
+    seasons[0],
+  );
+
+  // Estadísticas por competición
+  const allCompetitions = new Map<string, number>();
+  seasons.forEach((s) => {
+    s.competitions.forEach((goals, comp) => {
+      const current = allCompetitions.get(comp) || 0;
+      allCompetitions.set(comp, current + goals);
+    });
+  });
+
+  const topCompetitions = Array.from(allCompetitions.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
+  // Evolución temporal (últimas 10 temporadas)
+  const recentSeasons = seasons.slice(-10);
+  const maxGoalsInRecent = Math.max(...recentSeasons.map((s) => s.total), 1);
+
+  return (
+    <div className="stats-history-wrapper">
+      {/* Panel de resumen compacto */}
+      <div className="stats-summary-grid">
+        <div className="stat-card total">
+          <span className="stat-card-value">{totals.total}</span>
+          <div>
+            <span className="stat-card-label">Goles Totales</span>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-card-value">{average}</span>
+          <div>
+            <span className="stat-card-label">Promedio de Goles por Temporada</span>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-card-value">{bestSeason.total}</span>
+          <div>
+            <span className="stat-card-label">Mejor Temporada</span>
+            <span className="stat-card-detail">
+              T{bestSeason.season} · {bestSeason.team}
+            </span>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-card-value">{uniqueSeasons}</span>
+          <div>
+            <span className="stat-card-label">Temporadas</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabla detallada */}
+      <div className="stats-table-section">
+        <div className="stats-history-scroll">
+          <table className="stats-history-table">
+            <thead>
+              <tr>
+                <th>DT</th>
+                <th>Club</th>
+                <th>Temporada</th>
+                <th>Liga</th>
+                <th>Copa</th>
+                <th>Selección</th>
+                <th>Amistoso</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {seasons.map((row, idx) => (
+                <tr
+                  key={idx}
+                  className={row.total === bestSeason.total ? 'highlight-row' : ''}
+                >
+                  <td className="dt-cell" title={row.user}>
+                    {row.user}
+                  </td>
+                  <td className="team-cell" title={row.team}>
+                    {row.team}
+                  </td>
+                  <td className="season-cell">{row.season}</td>
+                  <td className="goal-cell">{row.liga || '–'}</td>
+                  <td className="goal-cell">{row.copa || '–'}</td>
+                  <td className="goal-cell">{row.seleccion || '–'}</td>
+                  <td className="goal-cell">{row.amistosa || '–'}</td>
+                  <td className="goal-cell total">{row.total}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="total-row">
+                <td colSpan={3} className="total-label">
+                  TOTAL
+                </td>
+                <td className="goal-cell">{totals.liga}</td>
+                <td className="goal-cell">{totals.copa}</td>
+                <td className="goal-cell">{totals.seleccion}</td>
+                <td className="goal-cell">{totals.amistosa}</td>
+                <td className="goal-cell total">{totals.total}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      {/* Top 5 competiciones */}
+      {topCompetitions.length > 0 && (
+        <div className="stats-top-competitions">
+          <h4>Top Competiciones</h4>
+          <div className="top-comp-list">
+            {topCompetitions.map(([comp, goals], idx) => (
+              <div key={idx} className="top-comp-item">
+                <span className="comp-rank">#{idx + 1}</span>
+                <span className="comp-name">{comp}</span>
+                <span className="comp-goals">{goals}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
