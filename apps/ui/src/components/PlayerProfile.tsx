@@ -1,5 +1,5 @@
 import type { DerivedPlayer } from '@anfpes/engine';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import faceDefault from '../assets/115837.png';
 import { RadarChart } from './RadarChart';
 import {
@@ -842,8 +842,15 @@ export function PlayerProfile() {
 
   const [query, setQuery] = useState('');
   const [lookupError, setLookupError] = useState('');
-  const [formState, setFormState] = useState<FormStateId>(DEFAULT_FORM_STATE);
+  const [formById, setFormById] = useState<Record<string, FormStateId>>({});
   const [formOpen, setFormOpen] = useState(false);
+
+  const playerKey = String(selectedPlayerId ?? '');
+  const formState = formById[playerKey] ?? DEFAULT_FORM_STATE;
+
+  useEffect(() => {
+    setFormOpen(false);
+  }, [playerKey]);
 
   const loading = status === 'idle' || status === 'loading';
 
@@ -899,6 +906,15 @@ export function PlayerProfile() {
 
   const showSuggestions = Boolean(query.trim() && suggestions.length > 0);
   const showSelector = Boolean(lookupError || showSuggestions);
+
+  const handleChangeForm = useCallback(
+    (next: FormStateId) => {
+      if (!playerKey) return;
+      setFormById((prev) => ({ ...prev, [playerKey]: next }));
+      setFormOpen(false);
+    },
+    [playerKey],
+  );
 
   // Aplicar form multipliers a los valores
   const getAdjustedValue = useCallback(
@@ -1069,46 +1085,43 @@ export function PlayerProfile() {
               {player.NOMBRE}
             </header>
             <div className="player-badges">
+              <div className="form-dropdown profile-form" title="Forma del jugador">
+                {FORM_STATES.map(
+                  (st) =>
+                    st.id === formState && (
+                      <button
+                        key={st.id}
+                        type="button"
+                        className="form-trigger"
+                        style={{ color: st.color, borderColor: st.color }}
+                        onClick={() => setFormOpen((v) => !v)}
+                      >
+                        {st.icon}
+                      </button>
+                    ),
+                )}
+                {formOpen && (
+                  <div className="form-menu">
+                    {FORM_STATES.map((state) => (
+                      <button
+                        key={state.id}
+                        type="button"
+                        className={`form-option ${formState === state.id ? 'active' : ''}`}
+                        style={{ color: state.color, borderColor: state.color }}
+                        onClick={() => handleChangeForm(state.id)}
+                      >
+                        <span className="form-option-icon">{state.icon}</span>
+                        <span className="form-option-label">{state.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               {badges.map((badge) => (
                 <span key={badge.key} className={badge.className} title={badge.title}>
                   {badge.label}
                 </span>
               ))}
-            </div>
-            <div className="form-dropdown profile-form" title="Forma del jugador">
-              {FORM_STATES.map(
-                (st) =>
-                  st.id === formState && (
-                    <button
-                      key={st.id}
-                      type="button"
-                      className="form-trigger"
-                      style={{ color: st.color, borderColor: st.color }}
-                      onClick={() => setFormOpen((v) => !v)}
-                    >
-                      {st.icon}
-                    </button>
-                  ),
-              )}
-              {formOpen && (
-                <div className="form-menu">
-                  {FORM_STATES.map((state) => (
-                    <button
-                      key={state.id}
-                      type="button"
-                      className={`form-option ${formState === state.id ? 'active' : ''}`}
-                      style={{ color: state.color, borderColor: state.color }}
-                      onClick={() => {
-                        setFormState(state.id);
-                        setFormOpen(false);
-                      }}
-                    >
-                      <span className="form-option-icon">{state.icon}</span>
-                      <span className="form-option-label">{state.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
@@ -1380,6 +1393,7 @@ function PlayerStatsHistory({ player }: { player: DerivedPlayer }) {
   });
 
   const topCompetitions = Array.from(allCompetitions.entries())
+    .filter(([comp, goals]) => goals > 0)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
 
