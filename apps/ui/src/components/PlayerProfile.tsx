@@ -1,6 +1,5 @@
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import faceDefault from '../assets/115837.png';
 import { RadarChart } from './RadarChart';
 import {
   PositionBadges,
@@ -61,12 +60,356 @@ function aliasName(raw: string): string {
     { find: /\bnec nijmegen\b/, to: 'nec' },
     { find: /\bbetis\b/, to: 'betis' },
     { find: /\bnewcastle u\b/, to: 'newcastle' },
-    { find: /\bparis sg\b|\bpsg\b/, to: 'psg' },
+    // PSG: normalización quita el guión, así que usamos "paris saint germain"
+    { find: /\bparis saint germain\b|\bpsg\b/, to: 'psg' },
   ];
   for (const a of aliases) {
     if (a.find.test(n)) return a.to;
   }
   return n;
+}
+
+/** Geometría común de la máscara */
+const SHIRT_GEOM = {
+  collarBottom: 4.2, // Y
+  torsoLeft: 24, // X
+  torsoRight: 76, // X
+  dorsalTop: 45, // Y, centro aproximado dorsal
+  dorsalBottom: 65, // Y
+};
+
+/** Prependemos una capa de cuello al resto del background */
+function withCollar(collarColor: string, restBackground: string): string {
+  const y = SHIRT_GEOM.collarBottom;
+  const collarLayer = `linear-gradient(${collarColor} 0 ${y}%, transparent ${y}% 100%)`;
+  return `${collarLayer},${restBackground}`;
+}
+
+/** Tipo A: camiseta lisa con cuello + puños en ambas mangas */
+function solidWithCuffs(
+  baseColor: string,
+  collarAndCuffColor: string,
+  cuffTopPct = 30, // dónde empieza el puño en Y
+  cuffHeightPct = 3, // alto del puño
+  cuffAngle = 27, // ángulo de la diagonal del puño
+): string {
+  const { torsoLeft, torsoRight } = SHIRT_GEOM;
+  const cuffBottomPct = cuffTopPct + cuffHeightPct;
+
+  // Puño manga derecha (tal como lo tenías)
+  const rightCuff = `linear-gradient(${cuffAngle}deg,
+    ${baseColor} 0 ${cuffTopPct}%,
+    ${collarAndCuffColor} ${cuffTopPct}% ${cuffBottomPct}%,
+    transparent ${cuffBottomPct}% 100%
+  )`;
+
+  // Puño manga izquierda: mismo patrón pero con ángulo espejado
+  const leftCuff = `linear-gradient(${-cuffAngle}deg,
+    ${baseColor} 0 ${cuffTopPct}%,
+    ${collarAndCuffColor} ${cuffTopPct}% ${cuffBottomPct}%,
+    ${baseColor} ${cuffBottomPct}% 100%
+  )`;
+
+  // “Borrador” de puños en el torso: repinta el torso con baseColor
+  // en toda la altura, sólo entre torsoLeft–torsoRight. En las mangas
+  // dejan pasar los puños diagonales.
+  const torsoStripe = `linear-gradient(
+    90deg,
+    transparent 0 ${torsoLeft - 1.5}%,
+    ${baseColor} ${torsoLeft - 1.5}% ${torsoRight + 1.5}%,
+    transparent ${torsoRight + 1.5}% 100%
+  )`;
+
+  // Relleno base
+  const fill = `linear-gradient(${baseColor} 0 100%)`;
+
+  // Orden: primero limpiamos torso, luego puño der, puño izq, y por último base
+  const body = [torsoStripe, rightCuff, leftCuff, fill].join(',');
+
+  // Añadimos el cuello por encima
+  return withCollar(collarAndCuffColor, body);
+}
+
+/** Tipo B: torso rayado con mangas de un color (Milan) */
+function stripedTorsoWithMonoColorSleeves(
+  collarColor: string, // ej: #111
+  sleeveColor: string, // ej: #111
+  lightColor: string, // ej: #fff
+  darkColor: string, // ej: #6ec6ff
+): string {
+  const y = SHIRT_GEOM.collarBottom;
+
+  return [
+    // cuello (mismo color claro; para Arg es blanco)
+    `linear-gradient(${collarColor} 0% ${y}%, transparent ${y}% 100%)`,
+    // torso rayado entre ~23% y ~77%, mangas transparentes
+    'repeating-linear-gradient(90deg,' +
+      'transparent 0 23%,' +
+      `${darkColor} 23% 27.5%,` +
+      `${lightColor} 27.5% 36.5%,` +
+      `${darkColor} 36.5% 45.5%,` +
+      `${lightColor} 45.5% 54.5%,` +
+      `${darkColor} 54.5% 63.5%,` +
+      `${lightColor} 63.5% 72.5%,` +
+      `${darkColor} 72.5% 77%,` +
+      'transparent 77% 100%)',
+    // mangas
+    `linear-gradient(90deg, ${sleeveColor} 0 23%, transparent 23% 77%, ${sleeveColor} 77% 100%)`,
+  ].join(',');
+}
+
+/** Tipo C: torso rayado con mangas diagonales (Classic Argentina) */
+function stripedTorsoWithDiagonalSleeves(
+  collarColor: string, // ej: #fff
+  lightColor: string, // ej: #fff
+  darkColor: string, // ej: #6ec6ff
+): string {
+  const y = SHIRT_GEOM.collarBottom;
+
+  return [
+    // cuello (mismo color claro; para Arg es blanco)
+    `linear-gradient(${collarColor} 0% ${y}%, transparent ${y}% 100%)`,
+    // torso rayado entre ~23% y ~77%, mangas transparentes
+    'repeating-linear-gradient(90deg,' +
+      'transparent 0 23%,' +
+      `${darkColor} 23% 27.5%,` +
+      `${lightColor} 27.5% 36.5%,` +
+      `${darkColor} 36.5% 45.5%,` +
+      `${lightColor} 45.5% 54.5%,` +
+      `${darkColor} 54.5% 63.5%,` +
+      `${lightColor} 63.5% 72.5%,` +
+      `${darkColor} 72.5% 77%,` +
+      'transparent 77% 100%)',
+    // diagonales de mangas
+    `linear-gradient(60deg, transparent 0 60%, ${lightColor} 60% 73%, ${darkColor} 73% 82%, ${lightColor} 82% 100%)`,
+    `linear-gradient(300deg, transparent 0 60%, ${lightColor} 60% 73%, ${darkColor} 73% 82%, ${lightColor} 82% 100%)`,
+  ].join(',');
+}
+
+/** Tipo D: banda horizontal centrada sólo en el torso (como Boca) */
+function horizontalBandBody(
+  bodyColor: string,
+  bandColor: string,
+  fromY: number,
+  toY: number,
+): string {
+  const { torsoLeft, torsoRight } = SHIRT_GEOM;
+  const bandYTop = fromY;
+  const bandYBottom = toY;
+
+  const bodyLayer = `linear-gradient(${bodyColor} 0 ${bandYTop}%, transparent ${bandYTop}% ${bandYBottom}%, ${bodyColor} ${bandYBottom}% 100%)`;
+  const bandTorsoLayer = `linear-gradient(90deg,${bodyColor} 0 ${torsoLeft}%,${bandColor} ${torsoLeft}% ${torsoRight}%,${bodyColor} ${torsoRight}% 100%)`;
+
+  return `${bodyLayer},${bandTorsoLayer}`;
+}
+
+/** Tipo E: banda diagonal (River, Perú, etc.) */
+function diagonalSash(
+  baseColor: string, // color fondo (mangas y base)
+  sashColor: string, // color de la banda
+  angleDeg: number, // 135 para hombro izq -> cintura der
+  startPct: number, // inicio banda (Y)
+  endPct: number, // fin banda (Y)
+  sleeveColor?: string, // opcional, por defecto = baseColor
+): string {
+  const { collarBottom } = SHIRT_GEOM;
+  const sleeves = sleeveColor ?? baseColor;
+
+  return [
+    // cuello
+    `linear-gradient(${baseColor} 0 ${collarBottom}%, transparent ${collarBottom}% 100%)`,
+    // mangas de color sólido y torso transparente (22.5–76)
+    'linear-gradient(90deg,' +
+      `${sleeves} 0 22.5%,` +
+      `transparent 22.5% 76%,` +
+      `${sleeves} 76% 100%)`,
+    // banda diagonal
+    `linear-gradient(${angleDeg}deg,` +
+      `${baseColor} 0 ${startPct}%,` +
+      `${sashColor} ${startPct}% ${endPct}%,` +
+      `${baseColor} ${endPct}% 100%)`,
+  ].join(',');
+}
+
+/** Tipo F: panel central vertical (Ajax / PSG style, genérico)
+ *
+ * baseColor   → color base (mangas + fondo)
+ * bands       → bandas verticales (from/to en % horizontal, 0–100)
+ * sleeveColor → color sólido de mangas (si se omite, usa baseColor)
+ *
+ * NOTA: las bandas se aplican sólo en el torso; las mangas
+ * quedan lisas con sleeveColor/baseColor.
+ */
+function centralPanel(
+  baseColor: string,
+  bands: Array<{ color: string; from: number; to: number }>,
+  sleeveColor?: string,
+): string {
+  const { torsoLeft, torsoRight } = SHIRT_GEOM;
+
+  // 1) Construimos el gradiente vertical del torso (0–100% en X)
+  const sorted = [...bands].sort((a, b) => a.from - b.from);
+
+  const stops: string[] = [];
+  let current = 0;
+
+  for (const band of sorted) {
+    if (band.from > current) {
+      stops.push(`${baseColor} ${current}% ${band.from}%`);
+    }
+    stops.push(`${band.color} ${band.from}% ${band.to}%`);
+    current = band.to;
+  }
+  if (current < 100) {
+    stops.push(`${baseColor} ${current}% 100%`);
+  }
+
+  // torso con las bandas (en todo el ancho, luego recortamos mangas)
+  const torsoLayer = `linear-gradient(90deg,${stops.join(',')})`;
+
+  // 2) Capa de mangas sólidas por encima (como en centralMultiBands)
+  const sleeveFill = sleeveColor ?? baseColor;
+  const leftCut = torsoLeft - 1;
+  const rightCut = torsoRight + 1;
+
+  const sleevesLayer =
+    `linear-gradient(90deg,` +
+    `${sleeveFill} 0 ${leftCut}%,` +
+    `transparent ${leftCut}% ${rightCut}%,` +
+    `${sleeveFill} ${rightCut}% 100%)`;
+
+  // 3) Base de seguridad por debajo
+  const baseLayer = `linear-gradient(${baseColor} 0 100%)`;
+
+  // Orden: mangas (recorte), torso con panel, base
+  return `${sleevesLayer},${torsoLayer},${baseLayer}`;
+}
+
+/** Tipo G: mitad y mitad vertical (half & half) */
+function halfAndHalf(leftColor: string, rightColor: string): string {
+  return `linear-gradient(90deg,${leftColor} 0 50%,${rightColor} 50% 100%)`;
+}
+
+/** Tipo H: cuerpo de un color, mangas de otro */
+function bodyWithSleeves(bodyColor: string, sleeveColor: string): string {
+  const { torsoLeft, torsoRight } = SHIRT_GEOM;
+  return `linear-gradient(90deg,${sleeveColor} 0 ${torsoLeft - 1.1}%,${bodyColor} ${torsoLeft - 1.1}% ${torsoRight + 1.1}%,${sleeveColor} ${torsoRight + 1.1}% 100%)`;
+}
+
+/** Tipo I: hoops (franjas horizontales) con opción de mangas sólidas */
+function horizontalHoops(
+  color1: string,
+  color2: string,
+  stripeHeightPct: number, // alto de cada franja en %
+  sleeveColor?: string, // si viene, mangas sólidas de este color
+): string {
+  const { torsoLeft, torsoRight } = SHIRT_GEOM;
+
+  const hoopsLayer =
+    `repeating-linear-gradient(180deg,` +
+    `${color1} 0 ${stripeHeightPct}%,` +
+    `${color2} ${stripeHeightPct}% ${stripeHeightPct * 2}%)`;
+
+  // Sin mangas especiales → todo a rayas como antes
+  if (!sleeveColor) return hoopsLayer;
+
+  // Capa superior: mangas sólidas, torso transparente
+  const sleevesLayer =
+    `linear-gradient(90deg,` +
+    `${sleeveColor} 0 ${torsoLeft - 1.1}%,` +
+    `transparent ${torsoLeft - 1.1}% ${torsoRight + 1}%,` +
+    `${sleeveColor} ${torsoRight + 1}% 100%)`;
+
+  // Mangas arriba, hoops abajo
+  return `${sleevesLayer},${hoopsLayer}`;
+}
+
+/** Tipo J: bloque de varias franjas horizontales centradas */
+function centralMultiBands(
+  baseColor: string,
+  bands: Array<{ color: string; from: number; to: number }>, // from/to en %
+  sleeveColor?: string, // opcional
+): string {
+  const { torsoLeft, torsoRight } = SHIRT_GEOM;
+
+  // Construimos el torso (igual que antes)
+  const sorted = [...bands].sort((a, b) => a.from - b.from);
+
+  const stops: string[] = [];
+  let current = 0;
+
+  for (const band of sorted) {
+    if (band.from > current) {
+      stops.push(`${baseColor} ${current}% ${band.from}%`);
+    }
+    stops.push(`${band.color} ${band.from}% ${band.to}%`);
+    current = band.to;
+  }
+  if (current < 100) {
+    stops.push(`${baseColor} ${current}% 100%`);
+  }
+
+  const torsoLayer = `linear-gradient(${stops.join(',')})`;
+
+  // Si no hay color de mangas (o es igual a base), mantenemos el comportamiento viejo
+  if (!sleeveColor) {
+    return torsoLayer;
+  }
+
+  // Mangas sólidas por arriba, torso transparente
+  const sleevesLayer =
+    `linear-gradient(90deg,` +
+    `${sleeveColor} 0 ${torsoLeft - 1}%,` +
+    `transparent ${torsoLeft - 1}% ${torsoRight + 1}%,` +
+    `${sleeveColor} ${torsoRight + 1}% 100%)`;
+
+  return `${sleevesLayer},${torsoLayer}`;
+}
+
+/** Tipo K bruto: tablero de NxM cuadros sólidos */
+/** Tablero SVG embebido como data URL */
+function svgCheckerboardDataURL(
+  lightColor: string,
+  darkColor: string,
+  cols: number,
+  rows: number,
+): string {
+  const cellW = 100 / cols;
+  const cellH = 100 / rows;
+  let rects = '';
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const isLight = (r + c) % 2 === 0;
+      const color = isLight ? lightColor : darkColor;
+      const x = c * cellW;
+      const y = r * cellH;
+      rects += `<rect x="${x}" y="${y}" width="${cellW}" height="${cellH}" fill="${color}"/>`;
+    }
+  }
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${rects}</svg>`;
+  const encoded = encodeURIComponent(svg)
+    .replace(/'/g, '%27')
+    .replace(/\(/g, '%28')
+    .replace(/\)/g, '%29');
+
+  // Esto es lo que va directamente en background:
+  return `url("data:image/svg+xml,${encoded}")`;
+}
+
+/** Tipo L: half&half diagonal (ej. Monaco) */
+function diagonalHalf(
+  colorTopLeft: string, // color desde la esquina sup. izq
+  colorBottomRight: string, // color hacia la esquina inf. der
+  angleDeg: number, // 135 = típico hombro izq → cintura der
+  splitPct: number, // % donde se hace el corte
+): string {
+  return (
+    `linear-gradient(${angleDeg}deg,` +
+    `${colorTopLeft} 0 ${splitPct}%,` +
+    `${colorBottomRight} ${splitPct}% 100%)`
+  );
 }
 
 function getShirtStyle(
@@ -76,506 +419,1304 @@ function getShirtStyle(
 ) {
   const name = aliasName(clubName || nationality || '');
 
-  // Paleta por clubes/selecciones (tokens de bÃºsqueda en minÃºsculas)
+  const { collarBottom, dorsalTop, dorsalBottom, torsoLeft, torsoRight } = SHIRT_GEOM;
+
+  // Paleta por clubes/selecciones
   const patterns: Array<{ token: string; background: string; color: string }> = [
+    // === Ejemplos adaptados a los nuevos tipos ===
+
+    // Tipo A (camiseta simple)
     {
-      token: 'milan',
-      background: 'repeating-linear-gradient(90deg,#b00 0 18%,#111 18% 36%)',
+      token: 'a s roma',
+      background: solidWithCuffs('#8e1f1f', '#f2e04c'),
+      color: '#f2e04c',
+    },
+    {
+      token: 'sparta praha',
+      background: solidWithCuffs('#7b1b1b', '#f2f2f2'),
       color: '#f2f2f2',
     },
     {
-      token: 'barcelona',
-      background: 'linear-gradient(90deg,#00205b 0 50%,#b20032 50% 100%)',
-      color: '#ffd700',
+      token: 'auxerre',
+      background: solidWithCuffs('#ffffff', '#0054a6'),
+      color: '#0054a6',
     },
     {
-      token: 'boca',
-      background: 'linear-gradient(#0b1a44 0 40%,#f6c800 40% 60%,#0b1a44 60% 100%)',
-      color: '#fff',
+      token: 'nancy',
+      background: solidWithCuffs('#ffffff', '#c00000'),
+      color: '#c00000',
     },
     {
-      token: 'river',
-      background: 'linear-gradient(135deg,#fff 0 46%,#d00000 46% 54%,#fff 54% 100%)',
-      color: '#111',
+      token: 'saint-etienne',
+      background: solidWithCuffs('#0b7d3c', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'real madrid',
-      background:
-        'linear-gradient( #5b2ba8 0 4.5%, transparent 4.5% 100%), linear-gradient(#f7f7f7)',
-      color: '#5b2ba8',
+      token: 'az ',
+      background: solidWithCuffs('#c00000', '#000000'),
+      color: '#ffffff',
     },
     {
-      token: 'ajax',
-      background: 'linear-gradient(90deg,#fff 0 35%,#c00 35% 65%,#fff 65% 100%)',
-      color: '#222',
+      token: 'bayern',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'arsenal',
-      background: 'linear-gradient(90deg,#c00000 0 70%,#fff 70% 100%)',
-      color: '#002244',
+      token: 'benfica',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'monaco',
-      background: 'linear-gradient(135deg,#c00 0 50%,#fff 50% 100%)',
-      color: '#111',
-    },
-    { token: 'saint-etienne', background: '#0b7d3c', color: '#fefefe' },
-    {
-      token: 'ascoli',
-      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
-      color: '#000',
+      token: 'bolton',
+      background: solidWithCuffs('#ffffff', '#0b1a44'),
+      color: '#0b1a44',
     },
     {
-      token: 'aston villa',
-      background: 'linear-gradient(90deg,#6a1b4d 0 70%,#6ec6ff 70% 100%)',
-      color: '#fff',
+      token: 'gimnastic',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'atalanta',
-      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 33%,#111 33% 66%)',
-      color: '#fefefe',
+      token: 'osasuna',
+      background: solidWithCuffs('#b00000', '#0b1a44'),
+      color: '#0b1a44',
     },
     {
-      token: 'athletic',
-      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
-      color: '#111',
-    },
-    { token: 'az ', background: '#c00', color: '#fefefe' },
-    { token: 'bayern', background: '#c00', color: '#fff' },
-    { token: 'benfica', background: '#c00', color: '#fff' },
-    {
-      token: 'besiktas',
-      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
-      color: '#000',
+      token: 'charlton',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'blackburn',
-      background: 'linear-gradient(90deg,#0b3b8c 0 50%,#fff 50% 100%)',
-      color: '#e4002b',
-    },
-    { token: 'bolton', background: '#fff', color: '#0b1a44' },
-    {
-      token: 'atlético madrid',
-      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
-      color: '#00205b',
+      token: 'chelsea',
+      background: solidWithCuffs('#0033a0', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'atlético',
-      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
-      color: '#00205b',
+      token: 'chievo',
+      background: solidWithCuffs('#ffda00', '#0b3b8c'),
+      color: '#0b3b8c',
     },
-    { token: 'gimnastic', background: '#c00', color: '#fefefe' },
-    { token: 'osasuna', background: '#b00', color: '#0b1a44' },
-    {
-      token: 'cagliari',
-      background: 'linear-gradient(90deg,#b00 0 50%,#001437 50% 100%)',
-      color: '#fff',
-    },
-    {
-      token: 'catania',
-      background:
-        'repeating-linear-gradient(90deg,#55bbee 0 50%,#c00 50% 70%,#55bbee 70% 100%)',
-      color: '#fff',
-    },
-    {
-      token: 'celtic',
-      background: 'repeating-linear-gradient(90deg,#0b7d3c 0 16%,#fff 16% 32%)',
-      color: '#111',
-    },
-    { token: 'charlton', background: '#c00', color: '#fff' },
-    { token: 'chelsea', background: '#0033a0', color: '#fff' },
-    { token: 'chievo', background: '#ffda00', color: '#0b3b8c' },
-    {
-      token: 'classic argentina',
-      background:
-        'linear-gradient( #fff 0% 4.5%, transparent 4.5% 100%),repeating-linear-gradient(90deg, transparent 0 23%, 	#6ec6ff 23% 27.5%, 	#FFF 27.5% 36.5%, 	#6ec6ff 36.5% 45.5%, 	#FFF 45.5% 54.5%, 	#6ec6ff 54.5% 63.5%, 	#FFF 63.5% 72.5%, 	#6ec6ff 72.5% 77%, 	transparent 77% 100%),linear-gradient(60deg, transparent 0 60%, #fff 60% 73%, #6ec6ff 73% 82%, #fff 82% 100%),linear-gradient(300deg, transparent 0 60%, #fff 60% 73%, #6ec6ff 73% 82%, #fff 82% 100%)',
-      color: '#111',
-    },
+
+    // “CLASSIC” SELECCIONES (VERSIONES TIPO A)
+
     {
       token: 'classic brazil',
-      background: 'linear-gradient( #198a43 0% 4.5%, #f6c800 4.5% 100%)',
+      background: solidWithCuffs('#f6c800', '#198a43'),
       color: '#198a43',
     },
-    { token: 'classic england', background: '#fff', color: '#0b1a44' },
-    { token: 'classic france', background: '#00205b', color: '#fff' },
-    { token: 'classic germany', background: '#fff', color: '#000' },
-    { token: 'classic italy', background: '#0b3b8c', color: '#fff' },
+    {
+      token: 'classic england',
+      background: solidWithCuffs('#ffffff', '#c00000'),
+      color: '#0b1a44',
+    },
+    {
+      token: 'classic france',
+      background: solidWithCuffs('#00205b', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'classic germany',
+      background: solidWithCuffs('#ffffff', '#000000'),
+      color: '#000000',
+    },
+    {
+      token: 'classic italy',
+      background: solidWithCuffs('#0b3b8c', '#ffffff'),
+      color: '#ffffff',
+    },
     {
       token: 'classic netherlands',
-      background: 'linear-gradient( #111 -5% 4.5%, #f58025 4.5% 100%)',
-      color: '#111',
+      background: solidWithCuffs('#f58025', '#111111'),
+      color: '#111111',
+    },
+
+    // MÁS CLUBES TIPO A
+
+    {
+      token: 'dynamo kiev',
+      background: solidWithCuffs('#ffffff', '#0033a0'),
+      color: '#0033a0',
     },
     {
-      token: 'club brugge',
-      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 33%,#111 33% 66%)',
-      color: '#fefefe',
+      token: 'empoli',
+      background: solidWithCuffs('#0b3b8c', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'sedan',
-      background: 'linear-gradient(90deg,#0b7d3c 0 60%,#b00 60% 100%)',
-      color: '#fff',
+      token: 'troyes',
+      background: solidWithCuffs('#0075c9', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'djurgardens',
-      background: 'repeating-linear-gradient(90deg,#7fbde9 0 33%,#003c7d 33% 66%)',
-      color: '#d4af37',
-    },
-    { token: 'dynamo kiev', background: '#fff', color: '#0033a0' },
-    { token: 'empoli', background: '#0b3b8c', color: '#fff' },
-    { token: 'everton', background: '#0033a0', color: '#fff' },
-    { token: 'fc copenhagen', background: '#fff', color: '#0033a0' },
-    {
-      token: 'fc groningen',
-      background: 'linear-gradient(90deg,#fff 0 33%,#0b7d3c 33% 66%,#fff 66% 100%)',
-      color: '#111',
-    },
-    { token: 'lorient', background: '#f58025', color: '#000' },
-    { token: 'nantes', background: '#ffda00', color: '#0b7d3c' },
-    {
-      token: 'porto',
-      background:
-        'repeating-linear-gradient(90deg,#0033a0 0 50%,#fff 50% 70%,#0033a0 70% 100%)',
-      color: '#fefefe',
+      token: 'everton',
+      background: solidWithCuffs('#0033a0', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'psg',
-      background: 'linear-gradient(90deg,#0a1445 0 40%,#c00 40% 60%,#0a1445 60% 100%)',
-      color: '#fff',
+      token: 'fc copenhagen',
+      background: solidWithCuffs('#ffffff', '#0033a0'),
+      color: '#0033a0',
     },
     {
-      token: 'feyenoord',
-      background: 'linear-gradient(90deg,#c00 0 50%,#fff 50% 100%)',
-      color: '#000',
-    },
-    { token: 'fiorentina', background: '#5e2d8a', color: '#fff' },
-    {
-      token: 'fulham',
-      background: 'linear-gradient(90deg,#fff 0 70%,#000 70% 100%)',
-      color: '#c00',
+      token: 'lorient',
+      background: solidWithCuffs('#f58025', '#000000'),
+      color: '#000000',
     },
     {
-      token: 'galatasaray',
-      background: 'linear-gradient(90deg,#c00 0 50%,#f6c800 50% 100%)',
-      color: '#000',
+      token: 'nantes',
+      background: solidWithCuffs('#ffda00', '#0b7d3c'),
+      color: '#0b7d3c',
     },
-    { token: 'getafe', background: '#0033a0', color: '#fff' },
+    {
+      token: 'sochaux',
+      background: solidWithCuffs('#ffda00', '#0033a0'),
+      color: '#0033a0',
+    },
+    {
+      token: 'twente',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'fiorentina',
+      background: solidWithCuffs('#5e2d8a', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'getafe',
+      background: solidWithCuffs('#0033a0', '#ffffff'),
+      color: '#ffffff',
+    },
     {
       token: 'bordeaux',
-      background: 'linear-gradient(180deg,#0a1445 0 75%,#fff 75% 100%)',
+      background: solidWithCuffs('#0a1445', '#ffffff'),
       color: '#e4002b',
     },
     {
-      token: 'inter',
-      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 33%,#111 33% 66%)',
-      color: '#d4af37',
+      token: 'lazio',
+      background: solidWithCuffs('#7fbde9', '#ffffff'),
+      color: '#111111',
     },
     {
-      token: 'juventus',
-      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
-      color: '#000',
+      token: 'le mans',
+      background: solidWithCuffs('#d62828', '#ffda00'),
+      color: '#ffffff',
     },
-    { token: 'lazio', background: '#7fbde9', color: '#111' },
     {
-      token: 'levante',
-      background: 'repeating-linear-gradient(90deg,#0b3b8c 0 50%,#6a1b4d 50% 100%)',
-      color: '#ffd700',
+      token: 'libre',
+      background: solidWithCuffs('#111111', '#f7f7f7'),
+      color: '#f7f7f7',
     },
-    { token: 'lille', background: '#c00', color: '#0a1445' },
-    { token: 'liverpool', background: '#c00', color: '#fff' },
-    { token: 'livorno', background: '#6a1b4d', color: '#fff' },
-    { token: 'manchester city', background: '#7fbde9', color: '#111' },
+    {
+      token: 'lille',
+      background: solidWithCuffs('#c00000', '#0a1445'),
+      color: '#0a1445',
+    },
+    {
+      token: 'liverpool',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'livorno',
+      background: solidWithCuffs('#6a1b4d', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'manchester city',
+      background: solidWithCuffs('#7fbde9', '#ffffff'),
+      color: '#111111',
+    },
     {
       token: 'manchester united',
-      background: 'linear-gradient(90deg,#c00 0 70%,#fff 70% 100%)',
-      color: '#000',
+      background: solidWithCuffs('#c00000', '#000000'),
+      color: '#000000',
     },
     {
       token: 'messina',
-      background: 'linear-gradient(90deg,#ffda00 0 50%,#c00 50% 100%)',
-      color: '#111',
+      background: solidWithCuffs('#ffda00', '#c00000'),
+      color: '#111111',
     },
     {
-      token: 'middlesbrough',
-      background: 'linear-gradient(180deg,#c00 0 60%,#fff 60% 70%,#c00 70% 100%)',
-      color: '#fff',
+      token: 'marseille',
+      background: solidWithCuffs('#ffffff', '#00a3e0'),
+      color: '#00a3e0',
     },
     {
-      token: 'nec ',
-      background: 'linear-gradient(90deg,#c00 0 33%,#0b7d3c 33% 66%,#000 66% 100%)',
-      color: '#fff',
+      token: 'palermo',
+      background: solidWithCuffs('#f5c1d1', '#000000'),
+      color: '#000000',
     },
     {
-      token: 'nac breda',
-      background: 'linear-gradient(135deg,#ffda00 0 60%,#000 60% 100%)',
-      color: '#fff',
-    },
-    {
-      token: 'newcastle',
-      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
-      color: '#000',
-    },
-    {
-      token: 'nice',
-      background: 'repeating-linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
-      color: '#fff',
-    },
-    {
-      token: 'olympiacos',
-      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
-      color: '#111',
-    },
-    { token: 'marseille', background: '#fff', color: '#00a3e0' },
-    {
-      token: 'lyon',
-      background: 'linear-gradient(90deg,#fff 0 33%,#0033a0 33% 66%,#c00 66% 100%)',
-      color: '#111',
-    },
-    { token: 'palermo', background: '#f5c1d1', color: '#000' },
-    { token: 'panathinaikos', background: '#0b7d3c', color: '#fff' },
-    {
-      token: 'paris saint-germain',
-      background: 'linear-gradient(90deg,#0a1445 0 40%,#c00 40% 60%,#0a1445 60% 100%)',
-      color: '#fff',
-    },
-    {
-      token: 'parma',
-      background: 'linear-gradient(90deg,#ffda00 0 50%,#0033a0 50% 100%)',
-      color: '#fff',
-    },
-    {
-      token: 'pes united',
-      background: 'linear-gradient(#ffda00 0 50%,#0a1445 50% 100%)',
-      color: '#fff',
-    },
-    { token: 'portsmouth', background: '#0033a0', color: '#ffd700' },
-    {
-      token: 'psv',
-      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
-      color: '#000',
-    },
-    {
-      token: 'betis',
-      background: 'repeating-linear-gradient(90deg,#0b7d3c 0 33%,#fff 33% 66%)',
-      color: '#111',
-    },
-    {
-      token: 'racing',
-      background: 'linear-gradient(90deg,#fff 0 50%,#0b7d3c 50% 100%)',
-      color: '#000',
-    },
-    {
-      token: 'real sociedad',
-      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
-      color: '#111',
+      token: 'panathinaikos',
+      background: solidWithCuffs('#0b7d3c', '#ffffff'),
+      color: '#ffffff',
     },
     {
       token: 'real zaragoza',
-      background: 'linear-gradient(90deg,#fff 0 70%,#0033a0 70% 100%)',
-      color: '#c00',
-    },
-    { token: 'celta', background: '#7fbde9', color: '#111' },
-    {
-      token: 'deportivo',
-      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
-      color: '#111',
+      background: solidWithCuffs('#ffffff', '#0033a0'),
+      color: '#c00000',
     },
     {
-      token: 'espanyol',
-      background: 'repeating-linear-gradient(90deg,#fff 0 33%,#0033a0 33% 66%)',
-      color: '#111',
+      token: 'celta',
+      background: solidWithCuffs('#7fbde9', '#ffffff'),
+      color: '#111111',
     },
     {
       token: 'mallorca',
-      background: 'linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
+      background: solidWithCuffs('#c00000', '#000000'),
       color: '#ffda00',
     },
     {
       token: 'rangers',
-      background: 'linear-gradient(90deg,#0033a0 0 70%,#fff 70% 100%)',
-      color: '#c00',
+      background: solidWithCuffs('#0033a0', '#ffffff'),
+      color: '#c00000',
     },
     {
-      token: 'lens',
-      background:
-        'repeating-linear-gradient(90deg,#ffda00 0 50%,#c00 50% 70%,#ffda00 70% 100%)',
-      color: '#000',
-    },
-    {
-      token: 'reading',
-      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
-      color: '#c00',
-    },
-    { token: 'reggina', background: '#6a1b4d', color: '#fff' },
-    {
-      token: 'rkc',
-      background: 'linear-gradient(90deg,#ffda00 0 60%,#0033a0 60% 100%)',
-      color: '#111',
-    },
-    {
-      token: 'roda',
-      background: 'linear-gradient(90deg,#ffda00 0 60%,#000 60% 100%)',
-      color: '#fff',
+      token: 'reggina',
+      background: solidWithCuffs('#6a1b4d', '#ffffff'),
+      color: '#ffffff',
     },
     {
       token: 'rosenborg',
-      background: 'linear-gradient(90deg,#fff 0 70%,#000 70% 100%)',
-      color: '#000',
-    },
-    { token: 'anderlecht', background: '#5e2d8a', color: '#fff' },
-    {
-      token: 'sampdoria',
-      background:
-        'linear-gradient(#0033a0 0 35%,#fff 35% 42%,#c00 42% 49%,#000 49% 56%,#fff 56% 63%,#0033a0 63% 100%)',
-      color: '#fff',
+      background: solidWithCuffs('#ffffff', '#000000'),
+      color: '#000000',
     },
     {
-      token: 'sao paulo',
-      background: 'linear-gradient(#fff 0 50%,#c00 50% 55%,#111 55% 60%,#fff 60% 100%)',
-      color: '#111',
+      token: 'anderlecht',
+      background: solidWithCuffs('#5e2d8a', '#ffffff'),
+      color: '#ffffff',
     },
     {
-      token: 'excelsior',
-      background: 'repeating-linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
-      color: '#fff',
+      token: 'sevilla',
+      background: solidWithCuffs('#ffffff', '#c00000'),
+      color: '#c00000',
     },
     {
-      token: 'heerenveen',
-      background: 'repeating-linear-gradient(90deg,#0033a0 0 33%,#fff 33% 66%)',
-      color: '#c00',
+      token: 'torino',
+      background: solidWithCuffs('#6a1b4d', '#ffffff'),
+      color: '#ffffff',
     },
-    { token: 'sevilla', background: '#fff', color: '#c00' },
-    {
-      token: 'sheffield united',
-      background: 'repeating-linear-gradient(90deg,#c00 0 25%,#fff 25% 50%)',
-      color: '#000',
-    },
-    {
-      token: 'siena',
-      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
-      color: '#000',
-    },
-    {
-      token: 'sparta rotterdam',
-      background: 'repeating-linear-gradient(90deg,#c00 0 33%,#fff 33% 66%)',
-      color: '#000',
-    },
-    {
-      token: 'sporting lisbon',
-      background: 'repeating-linear-gradient(90deg,#0b7d3c 0 33%,#fff 33% 66%)',
-      color: '#111',
-    },
-    {
-      token: 'stade rennais',
-      background: 'linear-gradient(90deg,#c00 0 50%,#000 50% 100%)',
-      color: '#fff',
-    },
-    { token: 'torino', background: '#6a1b4d', color: '#fff' },
     {
       token: 'tottenham',
-      background: 'linear-gradient(90deg,#fff 0 70%,#0a1445 70% 100%)',
-      color: '#ffda00',
+      background: solidWithCuffs('#ffffff', '#0a1445'),
+      color: '#0a1445',
     },
-    { token: 'toulouse', background: '#7e57c2', color: '#fff' },
     {
-      token: 'udinese',
-      background: 'repeating-linear-gradient(90deg,#fff 0 20%,#000 20% 40%)',
-      color: '#000',
+      token: 'toulouse',
+      background: solidWithCuffs('#7e57c2', '#ffffff'),
+      color: '#ffffff',
     },
     {
       token: 'valencia',
-      background: 'linear-gradient(90deg,#fff 0 70%,#000 70% 100%)',
+      background: solidWithCuffs('#ffffff', '#000000'),
       color: '#f58025',
     },
-    { token: 'valenciennes', background: '#c00', color: '#fff' },
-    { token: 'villarreal', background: '#ffda00', color: '#0033a0' },
     {
-      token: 'vitesse',
-      background:
-        'repeating-linear-gradient(90deg,#ffda00 0 50%,#000 50% 70%,#ffda00 70% 100%)',
-      color: '#000',
+      token: 'valenciennes',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'villarreal',
+      background: solidWithCuffs('#ffda00', '#0033a0'),
+      color: '#0033a0',
     },
     {
       token: 'watford',
-      background: 'linear-gradient(90deg,#ffda00 0 60%,#000 60% 80%,#c00 80% 100%)',
-      color: '#fff',
+      background: solidWithCuffs('#ffda00', '#000000'),
+      color: '#c00000',
+    },
+    // TIPO A – CLUBES PENDIENTES
+
+    {
+      token: 'real madrid',
+      background: solidWithCuffs('#f7f7f7', '#5b2ba8'),
+      color: '#5b2ba8',
     },
     {
-      token: 'west ham',
-      background: 'linear-gradient(90deg,#6a1b4d 0 70%,#7fbde9 70% 100%)',
+      token: 'equipo ml',
+      background: solidWithCuffs('#0a1445', '#ffda00'),
+      color: '#ffda00',
+    },
+    {
+      token: 'ml old',
+      background: solidWithCuffs('#0a1445', '#ffda00'),
+      color: '#ffda00',
+    },
+    {
+      token: 'ml young',
+      background: solidWithCuffs('#0a1445', '#ffda00'),
+      color: '#ffda00',
+    },
+
+    // SELECCIONES – TIPO A (solidWithCuffs)
+
+    {
+      token: 'australia',
+      background: solidWithCuffs('#f6c800', '#006437'),
+      color: '#006437',
+    },
+    {
+      token: 'austria',
+      background: solidWithCuffs('#d00000', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'belgium',
+      background: solidWithCuffs('#e30613', '#000000'),
+      color: '#000000',
+    },
+    {
+      token: 'brazil',
+      background: solidWithCuffs('#f6c800', '#198a43'),
+      color: '#198a43',
+    },
+    {
+      token: 'bulgaria',
+      background: solidWithCuffs('#ffffff', '#0b7d3c'),
+      color: '#0b7d3c',
+    },
+    {
+      token: 'cameroon',
+      background: solidWithCuffs('#0b7d3c', '#d00000'),
+      color: '#ffda00',
+    },
+    {
+      token: 'chile',
+      background: solidWithCuffs('#c00000', '#0033a0'),
+      color: '#ffffff',
+    },
+    {
+      token: 'colombia',
+      background: solidWithCuffs('#ffda00', '#0033a0'),
+      color: '#c00000',
+    },
+    {
+      token: 'costa rica',
+      background: solidWithCuffs('#c00000', '#0033a0'),
+      color: '#ffffff',
+    },
+    {
+      token: 'cote d ivoire',
+      background: solidWithCuffs('#f58025', '#0b7d3c'),
+      color: '#ffffff',
+    },
+    {
+      token: 'czech republic',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'denmark',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'ecuador',
+      background: solidWithCuffs('#ffda00', '#031e58ff'),
+      color: '#03158ff',
+    },
+    {
+      token: 'england',
+      background: solidWithCuffs('#ffffff', '#c00000'),
+      color: '#c00000',
+    },
+    {
+      token: 'finland',
+      background: solidWithCuffs('#ffffff', '#0033a0'),
+      color: '#0033a0',
+    },
+    {
+      token: 'france',
+      background: solidWithCuffs('#00205b', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'germany',
+      background: solidWithCuffs('#ffffff', '#000000'),
+      color: '#000000',
+    },
+    {
+      token: 'ghana',
+      background: solidWithCuffs('#ffffff', '#000000ff'),
+      color: '#000000ff',
+    },
+    {
+      token: 'greece',
+      background: solidWithCuffs('#0033a0', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'hungary',
+      background: solidWithCuffs('#c00000', '#0b7d3c'),
+      color: '#ffffff',
+    },
+    {
+      token: 'iran',
+      background: solidWithCuffs('#ffffff', '#c00000'),
+      color: '#c00000',
+    },
+    {
+      token: 'ireland',
+      background: solidWithCuffs('#0b7d3c', '#ffda00'),
+      color: '#ffffff',
+    },
+    {
+      token: 'italy',
+      background: solidWithCuffs('#0b3b8c', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'japan',
+      background: solidWithCuffs('#0a1445', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'latvia',
+      background: solidWithCuffs('#7b1b1b', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'mexico',
+      background: solidWithCuffs('#0b7d3c', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'netherlands',
+      background: solidWithCuffs('#f58025', '#111111'),
+      color: '#111111',
+    },
+    {
+      token: 'nigeria',
+      background: solidWithCuffs('#0b7d3c', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'northern ireland',
+      background: solidWithCuffs('#0b7d3c', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'norway',
+      background: solidWithCuffs('#c00000', '#0033a0'),
+      color: '#ffffff',
+    },
+    {
+      token: 'poland',
+      background: solidWithCuffs('#ffffff', '#c00000'),
+      color: '#c00000',
+    },
+    {
+      token: 'portugal',
+      background: solidWithCuffs('#c00000', '#0b7d3c'),
+      color: '#ffda00',
+    },
+    {
+      token: 'romania',
+      background: solidWithCuffs('#ffda00', '#c00000'),
+      color: '#c00000',
+    },
+    {
+      token: 'russia',
+      background: solidWithCuffs('#ffffff', '#0033a0'),
+      color: '#c00000',
+    },
+    {
+      token: 'saudi arabia',
+      background: solidWithCuffs('#ffffff', '#0b7d3c'),
+      color: '#0b7d3c',
+    },
+    {
+      token: 'scotland',
+      background: solidWithCuffs('#00305b', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'serbia and montenegro',
+      background: solidWithCuffs('#c00000', '#0033a0'),
+      color: '#ffffff',
+    },
+    {
+      token: 'slovakia',
+      background: solidWithCuffs('#ffffff', '#0033a0'),
+      color: '#c00000',
+    },
+    {
+      token: 'slovenia',
+      background: solidWithCuffs('#ffffff', '#0b7d3c'),
+      color: '#0b7d3c',
+    },
+    {
+      token: 'south africa',
+      background: solidWithCuffs('#f6c800', '#0b7d3c'),
+      color: '#0b7d3c',
+    },
+    {
+      token: 'south korea',
+      background: solidWithCuffs('#c00000', '#0033a0'),
+      color: '#ffffff',
+    },
+    {
+      token: 'spain',
+      background: solidWithCuffs('#c00000', '#ffda00'),
+      color: '#ffda00',
+    },
+    {
+      token: 'sweden',
+      background: solidWithCuffs('#ffda00', '#0033a0'),
+      color: '#0033a0',
+    },
+    {
+      token: 'switzerland',
+      background: solidWithCuffs('#c00000', '#ffffff'),
+      color: '#ffffff',
+    },
+    {
+      token: 'togo',
+      background: solidWithCuffs('#ffda00', '#0b7d3c'),
+      color: '#0b7d3c',
+    },
+    {
+      token: 'tunisia',
+      background: solidWithCuffs('#ffffff', '#c00000'),
+      color: '#c00000',
+    },
+    {
+      token: 'ukraine',
+      background: solidWithCuffs('#ffda00', '#0033a0'),
+      color: '#0033a0',
+    },
+    {
+      token: 'uruguay',
+      background: solidWithCuffs('#7fbde9', '#000000'),
+      color: '#000000',
+    },
+    {
+      token: 'united states',
+      background: solidWithCuffs('#ffffff', '#00205b'),
+      color: '#00205b',
+    },
+    {
+      token: 'wales',
+      background: solidWithCuffs('#c00000', '#ffffffff'),
+      color: '#ffffffff',
+    },
+
+    // Tipo B (rayas con mangas de un color)
+    {
+      token: 'milan',
+      background: stripedTorsoWithMonoColorSleeves('#111', '#111', '#111', '#c01'),
+      color: '#f2f2f2',
+    },
+    {
+      token: 'inter',
+      background: stripedTorsoWithMonoColorSleeves('#111', '#111', '#111', '#2f05c7ff'),
+      color: '#f2f2f2',
+    },
+    {
+      token: 'ado den haag',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0b7d3c', // cuello verde
+        '#0b7d3c', // mangas verdes
+        '#ffda00', // franja clara (amarillo)
+        '#0b7d3c', // franja oscura (verde)
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'ascoli',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#000000', // cuello negro
+        '#000000', // mangas negras
+        '#f1f1f1ff', // franja clara
+        '#000000', // franja oscura
+      ),
+      color: '#ffffffff',
+    },
+    {
+      token: 'athletic club',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#111111', // cuello rojo
+        '#c00000', // mangas rojas
+        '#ffffff', // franja clara
+        '#c00000', // franja oscura
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'besiktas',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#000000', // cuello negro
+        '#000000', // mangas negras
+        '#e6e6e6ff', // franja clara
+        '#000000', // franja oscura
+      ),
+      color: '#ffffffff',
+    },
+    {
+      token: 'club brugge',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#111111', // cuello oscuro
+        '#0b3b8c', // mangas azules
+        '#111111', // franja clara (azul)
+        '#0b3b8c', // franja oscura (negro)
+      ),
+      color: '#fefefe',
+    },
+    {
+      token: 'djurgardens',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#003c7d', // cuello azul oscuro
+        '#003c7d', // mangas azul oscuro
+        '#7fbde9', // franja clara (celeste)
+        '#003c7d', // franja oscura
+      ),
+      color: '#d4af37',
+    },
+    {
+      token: 'porto',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0033a0', // cuello azul
+        '#0033a0', // mangas azules
+        '#ffffff', // franja clara
+        '#0033a0', // franja oscura
+      ),
+      color: '#fefefe',
+    },
+    {
+      token: 'levante',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0b3b8c', // cuello azul
+        '#0b3b8c', // mangas grana
+        '#6a1b28', // franja clara (azul)
+        '#0b3b8c', // franja oscura (grana)
+      ),
+      color: '#ffd700',
+    },
+    {
+      token: 'olympiacos',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#c00000', // cuello rojo
+        '#ffffff', // mangas rojas
+        '#c00000', // franja clara
+        '#ffffff', // franja oscura
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'psv',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#ffffff', // cuello blanco
+        '#c00000', // mangas rojas
+        '#ffffff', // franja clara
+        '#c00000', // franja oscura
+      ),
+      color: '#000000',
+    },
+    {
+      token: 'betis',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0b7d3c', // cuello verde
+        '#0b7d3c', // mangas verdes
+        '#ffffff', // franja clara
+        '#0b7d3c', // franja oscura
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'deportivo',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0033a0', // cuello azul
+        '#0033a0', // mangas azules
+        '#ffffff', // franja clara
+        '#0033a0', // franja oscura
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'recreativo',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0033a0', // cuello azul
+        '#0033a0', // mangas azules
+        '#0033a0', // franja clara
+        '#ffffff', // franja oscura
+      ),
+      color: '#000000ff',
+    },
+    {
+      token: 'espanyol',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0033a0', // cuello azul
+        '#ffffff', // mangas azules
+        '#0033a0', // franja clara
+        '#ffffff', // franja oscura
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'lens',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#c00000', // cuello rojo
+        '#c00000', // mangas rojas
+        '#ffda00', // franja clara (amarillo)
+        '#c00000', // franja oscura (rojo)
+      ),
+      color: '#000000',
+    },
+    {
+      token: 'heerenveen',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0033a0', // cuello azul
+        '#0033a0', // mangas azules
+        '#ffffff', // franja clara
+        '#0033a0', // franja oscura
+      ),
+      color: '#c00000',
+    },
+    {
+      token: 'sheffield united',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#000000', // cuello negro
+        '#c00000', // mangas rojas
+        '#ffffff', // franja clara
+        '#c00000', // franja oscura
+      ),
+      color: '#000000',
+    },
+    {
+      token: 'siena',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#000000', // cuello negro
+        '#000000', // mangas negras
+        '#ffffff', // franja clara
+        '#000000', // franja oscura
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'udinese',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#000000', // cuello negro
+        '#000000', // mangas negras (brazos oscuros)
+        '#ffffff', // franja clara
+        '#000000', // franja oscura
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'we united',
+      background: stripedTorsoWithMonoColorSleeves(
+        '#0a1445', // cuello azul marino
+        '#0a1445', // mangas azul marino
+        '#ffda00', // franja clara (amarillo)
+        '#0a1445', // franja oscura (azul marino)
+      ),
+      color: '#ffffff',
+    },
+
+    // Tipo C – torso rayado + mangas diagonales (stripedTorsoWithDiagonalSleeves)
+    {
+      token: 'classic argentina',
+      background: stripedTorsoWithDiagonalSleeves('#fff', '#fff', '#6ec6ff'),
+      color: '#111',
+    },
+    {
+      token: 'atalanta',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#111111', // cuello azul
+        '#0b3b8c', // franjas claras (azul)
+        '#111111', // franjas oscuras (negro)
+      ),
+      color: '#fefefe',
+    },
+    {
+      token: 'atlético madrid',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#00205b', // cuello azul
+        '#ffffff', // franjas claras (blanco)
+        '#c00000', // franjas oscuras (rojo)
+      ),
+      color: '#043ba1ff',
+    },
+    {
+      token: 'catania',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#55bbee', // cuello celeste
+        '#55bbee', // franjas claras (celeste)
+        '#c00000', // franjas oscuras (rojo)
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'fenerbahce',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#0a1445', // cuello azul marino
+        '#ffda00', // franjas claras (amarillo)
+        '#0a1445', // franjas oscuras (azul marino)
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'heracles',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#000000', // cuello negro
+        '#ffffff', // franjas claras
+        '#000000', // franjas oscuras
+      ),
+      color: '#ffffffff',
+    },
+    {
+      token: 'juventus',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#ffffff', // cuello negro
+        '#ffffff', // franjas claras
+        '#000000', // franjas oscuras
+      ),
+      color: '#d3a203ff',
+    },
+    {
+      token: 'newcastle',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#ffffff', // cuello negro
+        '#000', // franjas claras
+        '#fff', // franjas oscuras
+      ),
+      color: '#ffca1aff',
+    },
+    {
+      token: 'nice',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#000000', // cuello negro
+        '#c00000', // franjas claras (rojo)
+        '#000000', // franjas oscuras (negro)
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'sociedad',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#0033a0', // cuello azul
+        '#ffffff', // franjas claras
+        '#0033a0', // franjas oscuras (azul)
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'rkc',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#0033a0', // cuello azul
+        '#ffda00', // franjas claras (amarillo)
+        '#0033a0', // franjas oscuras (azul)
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'sparta rotterdam',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#000', // cuello negro (suele llevar negro)
+        '#fff', // franjas claras
+        '#c00000', // franjas oscuras (rojo)
+      ),
+      color: '#000000',
+    },
+    {
+      token: 'vitesse',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#000000', // cuello negro
+        '#ffda00', // franjas claras (amarillo)
+        '#000000', // franjas oscuras (negro)
+      ),
       color: '#fff',
     },
     {
       token: 'wigan',
-      background: 'repeating-linear-gradient(90deg,#0033a0 0 50%,#fff 50% 100%)',
-      color: '#000',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#0033a0', // cuello azul
+        '#ffffff', // franjas claras
+        '#0033a0', // franjas oscuras (azul)
+      ),
+      color: '#000000',
     },
     {
       token: 'willem ii',
-      background:
-        'repeating-linear-gradient(90deg,#c00 0 33%,#fff 33% 66%,#0033a0 66% 100%)',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#0033a0', // cuello azul (tercer color)
+        '#ffffff', // franjas claras (blanco)
+        '#c00000', // franjas oscuras (rojo)
+      ),
+      color: '#000000',
+    },
+    {
+      token: 'seleccion argentina',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#ffffff', // cuello blanco
+        '#ffffff', // franjas claras (blanco)
+        '#6ec6ff', // franjas oscuras (celeste)
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'seleccion paraguay',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#c00000', // cuello rojo
+        '#ffffff', // franjas claras
+        '#c00000', // franjas oscuras (rojo)
+      ),
+      color: '#2b41a1ff',
+    },
+    {
+      token: 'barcelona',
+      background: stripedTorsoWithDiagonalSleeves(
+        '#ffd700', // cuello amarillo
+        '#00205b', // franjas claras (azul)
+        '#b20032', // franjas oscuras (grana)
+      ),
+      color: '#ffd700', // dorsales amarillos
+    },
+
+    // Tipo D – banda horizontal centrada
+    {
+      token: 'boca',
+      background: withCollar(
+        '#0b1a44',
+        horizontalBandBody('#0b1a44', '#f6c800', dorsalTop, dorsalBottom),
+      ),
+      color: '#fff',
+    },
+    {
+      token: 'middlesbrough',
+      background: withCollar(
+        '#ffffffff', // cuello rojo
+        horizontalBandBody(
+          '#c00000', // fondo rojo
+          '#ffffff', // banda blanca
+          30,
+          50,
+        ),
+      ),
+      color: '#ffffff', // dorsales blancos
+    },
+    {
+      token: 'turkey',
+      background: withCollar(
+        '#c00000', // cuello rojo
+        horizontalBandBody(
+          '#ffffff', // fondo rojo
+          '#c00000', // banda blanca
+          30,
+          50,
+        ),
+      ),
+      color: '#dd0000ff', // dorsales blancos
+    },
+
+    // Tipo E – banda diagonal
+    {
+      token: 'river',
+      background: diagonalSash('#fff', '#d00000', 135, 40, 56),
+      color: '#111',
+    },
+    {
+      token: 'peru',
+      background: diagonalSash('#fff', '#d00000', 135, 40, 56),
+      color: '#111',
+    },
+    {
+      token: 'trinidad and tobago',
+      background: diagonalSash(
+        '#c00000', // fondo rojo
+        '#000000', // banda negra
+        135, // ángulo
+        40, // inicio banda (Y%)
+        56, // fin banda (Y%)
+      ),
+      color: '#ffffff', // dorsales blancos
+    },
+    {
+      token: 'nac breda',
+      background: diagonalSash(
+        '#ffda00', // fondo amarillo
+        '#000000', // banda negra
+        135, // ángulo
+        40, // inicio banda
+        56, // fin banda
+      ),
+      color: '#ffffffff', // dorsales negros
+    },
+
+    // Tipo F – panel central vertical con bordes
+    {
+      token: 'ajax',
+      background: withCollar(
+        '#c01',
+        centralPanel('#ffffff', [{ color: '#c01', from: 33, to: 67 }]),
+      ),
+      color: '#f7f7f7ff',
+    },
+    {
+      token: 'psg',
+      background: withCollar(
+        '#091b75ff',
+        centralPanel(
+          '#0a1445',
+          [
+            { color: '#c4c1c1ff', from: 35, to: 37 }, // borde izq
+            { color: '#c00', from: 37, to: 63 }, // centro rojo
+            { color: '#c4c1c1ff', from: 63, to: 65 }, // borde der
+          ],
+          '#0a1445', // mangas azul oscuro
+        ),
+      ),
+      color: '#fff',
+    },
+    {
+      token: 'fc groningen',
+      background: withCollar(
+        '#0b7d3c', // cuello verde
+        centralPanel(
+          '#ffffff', // base blanca (mangas + fondo)
+          [
+            { color: '#0b7d3c', from: 29, to: 42 }, // borde izq
+            { color: '#fff', from: 42, to: 58 }, // centro rojo
+            { color: '#0b7d3c', from: 58, to: 71 }, // borde der
+          ],
+          '#ffffff', // mangas blancas
+        ),
+      ),
+      color: '#111111', // dorsales oscuros
+    },
+    {
+      token: 'olympique lyonnais',
+      background: withCollar(
+        '#031e58', // cuello blanco (puedes cambiarlo a azul/rojo si quieres)
+        centralPanel(
+          '#ffffff', // base blanca
+          [
+            {
+              color: '#e20505ff', // franja roja (lado izquierdo del panel)
+              from: 43,
+              to: 50,
+            },
+            {
+              color: '#0206daff', // franja azul (lado derecho del panel)
+              from: 50,
+              to: 57,
+            },
+          ],
+          '#ffffff', // mangas blancas
+        ),
+      ),
+      color: '#031e58ff', // dorsales azul oscuro
+    },
+
+    // Tipo G – half & half vertical
+    {
+      token: 'feyenoord',
+      background: withCollar('#000000ff', halfAndHalf('#c00', '#fff')),
       color: '#000',
     },
-    { token: 'sevilla f.c', background: '#fff', color: '#c00' },
+    {
+      token: 'blackburn',
+      background: withCollar('#fff', halfAndHalf('#0b3b8c', '#ffffff')),
+      color: '#e4002b',
+    },
+    {
+      token: 'cagliari',
+      background: withCollar('#001437', halfAndHalf('#b00000', '#001437')),
+      color: '#ffffff',
+    },
+    {
+      token: 'sedan',
+      background: withCollar('#000000ff', halfAndHalf('#0b7d3c', '#b00000')),
+      color: '#ffffff',
+    },
+    {
+      token: 'feyenoord',
+      background: withCollar('#000000', halfAndHalf('#c00000', '#ffffff')),
+      color: '#000000',
+    },
+    {
+      token: 'galatasaray',
+      background: withCollar('#000000ff', halfAndHalf('#c00000', '#f6c800')),
+      color: '#000000',
+    },
+    {
+      token: 'racing',
+      background: withCollar('#0b7d3c', halfAndHalf('#ffffff', '#0b7d3c')),
+      color: '#000000',
+    },
+    {
+      token: 'roda',
+      background: withCollar('#000000', halfAndHalf('#ffda00', '#000000')),
+      color: '#ffffff',
+    },
+    {
+      token: 'excelsior',
+      background: withCollar('#000000', halfAndHalf('#c00000', '#000000')),
+      color: '#ffffff',
+    },
+    {
+      token: 'stade rennais',
+      background: withCollar('#000000', halfAndHalf('#c00000', '#000000')),
+      color: '#ffffff',
+    },
+    {
+      token: 'n e c',
+      background: withCollar(
+        '#000000',
+        halfAndHalf('#0b7d3c', '#c00000'), // izquierda verde, derecha roja
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'pes united',
+      background: withCollar('#0a1445', halfAndHalf('#ffda00', '#0a1445')),
+      color: '#ffffff',
+    },
+
+    // Tipo H – cuerpo/mangas distintos (Arsenal, Aston Villa)
+    {
+      token: 'arsenal',
+      background: withCollar('#fff', bodyWithSleeves('#c00000', '#fff')),
+      color: '#ffffffff',
+    },
+    {
+      token: 'aston villa',
+      background: withCollar('#6ec6ff', bodyWithSleeves('#6a1b4d', '#6ec6ff')),
+      color: '#fff',
+    },
+    {
+      token: 'fulham',
+      background: withCollar('#000000', bodyWithSleeves('#ffffff', '#000000')),
+      color: '#c00000', // números rojos como en muchos kits
+    },
+    {
+      token: 'portsmouth',
+      background: withCollar('#ffd700', bodyWithSleeves('#0033a0', '#0033a0')),
+      color: '#ffd700',
+    },
+    {
+      token: 'west ham',
+      background: withCollar('#6a1b4d', bodyWithSleeves('#6a1b4d', '#7fbde9')),
+      color: '#ffffff',
+    },
+
+    // Tipo I – hoops (Celtic, Reading)
+    {
+      token: 'celtic',
+      background: withCollar('#fff', horizontalHoops('#0b7d3c', '#fff', 14, '#fff')),
+      color: '#111',
+    },
+    {
+      token: 'reading',
+      background: withCollar('#fff', horizontalHoops('#0033a0', '#fff', 14, '#0033a0')),
+      color: 'rgba(236, 7, 7, 1)',
+    },
+    {
+      token: 'parma',
+      background: withCollar(
+        '#0033a0',
+        horizontalHoops('#ffda00', '#0033a0', 14, '#0033a0'),
+      ),
+      color: '#ffffff',
+    },
+    {
+      token: 'sporting lisbon',
+      background: withCollar(
+        '#0b7d3c',
+        horizontalHoops('#0b7d3c', '#ffffff', 14, '#0b7d3c'),
+      ),
+      color: '#111111',
+    },
+    {
+      token: 'shop',
+      background: withCollar(
+        '#ffffff',
+        horizontalHoops('#0f2238', '#2e7dff', 14, '#0f2238'),
+      ),
+      color: '#ffffff',
+    },
+    // Tipo J - varias franjas horizontales centradas
+    {
+      token: 'sampdoria',
+      background: centralMultiBands(
+        '#0033a0',
+        [
+          { color: '#fff', from: 45, to: 51 },
+          { color: '#c00', from: 51, to: 55 },
+          { color: '#000', from: 55, to: 59 },
+          { color: '#fff', from: 59, to: 65 },
+        ],
+        '#0033a0',
+      ),
+      color: '#fff',
+    },
+    {
+      token: 'sao paulo',
+      background: withCollar(
+        '#252525ff',
+        centralMultiBands(
+          '#fff',
+          [
+            { color: '#c00', from: 45, to: 53 },
+            { color: '#fff', from: 53, to: 57 },
+            { color: '#111', from: 57, to: 65 },
+          ],
+          '#fff',
+        ),
+      ),
+      color: '#f83737ff',
+    },
+    {
+      token: 'seleccion angola',
+      background: withCollar(
+        '#000000ff',
+        centralMultiBands(
+          '#c00000', // base roja
+          [
+            { color: '#000000', from: 44, to: 47 }, // negro
+            { color: '#ffda00', from: 48, to: 55 }, // amarillo
+            { color: '#000000', from: 56, to: 63 }, // negro
+            { color: '#ffda00', from: 64, to: 67 }, // amarillo
+          ],
+          '#c00000', // mangas rojas
+        ),
+      ),
+      color: '#ffda00',
+    },
+
+    // Tipo K - patrón de cuadros (checkerboard)
+    {
+      token: 'croatia',
+      background: withCollar(
+        '#fff', // cuello blanco
+        svgCheckerboardDataURL('#fff', 'rgba(255, 0, 0, 1)', 5, 4), // 8x10 cuadros (ajusta a gusto)
+      ),
+      color: '#0d0270ff',
+    },
+
+    // Tipo L - half&half diagonal
+    {
+      token: 'monaco',
+      background: withCollar(
+        '#fff', // cuello blanco (puedes cambiarlo a rojo si prefieres)
+        diagonalHalf('#c00', '#fff', 135, 56),
+      ),
+      color: '#e9e9e9ff',
+    },
+    {
+      token: 'fc utrecht',
+      background: withCollar(
+        '#ffffff', // cuello blanco
+        diagonalHalf('#fff', '#c01', 135, 56), // rojo/blanco, mismos parámetros
+      ),
+      color: '#111111',
+    },
   ];
 
   const match = patterns.find((p) => name.includes(p.token));
   if (match) return { background: match.background, color: match.color };
-
-  // Selecciones conocidas (genÃ©ricas por paÃ­s si no matchea club)
-  if (name.includes('argentina'))
-    return {
-      background: 'repeating-linear-gradient(90deg,#6ec6ff 0 33%,#fff 33% 66%)',
-      color: '#111',
-    };
-  if (name.includes('brasil') || name.includes('brazil'))
-    return {
-      background: 'linear-gradient(#f6c800 0 50%,#198a43 50% 100%)',
-      color: '#0b1a44',
-    };
-  if (name.includes('chile'))
-    return {
-      background: 'linear-gradient(135deg,#c00 0 60%,#0033a0 60% 100%)',
-      color: '#fff',
-    };
-  if (name.includes('alemania') || name.includes('germany'))
-    return { background: '#fff', color: '#000' };
-  if (name.includes('italia') || name.includes('italy'))
-    return { background: '#0b3b8c', color: '#fff' };
-  if (name.includes('francia') || name.includes('france'))
-    return { background: '#00205b', color: '#fff' };
-  if (name.includes('inglaterra') || name.includes('england'))
-    return { background: '#fff', color: '#0b1a44' };
-  if (name.includes('uruguay'))
-    return { background: 'linear-gradient(#7fbde9 0 70%,#000 70% 100%)', color: '#fff' };
-  if (name.includes('paraguay'))
-    return {
-      background: 'repeating-linear-gradient(90deg,#c00 0 33%,#fff 33% 66%)',
-      color: '#0033a0',
-    };
-  if (name.includes('peru'))
-    return {
-      background: 'linear-gradient(135deg,#fff 0 60%,#c00 60% 100%)',
-      color: '#111',
-    };
-  if (name.includes('portugal'))
-    return {
-      background: 'linear-gradient(90deg,#6a1b4d 0 70%,#0b7d3c 70% 100%)',
-      color: '#ffd700',
-    };
-  if (name.includes('colombia'))
-    return {
-      background: 'linear-gradient(90deg,#ffda00 0 50%,#0033a0 50% 100%)',
-      color: '#c00',
-    };
-  if (name.includes('mexico') || name.includes('mÃ©xico'))
-    return {
-      background: 'linear-gradient(90deg,#0b7d3c 0 60%,#fff 60% 100%)',
-      color: '#c00',
-    };
-
-  // Shop / Libre fallback
-  if (origin === 'shop') return { background: '#fff', color: '#111' };
-  if (origin === 'libre') return { background: '#111', color: '#f7f7f7' };
 
   // Genérico
   return { background: '#0f2238', color: '#f7f7f7' };
@@ -1070,9 +2211,7 @@ export function PlayerProfile() {
               <div className="shirt-number">{dorsalDisplay}</div>
             </div>
           </div>
-          <div className="profile-face">
-            <img src={faceDefault} alt="Foto del jugador" />
-          </div>
+          <div className="profile-face"></div>
         </div>
 
         <div className="profile-main-info">

@@ -3598,11 +3598,11 @@ tbody tr:hover {
 .shirt-name {
   position: relative;
   text-align: center;
-  font-size: 8.5px;
+  font-size: 9px;
   font-family: 'RubberNippleFactoryBlack', system-ui, sans-serif;
-  transform: scaleY(1.4);      /* 1.5 = 50% más alto */
-  letter-spacing: 0.03em;
-  -webkit-text-stroke: 0.7px #11111196;
+  transform: scaleY(1.5);      /* 1.5 = 50% más alto */
+  -webkit-text-stroke: 0.7px #11111179;
+  font-weight: bolder;
 }
 
 
