@@ -176,7 +176,7 @@ export function SimilarPlayersModule() {
       });
 
       group.fields.forEach((field) => {
-        if (shouldDisplayField(field)) {
+        if (shouldDisplayField(field) && field !== 'POSICIONES') {
           options.push({
             value: field,
             label: getFieldLabel(field),

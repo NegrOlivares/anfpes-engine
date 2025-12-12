@@ -201,9 +201,9 @@ export function PlayerSearch() {
         isGroup: true,
       });
 
-      // Agregar los campos del grupo
+      // Agregar los campos del grupo (excepto POSICIONES para filtros)
       group.fields.forEach((field) => {
-        if (shouldDisplayField(field)) {
+        if (shouldDisplayField(field) && field !== 'POSICIONES') {
           options.push({
             value: field,
             label: getFieldLabel(field),

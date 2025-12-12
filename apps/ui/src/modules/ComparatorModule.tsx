@@ -139,7 +139,7 @@ const POSITION_HIGHLIGHTS: PositionHighlight[] = [
   {
     id: 'CCD',
     label: 'CCD',
-    color: '#1975d2',
+    color: '#09a959',
     stats: [
       'DEFENSA',
       'ESTABILIDAD',
@@ -151,7 +151,7 @@ const POSITION_HIGHLIGHTS: PositionHighlight[] = [
   {
     id: 'LA',
     label: 'LA',
-    color: '#1975d2',
+    color: '#09a959',
     stats: [
       'DEFENSA',
       'VELOCIDAD MÁXIMA',
