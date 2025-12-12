@@ -1,15 +1,16 @@
 import type { ComponentType } from 'react';
+import type { ModuleId } from '../store/moduleStore';
 
 export interface ModuleDefinition {
-  id: string;
+  id: ModuleId;
   label: string;
   component: ComponentType;
 }
 
 interface ModuleTabsProps {
   modules: ModuleDefinition[];
-  activeId: string;
-  onSelect: (id: string) => void;
+  activeId: ModuleId;
+  onSelect: (id: ModuleId) => void;
 }
 
 export function ModuleTabs({ modules, activeId, onSelect }: ModuleTabsProps) {

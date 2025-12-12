@@ -6,6 +6,12 @@
   "scripts": {
     "build": "tsx src/buildData.ts",
     "build:data": "tsx src/buildData.ts",
+    "match:players": "tsx src/matchPlayers.ts",
+    "diagnose": "tsx src/diagnoseMatches.ts",
+    "check:results": "tsx src/checkResults.ts",
+    "analyze:bad": "tsx src/analyzeBadMatches.ts",
+    "analyze:nationalities": "tsx src/analyzeNationalities.ts",
+    "test:dober": "tsx src/testDober.ts",
     "dev": "echo \"TODO: dev cache builder\"",
     "lint": "eslint src --ext .ts --no-error-on-unmatched-pattern",
     "test": "vitest run"
@@ -13,6 +19,8 @@
   "dependencies": {
     "@anfpes/data-ingest": "file:../../packages/data-ingest",
     "@anfpes/engine": "file:../../packages/engine",
+    "csv-parse": "^6.1.0",
+    "xlsx": "^0.18.5",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

@@ -7,6 +7,8 @@ apps/ui/dist/
 *.tsbuildinfo
 build/
 coverage/
+legacy playerprofile/
+apps/ui/public/images/faces/
 
 # Logs
 npm-debug.log*

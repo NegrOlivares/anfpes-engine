@@ -17,6 +17,7 @@ import {
   FORM_STATES,
   type FormStateId,
 } from '../data/formModifiers';
+import profileAddons, { type ProfileAddon } from '../data/profileAddons';
 import { openPlayerActionsMenu } from './PlayerActionsOverlay';
 import {
   formatClub,
@@ -1985,6 +1986,7 @@ export function PlayerProfile() {
   const [lookupError, setLookupError] = useState('');
   const [formById, setFormById] = useState<Record<string, FormStateId>>({});
   const [formOpen, setFormOpen] = useState(false);
+  const [faceSrc, setFaceSrc] = useState<string>('/images/faces/missing.png');
 
   const playerKey = String(selectedPlayerId ?? '');
   const formState = formById[playerKey] ?? DEFAULT_FORM_STATE;
@@ -1999,6 +2001,26 @@ export function PlayerProfile() {
     if (!players || !selectedPlayerId) return undefined;
     return players.find((p) => String(p.ID) === String(selectedPlayerId));
   }, [players, selectedPlayerId]);
+
+  const addon: ProfileAddon | undefined = useMemo(() => {
+    if (!player) return undefined;
+    const key = String(player.ID);
+    return (profileAddons as Record<string, ProfileAddon>)[key];
+  }, [player]);
+
+  const isLegendPlayer = useMemo(() => {
+    if (!player) return false;
+    const playerName = String(player.NOMBRE ?? '').trim();
+    const classicValue = formatSelectionDisplay(player['nro clasico'] as string);
+    return classicValue !== 'No' || LEGEND_PLAYERS.has(playerName);
+  }, [player]);
+
+  useEffect(() => {
+    const legendFallback = '/images/faces/Legend.png';
+    const defaultFallback = '/images/faces/missing.png';
+    const nextSrc = addon?.image || (isLegendPlayer ? legendFallback : defaultFallback);
+    setFaceSrc(nextSrc);
+  }, [addon, isLegendPlayer]);
 
   const suggestions = useMemo(() => {
     if (!players) return [];
@@ -2211,7 +2233,25 @@ export function PlayerProfile() {
               <div className="shirt-number">{dorsalDisplay}</div>
             </div>
           </div>
-          <div className="profile-face"></div>
+          <div className="profile-face">
+            <img
+              src={faceSrc}
+              alt={`${addon?.fullName ?? player?.NOMBRE ?? 'Jugador'}`}
+              onError={(e) => {
+                const legendFallback = '/images/faces/Legend.png';
+                const defaultFallback = '/images/faces/missing.png';
+                const alreadyLegend = e.currentTarget.src.endsWith(legendFallback);
+                const alreadyDefault = e.currentTarget.src.endsWith(defaultFallback);
+                if (
+                  (isLegendPlayer && alreadyLegend) ||
+                  (!isLegendPlayer && alreadyDefault)
+                ) {
+                  return;
+                }
+                e.currentTarget.src = isLegendPlayer ? legendFallback : defaultFallback;
+              }}
+            />
+          </div>
         </div>
 
         <div className="profile-main-info">
@@ -2265,7 +2305,10 @@ export function PlayerProfile() {
           </div>
 
           <div className="profile-sub muted">
-            <span>Robin Nelisse · 25 de enero de 1978</span>
+            <span>
+              {addon?.fullName || player?.NOMBRE}
+              {addon?.birthDate ? ` · ${addon.birthDate}` : ''}
+            </span>
           </div>
 
           <div className="profile-main-data">

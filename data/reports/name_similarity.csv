@@ -1,0 +1,4334 @@
+ID,NOMBRE,fullName,similarity_pct
+1,Macho,Jürgen Macho,58.82
+2,Scharner,Paul Josef Herbert Scharner,45.71
+3,Stranzl,Martin Stranzl,66.67
+4,Dober,Andreas Dober,55.56
+5,Pogatetz,Emanuel Pogatetz,66.67
+6,Kiesenebner,Markus Kiesenebner,75.86
+7,Aufhauser,Rene Aufhauser,78.26
+8,Schopp,Markus Schopp,63.16
+9,Ivanschitz,Andreas Ivanschitz,71.43
+10,Linz,Roland Günther Linz,34.78
+11,Wallner,Roman Wallner,70.00
+12,Schranz,Andreas Schranz,63.64
+13,Payer,Helge Payer,62.50
+14,Ehmann,Anton Ehmann,66.67
+15,Feldhofer,Ferdinand Feldhofer,64.29
+16,A. Ibertsberger,Andreas Ibertsberger,82.35
+17,Gercaliu,Ronald Gërçaliu - born Metani,45.71
+18,Standfest,Joachim Standfest,69.23
+19,Dospel,Ernst Dospel,66.67
+20,Lasnik,Andreas Lasnik,60.00
+21,Säumel,Jürgen Säumel,63.16
+22,Sariyar,Yüksel Sariyar,66.67
+23,Kuljic,Sanel Kuljic,66.67
+24,Stijnen,Stijn Stijnen,70.00
+25,Hoefkens,Carl Hoefkens,76.19
+26,Van Buyten,Daniel Van Buyten,74.07
+27,Van Damme,Jelle François Maria Van Damme,46.15
+28,Van der Heyden,Peter Van der Heyden,82.35
+29,Vanden Borre,Anthony Henri Vanden Borre,63.16
+30,Simons,Timmy Simons,66.67
+31,Buffel,Thomas Buffel,63.16
+32,Goor,Bart Goor,61.54
+33,Pieroni,Luigi Pieroni,70.00
+34,Sonck,Wesley Sonck,58.82
+35,Vandenbussche,Brian Vandenbussche,81.25
+36,Kompany,Vincent Jean Mpoy Kompany,43.75
+37,Vermaelen,Thomas Vermaelen,72.00
+38,Leonard,Philippe Leonard,60.87
+39,Swerts,Gill Toby Todor Swerts,42.86
+40,Collen,Pieter Collen,63.16
+41,Geraerts,Karel Geraerts,72.73
+42,Caluwé,Tom Caluwe,75.00
+43,Daerden,Koen Daerden,73.68
+44,M. Mpenza,Mbo Jerome Mpenza,64.00
+45,Huysegems,Stein Huysegems,75.00
+46,Vandenbergh,Kevin Vandenbergh,78.57
+47,Ivankov,Dimitar Ivanov Ivankov,48.28
+48,Topuzakov,Elin Kalinov Topuzakov,58.06
+49,V. Iliev,Valentin Iliev Ivanov,50.00
+50,Kishishev,Radostin Prodanov Kishishev,50.00
+51,I. Petkov,Ivaylo Rumenov Petkov,55.17
+52,Yankov,Chavdar Yankov,60.00
+53,S. Petrov,Stiliyan Alyoshev Petrov,50.00
+54,Gargorov,Emil Nikolaev Gargorov,53.33
+55,Bojinov,Valeri Emilov Bozhinov,41.38
+56,M. Petrov,Martin Petyov Petrov,57.14
+58,G. Petkov,Georgi Stoyanov Petkov,53.33
+59,Kolev,Stoyan Petrov Kolev,41.67
+60,Kirilov,Rosen Yordanov Kirilov,48.28
+61,Karaslavov,Asen Karaslavov,80.00
+62,Wagner,Lucio Wagner,66.67
+63,G. Iliev,Georgi Rusev Iliev,56.00
+64,Dimitrov,Dimitrov Velizar Kostadinov,45.71
+65,Genkov,Tsvetan Valentinov Genkov,38.71
+66,Y. Todorov,Yordan Valkov Todorov,60.00
+67,Yankovic,Zoran Jankovic,63.64
+68,Domovchiski,Valeri Angelov Domovchiyski,57.89
+69,Todorov,Svetoslav Ivanov Todorov,45.16
+70,Pletikosa,Stipe Pletikosa,75.00
+73,Simunic,Josip Šimunić,70.00
+75,N. Kovac,Niko Kovač,82.35
+76,Srna,Darijo Srna,53.33
+77,Babic,Marko Babić,62.50
+78,Kranjcar,Niko Kranjcar,76.19
+79,Klasnic,Ivan Klasnic,73.68
+81,Butina,Tomislav Butina,57.14
+82,Didulica,Joseph Anthony Didulica,51.61
+83,Tokic,Mario Tokić,62.50
+84,Tomas,Stjepan Tomas,55.56
+85,J. Leko,Jerko Leko,75.00
+86,Seric,Anthony Šerić,55.56
+87,Vranjes,Jurica Vranješ,66.67
+88,Modric,Luka Modrić,70.59
+89,I. Leko,Ivan Leko,80.00
+90,Olic,Ivica Olic,57.14
+91,Balaban,Bosko Balaban,70.00
+92,Ivan Bosnjak,Ivan Bosnjak,100.00
+93,Cech,Petr Čech,61.54
+94,Rozehnal,David Sebastian Klement Rozehnal,40.00
+95,Ujfalusi,Tomáš Ujfaluši,72.73
+96,Grygera,Zdenek Grygera,66.67
+97,Jankulovski,Marek Jankulovski,78.57
+98,Galásek,Tomas Galasek,70.00
+99,Poborský,Karel Poborsky,72.73
+100,Plasil,Jaroslav Plasil,57.14
+101,Rosický,Tomáš Rosický,70.00
+102,Nedved,Pavel Nedved,66.67
+103,Koller,Jan Koller,75.00
+104,Jaromír Blazek,Jaromir Blazek,100.00
+105,Kinsky,Antonin Kinsky,60.00
+106,Mares,Pavel Mares,62.50
+107,Jiránek,Martin Jiranek,66.67
+108,Kovác,Radoslav Kovac,52.63
+109,Polák,Jan Polak,71.43
+110,Jarolím,David Jarolim,70.00
+111,Heinz,Marek Heinz,62.50
+112,Sionko,Libor Sionko,66.67
+113,Stajner,Jiri Stajner,73.68
+114,Baros,Milan Baroš,62.50
+115,Lokvenc,Vratislav Lokvenc,58.33
+116,Sorensen,Thomas Sorensen,69.57
+117,Kroldrup,Per Billeskov Krøldrup,46.67
+118,Agger,Daniel Munthe Agger,41.67
+119,B. P. Pedersen,Brian Priske Pedersen,72.73
+120,N. Jensen,Niclas Christian Monberg Jensen,41.03
+121,Gravesen,Thomas Gravesen,69.57
+122,Poulsen,Christian Bjornshoj Poulsen,41.18
+123,Rommedahl,Dennis Rommedahl,72.00
+124,Jorgensen,Lars Martin Jørgensen,53.33
+125,C. Jensen,Claus William Wessel Jensen,45.71
+126,Tomasson,Jon Dahl Tomasson,64.00
+127,Christiansen,Jesper Ringsborg Christiansen,58.54
+128,P. Nielsen,Per Lundgren Nielsen,62.07
+129,Gravgaard,Michael Julius Gravgaard,54.55
+130,Bogelund,Kasper Bøgelund,60.87
+131,Lars Jacobsen,Lars Christian Jacobsen,72.22
+132,Wurtz,Rasmus Østergaard Würtz,37.04
+133,D. Jensen,Daniel Monberg Jensen,55.17
+134,Kahlenberg,Thomas Zeuthen Kahlenberg,57.14
+135,Perez,Kenneth Perez Dahl Jensen,33.33
+136,Gronkjær,Jesper Grønkjær Sørensen,43.75
+137,Skoubo,Morten Skoubo,63.16
+138,Larsen,Søren Larsen-Hedeman,46.15
+139,Robinson,Paul William Robinson,55.17
+140,R. Ferdinand,Rio Gavin Ferdinand,73.33
+141,Terry,John George Terry,45.45
+142,G. Neville,Gary Alexander Neville,58.06
+143,Ashley Cole,Ashley Donovan Cole,73.33
+144,Lampard,Frank James Lampard Jr.,48.28
+145,Gerrard,Steven George Gerrard,50.00
+146,Beckham,David Robert Joseph Beckham,41.18
+147,Joe Cole,Joseph John Cole,66.67
+148,Owen,Michael James Owen,36.36
+149,Crouch,Peter James Crouch,50.00
+150,James,David Benjamin James,40.00
+151,Carson,Scott Paul Carson,52.17
+152,Campbell,Sulzeer Jeremiah Campbell,48.48
+153,Carragher,James Carragher,75.00
+154,Bridge,Wayne Michael Bridge,46.15
+155,Carrick,Michael Carrick,63.64
+156,Hargreaves,Owen Lee Hargreaves,68.97
+157,Jenas,Jermaine Anthony Jenas,37.04
+158,Aaron Lennon,Aaron Justin Lennon,77.42
+159,Downing,Stewart Downing,63.64
+160,Rooney,Wayne Mark Rooney,52.17
+161,Walcott,Theodore James Walcott,48.28
+162,Jääskeläinen,Jussi Albert Jääskeläinen,64.86
+163,Kuivasto,Toni Kuivasto,76.19
+164,Hyypiä,Sami Tuomas Hyypiä,50.00
+165,Nyman,Ari Kalevi Nyman,47.62
+166,Kallio,Toni Kari Mikael Kallio,41.38
+167,Lagerblom,Pekka Sakari Lagerblom,58.06
+168,Heikkinen,Markus Heikkinen,72.00
+169,Tainio,Teemu Mikael Tainio,48.00
+170,Saarinen,Janne Saarinen,72.73
+171,Eremenko Jr.,Alexey Eremenko,61.54
+172,Forssell,Mikael Kaj Forssell,59.26
+173,Kaven,Mikko Kaven,62.50
+174,Tihinen,Hannubal the Iron Mountain,24.24
+175,Pasanen,Petri Mikael Pasanen,51.85
+176,Riihilahti,Aki Pasinpoika Riihilahti,57.14
+177,Wiss,Jarkko Wiss,53.33
+178,Haapala,Tuomas Haapala,66.67
+179,Kopteff,Peter Kopteff,70.00
+180,Litmanen,Jari Olavi Litmanen,59.26
+181,Kolkka,Joonas Einari Kolkka,46.15
+182,Sjölund,Henrik Daniel Sjölund,50.00
+183,Johansson,Jonatan Lillebror Johansson,50.00
+184,Roiha,Paulus Roiha,58.82
+185,Barthez,Fabien Alain Barthez,51.85
+186,Thuram,Lilian Thuram,63.16
+187,Gallas,William Eric Gallas,48.00
+188,Sagnol,Willy David Frédéric Sagnol,36.36
+189,Abidal,Eric Sylvain Abidal,48.00
+190,Makélélé,Claude Makélélé Sinda,55.17
+191,Vieira,Patrick Paul Vieira,48.00
+192,Wiltord,Sylvain Wiltord,63.64
+193,Ribery,Franck Henry Pierre Ribéry,37.50
+194,Zidane,Yazid Zinedine Zidane,44.44
+195,Henry,Thierry Daniel Henry,40.00
+196,Coupet,Grégory Coupet,60.00
+197,Landreau,Mickaël Vincent André-Marie Landreau,36.36
+198,Boumsong,Jean-Alain Boumsong Somkong,45.71
+199,Silvestre,Mikaël Samy Silvestre,60.00
+200,Givet,Gaël Givet-Viaros,45.45
+201,Chimbonda,Pascal Chimbonda,72.00
+202,Alou Diarra,Alou Diarra,100.00
+203,Dhorasoo,Vikash Dhorasoo,69.57
+204,Malouda,Florent Johan Malouda,50.00
+205,Govou,Sidney Rodrigue Noukpo Govou,30.30
+206,Saha,Louis Laurent Saha,36.36
+207,Trézéguet,David Sergio Trezeguet,58.06
+209,Metzelder,Christoph Tobias Metzelder,51.43
+210,Mertesacker,Per Mertesacker,84.62
+211,Friedrich,Arne Friedrich,78.26
+213,Frings,Torsten Klaus Frings,46.15
+214,Schneider,Bernd Schneider,75.00
+216,Borowski,Tim Borowski,80.00
+217,Klose,Miroslav Josef Klose,40.00
+219,Kahn,Oliver Rolf Kahn,40.00
+220,Hildebrand,Timo Hildebrand,80.00
+222,Nowotny,Jens Daniel Nowotny,53.85
+223,M. Jansen,Marcell Jansen,72.73
+224,Kehl,Sebastian Walter Kehl,32.00
+225,Hitzlsperger,Thomas Hitzlsperger,77.42
+227,Asamoah,Gerald Asamoah,66.67
+228,Odonkor,David Odonkor,70.00
+229,Neuville,Oliver Patric Neuville,53.33
+230,Hanke,Mike Hanke,66.67
+231,Nikopolidis,Antonis Nikopolidis,73.33
+232,Goumas,Giannis Goumas,60.00
+233,Kyrgiakos,Sotiris Kyrgiakos,69.23
+234,Seitaridis,Giourkas Seitaridis,68.97
+235,Zagorakis,Thodoris Zagorakis,66.67
+236,Basinas,Angelos Basinas,63.64
+237,Karagounis,Georgios Karagkounis,66.67
+238,Katsouranis,Kostas Katsouranis,75.86
+239,Charisteas,Angelos Charisteas,71.43
+240,Giannakopoulos,Stelios Giannakopoulos,77.78
+241,Vryzas,Zisis Vryzas,66.67
+242,Kotosolis,Stefanos Kotsolis,61.54
+243,Dellas,Traianos Dellas,57.14
+244,Kapsis,Michalis Kapsis,57.14
+245,Anatolakis,Georgios Anatolakis,68.97
+246,Fyssas,Takis Fyssas,66.67
+247,Vintra,Loukas Vyntra,52.63
+248,Kafes,Pantelis Kafes,52.63
+249,Liberopoulos,Nikolaos Liberopoulos,72.73
+250,Mantzios,Vangelis Mantzios,64.00
+251,Papadopoulos,Dimitris Papadopoulos,72.73
+252,Salpingidis,Dimitris Salpingidis,70.97
+253,Gekas,Theofanis Gekas,50.00
+254,Király,Gábor Ferenc Király,48.00
+255,Juhász,Roland Juhasz,63.16
+256,Vanczák,Vilmos Vanczak,66.67
+257,Bodnar,Laszlo Bodnar,63.16
+258,Éger,Laszlo Eger,53.33
+259,Takács,Ákos takács,70.59
+260,Hajnal,Tamas Hajnal,66.67
+261,Boor,Zoltán Böőr,53.33
+262,Huszti,Huszti Szabolcs,57.14
+263,Gera,Zoltan Gera,53.33
+264,Torghelle,Sandor Torghelle,72.00
+265,Rabóczki,Balazs Raboczki,69.57
+266,Gyepes,Gabor Gyepes,66.67
+267,Stark,Peter Stark,62.50
+268,Máté,Peter Mate,57.14
+269,György Korsós,Gyorgy Korsos,100.00
+270,Balog,Zoltán Balog,58.82
+271,Halmosi,Péter Halmosi,70.00
+272,Buzsáky,Akos Buzsaky,73.68
+273,Bárányos,Zsolt Bárányos,72.73
+274,Rajczi,Peter Rajczi,66.67
+275,Z. Kovács,Zoltan Kovacs,76.19
+276,Kerekes,Zsombor Kerekes,63.64
+277,Given,Seamus John James Given,35.71
+278,Dunne,Richard Patrick Dunne,38.46
+279,O'Brien,Andrew James O'Brien,51.85
+280,Joey O'brien,Joseph Martin O'Brien,66.67
+281,Harte,Ian Patrick Harte,45.45
+282,Kavanagh,Graham Anthony Kavanagh,51.61
+283,O'Shea,John Francis O'Shea,48.00
+284,Andy Reid,Andrew Matthew Reid,57.14
+285,Kilbane,Kevin Daniel Kilbane,51.85
+286,Morrison,Clinton Hubert Morrison,51.61
+287,Robbie Keane,Robert David Keane,66.67
+288,Kenny,Patrick Joseph Kenny,40.00
+289,S. Henderson,Wayne Christopher Patrick Henderson,47.83
+290,Breen,Gary Patrick Breen,43.48
+291,Doherty,Gary Michael Thomas Doherty,41.18
+292,Stephen Kelly,Stephen Michael Kelly,76.47
+293,Finnan,Steve Finnan,66.67
+294,Liam Miller,Liam William Peter Miller,61.11
+295,Jonatan Douglas,Jonathan Michael Douglas,76.92
+296,S. Reid,Steven John Reid,54.55
+297,Duff,Damien Anthony Duff,34.78
+298,Stephen Elliott,Stephen William Elliott,78.95
+299,Doyle,Kevin Edward Doyle,43.48
+300,Buffon,Gianluigi Buffon,54.55
+301,Nesta,Alessandro Nesta,47.62
+302,F. Cannavaro,Fabio Mamerto Cannavaro,64.71
+303,Zambrotta,Gianluca Zambrotta,66.67
+304,Grosso,Fabio Grosso,66.67
+305,Pirlo,Andrea Pirlo Escaleto,38.46
+306,Camoranesi,Mauro Germán Camoranesi Serra,51.28
+307,Gattuso,Gennaro Ivan Gattuso,51.85
+308,Totti,Francesco Totti,50.00
+309,Toni,Luca Toni,61.54
+310,Gilardino,Alberto Gilardino,69.23
+311,Peruzzi,Angelo Peruzzi,66.67
+312,Amelia,Marco Amelia,66.67
+313,Materazzi,Marco Materazzi,75.00
+314,Barzagli,Andrea Barzagli,69.57
+315,Zaccardo,Cristian Zaccardo,64.00
+316,Oddo,Massimo Oddo,50.00
+317,Barone,Simone Barone,63.16
+318,De Rossi,Daniele De Rossi,66.67
+319,Perrotta,Simone Perrotta,69.57
+320,Del Piero,Alessandro Del Piero,62.07
+321,Iaquinta,Vincenzo Iaquinta,64.00
+322,F. Inzaghi,Filippo Inzaghi,75.00
+323,Kolinko,Aleksandrs Koliņko,56.00
+324,Zakresevskis,Artūrs Zakreševskis,77.42
+325,Stepanovs,Igors Stepanovs,75.00
+326,Isakovs,Aleksandrs Isakovs,56.00
+327,Zirnis,Dzintars Zirnis,57.14
+328,Astafjevs,Vitālijs Astafjevs,66.67
+329,Morozs,Viktors Morozs,60.00
+330,Solonicins,Genadijs Solonicins,68.97
+331,Rubins,Andrejs Rubins,60.00
+332,Verpakovskis,Māris Verpakovskis,80.00
+333,Rimkus,Vits Rimkus,70.59
+334,Piedels,Andrejs Piedels,63.64
+335,Smirnovs,Māris Smirnovs,72.73
+336,Zavoronkovs,Vladimirs Žavoronkovs,68.75
+337,Korablovs,Igors Korabļovs,75.00
+338,Laizans,Juris Laizāns,70.00
+339,Bleidelis,Imants Bleidelis,72.00
+340,Visnakovs,Aleksejs Višņakovs,66.67
+341,Blanks,Kristaps Blanks,57.14
+342,Kolesnicenko,Vladimirs Kolesnicenko,70.59
+343,Miholaps,Mihails Miholaps,66.67
+344,Prohorenkovs,Andrejs Prohorenkovs,75.00
+345,Kalnins,Gatis Kalniņš,70.00
+346,Van der Sar,Edwin van der Saar,75.86
+347,Ooijer,André Antonius Maria Ooijer,36.36
+348,Mathijsen,Joris Mathijsen,75.00
+349,Heitinga,John Gijsbert Alan Heitinga,45.71
+350,Van Bronckhorst,Giovanni Christiaan van Bronckhorst,60.00
+351,Van Bommel,Mark Peter Gertruda Andreas van Bommel,41.67
+352,Sneijder,Wesley Benjamin Sneijder,50.00
+353,Cocu,Phillip John William Cocu,27.59
+354,Van Persie,Robin van Persie,76.92
+355,Robben,Arjen Robben,66.67
+356,Van Nistelrooy,Rutgerus Johannes Martinus van Nistelrooij,46.43
+357,Timmer,Hendrik Timmer,60.00
+358,Stekelenburg,Maarten Stekelenburg,75.00
+359,Boulahrouz,Khalid Boulahrouz,74.07
+360,Jaliens,Kew Raffique Jaliens,51.85
+361,Kromkamp,Jan Kromkamp,80.00
+362,De Cler,Tim de Cler,77.78
+363,Maduro,Hedwiges Eduard Martinus Maduro,32.43
+364,Landzaat,Denny Domingues Landzaat,50.00
+365,Van der Vaart,Rafael Ferdinand van der Vaart,60.47
+366,Kuyt,Dirk Kuijt,42.86
+367,Babel,Ryan Miguel Guno Babel,37.04
+368,Vennegoor,Johannes Vennegoor of Hesselink,45.00
+369,Taylor,Maik Stefan Taylor,50.00
+370,Craigan,Stephen James Craigan,50.00
+371,Aaron Hughes,Aaron William Hughes,75.00
+372,Baird,Christopher Patrick Baird,33.33
+373,Capaldi,Anthony Charles Capaldi,46.67
+374,Johnson,Damien Michael Johnson,48.28
+375,Steven Davis,Steven Davis,100.00
+376,Gillespie,Keith Gillespie,75.00
+377,Elliott,Stuart Elliott,66.67
+378,Healy,David Jonathon Healy MBE,34.48
+379,James Quinn,James Stephen Quinn,73.33
+380,Ingham,Michael Gerard Ingham,44.44
+381,Murdock,Colin Murdock,70.00
+382,Michael Duff,Michael James Duff,80.00
+383,McLean,Brian Stuart Mc Lean,46.15
+384,Whitley,James Whitley,70.00
+385,McCann,Grant Samuel Mc Cann,46.15
+386,Brunt,Christopher Colin Brunt,35.71
+387,Mulryne,Phil Mulryne,73.68
+388,Sproule,Ivan Sproule,73.68
+389,Jones,Stephen Graham Jones,40.00
+390,Feeney,Warren James Feeney,48.00
+391,Smith,Andrew William Smith,40.00
+392,Myhre,Thomas Harald Myhre,41.67
+393,Hagen,Erik Bjørnstad Hagen,40.00
+394,Hangeland,Brede Paulsen Hangeland,56.25
+395,Bergdolmo,André Bergdølmo,66.67
+396,Riise,John Arne Semundseth Riise,32.26
+397,Hæstad,Kristofer Krüger Hæstad,41.38
+398,Grindheim,Christian Grindheim,64.29
+399,Solli,Jan Gunnar Solli,47.62
+400,M. G. Pedersen,Morten Gamst Pedersen,72.73
+401,Carew,John Carew,66.67
+402,Iversen,Steffen Iversen,63.64
+403,E. Johnsen,Espen Johnsen,81.82
+404,Jarstein,Rune Almenning Jarstein,51.61
+405,Lundekvam,Claus Lundekvam,75.00
+406,Borgersen,Bård Borgersen,78.26
+407,Hoiland,Jon Inge Høiland,52.17
+408,Marius Johnsen,Marius Johnsen,100.00
+409,Valencia,Alex Marcel Lund Valencia,48.48
+410,Stromstad,Fredrik Strømstad,61.54
+411,Braaten,Daniel Omoya Braaten,51.85
+412,Rushfeldt,Sigurd Rushfeldt,72.00
+413,Årst,ole martin Årst,42.11
+414,Helstad,Thorstein Helstad,58.33
+415,Boruc,Artur Boruc,62.50
+416,Jop,Mariusz Jop,42.86
+417,Bak,Jacek Bak,50.00
+418,Baszczynski,Marcin Baszczyński,75.86
+419,M. Zewlakow,Michał Ryszard Żewłakow,56.25
+420,Sobolewski,Radoslaw Sobolewski,68.97
+421,Radomski,Arkadiusz Radomski,61.54
+422,Smolarek,Euzebiusz Smolarek,61.54
+423,Krzynówek,Jacek Krzynowek,75.00
+424,Szymkowiak,Mirosław Szymkowiak,68.97
+425,Zurawski,Maciej Stanisław Żurawski,48.48
+426,Kuszczak,Tomasz Kuszczak,69.57
+427,Fabianski,Łukasz Marek Fabiański,60.00
+428,Bosacki,Bartosz Bosacki,63.64
+429,Dudka,Dariusz Dudka,55.56
+430,Gancarczyk,Seweryn Daniel Gancarczyk,57.14
+431,M. Lewandowski,Mariusz Lewandowski,81.25
+432,Mila,Sebastian Mila,44.44
+433,Giza,Piotr Giza,57.14
+434,Kosowski,Kamil Kosowski,72.73
+435,Jelen,Ireneusz Jelen,52.63
+436,Brozek,Paweł Łukasz Brożek,52.17
+437,Rasiak,Grzegorz Rasiak,57.14
+438,Ricardo,Ricardo Alexandre Martins Soares Pereira,29.79
+439,F. Meira,Fernando José da Silva Freitas Meira,32.56
+440,R. Carvalho,Ricardo Alberto Silveira de Carvalho,43.48
+441,Miguel,Luís Miguel Brito Garcia Monteiro,30.77
+442,Nuno Valente,Nuno Jorge Pereira Silva Valente,54.55
+443,Costinha,Francisco José Rodrigues da Costa,24.39
+444,Deco,Anderson Luis de Souza,23.08
+445,Maniche,Nuno Ricardo de Oliveira Ribeiro,20.51
+446,C. Ronaldo,Cristiano Ronaldo dos Santos Aveiro,40.91
+447,Figo,Luís Filipe Madeira Caeiro,20.00
+448,Pauleta,Pedro Miguel Carreiro Resendes,16.22
+449,Quim,Joaquim Manuel Sampaio Silva,25.00
+450,Paulo Santos,Paulo Jorge da Silva Santos,61.54
+451,Ricardo Costa,Ricardo Miguel Moreira da Costa,59.09
+452,Caneira,Marco Antonio Simoes Caneira,40.00
+453,Paulo Ferreira,Paulo Renato Rebocho Ferreira,65.12
+454,Petit,Armando Gonçalves Teixeira,19.35
+455,Tiago,Tiago Cardoso Mendes,40.00
+456,Hugo Viana,Hugo Miguel Ferreira Gomes Viana,47.62
+457,Simão,Simão Pedro Fonseca Sabrosa,31.25
+458,Boa Morte,Luis Boa Morte Pereira,58.06
+459,Nuno Gomes,Nuno Miguel Soares Pereira Ribeiro,40.91
+460,Hélder Postiga,Hélder Manuel Marques Postiga,65.12
+461,Lobont,Bogdan Ionut Lobont,48.00
+462,Tamas,Gabriel Sebastian Tamaş,35.71
+463,Chivu,Cristian Eugen Chivu,40.00
+464,Contra,Cosmin Marius Contra,46.15
+465,Rat,Răzvan Dincă Raţ,31.58
+466,Petre,Ovidiu Petre,58.82
+467,D. Munteanu,Dorinel Ionel Munteanu,62.50
+468,Balan,Tiberiu Gabriel Bălan,38.46
+469,Mutu,Adrian Mutu,53.33
+470,Cocis,Răzvan Vasilie Cociş,40.00
+471,Mazilu,Ionuţ Costinel Mazilu,44.44
+472,Danut Coman,Dănuţ Dumitru Coman,73.33
+473,Iencsi,Adrian Mihai Iencsi,48.00
+474,N. Dorin Goian,Dorin Nicolae Goian,68.75
+475,Radoi,Matei Mirel Rădoi,45.45
+476,Pompiliu Stoica,Pompiliu Sorin Stoica,83.33
+477,Soava,Costin Florin Şoavă,41.67
+478,Badoi,Valentin Emanoil Bădoi,37.04
+479,Bostina,Gabriel Bostina,63.64
+480,Nicolita,Bănel Nicoliță,72.73
+481,D. Niculae,Daniel George Niculae,60.00
+482,Oprita,Daniel Ionel Opriţa,48.00
+483,M. Niculae,Marius Constantin Niculae,52.94
+484,Akinfeev,Igor Vladimirovich Akinfeyev,44.44
+485,V. Berezutski,Vasiliy Berezutskiy,77.42
+486,Sennikov,Dmitry Sennikov,69.57
+487,Anyukov,Alexandr Anyukov,60.87
+488,A. Berezutski,Alexey Berezutskiy,80.00
+489,Loskov,Dmitry Loskov,63.16
+490,Smertin,Alexey Smertin,66.67
+491,Izmailov,Marat Izmailov,72.73
+492,Bilyaletdinov,Diniyar Bilyaletdinov,76.47
+493,Arshavin,Andrey Sergeevich Arshavin,47.06
+494,Kerzhakov,Alexandr Kerzhakov,66.67
+495,Ovchinnikov,Serguéi Ivánovich Ovchínnikov,55.00
+496,Ignashevich,Sergey Ignashevich,75.86
+497,Zyryanov,Konstantin Zyryanov,59.26
+498,Kolodin,Denis Alekseyevich Kolodin,42.42
+499,Aldonin,Evgeny Aldonin,66.67
+500,Gusev,Rolan Aleksandrovich Gusev,32.26
+501,Semak,Sergey Semak,58.82
+502,Semshov,Igor Petrovich Semshov,48.28
+503,Titov,Yegor Titov,62.50
+504,Pavlyuchenko,Roman Anatolyevich Pavlyuchenko,55.81
+505,Kirichenko,Dmitry Kirichenko,74.07
+506,Sytchev,Dmitri Yevgenyevich Sychev,36.36
+507,Gordon,Craig Sinclair Gordon,44.44
+508,Pressley,Steven John Pressley,57.14
+509,Weir,David Gillespie Weir,33.33
+510,Alexander,Graham Alexander,72.00
+511,Ian Murray,Ian William Murray,71.43
+512,Dailly,Christian Eduard Dailly,41.38
+513,Fletcher,Darren Barr Fletcher,57.14
+514,B. Ferguson,Barry Ferguson,83.33
+515,Hartley,Paul James Hartley,56.00
+516,McCulloch,Lee Henry Mc Culloch,62.07
+517,Miller,Kenneth Miller,60.00
+518,Marshall,David James Marshall,57.14
+519,Neil Alexander,James Neil Alexander,82.35
+520,Gary Caldwell,Gary Robert Caldwell,78.79
+521,Steve Caldwell,Steven Caldwell,96.55
+522,Webster,Andrew Neil Webster,53.85
+523,R. Anderson,Russell Anderson,76.92
+524,Quashie,Nigel Francis Quashie,50.00
+525,Mcfadden,James Henry Mc Fadden,55.17
+526,Maloney,Shaun Richard Maloney,50.00
+527,O'Connor,Garry Lawrence John O'Connor,44.44
+528,Boyd,Kris Boyd,61.54
+529,Riordan,Derek George Riordan,51.85
+530,Jevric,Dragoslav Jevrić,54.55
+531,Gavrancic,Goran Gavrancic,75.00
+532,Krstajic,Mladen Krstajic,69.57
+533,N. Djordjevic,Nnenad Djordjevic,82.76
+534,Dragutinovic,Ivica Dragutinovic,80.00
+535,Duljaj,Igor Duljaj,70.59
+536,Nadj,Albert Nadj,53.33
+538,P. Djordjevic,Predrag Djordjevic,80.00
+541,O. Kovacevic,Oliver Kovačević,81.48
+542,Stojkovic,Vladimir Stojković,66.67
+544,Dudic,Milan Dudic,62.50
+545,Petkovic,Dušan Petković,72.73
+546,Basta,Dušan Basta,62.50
+547,Ergic,Ivan Ergic,66.67
+548,Koroman,Ognjen Koroman,66.67
+549,Vukic,Zvonimir Vukic,52.63
+550,Sasa Ilic,Saša Ilić,100.00
+551,Ljuboja,Danijel Ljuboja,63.64
+552,Zigic,Nikola Žigić,58.82
+553,Contofalsky,Kamil Contofalsky,78.57
+554,Skrtel,Martin Škrtel,63.16
+555,Kratochvíl,Roman Kratochvil,76.92
+556,Zabavník,Radoslav Zabavnik,64.00
+557,Had,Marian Had,46.15
+558,Petras,Martin Petras,63.16
+559,Karhan,Miroslav Karhan,57.14
+560,Hlinka,Peter Hlinka,66.67
+561,Hodúr,Ivan Hodur,66.67
+562,Holosko,Filip Holosko,70.00
+563,Vittek,Robert Vittek,63.16
+564,König,Miroslav Konig,52.63
+565,Durica,Jan Durica,75.00
+566,Marek Cech,Marek Cech,100.00
+567,Gresko,Vratislav Gresko,54.55
+568,Hanek,Michal Hanek,58.82
+569,Valachovic,Jozef Valachovič,76.92
+570,Krajcík,Matej Krajcik,70.00
+571,Kisel,Karol Kisel,62.50
+572,Michalík,Rastislav Michalik,61.54
+573,Mintal,Marek Mintal,66.67
+574,Reiter,Lubomir Reiter,60.00
+575,Németh,Szilard Nemeth,60.00
+576,B. Mavric,Borut Mavrič,80.00
+577,B. Cesar,Boštjan Cesar,70.00
+578,Knavs,Aleksander Knavs,47.62
+579,M. Mavric,Matej Mavrič Rožič,61.54
+580,Filekovic,Suad Fileković,78.26
+581,Zlogar,Anton Žlogar,66.67
+582,Pokorn,Jalen Pokorn,66.67
+583,Komac,Andrej Komac,58.82
+584,Koren,Robert Koren,58.82
+585,Acimovic,Milenko Aćimović,66.67
+586,Rodic,Aleksandar Rodić,47.62
+587,Handanovic,Samir Handanović,76.92
+588,B. Ilic,Branko Ilić,70.59
+589,Brecko,Mišo Brečko,70.59
+590,Gobec,Sebastjan Gobec,50.00
+591,Seslar,Simon Sešlar,66.67
+592,Sukalo,Goran Sukalo,66.67
+593,Pecnik,Andrej Pečnik,63.16
+594,Ceh,Nastja Čeh,46.15
+595,Siljak,Ermin Šiljak,66.67
+596,Cimerotic,Sebastjan Cimirotič,57.14
+597,Lavric,Klemen Lavric,63.16
+598,Dedic,Zlatko Dedić,58.82
+599,Casillas,Iker Casillas Fernandez,51.61
+600,Pablo Ibañez,Pablo Ibáñez Tebar,80.00
+601,Puyol,Carles Puyol Saforcada,37.04
+602,Sergio Ramos,Sergio Ramos García,77.42
+603,Pernía,Mariano Andrés Pernía,44.44
+604,Xabi Alonso,Xabier Alonso Olano,73.33
+605,Cesc Fàbregas,Francesc Fabregas Soler,72.22
+606,Xavi,Xavier Hernández Creus,30.77
+607,Raúl,Raúl González Blanco,33.33
+608,Fernando Torres,Fernando José Torres Sanz,75.00
+609,Villa,David Villa Sánchez,41.67
+610,Cañizares,José Santiago Cañizares Ruiz,48.65
+611,Reina,Jose Manuel Reina Paez,37.04
+612,C. Marchena,Carlos Marchena López,64.52
+613,Juanito G.,Juan Gutiérrez Moreno,40.00
+614,Míchel Salgado,Miguel Ángel Salgado Fernández,54.55
+615,Antonio López,Antonio López Guerrero,74.29
+616,Albelda,David Albelda Aliqués,50.00
+617,Senna,Marcos Antonio Senna da Silva,29.41
+618,Iniesta,Andrés Iniesta Luján,51.85
+619,Luis García,Luis Javier García Sanz,64.71
+620,Reyes,José Antonio Reyes Calderón,31.25
+621,Joaquin,Joaquín Sánchez Rodríguez,43.75
+622,Shaaban,Rami Shaaban,73.68
+623,Mellberg,Erik Olof Mellberg,61.54
+624,Lucic,Teddy Lucic,62.50
+625,Alexandersson,Niclas Alexandersson,78.79
+626,Edman,Erik Kenneth Edman,43.48
+627,Linderoth,Tobias Jan Håkan Linderoth,51.43
+628,Wilhelmsson,Christian Ulf Wilhelmsson,61.11
+629,Ljungberg,Karl Fredrik Ljungberg,58.06
+630,A. Svensson,Anders Gunnar Svensson,62.50
+631,Ibrahimovic,Zlatan Ibrahimović,75.86
+632,Larsson,Edward Henrik Larsson,50.00
+633,Isaksson,Jan Andreas Isaksson,57.14
+634,Alvbåge,John Rune Alvbåge,58.33
+635,Hansson,Carl Johan Petter Hansson,43.75
+636,Karl Svensson,Karl Svensson,100.00
+637,Stenman,Erik Karl-Fredrik Stenman,43.75
+638,D. Andersson,Daniel Jerry Andersson,66.67
+639,Nilsson,Mikael Nilsson,66.67
+640,Jonson,Olof Mattias Jonsson,46.15
+641,Källström,Kim Källström,81.82
+642,Elmander,Johan Erik Calvin Elmander,47.06
+643,Rosenberg,Nils Markus Rosenberg,60.00
+644,Allbäck,Marcus Christian Allbäck,45.16
+645,Zuberbühler,Pascal Werner Zuberbühler,61.11
+646,Müller,Patrick Mueller,57.14
+647,Senderos,Philippe Sylvain Senderos,48.48
+648,Degen,Philipp Degen,55.56
+649,Magnin,Ludovic Magnin,60.00
+650,Vogel,Johann Vogel,58.82
+651,Barnetta,Tranquillo Barnetta,59.26
+652,Wicky,Raphaël Wicky,55.56
+653,Cabanas,Ricardo Cabanas-Rey,53.85
+654,Streller,Marco Streller,72.73
+655,Frei,Alexander Frei,44.44
+656,Coltorti,Fabio Coltorti,72.73
+657,Benaglio,Diego Orlando Benaglio,53.33
+658,Grichting,Stéphane Grichting,66.67
+659,Spycher,Christoph Spycher,58.33
+660,Dzemaili,Blerim Dzemaili,69.57
+661,Djourou,Danon Issouf Johannes Djourou-Gbadjere,31.11
+662,David Degen,David Degen,100.00
+663,Behrami,Valon Behrami,70.00
+664,Margairaz,Xavier Margairaz,72.00
+665,Gygax,Daniel Gygax,58.82
+666,H. Yakin,Hakan Yakin,77.78
+667,Lustrinelli,Mauro Lustrinelli,78.57
+668,Volkan,Volkan Demirel,60.00
+669,Tolga Seyhan,Tolga Seyhan,100.00
+670,Ibrahim Toraman,Ibrahim Toraman,100.00
+671,Hamit Altintop,Hamit Altintop,100.00
+672,Ozat,Ümit Özat,61.54
+673,Selcuk,Mustafa Selçuk Perekli,42.86
+674,Serhat Akin,Niyazi Serhat Akin Hikmet,61.11
+675,Tuncay,Tuncay Sanli,66.67
+676,Emre Belözoglu,Emre Belözoğlu,100.00
+677,Halil Altintop,Halil Altintop,100.00
+678,Necati Ates,Necati Ateş,100.00
+679,Rüstü,Rüştü Reçber,58.82
+680,Cetin,Servet Çetin,58.82
+681,Fatih Akyel,Fatih Akyel,100.00
+682,Serkan Balci,Serkan Balcı,95.65
+683,Hüseyin Cimsir,Hüseyin Çimşir,100.00
+684,Okan,Okan Buruk,57.14
+685,Tümer,Tümer Metin,62.50
+686,Nuri Sahin,Nuri Kazim Şahin,76.92
+687,Bastürk,Yildiray Bastürk,60.87
+689,Ibrahim Akin,Ibrahim Akin,100.00
+690,Fatih Tekke,Fatih Tekke,100.00
+691,Shovkovskyi,Olexandr Shovkovskyi,70.97
+692,Rusol,Rusol Andrii Anatoliiovych,32.26
+693,Vaschuk,Vashchuk Vladyslav Viktorovych,37.84
+694,Yezersky,Vladímir Ivánovich Yezerskiy,44.44
+695,Nesmachnyi,Anriy Nesmachnyi,76.92
+696,Tymoshchyuk,Anatoliy Tymoshchuk,66.67
+697,Husin,Andrei Husin,58.82
+698,Husev,Husev Oleh Anatoliyovych,34.48
+699,Rotan,Rotan Ruslan Petrovych,37.04
+700,Shevchenko,Andriy Mykolayovych Shevchenko,50.00
+701,Voronin,Voronin Andriy Victorovych,42.42
+702,Pyatov,Piatov Andriy Valeriyovych,31.25
+703,Shust,Bohdan Romanovych Shust,35.71
+704,Yatsenko,Oleksandr Ivanovych Yatsenko,44.44
+705,Svidersky,Viacheslav Mijáilovich Sviderski,39.02
+706,Chygrynskiy,Dmitró Anatóliyovich Chihrinski,33.33
+707,Shelayev,Oleh Mykolayovych Shelayev,47.06
+708,Nazarenko,Nazarenko Serhiy Yuriyovych,50.00
+709,Kalinichenko,Kalinichenko Maxym Sergiyovych,57.14
+710,Rebrov,Sergiy Rebrov Stanislavovych,35.29
+711,Belik,Belik Oleksiy Grygorovych,33.33
+712,Vorobey,Andriy Oleksiyovych Vorobey,41.18
+713,Milevskiy,Artem Volodymyrovych Milevskyi,41.03
+714,Paul Jones,Paul Steven Jones,74.07
+715,Page,Robert Page,53.33
+716,Gabbidon,Daniel Leon Gabbidon,57.14
+717,Richard Duffy,Richard Michael Duffy,76.47
+718,Ricketts,Samuel Derek Ricketts,55.17
+719,Carl Fletcher,Carl Neil Fletcher,83.87
+720,Partridge,David Partridge,75.00
+721,Simon Davies,Simon Davies,100.00
+722,Carl Robinson,Carl Robinson,100.00
+725,Price,Lewis Peter Price,45.45
+726,D. Collins,Daniel Lewis Collins,62.07
+727,J. Collins,James Michael Collins,60.00
+728,Nyatanga,Lewin John Nyatanga,59.26
+729,Delaney,Mark Anthony Delaney,51.85
+730,Edwards,Robert Owen Edwards,53.85
+731,Crofts,Andrew Lawrence Crofts,42.86
+732,Ledley,Joseph Christopher Ledley,38.71
+733,David Vaughan,David Owen Vaughan,83.87
+734,Koumas,Jason Koumas,66.67
+735,Cotterill,David Rhys George Best Cotterill,43.90
+736,Earnshaw,Robert Earnshaw,69.57
+737,Joao Ricardo,João Ricardo Pereira Batalha Santos Ferreira,42.86
+738,Jamba,João Pereira,35.29
+739,Kali,Carlos Manuel Gonçalves Alonso,11.76
+740,Loco,Manuel António Cange,25.00
+741,Luís Delgado,Luís Delgado,100.00
+742,André Macanga,André Venceslau Valentim Macanga,57.78
+743,Zé Kalanga,Paulo Baptista Nsimba,32.26
+744,Mendonça,António Mendonça,66.67
+745,Mateus da Costa,Mateus Santos,71.43
+746,Figueiredo,Paulo Jose Lopes de Figueiredo,50.00
+747,Akwa,Fabrice Alcebíades Maieco,13.79
+748,Lama,Luís Mamona João,40.00
+749,Mario Hipólito,Mario Hipólito Damião,80.00
+750,Rui Marques,Rui Marques,100.00
+751,Lebo Lebo,António Lebo-Lebo,69.23
+752,Marcos Airosa,Marco Ibraim de Sousa Airosa,63.41
+753,Marco Abreu,Marco Paulo Coimbra de Abreu,56.41
+754,Miloy,Marcos Hermenegildo Joaquim,25.00
+755,Flávio,Flávio da Silva Amado,44.44
+756,Edson,Édson de Jesus Nobre,40.00
+757,Mantorras,Pedro Manuel Torres,57.14
+758,Love,Arsénio Sebastião Cabungula,6.45
+759,Titi Buengo,André Titi Buengo,78.57
+760,Kameni,Carlos Idriss Kameni,46.15
+761,Matoukou,Eric Benoit Matoukou,57.14
+762,Song,Rigobert Song Bahanag,32.00
+763,Geremi,Geremi Sorele Ndjitap Fotso,36.36
+764,Atouba,Thimothée Essama Atouba,41.38
+765,Makoun,Jean Ii Makoun,60.00
+766,Saidou,Alioum Saidou,63.16
+767,Douala,Rudolph M'Bela Douala,44.44
+768,Kome,Daniel Ngom Kome,40.00
+769,Eto'o,Samuel Eto'o Fils,45.45
+770,Webó,Pierre Achille Webó Kouamo,26.67
+771,Souleymanou,Souleymanou Hamidou,73.33
+772,Bikey,André Stéphane Bikey-Amougou,30.30
+773,Perrier Doumbe,Jean-Joël Perrier-Doumbé,73.68
+774,Angbwa,Benoît Christian Angbwa Ossoemeyang,29.27
+775,Bilayi Ateba,Jean-Hugues Ateba-Bilayi,33.33
+776,Wamfor,Justice Wamfor,60.00
+777,Djemba Djemba,Eric Daniel Djemba-Djemba,68.42
+778,M'bia,Stephane M'Bia Etoundi,37.04
+779,Feuchine,Guy Armand Feutchine,57.14
+780,Emana,Achille Emana Edzimbi,38.46
+781,Olembé,Salomon René Olembé-Olembé,37.50
+782,Meyong Ze,Albert Meyong Ze,72.00
+783,Tizié,Jean-Jacques Tizié Hobrou,33.33
+785,Méïté,Abdoulaye Meïté,50.00
+786,Eboué,Emmanuel Eboué,52.63
+787,Boka,Arthur Étienne Boka,34.78
+788,Zokora,Alain Didier Zokora Deguy,38.71
+789,Yaya Touré,Gnégnéri Yaya Touré,68.97
+790,Kader Keïta,Abdul Kader Keïta,78.57
+791,Akalé,Kanga Gauthier Akalé,40.00
+792,B. Kalou,Bonaventure Kalou,58.33
+794,Gnanhouan,Gérard Amoukou Gnanhouan,54.55
+795,Barry,Boubacar Barry,52.63
+796,Kouassi,Koffi-Blaise Kouassi,51.85
+797,Demel,Guy Roland Demel,47.62
+798,Domoraud,Depri Cyrille Leandre Domoraud,42.11
+799,Zoro,Marc-André Zoro Kpolo,32.00
+800,Faé,Emerse Fae,46.15
+801,Yapi Yapo,Gilles Donald Yapi Yapo,56.25
+802,Romaric,Christian Koffi N'dri Romaric,38.89
+803,Bakari Koné,Bakari Koné,100.00
+804,Koné,Arouna Kone,53.33
+805,Dindane,Aruna Dindane,70.00
+806,Kingston,Richard Paul Franck Kingson,40.00
+807,Mensah,Le Roc de Gibraltar,16.00
+808,Kuffour,Samuerl Kuffour,63.64
+809,Paintsil,John Paintsil,76.19
+810,Pappoe,Emmanuel Addoquaye Pappoe,38.71
+811,Eric Addo,Eric Addo,100.00
+813,Appiah,Stephen Christian Appiah,40.00
+814,Muntari,Suleyman Ali Muntari,51.85
+815,Amoah,Matthew Amoah,55.56
+816,Gyan,Asamoah Gyan,50.00
+817,Adjei,Sammy Adjei,62.50
+818,Owu,George Owu,46.15
+819,Quaye,Peter Ofori-Quaye,45.45
+820,Issah,Gabriel Issah Ahmed,41.67
+821,Shilla,Iliasu Alhassan Shilla,42.86
+822,Sarpei,Hans Adu Sarpei,57.14
+823,Mohamed,Habib Mullah Mohamed,51.85
+824,Draman,Haminu Dramani,60.00
+825,Derek Boateng,Derek Owusu Boateng,81.25
+826,Pimpong,Razak Pimpong,70.00
+827,Otto Addo,Otto Addo,100.00
+828,Tachie-Mensah,Alexander Tachie-Mensah,72.22
+829,Enyeama,Vincent Enyeama,63.64
+830,Yobo,Joseph Michael Yobo,34.78
+831,Enakahire,Joseph Enakarhire,69.23
+832,Odiah,Chukwudi Odiah,52.63
+833,Taiwo,Taye Ismaila Taiwo,43.48
+834,Yussuf,Atanda Ayila Yussuf,48.00
+835,Utaka,John Chukwridi Utaka,40.00
+836,Obodo,Christian Udubuesi Obodo,34.48
+837,Mikel,John Michael Nchekwube Obinna,23.53
+838,Martins,Obafemi Akinwunmi Martins,43.75
+839,Aghahowa,Julius Efosa Aghahowa,55.17
+840,Ejide,Augustine Amamchukwu Ejide,32.26
+841,Nwaneri,Obinna Nwaneri,66.67
+842,Udeze,Ifeanyi Udeze,55.56
+843,Olofinjana,Oluwaseyi George Olofinjana,54.05
+844,Kaita,Sani Haruna Kaita,45.45
+845,Lawal,Garba Lawal,62.50
+846,Oruma,Wilson Oruma,58.82
+847,Okocha,Augustine Azuka Okocha,42.86
+848,Kanu,Nwanko Kanu,53.33
+849,Odemwingie,Osaze Peter Odemwingie,62.50
+850,Makinwa,Stephen Ayodele Makinwa,46.67
+851,Obinna,Victor Nsofor Obinna,46.15
+852,Marlin,Calvin Donovan Marlin,44.44
+853,Morris,Mogammat Nasief Morris,42.86
+854,A. Mokoena,Teboho Aaron Mokoena,62.07
+855,Tau,Joseph Jimmy Tau,31.58
+856,Katza,Ricardo Katza,55.56
+857,Mabizela,Mbulelo Oldjohn Mabizela,50.00
+858,Pienaar,Steven Jerome Pienaar,50.00
+859,Buckley,Delron Sebastian Buckley,45.16
+860,Vilakazi,Benedict Bongani Vilakazi,48.48
+861,Zuma,Sibusiso Wiseman Zuma,32.00
+862,Bartlett,Thurston Shaun Bartlett,51.61
+863,Joseph,Moeneeb Josephs,57.14
+864,Kannemeyer,David Charles Kannemeyer,58.82
+865,Gaxa,Siboniso Gaxa,47.06
+866,Carnell,Bradley Neil Carnell,51.85
+867,Sheppard,Dillon Sheppard,69.57
+868,Van Heerden,Elrio van Heerden,78.57
+869,Arthur Zwane,Arthur Zwane,100.00
+870,Mphela,Katlego Abel Mphela,48.00
+871,Nkosi,Siyabonga Solace Nkosi,37.04
+872,Nomvethe,Siyabonga Eugene Nomvethe,48.48
+873,McCarthy,Benedict Saul Mc Carthy,51.61
+874,Raselemane,Abram Raselemane,76.92
+875,Agassa,Kossi Agassa,66.67
+876,Abalo,Jean-Paul Yaovi Dosseh Abalo,30.30
+877,Nibombé,Daré Nibombé,73.68
+878,Tchangai,Komi Tchangai,76.19
+879,Assemoassa,Amevou-Ludovic Assemoassa,57.14
+880,Romao,Jacques-Alaixys Romao,38.46
+881,Cherif Touré,Mohamed Abdel Kader Coubadja Touré,39.13
+882,Senaya,Yao Séyram Junior Sènaya,40.00
+883,Salifou,Moustapha Salifou,58.33
+885,Mohamed Kader,Mohamed Abdel Kader Coubadja Touré,55.32
+886,Tchagnirou,Ouro-Nimini Tchagnirou,62.50
+887,Obilale,Kodjovi Dodji Obilalé,50.00
+888,Akoto,Eric Akoto,66.67
+889,Forson,Richmond Forson,57.14
+890,A. Touré,Assimiou Toure,66.67
+891,Atsou,Edem Komlan Franck Atsou,34.48
+892,Aziawonou,Yao Aziawonou,81.82
+893,Agboh,Kuami Agboh,62.50
+894,Dossevi,Thomas Folivi Dossevi,50.00
+895,Erassa,Affo Omorou Erassa,50.00
+896,Olufadé,Adekanmi Olufade,60.87
+897,Malm,Robert Malm,53.33
+898,Boumnijel,Ali Boumnijel,81.82
+899,Jaïdi,Radhi Ben Abdelmajid Jaïdi,32.26
+900,Haggui,Karim Haggui,66.67
+901,Trabelsi,Hatem Trabelsi,72.73
+902,Jemmali,David Jemmali,70.00
+903,Mnari,Jaouhar Mnari,55.56
+904,Bouazizi,Riadh Bouazizi,72.73
+905,Chedli,Adel Chedli,70.59
+906,Namouchi,Hamed Namouchi,72.73
+907,Jaziri,Zied Jaziri,70.59
+908,Chikhaoui,Yassine Chikhaoui,69.23
+909,Nefzi,Adel Nefzi,66.67
+910,Kasraoui,Hamdi Kasraoui,72.73
+911,Saidi,Karim Saïdi,62.50
+912,Yahia,Ala-eddine Yahia,47.62
+913,Ayari,Anis Ayari,66.67
+914,Nafti,Mehdi Ben Sadok Nafti,38.46
+915,Ghodhbane,Kaies Ghodhbane,75.00
+916,Melliti,Mohamed Raâfat Melliti,48.28
+917,Ben Saada,Chaouki Ben Saada,69.23
+918,Essediri,Karim Essediri,72.73
+919,Guemandia,Haykel Guemamdia,64.00
+920,Dos Santos,Francileudodos Santos Silva,54.05
+921,Porras,José Francisco Porras Hidalgo,34.29
+922,Umaña,Michael Umaña Corrales,37.04
+923,Sequeira,Douglas Esteban Sequeira Solano,41.03
+924,Luis Marín,Luis Antonio Marín Murillo,55.56
+925,Danny Fonseca,Danny Fonseca,100.00
+926,Solís,Jorge Alonso Solís Calderón,31.25
+927,G. Martínez,Gilberto Martínez Vidal,60.61
+928,Leo González,Leonardo González Arce,70.59
+929,Centeno,Walter Centeno Corea,51.85
+930,Wanchope,Paulo César Wanchope,57.14
+931,Ronald Gómez,Ronald Gomez,100.00
+932,Mesen,Álvaro Mesén Murillo,40.00
+933,Alfaro,Wardy Bordman Alfaro Pizarro,35.29
+934,Badilla,Gabriel Badilla Segura,48.28
+935,M. Rodríguez,Michael Rodríguez Gutiérrez,57.89
+936,Drummond,Jervis Drummond,69.57
+937,Harold Wallace,Harold Wallace Mc Donald,73.68
+938,Azofeifa,Randall Azofeifa Corrales,48.48
+939,Bolaños,Christián Bolaños Hueco Navarro,36.84
+940,C. Hernández,Carlos Hernández,81.48
+941,Víctor Núñez,Víctor Amauri Núñez Rodríguez,58.54
+942,Saborío,Álvaro Saborío,66.67
+943,Kurt Bernard,Kurt Robert Bernard Simpson,61.54
+944,O. Sánchez,Oswaldo Javier Sánchez Ibarra,47.37
+945,Rafa Márquez,Rafael Márquez Álvarez,70.59
+946,Osorio,Ricardo Osorio Mendoza,42.86
+947,Salcido,Carlos Arnoldo Flores Salcido,38.89
+948,Pardo,Pável Pardo Segura,43.48
+949,Torrado,Gerardo Torrado Diez de Bonilla,36.84
+950,Mario Méndez,Mario Méndez Olague,77.42
+951,Pineda,Gonzalo Pineda Reyes,46.15
+952,Bravo,Omar Bravo Tordecillas,37.04
+953,Franco,Guillermo Luis Franco Farcuasón,32.43
+954,Borgetti,Jared Francisco Borgetti Echavarría,37.21
+955,Corona,José de Jesús Corona Rodríguez,33.33
+956,Ochoa,Francisco Guillermo Ochoa Magaña,27.03
+957,Suárez,Claudio Suárez Sánchez,42.86
+958,F. Rodríguez,Francisco Javier Rodríguez Pinedo,50.00
+959,J. A. Castro,José Antonio Castro González,52.63
+960,R. Garcia,Víctor Hugo García Reza,51.61
+961,Ramón Morales,Ramón Morales Higuera,76.47
+962,Guardado,José Andrés Guardado Hernández,42.11
+963,L. E. Pérez,Luis Ernesto Pérez Gómez,54.55
+964,Zinha,Antônio Naelson Matías,22.22
+965,Arellano,José de Jesús Arellano Alcocer,42.11
+966,Kikin,José Francisco Fonseca Guzmán,11.76
+967,Hislop,Neil Shaka Hislop,52.17
+968,Sancho,Brent Sancho,66.67
+969,Dennis Lawrence,Dennis William Lawrence,78.95
+970,Cyd Gray,Cyd Gray,100.00
+971,Avery John,Avery John,100.00
+972,Yorke,Dwight Eversley Yorke,38.46
+973,Birchall,Christopher Birchall,57.14
+974,Theobald,Densill Theobald,66.67
+975,Carlos Edwards,Akenhaton Carlos Edwards,73.68
+976,Collin Samuel,Collin Andrew Samuel,78.79
+977,Setern John,Stern John,95.24
+978,Jack,Kelvin Kyron Jack,38.10
+979,Clayton Ince,Clayton Ince,100.00
+980,Marvin Andrews,Marvin Andrews,100.00
+981,Ian Cox,Ian Gary Cox,73.68
+982,Charles,Atiba Charles,70.00
+983,Aurtis Whitley,Aurtis Whitley,100.00
+984,Wolfe,Anthony Wolfe,55.56
+985,Wise,Evans Wise,57.14
+986,Latapy,Russell Nigel Latapy,46.15
+987,Scotland,Jason Kelvin Scotland,55.17
+988,K. Jones,Kenwyne Joel Jones,56.00
+989,Glen,Cornell Glen,50.00
+990,Keller,Kasey Keller,66.67
+991,Pope,George Edward Pope,36.36
+992,Onyewu,Oguchialu Chijioke Goma Lambu Onyewu,28.57
+993,Cherundolo,Steven Emil Cherundolo,62.50
+994,Lewis,Edward James Lewis,43.48
+996,Mastroeni,Pablo Mastroeni,75.00
+998,Convey,Robert Francis Convey,44.44
+999,Donovan,Landon Timothy Donovan,48.28
+1002,Hahnemann,Marcus Hahnemann,72.00
+1003,Bocanegra,Carlos Manuel Bocanegra,56.25
+1004,Berhalter,Gregg Matthew Berhalter,56.25
+1005,Conrad,James Paul Conrad,52.17
+1006,Albright,Christopher John Albright,48.48
+1007,Olsen,Benjamin Robert Olsen,38.46
+1008,John O'Brien,John O'Brien,100.00
+1009,Dempsey,Clinton Drew Dempsey,51.85
+1010,Eddie Johnson,Edward Abraham Johnson,62.86
+1011,Ching,Brian Ching,62.50
+1012,Wolff,Joshua David Wolff,43.48
+1013,Abbondanzieri,Roberto Carlos Abbondanzieri,63.41
+1014,Ayala,Roberto Fabián Ayala,40.00
+1015,Heinze,Gabriel Iván Heinze,48.00
+1016,Burdisso,Nicolás Andrés Burdisso,51.61
+1017,Juan P. Sorín,Juan Pablo Sorín,85.71
+1018,Mascherano,Javier Alejandro Mascherano,54.05
+1019,Cambiasso,Esteban Matias Cambiasso Deleau,45.00
+1020,Maxi Rodríguez,Maximiliano Rubén Rodríguez,68.29
+1021,Riquelme,Juan Roman Riquelme,59.26
+1022,Saviola,Javier Pedro Saviola Fernandez,37.84
+1023,Crespo,Hernán Jorge Crespo,48.00
+1024,Leo Franco,Leonardo Neorén Franco,62.50
+1025,Ustari,Oscar Alfredo Ustari,46.15
+1026,G. Milito,Gabriel Alejandro Milito,50.00
+1027,Coloccini,Fabricio Tomás Coloccini,54.55
+1028,Cufré,Leandro Damián Cufré,40.00
+1029,Lucho González,Luis Oscar González,72.73
+1030,Scaloni,Lionel Sebastián Scaloni,45.16
+1031,Aimar,Pablo César Aimar,45.45
+1032,Palacio,Rodrigo Sebastián Palacio Alcalde,35.00
+1033,Messi,Lionel Andrés Messi Cuccittini,28.57
+1034,Tevez,Carlos Alberto Tevez Martínez,29.41
+1035,Julio Cruz,Julio Cruz,100.00
+1036,Dida,Nélson de Jesus Silva,24.00
+1037,Lúcio,Lucimar Ferreira da Silva,26.67
+1038,Juan,Juan Silveira dos Santos,28.57
+1039,Cafú,Marcos Evangelista de Morais,12.50
+1040,Roberto Carlos,Roberto Carlos da Silva Rocha,65.12
+1041,Emerson,Emerson Ferreira Da Rosa,45.16
+1042,Zé Roberto,José Roberto Da Silva Júnior,47.37
+1043,Kaka',Ricardo Izecson dos Santos Leite,11.11
+1044,Ronaldinho,Ronaldode Assis Moreira,48.48
+1045,Adriano,Adriano Leite Ribeiro,50.00
+1046,Ronaldo,Ronaldo Luís Nazário De Lima,40.00
+1047,Júlio César,Júlio César Soares De Espíndola,52.38
+1048,Rogério Ceni,Rogerio Ceni,100.00
+1049,Luisão,Anderson Luis da Silva,35.71
+1050,Cris,Cristiano Marques Gomez,29.63
+1051,Ricardinho,Ricardo Luís Pozzi Rodrigues,42.11
+1052,Cicinho,Cícero João De Cézare,28.57
+1053,Mineiro,Carlos Luciano da Silva,20.00
+1054,Gilberto Silva,Gilberto Aparecido Da Silva,68.29
+1055,Gilberto,Gilberto Da Silva Melo,53.33
+1056,Juninho,Antônio Augusto Ribeiro Reis Júnior,23.81
+1057,Robinho,Rei das Pedaladas,16.67
+1058,Fred,Frederico Chaves Guedes,29.63
+1059,Claudio Bravo,Claudio Andrés Bravo Muñoz,66.67
+1060,Ricardo Rojas,Ricardo Francisco Rojas Trujillo,57.78
+1061,P. Contreras,Pablo Andrés Contreras Fica,57.89
+1062,Rafael Olarra,Rafael Andrés Olarra Guerrero,61.90
+1063,Jorge Ormeño,Jorge Andrés Ormeño Guerra,63.16
+1064,Jorge Acuña,Jorge Cristian Acuña Conchalalora,50.00
+1065,Manuel Iturra,Manuel Rolando Iturra Urrutia,61.90
+1066,Mark González,Mark Dennis González Hoffmann,61.90
+1067,Jorge Valdivia,Jorge Luis Valdivia Toro,73.68
+1068,Luis Jiménez,Luis Antonio Jiménez Garcés,61.54
+1069,Reinaldo Navia,Reinaldo Marcelino Navia Amador,62.22
+1070,Johnny Herrera,Johnny Cristian Herrera Munoz,65.12
+1071,Miguel Pinto,Miguel Angel Pinto Jerez,66.67
+1072,Jorge Vargas,Jorge Francisco Vargas Palacios,55.81
+1073,M. Zenteno,Mauricio Alejandro Zenteno Morales,41.86
+1074,Gonzalo Jara,Gonzalo Alejandro Jara Reyes,60.00
+1075,J. Contreras,José Contreras,88.00
+1076,C. Maldonado,Claudio Andrés del Tránsito Maldonado Rivera,40.00
+1077,Jaime Valdés,Jaime Andrés Valdés Zapata,63.16
+1078,M. Fernández,Matías Ariel Fernández Fernández,51.16
+1079,Humberto Suazo,Humberto Andrés Suazo Pontivo,65.12
+1080,Eduardo Rubio,Eduardo Javier Rubio Kostner,63.41
+1081,Patricio Galaz,Patricio Sebastián Galaz Sepúlveda,58.33
+1082,Luis Martínez,Luis Eduardo Martínez,76.47
+1083,Perea,Luis Amaranto Perea Mosquera,30.30
+1084,Cristian Zapata,Cristián Eduardo Zapata Valencia,63.83
+1085,Orozco,Andrés Felipe Orozco Vásquez,35.29
+1086,Passo,Oscar Enríque Passo,41.67
+1087,Fabián Vargas,Fabián Andrés Vargas Rivera,65.00
+1088,Viáfara,Jhon Eduis Viáfara Mina,46.67
+1089,Elkin Soto,Elkin Soto Jaramillo,66.67
+1090,Tressor Moreno,Mahler Tressor Moreno Baldrich,63.64
+1091,Elkin Murillo,Elkin Antonio Murillo Amor,66.67
+1092,Rodallega,Hugo Rodallega Martínez,56.25
+1093,Óscar Córdoba,Oscar Eduardo Córdoba Arce,66.67
+1094,Arenas,Líbis Andrés Arenas Murillo,36.36
+1095,De La Cuesta,José Julián De la Cuesta Herrera,54.55
+1096,Nájera,Álvaro Francisco Nájera Gil,36.36
+1097,Pacheco,Víctor Danilo Pacheco Bustamante,35.90
+1098,Casierra,Mauricio Ferney Casierra,50.00
+1099,Abel Aguilar,Abel Enrique Aguilar Tapias,61.54
+1100,Castrillón,Jaime Alberto Castrillón Vásquez,47.62
+1101,Patiño,Jairo Leonard Patiño Rosero,36.36
+1102,Á. Domínguez,Álvaro José Domínguez Cabezas,55.00
+1103,Yanes,Luis Alfredo Yanes Padilla,32.26
+1104,Rentería,Wason Libardo Rentería Cuesta,43.24
+1105,Cristhian Mora,Cristhian Rafael Mora Medrano,65.12
+1106,I. Hurtado,Iván Hurtado,85.71
+1107,G. Espinoza,Giovanny Patricio Espinoza Pabon,47.62
+1108,De La Cruz,Ulises de la Cruz,74.07
+1109,Néicer Reasco,Néicer Reasco Yano,83.87
+1110,Castillo,Segundo Alejandro Castillo Nazareno,37.21
+1111,E. Tenorio,Edwin Rolando Tenorio Montaño,47.37
+1112,A. Valencia,Luis Antonio Valencia Mosqueras,48.78
+1113,Edison Méndez,Edison Vicente Méndez Méndez,63.41
+1114,Agustín Delgado,Agustín Javier Delgado Chalá,69.77
+1115,Carlos Tenorio,Carlos Vicente Tenorio Medina,65.12
+1116,Villafuerte,Edwin Alberto Villafuerte,61.11
+1117,Lanza,Damián Enrique Lanza Moyano,31.25
+1118,Guagua,Jorge Daniel Guagua Tamayo,37.50
+1119,Perlaza,José Luis Perlaza Napa,48.28
+1120,Marlón Ayoví,Arlin Segundo Ayoví Ayoví,54.05
+1121,Urrutia,Patricio Urrutia,60.87
+1122,Ambrossi,Vicente Paúl Ambrosi Zambrano,37.84
+1123,Saritama,Luis Fernando Saritama Padilla,42.11
+1124,Lara,Christian Rolando Lara Anangonó,22.86
+1125,Benítez,Cristián Benitez,60.87
+1126,Kaviedes,Jaime Iván Kaviedes Llorentty,43.24
+1127,Borja,Félix Alexander Borja Valencia,28.57
+1128,Villar,Justo Wilmar Villar Viveros,36.36
+1129,J. C. Cáceres,Julio César Cáceres López,61.11
+1130,Gamarra,Carlos Alberto Gamarra Pavón,40.00
+1131,Caniza,Denis Ramón Caniza Acuña,40.00
+1132,Toledo,Delio César Toledo,50.00
+1133,Toro Acuña,Roberto Miguel Acuña,53.33
+1134,Carlos Paredes,Carlos Humberto Paredes Monges,63.64
+1135,Bonet,Carlos Bonet Cáceres,40.00
+1136,Riveros,Cristian Miguel Riveros Núñez,38.89
+1137,Santa Cruz,Roque Luis Santa Cruz Cantero,51.28
+1138,Haedo Valdez,Nelson Antonio Haedo Valdez,61.54
+1139,Bobadilla,Aldo Antonio Bobadilla Avalos,47.37
+1140,Derlis Gómez,Derlis Venancio Gómez López,61.54
+1141,Manzur,Julio César Manzur,50.00
+1142,Da Silva,Paulo César da Silva Barrios,44.44
+1143,Jorge Núñez,Jorge Martín Núñez Mendoza,59.46
+1144,Diego Gavilán,Diego Antonio Gavilán Zárate,63.41
+1145,Barreto,Édgar Osvaldo Barreto Cáceres,38.89
+1146,Montiel,José Arnulfo Montiel Núñez,42.42
+1147,J. D. Santos,Julio Daniel dos Santos Rodríguez,46.51
+1148,Cuevas,Nelson Rafael Cuevas Amarilla,34.29
+1149,Cabañas,Salvador Cabañas Ortega,46.67
+1150,Dante López,Dante Rafael López Farina,61.11
+1151,Butron,Leao Butrón Gotuzzo,48.00
+1152,Villalta,Miguel Angel Villalta Hurtado,43.24
+1153,A. Rodríguez,Alberto Junior Rodríguez Valdelomar,47.83
+1154,Galliquio,John Cristian Galliquio Castro,46.15
+1155,Juan M. Vargas,Juan Manuel Vargas Risco,70.27
+1156,Reiner Torres,Rainer Torres Salas,75.00
+1157,Zegarra,Carlos Alberto Zegarra Zamora,38.89
+1158,Farfán,Jefferson Augustín Farfán Guadalupe,29.27
+1159,Cominges,Juan Elías Cominges Mayorga,45.71
+1160,Vasallo,Gustavo Enrique Vassallo Ferrari,35.90
+1161,Guerrero,José Paolo Guerrero Gonzales,44.44
+1162,E. Delgado,Erick Guillermo Delgado Vásquez,45.00
+1163,Acasiete,Wilmer Santiago Acasiete Aradiela,39.02
+1164,Salazar,Santiago Roberto Salazar Peña,38.89
+1165,Prado,Amilton Jair Prado Barron,33.33
+1166,Vílchez,Walter Ricardo Vílchez Soto,41.18
+1167,Cevasco,Miguel Ángel Cevasco Abad,43.75
+1168,Cruzado,Paulo Rinaldo Cruzado Durando,38.89
+1169,Solano,Nolberto Albino Solano Todco,35.29
+1170,Olcese,Aldo Italo Olcese Vassallo,37.50
+1171,Pedro García,Pedro Alexander García de la Cruz,53.33
+1172,Pizarro,Claudio Miguel Pizarro Bosio,40.00
+1173,Ross,Douglas Junior Ross Santillana,23.53
+1174,Carini,Héctor Fabián Carini Hernández,33.33
+1175,Diego Lugano,Diego Alfredo Lugano Morena,61.54
+1176,Valdez,Carlos Adrián Valdéz Suárez,36.36
+1177,Diogo,Carlos Andrés Diogo Enseñat,31.25
+1178,D. Rodríguez,Octavio Darío Rodríguez Peña,56.41
+1179,Diego Pérez,Diego Fernando Pérez Aguado,57.89
+1180,P. García,Pablo Gabriel García Pérez,47.06
+1181,Ruben Olivera,Rubén Ariel Olivera Da Rosa,65.00
+1182,Zalayeta,Marcelo Danubio Zalayeta,50.00
+1183,Forlán,Diego Forlán Corazo,48.00
+1184,Gonzalo Vargas,Gonzalo Vargas Abella,80.00
+1185,Viera,Diego Sebastián Viera Galaín,30.30
+1186,Oscar Castro,Óscar Manuel Castro Aristimuño,57.14
+1187,Godín,Diego Roberto Godín Leal siuu,29.41
+1188,D. López,Luis Diego López Breijo,46.67
+1189,P. Lima,Pablo Martín Lima Olid,42.86
+1190,Pouso,Omar Heber Pouso Osores,35.71
+1191,Giacomazzi,Guillermo Gonzalo Giacomazzi Suarez,44.44
+1192,Gustavo Varela,Gustavo Antonio Varela Rodríguez,60.87
+1193,Recoba,Alvaro Alexander Recoba Rivero,33.33
+1194,V. Sánchez,Vicente Martín Sánchez Bragunde,45.00
+1195,Estoyanoff,Fabian Larry Estoyanoff Poggio,50.00
+1196,Abreu,Washington Sebastián Abreu Gallo,27.03
+1197,Mirzapour,Ebrahim Mirzapour,69.23
+1198,Golmohammadi,Yahya Golmohammadi,80.00
+1199,Rezaei,Rahman Rezaei,63.16
+1200,Kaabi,Hossein Kaebi,44.44
+1201,Nosrati,Mohammad Nosrati,60.87
+1202,Nekounam,Javad Nekounam,72.73
+1203,Teymourian,Andranik Teymourian Samarani,52.63
+1204,Mahdavikia,Mehdi Mahdavikia,76.92
+1206,Hashemian,Vahid Hashemian Korbekandi,51.43
+1207,Daei,Ali Daei,66.67
+1208,Roudbarian,Hasan Roudbarian,76.92
+1209,Talebloo,Vahid Talebloo,72.73
+1210,Bakhtiarizadeh,Sohrab Bakhtiarizadeh,80.00
+1211,Saedqi,Amir Hossein Sadeghi,30.77
+1212,Navidkia,Moharram Navidkia,64.00
+1213,Madanchi,Mehrzad Madanchi,66.67
+1214,Shojaei,Masoud Shojaei Soleimani,45.16
+1215,Zandi,Ferydoon Zandi,52.63
+1216,Khatibi,Rasoul Paki Khatibi,53.85
+1217,Kazemeian,Javad Kazemian,69.57
+1218,Borhani,Arash Borhani,70.00
+1219,Enayati,Gholam Reza Enayati,53.85
+1220,Kawaguchi,Yoshikatsu Kawaguchi,62.07
+1221,Tsuboi,Keisuke Tsuboi,60.00
+1222,Miyamoto,Tsuneyasu Miyamoto,61.54
+1223,Nakazawa,Yuji Nakazawa,76.19
+1224,Komano,Yuichi Komano,63.16
+1225,Santos,Alessandro Santos,52.17
+1226,H. Nakata,Hidetoshi Nakata,66.67
+1227,Fukunishi,Takashi Fukunishi,69.23
+1228,Nakamura,Shunsuke Nakamura,64.00
+1229,Yanagisawa,Atsushi Yanagisawa,71.43
+1230,Takahara,Naohiro Takahara,66.67
+1231,Doi,Yoichi Doi,46.15
+1232,Narazaki,Seigo Narazaki,72.73
+1233,Moniwa,Teruyuki Moniwa,57.14
+1234,Kaji,Akira Kaji,57.14
+1235,K. Nakata,Kôji Nakata,84.21
+1236,Endo,Yasuhito Endo,47.06
+1237,Inamoto,Junichi Inamoto,63.64
+1238,Ogasawara,Mitsuo Ogasawara,72.00
+1239,Ono,Shinji Ono,46.15
+1240,Tamada,Keiji Tamada,66.67
+1241,Oguro,masashi Ôguro,55.56
+1242,Maki,Seiichiro Maki,44.44
+1243,Zaid,Mabrouk Zaid,50.00
+1244,Tukar,Redah Hassan Tukar Fallatah,31.25
+1245,Al Montashari,Hamad Mohsen Al-Muntashri,57.89
+1246,Dokhi,Ahmed Dukhi Al-Dossary,29.63
+1247,Sulimani,Hussein Omar Abdul Ghani Al-Sulimani,36.36
+1248,Aziz,Khaled Aziz Al-Thaker,32.00
+1249,Al Ghamdi,Omar Al-ghamdi,78.26
+1250,Kariri,Saud Ali Kariri,57.14
+1251,Al Temyat,Nawaf Al-Temyat,75.00
+1252,Noor,Mohammed Noor Adam bin Hawsawi,23.53
+1253,Al Kahtani,Yaser Al-qahtani,69.23
+1254,Al Deayea,Mohammed Abdullaziz Al-Deayea,47.37
+1255,Khojah,Mohammed Khojah,57.14
+1256,Al Qadi,Nayef Ali Al-Qadi Fallatah,42.42
+1257,Al Bishi,Mohammed Eid Naser Al-Bishi,45.71
+1258,Khathran,Abdulaziz Mohammed Al-Khathran,42.11
+1259,Al Bahri,Ahmed Al-bahri,72.73
+1260,Massad,Mohammed Massad Al-Muwalid Al-Harbi,29.27
+1261,Ameen,Mohammed Ameen Haidar Al-Aulaqi,27.78
+1262,Al Shlhoub,Mohammed Bander Al-Shalhoob,48.65
+1263,Al Hawsawi,Malik Mouath Al-Hawasawi,58.82
+1264,Al Jaber,Sami Abdullah Al-Jaber,53.33
+1265,Al Harthi,Saad Mish'al Al-Harthi,58.06
+1266,Lee Woon Jae,Lee Woon-Jae,100.00
+1267,Choi Jin Cheul,Choi Jin-Chul,96.30
+1268,Kim Young Chul,Kim Young-Chul,100.00
+1269,Song Chong Gug,Song Chong-Goog,89.66
+1270,Lee Young Pyo,Lee Young-Pyo,100.00
+1271,Lee Ho,Lee Ho,100.00
+1272,Lee Eul Yong,Lee Eul-Yong,100.00
+1273,Ahn Jung Hwan,Ahn Jung-Hwan,100.00
+1274,Lee Chun Soo,Lee Chun-Soo,100.00
+1275,Park Ji Sung,Park Ji-Sung,100.00
+1276,Cho Jae Jin,Cho Sung-Jin,69.57
+1277,Kim Young Kwang,Kim Young-Kwang,100.00
+1278,Kim Yong Dae,Kim Yong-Dae,100.00
+1279,Kim Jin Kyu,Jin-Kyu Kim,63.64
+1280,Kim Sang Sik,Kim Sang-Sik,100.00
+1281,Cho Won Hee,Cho Won-Hee,100.00
+1282,Kim Dong Jin,Kim Dong-Jin,100.00
+1283,Kim Nam Il,Kim Nam-Il,100.00
+1284,Baek Ji Hoon,Baek Ji-Hoon,100.00
+1285,Kim Do Heon,Kim Do-Hyun,81.82
+1286,Chung Kyung Ho,Chung Kyung-Ho,100.00
+1287,Park Chu Young,Park Chu-Young,100.00
+1289,Schwarzer,Mark Schwarzer,78.26
+1290,Craig Moore,Craig Andrew Moore,75.86
+1291,Neill,Lucas Edward Neill,43.48
+1292,Chipperfield,Scott Kenneth Chipperfield,63.16
+1293,Grella,Vincenzo Grella,57.14
+1294,Wilkshire,Luke Wilkshire,78.26
+1295,Culina,Jason Culina,66.67
+1296,Emerton,Brett Michael Emerton,50.00
+1297,Bresciano,Mark Bresciano,78.26
+1298,Kewell,Harold Kewell,63.16
+1299,Viduka,Mark Viduka,70.59
+1300,Kalac,Zeljko Kalac,58.82
+1301,Covic,Ante Covic,66.67
+1302,Popovic,Anthony Popovic,63.64
+1303,Beauchamp,Michael Francis Beauchamp,52.94
+1304,Milligan,Mark Daniel Milligan,57.14
+1305,Tim Cahill,Timothy Filiga Cahill,64.52
+1306,Lazaridis,Stan Lazaridis,78.26
+1307,Skoko,Josip Skoko,62.50
+1308,Sterjovski,Mile Sterjovski,80.00
+1309,Aloisi,John Aloisi,70.59
+1310,Archie Thompson,Archibald Gerald Thompson,75.00
+1311,Joshua Kennedy,Joshua Blake Kennedy,82.35
+1312,Gordon Banks,Gordon Banks,100.00
+1313,Jack Charlton,Jack Charlton,100.00
+1314,Bobby Moore,Bobby Moore,100.00
+1315,George Cohen,George Reginald Cohen,72.73
+1316,Ray Wilson,Ray Wilson,100.00
+1317,Nobby Stiles,Nobby Stiles,100.00
+1318,Alan Ball,James Alan Ball,75.00
+1319,Martin Peters,Martin Peters,100.00
+1320,Bobby Charlton,Robert Charlton,75.86
+1321,Roger Hunt,Roger Hunt,100.00
+1322,Geoff Hurst,Geoff Hurst,100.00
+1323,Peter Shilton,Peter Shilton,100.00
+1324,David Seaman,David Seaman,100.00
+1325,Tony Adams,Tony Adams,100.00
+1326,Martin Keown,Martin Keown,100.00
+1327,Paul Ince,Paul Ince,100.00
+1328,Glen Hoodle,Glenn Hoddle,86.96
+1329,Paul Gascoigne,Paul Gascoigne,100.00
+1330,Bobby Robson,Robert William Robson,54.55
+1331,John Barnes,John Charles Bryan Barnes,61.11
+1332,Ian Wright,Ian Edward Wright,74.07
+1333,Gary Lineker,Gary Lineker,100.00
+1334,Kevin Keegan,Kevin Keegan,100.00
+1335,Jean-Luc Ettori,Jean-Luc Ettori,100.00
+1336,Gérard Janvion,Gérard Janvion,100.00
+1337,Marius Trésor,Marius Trésor,100.00
+1338,Maxime Bossis,Maxime Bossis,100.00
+1339,Manuel Amorós,Manuel Amorós,100.00
+1340,B. Genghini,Bernard Genghini,76.92
+1341,Jean Tigana,Jean Tigana,100.00
+1342,Alain Giresse,Alain Giresse,100.00
+1343,Michel Platini,Michel Platini,100.00
+1344,D. Rocheteau,Dominique Rocheteau,73.33
+1345,Didier Six,Didier Six,100.00
+1346,Joël Bats,Joël Bats,100.00
+1347,Laurent Blanc,Laurent Blanc,100.00
+1348,Frank Leboeuf,Frank Leboeuf,100.00
+1349,Emmanuel Petit,Emmanuel Petit,100.00
+1350,D. Deschamps,Didier Deschamps,81.48
+1351,Luis Fernández,Luis Fernandez,100.00
+1352,Thierry Tusseau,Thierry Tusseau,100.00
+1353,David Ginola,David Ginola,100.00
+1354,Jean M. Ferreri,Jean-Marc Ferreri,90.32
+1355,Bruno Bellone,Bruno Bellone,100.00
+1356,Jean P. Papin,Jean-Pierre Papin,82.76
+1357,Éric Cantona,Éric Cantona,100.00
+1358,Sepp Maier,Josef Dieter Maier,57.14
+1359,Berti Vogts,Hans-Hubert Vogts,71.43
+1360,Schwarzenbeck,Hans-Georg Schwarzenbeck,70.27
+1361,F. Beckenbauer,Franz Anton Beckenbauer,72.22
+1362,Rainer Bonhof,Rainer Bonhof,100.00
+1363,Uli Höeness,Uli Höeness,100.00
+1364,Paul Breitner,Paul Breitner,100.00
+1365,W. Overath,Wolfgang Overath,72.00
+1366,J. Grabowski,Jürgen Grabowski,81.48
+1367,B. Hölzenbein,Bernd Hölzenbein,85.71
+1368,Gerd Müller,Gerhard Müller,88.00
+1369,Bodo Illgner,Bodo Illgner,100.00
+1370,Jürgen Kohler,Jurgen Kohler,100.00
+1371,Matthias Sammer,Matthias Sammer,100.00
+1372,Guido Buchwald,Guido Ulrich Buchwald,80.00
+1373,Andreas Brehme,Andreas Brehme,100.00
+1374,Bernd Schuster,Bernd Schuster,100.00
+1375,Lothar Matthäus,Lothar Matthäus,100.00
+1376,K-H Rummenigge,Karl-Heinz Rummenigge,80.00
+1377,P. Littbarski,Pierre Michael Littbarski,64.86
+1378,Oliver Bierhoff,Oliver Bierhoff,100.00
+1379,Rudi Völler,Rudolf Völler,83.33
+1380,J. Klinsmann,Jürgen Klinsmann,81.48
+1381,Dino Zoff,Dino Zoff,100.00
+1382,Claudio Gentile,Claudio Gentile,100.00
+1383,G. Bergomi,Giuseppe Bergomi,72.00
+1384,Gaetano Scirea,Gaetano Scirea,100.00
+1385,F. Collovati,Fulvio Collovati,81.48
+1386,Gabriele Oriali,Gabriele Oriali,100.00
+1387,Marco Tardelli,Marco Tardelli,100.00
+1388,Antonio Cabrini,Antonio Cabrini,100.00
+1389,Bruno Conti,Bruno Conti,100.00
+1390,Paolo Rossi,Paolo Rossi,100.00
+1391,F. Graziani,Francesco Graziani,71.43
+1392,Walter Zenga,Walter Zenga,100.00
+1393,Franco Baresi,Franco Baresi,100.00
+1394,P. Vierchowod,Pietro Vierchowod,82.76
+1395,D. Albertini,Demetrio Albertini,75.86
+1396,Angelo Di Livio,Angelo Di Livio,100.00
+1397,Gianni Rivera,Gianni Rivera,100.00
+1398,Roberto Mancini,Roberto Mancini,100.00
+1399,Roberto Baggio,Roberto Baggio,100.00
+1400,Gianfranco Zola,Gianfranco Zola,100.00
+1401,R. Donadoni,Roberto Donadoni,76.92
+1402,S. Schillaci,Salvatore Schillaci,73.33
+1403,Gianluca Vialli,Gianluca Vialli,100.00
+1404,Jan Jongbloed,Jan Jongbloed,100.00
+1405,Wim Rijsbergen,Wim Rijsbergen,100.00
+1406,Arie Haan,Arend Haan,84.21
+1407,Wim Suurbier,Wilhelmus Lourens Johannes Suurbier,51.06
+1408,Ruud Krol,Rudolf Jozef Krol,61.54
+1409,W. van Hanegem,Willem van Hanegem,83.87
+1410,Wim Jansen,Wim Jansen,100.00
+1411,Johan Neeskens,Johannes Jacobus Neeskens,71.79
+1412,Johnny Rep,John Nicholaas Rep,64.29
+1413,Johan Cruyff,Hendrik Johannes Cruijff,61.11
+1414,Rob Rensenbrink,Pieter Robert Rensenbrink,75.00
+1415,Van Breukelen,Johannes Franciscus van Breukelen,56.52
+1416,Ronald Koeman,Ronald Koeman,100.00
+1417,A. van Tiggelen,Adrianus Andreas van Tiggelen,65.12
+1418,Frank Rijkaard,Franklin Edmundo Rijkaard,71.79
+1419,Berry van Aerle,Hubertus Aegidius Hermanus van Aerle,54.90
+1420,Jan Wouters,Jan Jacobus Wouters,73.33
+1421,Erwin Koeman,Erwin Koeman,100.00
+1422,G. Vanenburg,Gerald Vanenburg,81.48
+1423,Arnold Mühren,Arnold Mühren,100.00
+1424,Ruud Gullit,Ruud Gullit,100.00
+1425,Piet Keizer,Piet Keizer,100.00
+1426,M. van Basten,Marcel van Basten,82.76
+1427,Nery Pumpido,Nery Alberto Pumpido,75.00
+1428,Óscar Ruggeri,Oscar Alfredo Ruggeri,76.47
+1429,José Luis Brown,José Luis Brown,100.00
+1430,José Cuciuffo,Jose Luis Cuciuffo,83.87
+1431,Sergio Batista,Sergio Daniel Batista,80.00
+1432,Ricardo Giusti,Ricardo Omar Giusti,84.85
+1433,Olarticoechea,Julio Jorge Olarticoechea,68.42
+1434,J. Burruchaga,Jorge Luis Burruchaga,72.73
+1435,Héctor Enrique,Héctor Adolfo Enrique,80.00
+1436,Diego Maradona,Diego Armando Maradona,77.78
+1437,Jorge Valdano,Jorge Alberto Francisco Valdano Castellanos,46.43
+1438,Ubaldo Fillol,Ubaldo Matildo Fillol,76.47
+1439,D. Passarella,Daniel Alberto Passarella,64.86
+1440,Luis Galván,Luis Adolfo Galván,75.86
+1441,A. Tarantini,Alberto César Tarantini,64.71
+1442,Américo Gallego,Américo Rubén Gallego,83.33
+1443,F. Redondo,Fernando Carlos Redondo Neri,48.65
+1444,Matías Almeyda,Matías Almeyda,100.00
+1445,Osvaldo Ardiles,Osvaldo César Ardiles,83.33
+1446,Daniel Bertoni,Ricardo Daniel Bertoni,77.78
+1447,Leopoldo Luque,Leopoldo Jacinto Luque,77.78
+1448,Mario Kempes,Mario Alberto Kempes Chiodi,61.54
+1449,G. Batistuta,Gabriel Omar Batistuta,66.67
+1450,Félix,Félix Miélli Venerando,37.04
+1451,Piazza,Wilson da Silva Piazza,42.86
+1452,Brito,Hércules Brito Ruas,41.67
+1453,Carlos Alberto,Carlos Alberto Torres,80.00
+1454,Everaldo,Everaldo Marques da Silva,48.48
+1455,Clodoaldo,Clodoaldo Tavares de Santana,48.65
+1456,Gerson,Gérson de Oliveira Nunes,40.00
+1457,R. Rivelino,Roberto Rivellino,74.07
+1458,Pelé,Edson Arantes do Nascimento,12.90
+1459,Jairzinho,Jair Ventura Filho,51.85
+1460,Tostao,Eduardo Gonçalves de Andrade,17.65
+1461,C. Taffarel,Claudio Taffarel,76.92
+1462,Luiz Pereira,Luís Edmundo Pereira,68.75
+1463,Júnior,Leovegildo Lins da Gama Júnior,33.33
+1464,Dunga,Carlos Caetano Bledorn Verri,12.12
+1465,Toninho Cerezo,Antônio Carlos Cerezzo,66.67
+1466,Paulo Falcao,Paulo Roberto Falção,75.00
+1467,Sócrates,Sócrates Brasileiro Sampaio de Souza Vieira de Oliveira,25.40
+1468,Zico,Arthur Antunes Coimbra,15.38
+1469,Raí,Raimundo Souza Vieira de Oliveira,16.67
+1470,Leonardo,Leonardo Nascimento de Araújo,43.24
+1471,Bebeto,José Roberto da Gama de Oliveira,21.05
+1472,Careca,Antônio de Oliveira Filho,19.35
+1473,Lehmann,Jens Gerhard Lehmann,51.85
+1474,Kolo Touré,Kolo Habib Touré,76.92
+1475,Adebayor,Sheyi Emmanuel Adebayor,51.61
+1476,Almunia,Manuel Almunia Rivero,50.00
+1477,Song Bilong,Alexandre Dimitri Song Billong,53.66
+1478,Clichy,Gaël Dimitri Clichy,48.00
+1479,Hoyte,Justin Raymond Hoyte,40.00
+1480,Flamini,Mathieu Pierre Flamini,48.28
+1481,Diaby,Vassiriki Abou Diaby,40.00
+1482,Lauren,Laureno Bisan-Etame Mayer,38.71
+1483,A. Hleb,Alexandr Pavlovich Hleb,41.38
+1484,Julio Baptista,Júlio César Pereira Clemente Baptista,54.90
+1485,Poom,Mart Poom,61.54
+1486,Cygan,Pascal Cygan,58.82
+1487,Garry,Ryan Felix Mayne Garry,37.04
+1488,Aliadiere,Jérémie Aliadière,69.23
+1489,Lupoli,Arturo Lupoli,63.16
+1490,Ridgewell,Liam Matthew Ridgewell,58.06
+1491,Samuel,Jlloyd Tafari Samuel,46.15
+1492,Gavin McCann,Gavin Peter Mc Cann,77.42
+1493,Gareth Barry,Gareth Robert Barry,77.42
+1494,Agbonlahor,Gabriel Imuetinyan Agbonlahor,51.28
+1495,Luke Moore,Luke Isaac Hunt Moore,64.52
+1496,Juan P. Ángel,Juan Pablo Ángel Arango,68.57
+1497,S. Taylor,Stuart James Taylor,59.26
+1498,M. Laursen,Martin Laursen,78.26
+1499,Gary Cahill,Gary James Cahill,78.57
+1500,Bouma,Wilfred Bouma,55.56
+1501,Craig Gardner,Craig Gardner,100.00
+1502,Hendrie,Lee Andrew Hendrie,56.00
+1503,Whittingham,Peter Michael Whittingham,61.11
+1504,Patrik Berger,Patrik Berger,100.00
+1505,Friedel,Bradley Howard Friedel,48.28
+1506,Khizanishvili,Zurab Khizanishvili,81.25
+1507,Savage,Robert William Savage,44.44
+1508,Bentley,David Michael Bentley,50.00
+1509,Jason Roberts,Jason Andre Davis Roberts,68.42
+1510,Enckelman,Peter Enckelman,75.00
+1511,Nelsen,Ryan William Nelsen,48.00
+1512,Todd,Andrew John James Todd,30.77
+1513,Matteo,Dominic Matteo,60.00
+1514,Gray,Michael Gray,50.00
+1515,Mceveley,James Michael Mc Eveley,51.61
+1516,Tugay,Tugay Kerimoglu,50.00
+1517,Peter,Sergio Mario Peter,43.48
+1518,Kuqi,Shefki Kuqi,53.33
+1519,Gallagher,Paul Gallagher,78.26
+1520,Nonda,Shabani Nonda,55.56
+1521,Jason Brown,Jason Roy Brown,84.62
+1522,Andy Taylor,Andrew Taylor,83.33
+1523,Eddie Nolan,Edward William Nolan,64.52
+1524,Kane,Anthony Michael Kane,33.33
+1525,Derbyshire,Matthew Anthony Derbyshire,55.56
+1526,Jeffers,Francis Jeffers,63.64
+1527,Ben Haim,Tal Ben-haim,80.00
+1528,Diagne Faye,Abdoulaye Diagne-Faye,68.75
+1529,Nicky Hunt,Nicholas Brett Hunt,55.17
+1530,Ricardo Gardner,Ricardo Wayne Gardner,83.33
+1531,Iván Campo,Iván Campo Ramos,76.92
+1532,Speed,Gary Speed,66.67
+1533,Nolan,Kevin Anthony Jance Nolan,33.33
+1534,Diouf,El-Hadji Ousseynou Diouf,34.48
+1535,K. Davies,Kevin Cyril Davies,61.54
+1536,Ian Walker,Ian Michael Walker,71.43
+1537,Sam Ashton,Samuel Seth Ashton,71.43
+1538,Al Habsi,Ali Abdullah Harib Al Habsi,45.71
+1539,Tal,Idan Tal,54.55
+1540,Quinton Fortune,Quinton Fortune,100.00
+1541,Pedersen,Henrik Pedersen,69.57
+1542,Vaz Te,Ricardo Jorge Vaz Tê,46.15
+1543,Anelka,Nicolas Sebastien Anelka,40.00
+1544,J. Fortune,Jonathan Jay Fortune,62.07
+1545,Hreidarsson,Hermann Hreidarsson,73.33
+1546,Young,Luke Paul Young,50.00
+1547,El Karkouri,Talal El Karkouri,78.57
+1548,Faye,Amady Faye,57.14
+1549,Holland,Matthew Rhys Holland,51.85
+1550,Ambrose,Darren Paul Ambrose,53.85
+1551,B. Hughes,Bryan Hughes,80.00
+1552,Hasselbaink,Jerrel Floyd Hasselbaink,62.86
+1553,D. Bent,Darren Ashley Bent,50.00
+1554,Andersen,Stephan Maigaard Andersen,48.48
+1555,Sorondo,Gonzalo Sorondo,63.64
+1556,Gibbs,Cory Gibbs,66.67
+1557,Traoré,Djimi Traore,66.67
+1558,Sam,Lloyd Ekow Sam,35.29
+1559,J. Thomas,Jerome William Thomas,55.17
+1560,M. Bent,Marcus Nathan Bent,50.00
+1561,Lisbie,Kevin Anthony Lisbie,46.15
+1562,Randolph,Darren Edward Andrew Randolph,43.24
+1563,Sankofa,Osei Omari Kwende Sankofa,43.75
+1564,Youga,Kelly Alexandre Youga,38.46
+1565,Nathan Ashton,Nathan Wesley Ashton,78.79
+1566,Gíslason,Rurik Gislason,72.73
+1567,James Walker,James Luke Newton Walker,66.67
+1568,Euell,Jason Joseph Euell,43.48
+1569,Essien,Michael Kojo Essien,48.00
+1570,Drogba,Didier Yves Drogba Tebily,38.71
+1571,Cudicini,Carlo Cudicini,72.73
+1572,Hilário,Henrique Hilario Meireles Alves Sampaio,30.43
+1573,Lassana Diarra,Lassana Diarra,100.00
+1574,Wright-Phillips,Shaun Cameron Wright-Phillips,68.18
+1575,Ballack,Michael Ballack,63.64
+1576,Kalou,Salomon Armand Magloire Kalou,29.41
+1577,Howard,Timothy Matthew Howard,42.86
+1578,Hibbert,Anthony James Hibbert,50.00
+1579,P. Neville,Philip John Neville,64.29
+1580,Arteta,Mikel Arteta Amatriain,42.86
+1581,Osman,Leon Osman,66.67
+1582,James Beattie,James Scott Beattie,81.25
+1583,Richard Wright,Richard Ian Wright,87.50
+1584,Stubbs,Alan Stubbs,70.59
+1585,Mark A. Hughes,Mark Anthony Hughes,81.25
+1586,Lescott,Joleon Patrick Lescott,48.28
+1587,Naysmith,Gary Andrew Naysmith,57.14
+1588,Pistone,Alessandro Pistone,56.00
+1589,Carsley,Lee Kevin Carsley,58.33
+1590,Van der Meyde,Andy Van Der Meijde,75.00
+1591,Vaughan,James Oliver Vaughan,51.85
+1592,Andrew Johnson,Andrew Johnson,100.00
+1593,Turner,Iain Robert Turner,50.00
+1594,Ruddy,John Thomas Gordon Ruddy,34.48
+1595,Boyle,Patrick Joseph Gerald Boyle,31.25
+1596,B. Vidarsson,Bjarni Þór Viðarsson,66.67
+1597,Anichebe,Victor Chinedu Anichebe,51.61
+1598,Niemi,Antti Mikko Niemi,45.45
+1599,Christanval,Philippe Christanval,70.97
+1600,Pearce,Ian Anthony Pearce,50.00
+1601,Rosenior,Liam James Rosenior,59.26
+1602,Queudrue,Franck Roger Queudrue,55.17
+1603,Bullard,James Richard Bullard,50.00
+1604,Bouba Diop,Papa Bouba Diop,80.00
+1605,M. Brown,Michael Robert Brown,51.85
+1606,Helguson,Heidar Helguson,69.57
+1607,John,Collins John,50.00
+1608,Crossley,Mark Geoffrey Crossley,53.33
+1609,Knight,Zatyiah Knight,60.00
+1610,Volz,Moritz Volz,53.33
+1611,Pembridge,Mark Anthony Pembridge,58.06
+1612,Simon Elliott,Simon John Elliott,83.87
+1613,Timlin,Michael Anthony Timlin,42.86
+1614,Elrich,Ahmad Elrich,66.67
+1615,Radzinski,Tomasz Radzinski,72.00
+1616,McBride,Brian Robert Mc Bride,50.00
+1617,Jaroslav Drobny,Jaroslav Drobny,100.00
+1618,Legwinski,Sylvain Legwinski,69.23
+1619,Matty Collins,Matthew Collins,85.71
+1620,Chris James,Christopher Paul James,66.67
+1621,Malbranque,Steed Claude Malbranque,60.61
+1622,Ehui,Ismael Ehui Kouadio,34.78
+1623,Sissoko,Mohamed Lamine Sissoko Gillan,38.89
+1624,Bellamy,Craig Douglas Bellamy,50.00
+1625,Fowler,Robert Bernard Fowler,44.44
+1626,Dudek,Jerzy Dudek,62.50
+1627,Paletta,Gabriel Alejandro Paletta,43.75
+1628,Warnock,Stephen David Warnock,50.00
+1629,Guthrie,Daniel Sean Guthrie,53.85
+1630,Zenden,Boudewijn Zenden,54.55
+1631,Pennant,Jermaine Lloyd Pennant,48.28
+1632,Fábio Aurélio,Fábio Aurélio Rodrigues,72.22
+1633,Paul Anderson,Paul Anderson,100.00
+1634,Sinama Pongolle,Florent Sinama-pongolle,78.95
+1635,Mellor,Neil Mellor,70.59
+1636,Distin,Sylvain Distin,60.00
+1637,Mills,Danny Mills,62.50
+1638,Thatcher,Ben Thatcher,80.00
+1639,Dabo,Ousmane Dabo,50.00
+1640,Reyna,Captain America,20.00
+1641,Barton,Joseph Anthony Barton,44.44
+1642,Sinclair,Trevor Lloyd Sinclair,55.17
+1643,Corradi,Bernardo Corradi,60.87
+1644,Samaras,Georgios Samaras,60.87
+1645,Weaver,Nicholas James Weaver,44.44
+1646,Micah Richards,Micah Lincoln Richards,77.78
+1647,Matthew Mills,Matthew Claude Mills,78.79
+1648,Sun Jihai,Sun Jihai,100.00
+1649,Onuoha,Chinedum Onuoha,57.14
+1650,Hamann,Dietmar Johann Wolfgang Hamann,33.33
+1651,Sibierski,Antoine Sibierski,69.23
+1652,Ireland,Stephen James Ireland,50.00
+1653,Dickov,Paul Dickov,70.59
+1654,Vassell,Darius Martin Clarke Vassell,40.00
+1655,Andy Cole,Andrew Alexander Cole,53.33
+1656,K. Schmeichel,Kasper Peter Schmeichel,68.57
+1657,Hart,Charles Joseph John Hart,28.57
+1658,Jordan,Stephen Robert Jordan,44.44
+1659,Beasley,Da Marcus Lamont Beasley,45.16
+1660,Ishmael Miller,Ishmael Anthony Miller,77.78
+1661,Brown,Wesley Michael Brown,40.00
+1662,Evra,Patrice Latyr Evra,36.36
+1663,Scholes,Paul Aaron Scholes,56.00
+1664,Giggs,Ryan Joseph Giggs,45.45
+1665,Vidic,Nemanja Vidic,55.56
+1666,D. Jones,David Frank Llwyd Jones,46.67
+1667,Richardson,Kieran Edward Richardson,58.82
+1669,Alan Smith,Alan Smith,100.00
+1670,Solskjær,Baby Faced Assassin,14.81
+1671,Giuseppe Rossi,Giuseppe Rossi,100.00
+1672,Huth,Robert Huth,53.33
+1673,Woodgate,Jonathan Simon Woodgate,51.61
+1674,Parnaby,Stuart Parnaby,66.67
+1675,Boateng,George Antwi Boateng,51.85
+1676,Rochemback,Fábio Rochemback,76.92
+1677,James Morrison,James Clark Morrison,82.35
+1678,Adam Johnson,Adam Johnson,100.00
+1679,Yakubu,Yakubu Aiyegbeni,54.55
+1680,Turnbull,Ross Turnbull,76.19
+1681,Riggott,Christopher Mark Riggott,45.16
+1682,Ehiogu,Ugochuku Ehiogu,57.14
+1683,Southgate,Gareth Southgate,72.00
+1684,Anthony McMahon,Anthony Mc Mahon,96.77
+1685,Arca,Julio Andrés Arca,38.10
+1686,Parlour,Ray Parlour,77.78
+1687,Catermole,Lee Barry Cattermole,62.07
+1688,Mendieta,Gaizka Mendieta Zabala,53.33
+1689,Christie,Malcolm Christie,66.67
+1690,Maccarone,Massimo Maccarone,69.23
+1691,Hines,Sebastian Tony Hines,40.00
+1692,Wheater,David James Peter Wheater,43.75
+1693,Davies,Andrew John Davies,50.00
+1694,Andrew Taylor,Andrew Derek Taylor,81.25
+1695,Bates,Matthew David Bates,41.67
+1696,Kennedy,Jason Brian Kennedy,53.85
+1697,Liddle,Gary Daniel Liddle,50.00
+1698,Walker,Joshua Walker,63.16
+1699,Craddock,Tom Craddock,80.00
+1700,Bramble,Titus Malachi Bramble,50.00
+1701,Carr,Stephen Carr,50.00
+1702,Babayaro,Celestine Babayaro,61.54
+1703,Butt,Nicholas Butt,47.06
+1704,Parker,Scott Matthew Parker,46.15
+1705,Ameobi,Foluwashola Ameobi,50.00
+1706,Steve Harper,Stephen Alan Harper,70.97
+1707,Steven Taylor,Steven Vincent Taylor,76.47
+1708,Ramage,Peter Iain Ramage,52.17
+1709,Gate,Kristopher Gate,42.11
+1710,Dyer,Kieron Dyer,53.33
+1711,Alan O'brien,Alan O'Brien,100.00
+1712,Milner,James Philip Milner,48.00
+1713,Clark,Lee Robert Clark,47.62
+1714,N'Zogbia,Charles N'Zogbia,66.67
+1715,Luque,Antonio Javier Domingo Luque,30.30
+1716,Huntington,Paul David Huntington,64.52
+1717,Pattison,Matthew Joseph Pattison,51.61
+1718,Kiely,Dean Laurence Kiely,41.67
+1719,Primus,Linvoy Primus,63.16
+1720,Pamarot,Noé Elias Pamarot,58.33
+1721,M. Taylor,Matthew Simon Taylor,57.14
+1722,Sean Davis,Sean Davis,100.00
+1723,Pedro Mendes,Pedro Miguel da Silva Mendes,60.00
+1724,O'Neil,Gary Paul O'Neil,54.55
+1725,Mornar,Ivica Mornar,66.67
+1726,Lualua,Trésor Lomana Lua Lua,44.44
+1727,Mwaruwari,Benjamin Mwaruwari,66.67
+1728,Ashdown,Jamie Lawrence Ashdown,48.28
+1729,Stefanovic,Dejan Stefanović,76.92
+1730,Griffin,Andy Griffin,73.68
+1731,Glen Johnson,Glen Mc Leod Cooper Stephens,45.00
+1732,R. Hughes,Richard Daniel Hughes,55.17
+1733,D. Thompson,David Anthony Thompson,62.50
+1734,Songo'o,Franck Steve Songo'o,51.85
+1735,Jason Pearce,Jason Daniel Pearce,77.42
+1736,Ibrahima Sonko,Ibrahima Sonko,100.00
+1737,Ingimarsson,Ívar Ingimarsson,81.48
+1738,Murty,Graeme Stuart Murty,41.67
+1739,Shorey,Nicholas Robert Shorey,42.86
+1740,Harper,James Alan John Harper,42.86
+1741,Sidwell,Steven James Sidwell,51.85
+1742,Little,Glen Matthew Little,48.00
+1743,Kitson,David Barry Kitson,50.00
+1744,Stack,Graham Christopher Stack,34.48
+1745,Federici,Adam Jay Federici,64.00
+1746,Aaron Brown,Aaron Anthony Brown,73.33
+1747,Halls,John Halls,66.67
+1748,Osano,Curtis Osano,58.82
+1749,Gunnarsson,Brynjar Björn Gunnarsson,58.82
+1750,Cox,Simon Richard Cox,30.00
+1751,Stephen Hunt,Stephen Patrick Hunt,75.00
+1752,Oster,John Morgan Oster,45.45
+1753,Seol Ki Hyeon,Seol Ki-Hyeon,100.00
+1754,Lita,Leroy Halirou Bohari Lita,27.59
+1755,Long,Shane Patrick Long,36.36
+1756,Hayes,Jonathan Hayes,52.63
+1757,Morgan,Christopher Paul Morgan,41.38
+1758,Lucketti,Christopher James Lucketti,47.06
+1759,Unsworth,David Gerald Unsworth,55.17
+1760,Jagielka,Philip Nikodem Jagielka,51.61
+1761,Tonge,Michael William Eric Tonge,32.26
+1762,Geary,Derek Geary,62.50
+1763,Armstrong,Chris Armstrong,75.00
+1764,Webber,Daniel Vaughn Webber,46.15
+1765,Hulse,Robert William Hulse,40.00
+1766,Bennett,Ian Michael Bennett,53.85
+1767,McFadzean,Kyle John Mc Fadzean,62.07
+1768,Sommeil,David Sommeil,70.00
+1769,C. Davis,Claude Davis,73.68
+1770,Bromby,Leigh David Bromby,50.00
+1771,Kozluk,Robert Kozluk,63.16
+1772,Li Tie,Li Tie,100.00
+1773,Quinn,Alan Quinn,66.67
+1774,Nade,Christian Nade,44.44
+1775,Kabba,Sorfitu Tejan Kabba,41.67
+1776,Akinbiyi,Adeola Peter Oluwatoyin Akinbiyi,40.00
+1777,Shipperley,Neil Shipperley,80.00
+1778,Short,Craig Jonathan Short,40.00
+1779,Leigertwood,Mikele Benjamin Leigertwood,57.89
+1780,Law,Nicholas Alexander Law,24.00
+1781,Horwood,Evan David Horwood,56.00
+1782,Wright,Alan Wright,70.59
+1783,Montgomery,Nicholas Anthony Montgomery,54.05
+1784,Ifill,Paul Everton Ifill,43.48
+1785,Stephen Quinn,Stephen Jude Quinn,83.87
+1786,Hao Haidong,Director Hao,26.09
+1787,Dawson,Michael Richard Dawson,42.86
+1788,Ledley King,Ledley Brenton King,73.33
+1789,Stalteri,Paul Andrew Stalteri,57.14
+1791,Davids,Edgar Steven Davids,48.00
+1792,Berbatov,Tsvetan Nikolaev Nikolov,25.00
+1793,Cerny,Radek Cerny,62.50
+1794,Gardner,Anthony Derek Gardner,50.00
+1795,Davenport,Calum Raymond Paul Davenport,48.65
+1796,Assou Ekotto,Benoît Assou-ekotto,77.42
+1797,Ifil,Philip Nathan Ifil,36.36
+1798,Danny Murphy,Daniel Benjamin Murphy,64.71
+1799,Huddlestone,Thomas Andrew Huddlestone,61.11
+1800,Reto Ziegler,Reto Pirmin Ziegler,77.42
+1801,Ghaly,Hossam Mohamed El Sayed Metwalli Abdel Sattar Ghaly,17.86
+1802,Defoe,Jermain Colin Defoe,41.67
+1803,Fülöp,Márton Fülöp,58.82
+1804,O'Hara,Jamie Darryl O'Hara,48.00
+1805,Routledge,Wayne Neville Anthony Routledge,45.00
+1806,Lee Barnard,Lee James Barnard,78.57
+1807,Mido,Ahmed Hossam Hussein Abdelhamid,17.14
+1808,Foster,Benjamin Anthony Foster,41.38
+1809,Mackay,Malcolm George Mackay,44.44
+1810,DeMerit,Jay De Merit,73.68
+1811,Doyley,Lloyd Colin Doyley,50.00
+1812,Stewart,Jordan Stewart,66.67
+1813,Mahon,Gavin Andrew Mahon,43.48
+1814,Spring,Matthew John Spring,48.00
+1815,James Chambers,James Ashley Chambers,80.00
+1816,Ashley Young,Ashley Simon Young,80.00
+1817,Marlon King,Marlon King,100.00
+1818,Henderson,Darius Alexis Henderson,56.25
+1819,Richard Lee,Richard Anthony Lee,73.33
+1820,Carlisle,Clarke Carlisle,69.57
+1821,Mariappa,Adrian Joseph Mariappa,53.33
+1822,Powell,Christopher George Robin Powell,32.43
+1823,Osborne,Junior Osborne,66.67
+1824,Blizzard,Dominic John Blizzard,55.17
+1825,Bangura,Alhassan Bangoura,58.33
+1826,Gill,Benjamin David Gill,34.78
+1827,D. Francis,Damien Francis,78.26
+1828,McNamee,Anthony Mcnamee,63.64
+1829,Bouazza,Hameur Bouazza,66.67
+1830,Grant,Joel Valentino Grant,40.00
+1831,Chamberlain,Alec Francis Roy Chamberlain,56.41
+1832,Kamara,Michael Kamara,60.00
+1833,Diagouraga,Toumani Diagouraga,71.43
+1834,Seanla,Claude Seanla,63.16
+1835,Green,Robert Paul Green,45.45
+1836,A. Ferdinand,Anton Julian Ferdinand,66.67
+1837,Konchesky,Paul Martyn Konchesky,60.00
+1838,Reo Coker,Nigel Shola Andre Reo-Coker,50.00
+1839,Mullins,Hayden Ian Mullins,56.00
+1840,Benayoun,Yossef Shai Benayoun,57.14
+1841,Bowyer,Lee David Bowyer,54.55
+1842,Harewood,Marlon Anderson Harewood,50.00
+1843,Carroll,Roy Eric Carroll,60.87
+1844,Spector,Jonathan Michael Paul Spector,38.89
+1845,McCartney,George Mc Cartney,69.23
+1846,Etherington,Matthew Etherington,73.33
+1847,Newton,Shaun Newton,66.67
+1848,Sheringham,Edward Paul Sheringham,62.50
+1849,C. Cole,Carlton Michael Cole Okirie,36.36
+1850,Ashton,Dean Ashton,70.59
+1851,Zamora,Robert Lester Zamora,46.15
+1852,Jimmy Walker,James Barry Walker,66.67
+1853,Reid,Kyel Romaine Reid,38.10
+1854,Ephraim,Hogan Phillip Ephraim,50.00
+1855,Kirkland,Christopher Edmund Kirkland,45.71
+1856,Hall,Fitz Benjamin Hall,36.36
+1857,Arjan de Zeeuw,Arjan de Zeeuw,100.00
+1858,Boyce,Emmerson Orlando Boyce,37.04
+1859,Baines,Leighton John Baines,46.15
+1860,Henri Camara,Henri Camara,100.00
+1861,Heskey,Emile William Ivanhoe Heskey,35.29
+1862,Pollitt,Michael Francis Pollitt,46.67
+1863,Filan,John Richard Filan,43.48
+1864,Matt Jackson,Matthew Alan Jackson,75.00
+1865,Mcmillan,Steve Mc Millan,69.57
+1866,David Wright,David Wright,100.00
+1867,Ryan Taylor,Ryan Anthony Taylor,73.33
+1868,Teale,Gary Stewart Teale,43.48
+1869,A. Johansson,Roy Johan Andreas Johansson,57.89
+1870,Cywka,Tomasz Wojciech Cywka,38.46
+1871,Connolly,David James Connolly,57.14
+1872,Cool,Fabien Cool,53.33
+1873,Mignot,Jean-pascal Mignot,50.00
+1874,Sagna,Bacary Sagna,58.82
+1875,Radet,Johan Radet,62.50
+1876,F. Thomas,Frederic Thomas,69.57
+1877,B. Cheyrou,Benoît Cheyrou,78.26
+1878,Alain Traoré,Alain Sibiri Traoré,77.42
+1879,Chabert,Sébastien Chabbert,56.00
+1880,Kaalabane,Oumar Kalabané,69.57
+1881,Vadócz,Krisztian Vadocz,54.55
+1882,Bolf,Rene Bolf,61.54
+1883,Baptiste Martin,Baptiste Martin,100.00
+1884,Jaures,Jean-sébastien Jaurès,44.44
+1885,Yebda,Hassan Yebda,58.82
+1886,Pedretti,Benoît Pedretti,69.57
+1887,Mathis,Lionel Mathis,63.16
+1888,Issa Ba,Issa Ba,100.00
+1889,Basso,Anthony Basso,55.56
+1890,Kaboul,Younes Kaboul,63.16
+1891,Lejeune,Kévin Lejeune,70.00
+1892,Ramé,Ulrich Jean Eugène Ramé,29.63
+1893,Henrique,Carlos Henrique dos Santos Souza,40.00
+1894,Planus,Marc Planus,70.59
+1895,Faubert,Julien Alex Thomas Faubert,42.42
+1896,Jurietti,Franck Jurietti,69.57
+1897,Menegazzo,Fernando Menegazzo,66.67
+1898,Alonso,Alejandro Alonso,54.55
+1899,Smicer,Vladimir Smicer,57.14
+1900,Micoud,Johan Cédric Micoud,48.00
+1901,Laslandes,Lilian Laslandes,72.00
+1902,Darcheville,Jean-Claude Jacques Ducan Darcheville,45.83
+1903,Valverde,Matthieu Valverde,64.00
+1904,Beto,Roberto Luis Gaspar de Deus Severo,21.05
+1905,Cid,Gerald Cid,46.15
+1906,Baysse,Paul Adrien Baysse,50.00
+1907,Marange,Florian Marange,63.64
+1908,Ted Lavie,Ted Mondésir Lavie Mienandy,50.00
+1909,Mavuba,Rio Antonio Zoba Mavuba,41.38
+1910,Ducasse,Pierre Ducasse,66.67
+1911,Francia,Juan Pablo Francia,56.00
+1912,E. Perea,Edixon Perea Valencia,50.00
+1913,Chamakh,Marouane Chamakh,60.87
+1914,S. Dalmat,Stephane Dalmat,69.57
+1915,Yohann Pelé,Yohann Pelé,100.00
+1916,Basa,Marko Basa,57.14
+1917,Cerdan,Gregory Cerdan,60.00
+1918,Olivier Thomas,Olivier Thomas,100.00
+1919,Bonnart,Laurent Bonnart,63.64
+1920,Coutadeur,Mathieu Coutadeur,69.23
+1921,Ismaël Bangoura,Ismaël Bangoura,100.00
+1922,Matsui,Daisuke Matsui,60.00
+1923,Grafite,Edinaldo Batista Libânio,19.35
+1924,Samassa,Mamadou Samassa,63.64
+1925,Ferrand,Thibaut Ferrand,63.64
+1926,Roche,Rodolphe Roche,52.63
+1927,Louvion,Cyriaque Louvion,60.87
+1928,Camara,Ibrahima Sory Camara,46.15
+1929,Yannick Fischer,Yannick Fischer,100.00
+1930,Baal,Ludovic Baal,50.00
+1931,Douillard,Martin Clément Douillard,54.55
+1932,Sessegnon,Stéphane Sessègnon,66.67
+1933,Loriot,Guillaume Loriot,54.55
+1934,Fanchone,James Fanchone,72.73
+1935,De Melo,Túlio Vinícius Froés De Melo,40.00
+1936,Lucau,Chiguy Lucau,58.82
+1937,Paulo André,Paulo Andre Cren Benini,64.71
+1938,Calvé,Jean Calve,66.67
+1939,Itandje,Charles Hubert Itandje,48.28
+1940,Gillet,Nicolas Gillet,60.00
+1941,Hilton,Hilton Vitorino Da Silva,40.00
+1942,Demont,Yohan Demont,66.67
+1943,Vignal,Gregory Vignal,60.00
+1944,Keita,Seydou Ahmed Keita,43.48
+1945,Boukari,Abdoul-Razak Boukari,51.85
+1946,Thomert,Olivier Thomert,63.64
+1947,Jussie,JussiêFerreira Vieira,44.44
+1948,Cousin,Daniel Cousin,63.16
+1949,Brocard,Arnaud Brocard,66.67
+1950,Chabbert,Sébastien Chabbert,61.54
+1951,Zayatte,Kamil Zayatte,70.00
+1952,Coulibaly,Adama Coulibaly,75.00
+1953,Diame,Mohamed Diame,55.56
+1954,Barul,Patrick Barul,55.56
+1955,Marco Ramos,Marco Miguel Gonçalves Ramos,56.41
+1956,Sidi Yaya Keita,Sidi Yaya Keita,100.00
+1957,Lacourt,Jonathan Lacourt,60.87
+1958,Carrière,Eric Carrière,76.19
+1959,Jomaâ,Issam Jemâa,50.00
+1960,T. M. Sylva,La Tarantule de Dakar,26.67
+1961,Schumitz,Rafael Schmitz,63.64
+1962,Plestan,Nicolas Plestan,63.64
+1963,Chalmé,Mathieu Chalmé,60.00
+1964,Tafforeau,Grégory Tafforeau,69.23
+1965,Dumont,Stephane Dumont,57.14
+1966,Michel Bastos,Michel Fernandes Bastos,72.22
+1967,Bodmer,Mathieu Bodmer,60.00
+1968,Malicki,Gregory Malicki,63.64
+1969,Vitakic,Milivoje Vitakić,60.87
+1970,Franquart,Peter Franquart,75.00
+1971,Tavlaridis,Stathis Tavlaridis,71.43
+1972,Zywiecki,Alexis Zywiecki,69.57
+1973,Lichtsteiner,Stephan Lichtsteiner,75.00
+1974,Cabaye,Yohan Cabaye,66.67
+1975,Debuchy,Mathieu Debuchy,63.64
+1976,Youla,Souleymane Youla,47.62
+1977,Fauvergue,Nicolas Fauvergue,69.23
+1978,Audel,Johan Audel,62.50
+1979,Lacroix,Yohann Lacroix,66.67
+1980,Pichon,Laurent Pichon,60.00
+1981,Owona,Dieudonné Owona,50.00
+1982,Lepostollec,Flavien Le Postollec,70.97
+1983,Samuel Robail,Samuel Robail,100.00
+1984,Mirallas,Kevin Antonio Joel Gislain Mirallas y Castillo,29.63
+1985,Mathieu Robail,Le Scholes du Cambrésis,32.43
+1986,Audard,Fabien Audard,63.16
+1987,Boutruche,Marc Boutruche,78.26
+1988,Marchal,Sylvain Marchal,63.64
+1989,Ciani,Michaël Henry Ciani,41.67
+1990,Morel,Jeremy Morel,58.82
+1991,Mansouri,Yazid Mansouri,72.73
+1992,Saïfi,Rafik Saïfi,62.50
+1993,Le Pen,Ulrich Le Pen,63.16
+1994,Fiorèse,Fabrice Fiorese,63.64
+1995,Abriel,Fabrice Abriel,60.00
+1996,M'Bodji,David Amadou M'Bodji,51.85
+1997,Cappone,Lionel Cappone,66.67
+1998,Recorbet,David Recorbet,72.73
+1999,Genton,Benjamin Genton,57.14
+2000,Barrientos,Juan Manuel Barrientos,62.50
+2001,Moullec,Guillaume Moullec,58.33
+2002,Jallet,Christophe Jallet,52.17
+2003,Yesso,Diego Yesso,62.50
+2004,Ewolo,Oscar Tony Ewolo,47.62
+2005,Pedron,Stephane Pedron,57.14
+2006,Rahmane Barry,Rahmane Barry,100.00
+2007,Bourhani,Kemal Bourhani,72.73
+2008,Rémy Riou,Remy Riou,100.00
+2009,Medjani,Carl Medjani,73.68
+2010,Dansoko,Mamadou Dansoko,63.64
+2011,Pinard,Julian Pinard,63.16
+2012,Cacapa,Cláudio Roberto Da Silva,26.67
+2013,Clerc,François Jacques Clerc,37.04
+2014,Toulalan,Jérémy Toulalan,69.57
+2015,Vercoutre,Rémy René Paul Vercoutre,54.55
+2016,Hartock,Johan Hartock,70.00
+2017,Squillaci,Sébastien Jean-Baptiste Squillaci,42.86
+2018,Réveillère,Anthony Guy Marie Réveillère,52.63
+2019,Berthod,Jeremy Berthod,66.67
+2020,Ben Arfa,Hatem Ben Arfa,72.73
+2021,Benzema,Karim Mostafa Benzema,50.00
+2022,Benhamida,Mourad Benhamida,72.00
+2023,Hima,Yacine Hima,53.33
+2024,Idangar,Sylvain Nguetoinar Idangar,42.42
+2025,Bettiol,Grégory Bettiol,63.64
+2026,Carrasso,Cédric Pascal Régis Carrasso,44.44
+2027,Civelli,Renato Civelli,66.67
+2028,Zubar,Ronald Zubar,58.82
+2029,Beye,Habib Frédéric Beye,34.78
+2030,Lamouchi,Sabri Lamouchi,72.73
+2031,Cana,Lorik Agim Cana,42.11
+2032,Bamogo,Habib Nomwaya Bamogo,46.15
+2033,Pagis,Mickaël Serge Pagis,41.67
+2034,Niang,Mamadou Hamidou Niang,38.46
+2035,Hamel,Sebastien Hamel,50.00
+2036,Cantareil,Alain Cantareil,75.00
+2037,Leo,Leonardo de Matos Cruz,24.00
+2038,Mame N'Diaye,Mame Mamadou Mbengue N'Diaye,60.00
+2039,Valbuena,Mathieu Valbuena,66.67
+2040,Nasri,Samir Ben Saïd Nasri,40.00
+2041,Luyindula,Peguy Luyindula Makenda,56.25
+2042,Djibril Cissé,Djibril Arrun Cissé,81.25
+2043,T. Maoulida,Toifilou Maoulida,74.07
+2044,Sennaoui,Mehdi,30.77
+2045,Khalifa Ba,Khalifa Elhadj Bâ,74.07
+2046,Hassoun Camara,Hassoun Camara,100.00
+2047,Bocaly,Garry Bocaly,66.67
+2048,Roma,Flavio Roma,53.33
+2049,Monsoreau,Sylvain Monsoreau,69.23
+2050,Modesto,François-Joseph Modesto,46.67
+2051,Bernardi,Lucas Ademar Bernardi,55.17
+2052,Gakpe,Serge Gakpe,62.50
+2053,Di Vaio,Marco Di Vaio,70.00
+2054,Warmuz,Guillaume Warmuz,54.55
+2055,Mangani,Thomas Mangani,66.67
+2056,Gerard,Gerard López Segú,52.17
+2057,M. Dos Santos,Manuel Dos Santos Fernandes,61.54
+2058,Martin,Malaury Martin,60.00
+2059,Licata,Alexandre Licata,54.55
+2060,Meriem,Camel Meriem,66.67
+2061,Grax,Sébastien Grax,44.44
+2062,Kallon,Mohamed Ajay Kallon,48.00
+2063,Menez,Jeremy Menez,58.82
+2064,Nimani,Frédéric Koutou Nimani N'Galou,33.33
+2065,Bracigliano,Gennaro Bracigliano,73.33
+2066,Diakhaté,Pape Malickou Diakhaté,53.33
+2067,Puygrenier,Sébastien Nicolas Puygrenier,52.63
+2068,Chrétien,Michaël Chrétien Basser,51.61
+2069,Biancalani,Frédéric Biancalani,68.97
+2070,Berenguer,Pascal Berenguer,72.00
+2071,N'Guemo,Landry Joel Tsafack N'Guémo,41.18
+2072,Duchemin,Emmanuel Duchemin,64.00
+2073,Zerka,Monsef Zerka,58.82
+2074,Sarkissián,Carlos Adrián Sarkisián Balerio,43.90
+2075,Kim,Carlos Henrique Dias,8.70
+2076,Sorin,Olivier Sorin,55.56
+2077,André Luiz,André Luiz Silva do Nascimento,50.00
+2078,Lecluse,Cedric Lecluse,66.67
+2079,Sapina,Jeremy Sapina,63.16
+2080,Adaílton Silva,Adaílton Da Silva Santos,73.68
+2081,B. Gavanon,Benjamin Gavanon,72.00
+2082,Khouma Keita,Abdoulaye Khouma Keïta,70.59
+2083,Brison,Jonathan Brison,57.14
+2084,Chouleur,Romain Chouleur,69.57
+2085,Curbelo,Carlos Gastón Curbelo Mareco,40.00
+2086,Rudolf,Gergely Rudolf,60.00
+2087,Dosunmu,Tosin Dosunmu,70.00
+2088,Sauget,David Sauget,66.67
+2089,Guerriero,Ludovic Guerriero,69.23
+2090,Hamdani,Rachid Hamdani,66.67
+2091,Cetto,Mauro Darío Jesús Cetto,35.71
+2092,Guillon,Loïc Guillon,73.68
+2093,Cubilier,Eric Cubilier,76.19
+2094,Signorino,Franck Eddy Signorino,60.00
+2095,Capoue,Aurélien Jacques Capoue,41.38
+2096,Boukhari,Nourdin Boukhari,66.67
+2097,Mamadou Diallo,Mamadou Diallo,100.00
+2098,Heurtebis,Tony Heurtebis,78.26
+2099,El Mourabet,Abdel Karim El-Mourabet,64.71
+2100,Ca,Bocundji Ca,30.77
+2101,Da Rocha,Frederic Da Rocha,64.00
+2102,Savinaud,Nicolas Savinaud,66.67
+2103,Dimitrijevic,Miloš Dimitrijević,80.00
+2104,Julio H. Rossi,Julio Rossi,91.67
+2105,Keseru,Claudiu Andrei Keşerü,44.44
+2106,Oliech,Dennis Oguta Oliech,48.00
+2107,Payet,Dimitri Payet,55.56
+2108,Lloris,Hugo Hadrien Dominique Lloris,34.29
+2109,Abardonado,Jacques Abardonado,71.43
+2110,Antar Yahia,Anthar Yahia,95.65
+2111,Fanni,Rod Fanni,71.43
+2112,Varrault,Cedric Varrault,69.57
+2113,Echouafni,Olivier Echouafni,69.23
+2114,Balmont,Florent Balmont,63.64
+2115,Rool,Cyril Rool,57.14
+2116,Vahirua,Marama Vahirua,66.67
+2117,Bellion,David Bellion,70.00
+2118,Moussilou,Matt Devlin Moussilou Nassamba,46.15
+2119,Grégorini,Damien Gregorini,72.00
+2120,Jérémie Moreau,Jeremie Moreau,100.00
+2121,Gace,Ismael Gace,53.33
+2122,Kanté,Cédric Kanté,58.82
+2123,Drissa Diakité,Drissa Diakite,100.00
+2124,Ederson,Éderson honorato campos,46.67
+2125,Scotto,Thibault Scotto Di Porfirio,36.36
+2126,S. Camara,Souleymane Camara,64.00
+2127,Larbi,Kamel Larbi,62.50
+2128,Fauconnier,Olivier Toutoute Fauconnier,54.05
+2129,Padovani,Franck Padovani,69.57
+2130,Veigneau,Olivier Veigneau,66.67
+2131,Yepes,Mario Alberto Yepes Diaz,34.48
+2132,B. Mendy,Bernard Mendy,70.00
+2133,Armand,Sylvain Armand,60.00
+2134,Édouard Cissé,Edouard Léopold Cissé,76.47
+2135,Rothen,Jérôme René Marcel Rothen,38.71
+2136,Paulo César,Paulo César Filgueira Narciso,55.00
+2137,Pancrate,Fabrice Pancrate,66.67
+2138,P. A. Frau,Pierre-Alain Frau,64.00
+2139,Alonzo,Jérôme Alonzo,63.16
+2140,Badiane,Jean-michel Badiane,53.85
+2141,Sammy Traoré,Sammy Traore,100.00
+2142,Pietre,Samuel Piètre,63.16
+2143,M'Bami,Modeste M'bami,60.00
+2144,C. Rodríguez,Cristian Gabriel Rodriguez Barrotti,47.83
+2145,Hellebuyck,David Hellebuyck,76.92
+2146,Amara Diané,Amara Salim Diané,78.57
+2147,Djadjedje,Franck Dja Djédjé,69.23
+2148,Nicolas Cousin,Nicolas Cousin,100.00
+2149,Dramé,Boukary Drame,55.56
+2150,Baning,Albert Legrand Baning,44.44
+2151,Boskovic,Branko Bošković,69.57
+2152,Pouplin,Simon Pouplin,70.00
+2153,Bourillon,Grégory Bourillon,69.23
+2154,Faty,Jacques Doudou Faty,34.78
+2155,Jeunechamp,Cyril Jeunechamp,76.92
+2156,Sorlin,Olivier Sorlin,60.00
+2157,Cheyrou,Bruno Olivier Cheyrou,50.00
+2158,Moreira,Daniel de Sá Moreira,51.85
+2159,Hadji,Youssouf Hadji,52.63
+2160,Monterrubio,Olivier Monterrubio,73.33
+2161,Briand,Jimmy Julien Briand,48.00
+2162,Revault,Christophe Maurice Robert Revault,35.00
+2163,C. T. Ndiaye,Cheick N'Diaye,66.67
+2164,Adailton,Adaílton Josédos Santos Filho,43.24
+2165,Melchiot,Mario Dino Patrick Melchiot,45.71
+2166,Marveaux,Sylvain Marveaux,66.67
+2167,Mvuemba,Arnold Mvuemba Makengo,48.28
+2168,Didot,Little Big Man,21.05
+2169,Sow,Moussa Sow,46.15
+2170,Danze,Romain Danzé,58.82
+2171,Papakouli Diop,Papakouly Diop,92.86
+2172,N'Guema,Stéphane N'Guéma,60.87
+2173,Ekoko,Jirès Kembo-Ekoko,45.45
+2174,Janot,Jeremie Janot,55.56
+2175,Hognon,Vincent Hognon,60.00
+2176,Zoumana Camara,Zoumana Camara,100.00
+2177,Diatta,Lamine Diatta,63.16
+2178,Ilunga,Herita Ilunga,63.16
+2179,Sablé,Julien Sable,58.82
+2180,Landrin,Christophe Landrin,56.00
+2181,Bilos,Daniel Rubén Bilos,43.48
+2182,Feindouno,Pascal Feindouno,72.00
+2183,Ilan,Ilan Araújo Dall'igna,32.00
+2184,Piquionne,Frédéric Piquionne,66.67
+2185,Viviani,Jody Viviani,73.68
+2186,Perquis,Damien Perquis,66.67
+2187,F. Diawara,Fousseni Diawara,72.00
+2188,Mouhamadou Dabo,Mouhamadou Dabo,100.00
+2189,Tiene,Siaka Tiéné,62.50
+2190,Loïc Perrin,Loïc Bruno Perrin,78.57
+2191,Hautcoeur,Yohan Hautcoeur,75.00
+2192,Dernis,Geoffrey Dernis,57.14
+2193,Houri,Samy Houri,66.67
+2194,Piatti,Ignacio Alberto Piatti,42.86
+2195,Sakho,Lamine Sakho,58.82
+2196,Gomis,Bafétimbi Fredius Gomis,35.71
+2197,Jessy Moulin,Jessy Moulin,100.00
+2198,Mermillod,Alan Mermillod,78.26
+2199,Guarín,Fredy Alejandro Guarín Vásquez,33.33
+2200,Regnault,Patrick Regnault,66.67
+2201,Henin,Jérémy Hénin,58.82
+2202,Sartre,Romain Sartre,63.16
+2203,Lachor,Yoann Lachor,66.67
+2204,Ducourtioux,David Ducourtioux,78.57
+2205,Belhadj,Nadir Belhadj,70.00
+2206,Le Moigne,Jérôme Le Moigne,72.00
+2207,Stephane Noro,Juninho des Ardennes,24.24
+2208,Mokaké,Le Petit Prince de Dugauguez,11.76
+2209,G. Pujol,Gregory Pujol,70.00
+2210,Boutabout,Mansour Boutabout,69.23
+2211,Trevisan,Stéphane Trévisan,64.00
+2212,Fabre,Michaël Belkacem Fabre,37.04
+2213,Ambourouet,Georges Ambourouet,71.43
+2214,Abdou,Nadjim Abdou,58.82
+2215,Amalfitano,Morgan Henri René Amalfitano,52.63
+2216,Bastien,Christophe Bastien,56.00
+2217,Jau,Fabrice Jau,42.86
+2218,Ouadah,Abdelnasser Ouadah,50.00
+2219,Marin,Nicolas Marin,55.56
+2220,Maurice Belay,Nicolas Maurice-Belay,76.47
+2221,Richert,Teddy Richert,70.00
+2222,Brechet,Jérémie Pierre Bréchet,48.28
+2223,Diawara,Souleymane Diawara,56.00
+2224,Daf,Omar Daf,54.55
+2225,Tosic,Duško Tošić,62.50
+2226,Pitau,Romain Aram Pitau,45.45
+2227,Jerome Leroy,Jerome Leroy,100.00
+2228,Isabey,Mickaël Isabey,60.00
+2229,Ziani,Karim Koceïla Yanis Ziani,33.33
+2230,Birsa,Valter Birsa,58.82
+2231,Álvaro Márcio,Álvaro márcio santos,78.79
+2232,Gavanon,Jérémy Gavanon,66.67
+2233,Afolabi,Rabiu Afolabi,70.00
+2234,João Miranda,João Miranda de Souza Filho,61.54
+2235,Potillon,Lionel Potillon,69.57
+2236,Pichot,Stephane Pichot,57.14
+2237,Ndaw,Guirane N'Daw,47.06
+2238,Lonfat,Johann Lonfat,63.16
+2239,Brunel,Philippe Brunel,57.14
+2240,Mézague,Valéry Mézague,66.67
+2241,Zairi,Jaouad Zaïri,58.82
+2242,Dagano,Moumouni Dagano Beli,46.15
+2243,Quercia,Julien Quercia,66.67
+2244,Deichelbohrer,Jérémy Deichelbohrer,78.79
+2245,Josse,Maxime Josse,58.82
+2246,Bühler,Arnaud Buehler,60.00
+2247,Séne,Virgile,18.18
+2248,Zerara,Toufik Zerara,63.16
+2249,Genghini,Benjamin Genghini,64.00
+2250,Le Tallec,Armand Anthony Le Tallec,54.55
+2251,Erding,Mevlüt Erding,63.16
+2252,Douchez,Nicolas Douchez,63.64
+2253,Arribagé,Dominique Arribage,61.54
+2254,Aubey,Lucien Yann Sherril Aubey,33.33
+2255,Ebondo,Albin Ebondo,66.67
+2256,Mathieu,Jérémy Mathieu,66.67
+2257,Dieuze,Nicolas Dieuze,60.00
+2258,Fofana,Mohamed Fofana,60.00
+2259,Batlles,Laurent Batlles,63.64
+2260,Mansare,Fodé Mansaré,73.68
+2261,Benvegnu,Benoît Benvegnu,69.57
+2262,Alseni Camara,Alseny Camara,92.31
+2263,Congre,Daniel Congre,63.16
+2264,Fabinho,Fábio Alves Félix,41.67
+2265,Taïder,Nabil Sliti Taïder,50.00
+2266,Sirieix,François Sirieix,60.87
+2267,Bonnet,Alexandre Bonnet,54.55
+2268,Akpa Akpro,Jean-Louis Akpa Akpro,64.52
+2269,Robic,Antony Robic,58.82
+2270,Bergougnoux,Bryan Hassan Bergougnoux,62.86
+2271,Pentecôte,Xavier Pentecôte,72.00
+2272,Le Crom,Ronan Le Crom,70.00
+2273,Gaël Sanz,Gaël Sanz,100.00
+2274,I. Faye,Roberto Carlos,20.00
+2275,Montero,Jean-Louis Montero,56.00
+2276,Paisley,Grégory Paisley,63.64
+2277,Matuidi,Blaise Matuidi,66.67
+2278,Lachuer,Yann Lachuer,73.68
+2279,Dallet,Sébastien Dallet,54.55
+2280,Nivet,Benjamin Nivet,52.63
+2281,I. Bangoura,Ibrahima Bangoura,74.07
+2282,Wéldon,Wéldon Santos De Andrade,40.00
+2283,Westberg,Quentin Oyamo Westberg,53.33
+2284,Guillaume,Auriol Guillaume,72.00
+2285,Boucansaud,Florian Boucansaud,71.43
+2286,Drouin,Stéphen Drouin,60.00
+2287,Berkak,Nabil Berkak,66.67
+2288,Amzine,Gharib Amzine,63.16
+2289,Enza Yamissi,Eloge Ethisse Enza-Yamissi,63.16
+2290,Danic,Gaël Danic,66.67
+2291,Ba,Georges Ba Depreyba,19.05
+2292,Gigliotti,David Gigliotti,75.00
+2293,N'Dour,Alassane N'Dour,57.14
+2294,Faivre,Cedric Faivre,63.16
+2295,Obaddi,Mounir Obbadi,52.63
+2296,Grondin,Jean-Willy Grondin,56.00
+2297,Chelle,Éric Sékou Chelle,52.17
+2298,Flachez,Maxence Flachez,63.64
+2299,Mater,Rudy Mater,66.67
+2300,Silvestri,Orlando Silvestri,69.23
+2301,Saez,Jose Saez,61.54
+2302,Doumeng,Geoffrey Doumeng,60.87
+2303,Bratu,Florin Daniel Bratu,41.67
+2304,Haddad,Rudy Haddad,70.59
+2305,Savidan,Steve Savidan,70.00
+2306,Dufresne,Laurent Dufresne,66.67
+2307,Penneteau,Nicolas Penneteau,69.23
+2308,Coque,Stéphane Coqu,44.44
+2309,Liron,Ludovic Liron,55.56
+2310,Mody Traoré,Mody Traoré,100.00
+2311,Rippert,Guillaume Rippert,58.33
+2312,Kharroubi,Khaled Farid Kharroubi,58.06
+2313,Paauwe,Patrick Paauwe,60.00
+2314,Bezzaz,Yassine Bezzaz,60.00
+2315,Roudet,Sebastien Roudet,54.55
+2316,Bourgeois,Freddy Bourgeois,72.00
+2317,Heitzmann,Sébastien Heitzmann,64.29
+2318,Pagliuca,Gianluca Pagliuca,64.00
+2319,Adani,Daniele Adani,55.56
+2320,Nastase,Valentin Vasile Năstase,46.67
+2321,Foglio,Paolo Foglio,66.67
+2322,Lukovic,Aleksandar Luković,56.00
+2323,Paolo Zanetti,Paolo Zanetti,100.00
+2324,Pecchia,Fabio Pecchia,70.00
+2325,Giampà,Domenico Giampa,57.14
+2326,Fini,Michele Fini,50.00
+2327,Bjelanovic,Saša Bjelanović,80.00
+2328,M. Paolucci,Michele Paolucci,76.92
+2329,Boccolini,Alessandro Boccolini,62.07
+2330,Corallo,Riccardo Corallo,60.87
+2331,Cudini,Mirco Cudini,66.67
+2332,Boudianski,Viktor Boudianski,74.07
+2333,Guberti,Stefano Guberti,63.64
+2334,Della Morte,Ivano Della Morte,78.57
+2335,Perrulli,Giampietro Perrulli,59.26
+2336,Ivan,Andrea Ivan,53.33
+2337,Rivalta,Claudio Rivalta,63.64
+2338,Carrozzieri,Morris Carrozzieri,75.86
+2339,Adriano Pereira,Adriano Pereira da Silva,76.92
+2340,Bellini,Giampaolo Bellini,58.33
+2341,Bernardini,Antonino Bernardini,68.97
+2342,Migliaccio,Giulio Migliaccio,74.07
+2343,Ariatti,Luca Ariatti,73.68
+2344,Tissone,Fernando Damián Tissone Rodrigues,35.00
+2345,Defendi,Marino Giovanni Defendi,46.67
+2346,Zampagna,Riccardo Zampagna,64.00
+2347,Calderoni,Alex Calderoni,78.26
+2348,Loria,Simone Loria,58.82
+2349,Capelli,Daniele Capelli,63.64
+2350,Conteh,Kewullay Conteh,57.14
+2351,Centi,Luis Fernando Centi,41.67
+2352,Donati,Massimo Donati,60.00
+2353,Bombardini,Davide Bombardini,74.07
+2354,Manzoni,Alessio Manzoni,63.64
+2355,Ventola,Nicola Ventola,66.67
+2356,Soncin,Andrea Soncin,63.16
+2357,Vieri,Christian Vieri,50.00
+2358,Chimenti,Antonio Chimenti,66.67
+2359,Bizera,Joe Emerson Bizera Bastos,38.71
+2360,Canini,Michele Canini,60.00
+2361,Agostini,Alessandro Agostini,59.26
+2362,Conti,Daniele Conti,55.56
+2363,Budel,Alessandro Budel,47.62
+2364,Conticchio,Alessandro Conticchio,64.52
+2365,Mauro Esposito,Mauro Esposito,100.00
+2366,Capone,Andrea Capone,63.16
+2367,David Suazo,Oscar David Suazo Velázquez,57.89
+2368,Fortin,Marco Fortin,66.67
+2369,Semedo,José Vítor Moreira Semedo,38.71
+2370,F. Pisano,Francesco Pisano,66.67
+2371,Ferri,Michele Ferri,55.56
+2372,Del Grosso,Cristiano Del Grosso,66.67
+2373,Pani,Claudio Pani,50.00
+2374,A. D'agostino,Antonino D'Agostino,77.42
+2375,Cossu,Andrea Cossu,58.82
+2376,Cocco,Andrea Salvatore Cocco,37.04
+2377,Langella,Antonio Langella,66.67
+2378,Pantanelli,Armando Pantanelli,71.43
+2379,Sottil,Andrea Sottil,63.16
+2380,César Vinício,César Vinicio Cervo de Luca,65.00
+2381,Bianco,Paolo Bianco,66.67
+2382,C. Silvestri,Christian Silvestri,73.33
+2383,Biso,Roberto Biserni,31.58
+2384,Caserta,Fabio Caserta,70.00
+2385,Baiocco,Davide Baiocco,66.67
+2386,Russo,Arazio Macca liotru,16.67
+2387,Mascara,Giuseppe Mascara,60.87
+2388,Spinesi,Gionatha Spinesi,60.87
+2389,Polito,Ciro Polito,70.59
+2390,Minelli,Mauro Minelli,70.00
+2391,Sabato,Rocco Sabato,66.67
+2392,Edusei,Mark Edusei,70.59
+2393,Lucenti,Giorgio Lucenti,63.64
+2394,Colucci,Giuseppe Colucci,60.87
+2395,Del Core,Umberto Del Core,66.67
+2396,Anastasi,Maurizio Anastasi,64.00
+2397,Fausto Rossini,Fausto Rossini,100.00
+2398,Morimoto,Pedro Ken Morimoto Moreira,47.06
+2399,Sicignano,Vincenzo Sicignano,66.67
+2400,Mandelli,Davide Mandelli,69.57
+2401,D'Anna,Lorenzo D'Anna,60.00
+2402,Fabio Moro,Fabio Moro,100.00
+2403,Lanna,Salvatore Lanna,50.00
+2404,Giunti,Federico Giunti,57.14
+2405,Brighi,Matteo Brighi,63.16
+2406,Semioli,Franco Semioli,66.67
+2407,Luciano S.,Luciano Lopes De Souza,58.06
+2408,Cossato,Federico Cossato,60.87
+2409,Pellissier,Sergio Pellissier,74.07
+2410,Squizzi,Lorenzo Squizzi,63.64
+2411,Scurto,Giuseppe Scurto,57.14
+2412,Mantovani,Andrea Mantocani,64.00
+2413,Malago,Marco Malagò,66.67
+2414,Sammarco,Paolo Sammarco,72.73
+2415,Zanchetta,Andrea Zanchetta,72.00
+2416,Marcolini,Michele Marcolini,69.23
+2417,Cariello,Alfredo Cariello,66.67
+2418,Marchesetti,Mattia Marchesetti,75.86
+2419,Amauri,Amauri Carvalho de Oliveira,36.36
+2420,Tiribocchi,Simone Tiribocchi,74.07
+2421,Rickler,Cesare Gianfranco Rickler Del Mare,34.15
+2422,Marchese,Giovanni Marchese,64.00
+2423,Garzon,Stefano Garzon,60.00
+2424,Antonelli,Filippo Agomeri Antonelli,52.94
+2425,Diego Silva,Diegoda Silva,91.67
+2426,Bruno,Salvatore Bruno,50.00
+2427,Balli,Daniele Balli,55.56
+2428,Raggi,Andrea Raggi,58.82
+2429,Vanigli,Richard Vanigli,63.64
+2430,Lucchini,Stefano Lucchini,66.67
+2431,Tosto,Vittorio Tosto,52.63
+2432,Davide Moro,Davide Moro,100.00
+2433,Ficini,Fabrizio Ficini,57.14
+2434,Almirón,Sergio Bernardo Almiron,46.67
+2435,Buscé,Antonio Buscè,55.56
+2436,Saudati,Luca Saudati,73.68
+2437,Pozzi,Nicola Pozzi,58.82
+2438,Bassi,Davide Bassi,58.82
+2439,Pratali,Francesco Pratali,58.33
+2440,Marzoratti,Lino Marzoratti,80.00
+2441,Ascoli,Nicola Ascoli,63.16
+2442,Buzzegoli,Daniele Buzzegoli,69.23
+2443,Marianini,Francesco Marianini,64.29
+2444,Vannucchi,Ighli Vannucchi,75.00
+2445,Eder,citadin martins Éder,33.33
+2446,Gasparetto,Mirco Gasparetto,76.92
+2447,Matteini,Davide Matteini,69.57
+2448,Frey,Sébastien Jacques André Frey,25.00
+2449,Di Loreto,Marco Di Loreto,75.00
+2450,Dainelli,Dario Dainelli,72.73
+2451,Pasqual,Manuel Pasqual,66.67
+2452,Donadel,Marco Donadel,70.00
+2453,Liverani,Fabio Liverani,72.73
+2454,Santana,Mario Alberto Santana,50.00
+2455,Pazzini,Giampaolo Pazzini,58.33
+2456,Gamberini,Alessandro Gamberini,62.07
+2457,Potenza,Alessandro Potenza,56.00
+2458,Blasi,Manuele Blasi,55.56
+2459,Pazienza,Michele Pazienza,66.67
+2460,Gobbi,Massimo Gobbi,55.56
+2461,Montolivo,Riccardo Montolivo,66.67
+2462,Do Prado,Guilherme Do Prado Raymundo,45.71
+2463,Riganò,Christian Rigano,54.55
+2464,Reginaldo,Reginaldo Ferreira da Silva,50.00
+2465,Lupatelli,Cristiano Lupatelli,64.29
+2466,Avramov,Vlada Avramov,70.00
+2467,Iván Córdoba,Iván Ramiro Córdoba Sepúlveda,58.54
+2468,Walter Samuel,Walter Adrián Samuel,78.79
+2469,Javier Zanetti,Javier Adelmar Zanetti,77.78
+2470,Dejan Stankovic,Dejan Stankovic,100.00
+2471,Toldo,Francesco Toldo,50.00
+2472,Andreolli,Marco Giancarlo Andreolli,52.94
+2473,Maicon,Maicon Douglas Sisenando,40.00
+2474,Dacourt,Olivier Dacourt,63.64
+2475,Maxwell,Maxwell Scherrer Cabelino Andrade,35.00
+2476,M. González,Mariano Nicolas Gonzalez,58.82
+2477,Solari,Santiago Hernán Solari Poggio,34.29
+2478,Orlandoni,Paolo Orlandoni,75.00
+2479,Coco,Francesco Coco,44.44
+2480,César,César Aparecido Rodrigues,33.33
+2481,Siviglia,Sebastiano Siviglia,59.26
+2482,Cribari,Emílson Sanches Cribari,46.67
+2483,Zauri,Luciano Zauri,55.56
+2484,Mudingayi,Gaby Mudingayi,78.26
+2485,Ledesma,Cristian Daniel Ledesma,46.67
+2486,Mauri,Stefano Mauri,55.56
+2487,Rocchi,Tommaso Rocchi,60.00
+2488,Ballotta,Marco Ballotta,72.73
+2489,Sereni,Matteo Sereni,63.16
+2490,Stendardo,Guglielmo Stendardo,64.29
+2491,Belleri,Manuel Belleri,66.67
+2492,De Silvestri,Lorenzo De Silvestri,75.00
+2493,Firmani,Fabio Firmani,70.00
+2494,Manfredini,Christian José Manfredini Sisostri,45.45
+2495,Mutarelli,Massimo Mutarelli,69.23
+2496,Bonetto,Riccardo Bonetto,60.87
+2497,Tare,Igli Tare,61.54
+2498,Pandev,Goran Pandev,66.67
+2499,Simone Inzaghi,Simone Inzaghi,100.00
+2500,Grandoni,Alessandro Grandoni,59.26
+2501,Galante,Fabio Galante,70.00
+2502,Pavan,Simone Pavan,58.82
+2503,Passoni,Dario Passoni,70.00
+2504,Cesar Prates,César Luís Prates,82.76
+2505,Giallombardo,Andrea Giallombardo,77.42
+2506,Vidigal,José Luís da Cruz Vidigal,43.75
+2507,Morrone,Stefano Morrone,63.64
+2508,C. Lucarelli,Cristiano Lucarelli,73.33
+2509,Bakayoko,Ibrahima Bakayoko,64.00
+2510,Manitta,Emanuele Manitta,60.87
+2511,Edoardo Grosso,Edoardo Grosso,100.00
+2512,Fanucci,Stefano Fanucci,63.64
+2513,Argilli,Stefano Argilli,63.64
+2514,Pasquale,Giovanni Pasquale,64.00
+2515,Pfertzel,Marc Pfertzel,76.19
+2516,Balleri,David Balleri,70.00
+2517,A. Filippini,Antonio Filippini,78.57
+2518,Vigiani,Luca Vigiani,73.68
+2519,Danilevicius,Tomas Danilevičius,80.00
+2520,Paulinho,Paulo Sérgio Betanin,42.86
+2521,Storari,Marco Storari,70.00
+2522,Cristante,Filippo Cristante,69.23
+2523,Zanchi,Marco Zanchi,66.67
+2524,Parisi,Alessandro Parisi,52.17
+2525,Carmine Coppola,Carmine Coppola,100.00
+2526,Sullo,Salvatore Sullo,50.00
+2527,Rafael,Rafael Schmitz,60.00
+2528,Iliev,Ivica Iliev,62.50
+2529,Floccari,Sergio Floccari,69.57
+2530,Di Napoli,Arturo Di Napoli,72.00
+2531,Caglioni,Nicholas Caglioni,64.00
+2532,Olorunleke,Mathew Olorunleke,74.07
+2533,Tummiolo,Andrea Tummiolo,69.57
+2534,S. Masiello,Salvatore Masiello,71.43
+2535,Alvarez,Édgar Anthony Álvarez Reyes,41.18
+2536,Levecchia,Luigi La Vecchia,64.00
+2537,De Vesse,Daniele De Vezze,50.00
+2538,Nicolas Cordova,Nicolás Andrés Córdova San Cristóbal,58.82
+2540,Bernardo,Vittorio Bernardo,64.00
+2541,Kaladze,K'akhaber K'aladze,56.00
+2542,Serginho,Sérgio Cláudio Dos Santos,42.42
+2543,C. Seedorf,Clarence Clyde Seedorf,58.06
+2544,D. Simic,Dario Šimić,77.78
+2545,Maldini,Paolo Cesare Maldini,51.85
+2546,Costacurta,Alessandro Costacurta,64.52
+2547,Bonera,Daniele Bonera,60.00
+2548,Favalli,Giuseppe Favalli,60.87
+2549,Ambrosini,Massimo Ambrosini,69.23
+2550,Brocchi,Cristian Brocchi,60.87
+2551,Gourcuff,Yoann Gourcuff,72.73
+2552,R. Oliveira,Ricardo De Oliveira,68.97
+2553,Borriello,Marco Borriello,75.00
+2554,Fiori,Valerio Fiori,55.56
+2555,Coppola,Ferdinando Coppola,56.00
+2556,Foggia,Pasquale Foggia,57.14
+2557,Amoroso,Márcio Amoroso Dos Santos,43.75
+2558,Fontana,Alberto Fontana,63.64
+2559,Bovo,Cesare Bovo,53.33
+2560,Marco Pisano,Marco Giovanni Pisano,72.73
+2561,Corini,Eugenio Corini,60.00
+2562,Fabio Simplicio,Fábio Henrique Simplício,76.92
+2563,Diana,Aimo Stefano Diana,43.48
+2564,Di Michele,Davide Di Michele,74.07
+2565,Caracciolo,Andrea Antonio Caracciolo,57.14
+2566,Sirigu,Salvatore Sirigu,54.55
+2567,Agliardi,Federico Agliardi,64.00
+2568,Biava,Giuseppe Biava,52.63
+2569,Rinaudo,Leandro Rinaudo,63.64
+2570,Cassani,Mattia Cassani,66.67
+2571,Dellafiore,Hernán Paolo Dellafiore,60.61
+2572,Parravicini,Francesco Parravicini,68.75
+2573,Codrea,Paul Constantin Codrea,42.86
+2574,G. Tedesco,Giovanni Tedesco,72.00
+2575,Guana,Roberto Guana,55.56
+2576,Brienza,Franco Brienza,66.67
+2577,Godeas,Denis Godeas,66.67
+2578,Bucci,Luca Bucci,66.67
+2579,Cardone,Giuseppe Cardone,60.87
+2580,Fernando Couto,Fernando Manuel Silva Couto,68.29
+2581,Coly,Ferdinand Coly,44.44
+2582,Castellini,Paolo Castellini,76.92
+2583,Bolaño,Jorge Eladio Bolaño Correa,37.50
+2584,Pisanu,Andrea Pisanu,63.16
+2585,Gasbarroni,Andrea Gasbarroni,74.07
+2586,Morfeo,Domenico Morfeo,57.14
+2587,Budan,Igor Budan,66.67
+2588,De Lucia,Alfonso De Lucia,66.67
+2589,Rossi,Marco Rossi,62.50
+2590,Mattiuzzo,Filippo Mattiuzzo,69.23
+2591,Contini,Matteo Contini,66.67
+2592,Ferronetti,Damiano Ferronetti,71.43
+2593,Dessena,Daniele Dessena,63.64
+2594,Savi,Filippo Savi,50.00
+2595,Mandorlini,Matteo Mandorlini,74.07
+2596,Cigarini,Luca Cigarini,76.19
+2597,Ciaramitaro,Maurizio Ciaramitaro,70.97
+2598,Kutuzov,Vitaliy Vladimirovich Kutuzov,38.89
+2599,Muslimovic,Zlatan Muslimović,74.07
+2600,Paponi,Daniele Paponi,60.00
+2601,Pellizzoli,Ivan Pelizzoli,75.00
+2602,Cannarsa,Juriy Cannarsa,72.73
+2603,De Rosa,Gaetano De Rosa,63.64
+2604,A. Lucarelli,Alessandro Lucarelli,70.97
+2605,Biondini,Davide Biondini,69.57
+2606,Mesto,Giandomenico Mesto,43.48
+2607,F. Modesto,Francesco Modesto,69.23
+2608,Tedesco,Giacomo Tedesco,63.64
+2609,Missiroli,Simone Missiroli,72.00
+2610,Amoruso,Nick Piede Caldo,17.39
+2611,Rolando Bianchi,Rolando Romano Beniamino Bianchi,63.83
+2612,Campagnolo,Andrea Campagnolo,74.07
+2613,Aronica,Lucchetto palermitano,21.43
+2614,Ungaro,Gaetano Ungaro,60.00
+2615,Lanzaro,Maurizio Lanzaro,60.87
+2616,Giosa,Antonio Giosa,55.56
+2617,Castiglia,Ivan Castiglia,78.26
+2618,Ricardo Esteves,Ricardo Felipe dos Santos Esteves,62.50
+2619,Carrobbio,Filippo Carobbio,64.00
+2620,Amerini,Daniele Amerini,63.64
+2621,Ceravolo,Fabio Giovanni Ceravolo,51.61
+2622,Doni,Donieber Alexander Marangon,25.81
+2623,Mexés,Philippe Mexès,52.63
+2624,Panucci,Christian Panucci,58.33
+2625,Taddei,Rodrigo Ferrante Taddei,41.38
+2626,Mancini,Alessandro Faiolhe Amantino,29.41
+2627,Vucinic,Mirko Vucinic,70.00
+2628,Curci,Gianluca Curci,52.63
+2629,Ferrari,Matteo Ferrari,66.67
+2630,Marsili,Massimiliano Marsili,51.85
+2631,David Pizarro,David Marcelo Pizarro Cortés,63.41
+2632,Ricardo Faty,Ricardo William Faty,75.00
+2633,Aquilani,Alberto Aquilani,66.67
+2634,Rosi,Aleandro Rosi,47.06
+2635,Cassetti,Marco Cassetti,72.73
+2636,Tonetto,Max Tonetto,77.78
+2637,Montella,Vincenzo Montella,64.00
+2638,Okaka,Stefano Chuka Okaka,41.67
+2639,Galasso,Gianluca Galasso,60.87
+2640,Zotti,Carlo Zotti,62.50
+2641,Virga,Valerio Virga,55.56
+2642,Castellazzi,Luca Castellazzi,81.48
+2643,Falcone,Giulio Falcone,66.67
+2644,Sala,Luigi Sala,57.14
+2645,Zenoni,Christian Zenoni,54.55
+2646,Accardi,Pietro Accardi,66.67
+2647,Volpi,Sergio Tranquillo Volpi,35.71
+2648,Palombo,Angelo Palombo,66.67
+2649,Bonanni,Massimo Bonanni,63.64
+2650,Flachi,Francesco Flachi,54.55
+2651,Bonazzoli,Emiliano Bonazzoli,66.67
+2652,Berti,Gianluca Berti,52.63
+2653,Terlizzi,Christian Terlizzi,61.54
+2654,Maggio,Christian Maggio,54.55
+2655,Pieri,Mirko Pieri,62.50
+2656,Parola,Andrea Parola,63.16
+2657,Soddimo,Danilo Soddimo,66.67
+2658,G. Delvecchio,Gennaro Del Vecchio,77.42
+2659,D. Franceschini,Daniele Franceschini,82.35
+2660,Mota,Bruno Fontes da Mota,33.33
+2661,Bazzani,Fabio Bazzani,70.00
+2662,Foti,Salvatore Foti,44.44
+2663,Quagliarella,Fabio Quagliarella,80.00
+2664,Manninger,Alexander Manninger,64.29
+2665,Gastaldello,Daniele Gastaldello,73.33
+2666,Portanova,Daniele Portanova,69.23
+2667,Bertotto,Valerio Bertotto,66.67
+2668,Falsini,Gianluca Falsini,60.87
+2669,Brevi,Ezio Pietro Brevi,45.45
+2670,Vergassola,Simone Vergassola,74.07
+2671,Alberto,Alberto Valentim do Carmo Neto,37.84
+2672,Candela,Vincent Candela,63.64
+2673,Bogdani,Erjon Bogdani,70.00
+2674,Chiesa,Enrico Chiesa,63.16
+2675,Pavarini,Nicola Pavarini,69.57
+2676,Negro,Paolo Negro,62.50
+2677,Molinaro,Cristian Molinaro,64.00
+2678,Daversa,Roberto D'Aversa,60.87
+2679,Antonini,Luca Antonini,76.19
+2680,Locatelli,Tomas Locatelli,75.00
+2681,Cozza,Francesco Cozza,50.00
+2682,Serafini,Matteo Serafini,69.57
+2683,Frick,Mario Frick,62.50
+2684,Corvia,Daniele Corvia,60.00
+2685,Abbiati,Christian Abbiati,58.33
+2686,Oscar Brevi,Oscar Arnaldo Brevi,73.33
+2687,Doudou,Diaw Doudou,70.59
+2688,Comotto,Gianluca Comotto,60.87
+2689,Pancaro,Giuseppe Pancaro,60.87
+2690,De Ascentis,Diego De Ascentis,78.57
+2691,Lazetic,Nikola Lazetić,66.67
+2692,Music,Vedin Musić,62.50
+2693,Rosina,Alessandro Rosina,52.17
+2694,Stellone,Roberto Stellone,66.67
+2695,Taibi,Massimo Taibi,55.56
+2696,I. Franceschini,Ivan Franceschini,90.32
+2697,Melara,Matteo Melara,63.16
+2698,Orfei,Giovanni Orfei,52.63
+2699,Gallo,Fabio Gallo,62.50
+2700,Ardito,Andrea Ardito,63.16
+2701,Balestri,Iacopo Balestri,69.57
+2702,Ferrarese,Claudio Ferrarese,69.23
+2703,Fiore,Stefano Fiore,55.56
+2704,Muzzi,Roberto Muzzi,55.56
+2705,Abbruscato,Elvis Abbruscato,76.92
+2706,De Sousa,Claudio De Sousa,66.67
+2707,Alberto Fontana,Alberto Maria Fontana,83.33
+2708,Pagotto,Angelo Pagotto,66.67
+2709,Vailatti,Tommaso Vailatti,66.67
+2711,De Sanctis,Morgan De Sanctis,74.07
+2712,Natali,Cesare Natali,63.16
+2713,Felipe,Felipe Dias da Silva dal Belo,34.29
+2714,Damiano Zenoni,Damiano Zenoni,100.00
+2715,Motta,Marco Motta,62.50
+2716,Pinzi,Giampiero Pinzi,50.00
+2717,Di Natale,Antonio Di Natale,69.23
+2718,Paoletti,Gabriele Paoletti,64.00
+2719,Gotti,Massimo Gotti,55.56
+2720,Coda,Andrea Coda,53.33
+2721,Andrea Dossena,Andrea Dossena,100.00
+2722,Morosini,Piermario,23.53
+2723,De Martino,Raffaele De Martino,68.97
+2724,G. Siqueira,Guilherme Magdalena Siqueira,52.63
+2725,D'Agostino,Gaetano D'Agostino,71.43
+2726,Paulo Barreto,Paulo Vitor Barreto De Souza,63.41
+2727,Schumacher,Thiago Maier dos Santos,30.30
+2728,Moro,Alessandro Moro,42.11
+2729,Claudio Vargas,Claudio David Vargas Villalba,65.12
+2730,Roman Eremenko,Roman Alekseyevich Eremenko,68.29
+2731,Gheddafi,Saadi,30.77
+2732,Stefan Postma,Stefan Postma,100.00
+2733,Martha,Angelo Martha,63.16
+2734,Saavedra,Alberto Saavedra Muñoz,53.33
+2735,Vreven,Stijn Vreven,66.67
+2736,Loumpoutis,Konstantinos Loumpoutis,60.61
+2737,Kolk,Santiago Kolk,47.06
+2738,Bodde,Ferrie Bodde,58.82
+2739,Delorge,Laurent Delorge,63.64
+2740,Tininho,Ronildo Pereira de Freitas,18.18
+2741,Håkansson,Jesper Håkansson,72.00
+2742,Mols,Michael Alexander Mols,30.77
+2743,Wagenaar,Joshua Frederick Wagenaar,48.48
+2744,Zwinkels,Robert Zwinkels,69.57
+2745,Kum,Christian Kum,37.50
+2746,El Moussaoui,Samir El Moussaoui,80.00
+2747,Rijaard,Daniël Rijaard,66.67
+2748,Bakkati,Said Bakkati,73.68
+2749,Riedewald,Raimund Riedewald,69.23
+2750,Rankovic,Aleksandar Ranković,59.26
+2751,Schwiebbe,Levi Schwiebbe,78.26
+2752,Verhoek,Wesley Verhoek,66.67
+2753,Elia,Eljero George Rinaldo Elia,26.67
+2754,Den Ouden,Geert den Ouden,75.00
+2755,Jaap Stam,Jakob Stam,73.68
+2756,Ogararu,George Cristian Ogăraru,46.67
+2757,Emanuelson,Urby Vitorrio Diego Emanuelson,50.00
+2758,Roger,Roger García Junyent,40.00
+2759,Rosales,Mauro Damián Rosales,51.85
+2760,Huntelaar,Dirk Jan Klaas Huntelaar,54.55
+2761,Gentenaar,Dennis Gentenaar,72.00
+2762,Vermeer,Kenneth Harold Vermeer,48.28
+2763,Lindenbergh,Olaf Lindenbergh,81.48
+2764,Gabri,Gabriel Francisco García de la Torre,24.39
+2765,Manucharyan,Edgar Manucharyan,78.57
+2766,Mitea,Nicolae Mitea,55.56
+2767,Krohn Dehli,Michael Krohn-Dehli,73.33
+2768,De Mul,Tom De Mul,75.00
+2769,Vertonghen,Jan Bert Lieve Vertonghen,57.14
+2770,Opdam,Barry Opdam,62.50
+2771,Gudjonsson,Jóhannes Karl Guðjónsson,52.94
+2772,Cziommer,Simon Cziommer,72.73
+2773,Schaars,Stephanus Johannes Schaars,42.42
+2774,Meerdink,Martijn Meerdink,66.67
+2775,Arveladze,Shota Arveladze,75.00
+2776,Dembele,Moussa Sidi Yaya Dembele,45.16
+2777,Sinouh,Khalid Sinouh,63.16
+2778,Bulters,Job Bulters,77.78
+2779,Luirink,Gijs Luirink,73.68
+2780,Steinsson,Grétar Rafn Steinsson,60.00
+2781,De Zeeuw,Demy Patrick Rene de Zeeuw,47.06
+2782,Vormer,Ruud Vormer,70.59
+2783,Mendes Da Silva,David Mendes da Silva Gonçalves,65.22
+2784,Martens,Maarten Martens,63.64
+2785,Luijckx,Kees Luijckx,73.68
+2786,Molhoek,Rogier Marinus Molhoek,48.28
+2787,Jenner,Julian Christopher Jenner,38.71
+2788,Koevermans,Danny Koevermans,76.92
+2789,Lens,Jeremain Marciano Lens,30.77
+2790,Zwarthoed,Theo Zwarthoed,78.26
+2791,Van Nieuwstadt,Jos van Nieuwstadt,87.50
+2792,De Haan,Ferry de Haan,70.00
+2793,Ruud Jansen,Rudy Jansen,90.91
+2794,Piqué,Mitchell Pique,52.63
+2795,van Dieren,René Theo van Dieren,66.67
+2796,Guijo Velasco,Daniel Guijo-velasco,78.79
+2797,Bruins,Luigi Bruins,66.67
+2798,Slory,Andwele Cedric Slory,40.00
+2799,Steur,Sebastiaan Steur,47.62
+2800,Braber,Robert Braber,63.16
+2801,Arjan van Dijk,Arjan David van Dijk,82.35
+2802,Graafland,Ronald Graafland,72.00
+2803,van Nieuwenhui.,Jörg van Nieuwenhuijzen,75.68
+2804,Bandjar,Sigourney Paul Nurpiat Mustafa Bandjar,31.11
+2805,Zijm,Sieme Zijm,57.14
+2806,Buikema,Roel Buikema,73.68
+2807,Hertog,Damien Hertog,63.16
+2808,Hofman,Robin Hofman,66.67
+2809,Rothman,Gert-Jan Rothman,60.87
+2810,Dijkhuizen,Marinus Dijkhuizen,71.43
+2811,Voskamp,Johannes Dirk Voskamp,50.00
+2812,Vlaar,Ron Peter Vlaar,50.00
+2813,Bahia,André Luiz Bahia dos Santos Viana,26.32
+2814,Greene,Serginho Greene,57.14
+2815,Drenthe,Royston Ricky Drenthe,50.00
+2816,Jona. De Guzman,Jonathan Alexander de Guzman,66.67
+2817,Lucius,Boem Boem Theo,0.00
+2818,Hofs,Nicky Hofs,57.14
+2819,Castelen,Romeo Erwin Maurits Castelen,44.44
+2820,Lodewijks,Patrick Lodewijks,69.23
+2821,Ekramy,Sherif Ekramy Ahmed Ahmed,38.71
+2822,Derijck,Timothy Derijck,63.64
+2823,Schreuder,Alfred Schreuder,72.00
+2824,Buijs,Danny Buijs,62.50
+2825,Sebastián Pardo,Sebastián Eduardo Pardo Campos,66.67
+2826,De Ceulaer,Benjamin De Ceulaer,68.97
+2827,Vincken,Tim Vincken,77.78
+2828,Boussaboun,Ali Boussaboun,83.33
+2829,Van Hooijdonk,Petrus Ferdinandus Johannes van Hooijdonk,48.15
+2830,Abubakari,Mohammed Abubakari,66.67
+2831,Sammuel,Sammuel De Almeida Cardoso,42.42
+2832,Roorda,Bas Roorda,75.00
+2833,Sankoh,Gibril Sankoh,63.16
+2834,Kruiswijk,Arnold Kruiswijk,72.00
+2835,Silva,Bruno Ramón Silva Barone,34.48
+2836,Van der Linden,Antoine Van Der Linden,77.78
+2837,Matthijs,Paul Matthijs,76.19
+2838,Lovre,Goran Lovre,62.50
+2839,Lindgren,Rasmus Lindgren,69.57
+2840,Levchenko,Yevgeni Levchenko,69.23
+2841,Nevland,Erik Nevland,73.68
+2842,Salmon,Glen George Salmon,50.00
+2843,Van Loo,Brian van Loo,70.00
+2844,Svejdik,Ondrej Svejdik,66.67
+2845,Holla,Danny Holla,62.50
+2846,Florén,Lars Mathias Florén,48.00
+2847,Van de Laak,Koen Marinus van de Laak,62.86
+2848,Seedorf,Stefano Maarten Omar Seedorf,40.00
+2849,Fledderus,Mark-Jan Fledderus,66.67
+2850,Yuri Cornelisse,Yuri Cornelisse,100.00
+2851,Bechan,Winand Kiran Madhankumar Bechan,32.43
+2852,Njazi Kuqi,Njazi Kuqi,100.00
+2853,Luis Suárez,Luis Alberto Suárez Díaz,62.86
+2854,Dingsdag,Michael Christiaan Dingsdag,45.71
+2855,Zuiverloon,Gianni Michel Eugene Zuiverloon,48.78
+2856,Drost,Jeroen Drost,58.82
+2857,Norregaard,Hjalte Nørregaard,66.67
+2858,Bosvelt,Paul Bosvelt,73.68
+2859,Pranjic,Danijel Pranjic,63.64
+2860,Ugur Yildirim,Ugur Yildirim,100.00
+2861,Lasse Nilsson,Lars Thomas Nilsson,75.00
+2862,Afonso Alves,Afonso Alves Martins Júnior,61.54
+2863,Waterman,Boy Waterman,80.00
+2864,H.Drost,Henrico Drost,70.00
+2865,Jakob Poulsen,Jakob Bendix Uhd Poulsen,70.27
+2866,Kissi,Abdelkarim Kissi,47.62
+2867,Türk,Oğuzhan Türk,50.00
+2868,Prager,Thomas Prager,63.16
+2869,Hanssen,Andre Hanssen,70.00
+2870,Gonzalo García,Gonzalo Manuel García García,66.67
+2871,Will Johnson,William David Johnson,72.73
+2872,Tarvajärvi,Niklas Henrikki Tarvajärvi,55.56
+2873,Ken Ilso Larsen,Ken Ilso Larsen,100.00
+2874,Friend,Robert Douglas Friend,44.44
+2875,Wintjens,Danny Wintjens,72.73
+2876,Breuer,Michel Breuer,63.16
+2877,Michael Bradley,Michael Sheehan Bradley,78.95
+2878,Bo Storm,Bo Storm,100.00
+2879,Pieckenhagen,Martin Pieckenhagen,77.42
+2880,Reekers,Peter Reekers,70.00
+2881,Wuytens,Jan René Antoon Wuytens,46.67
+2882,Daelemans,Bjorn Daelemans,75.00
+2883,Klavan,Ragnar Klavan,63.16
+2884,Maas,Rob Maas,66.67
+2885,Quansah,Kwame Gershion Quansah,48.28
+2886,Tanghe,Stefaan Tanghe,60.00
+2887,Hofstede,Bernard Hofstede,66.67
+2888,Höcher,Marc Höcher,70.59
+2889,Hirayama,Sota Hirayama,76.19
+2890,Pasveer,Remko Jurian Pasveer,51.85
+2891,Smit,Marnix Smit,53.33
+2892,Boakye,Emmanuel Kwame Agyemang Boakye,33.33
+2893,Looms,Mark Looms,66.67
+2894,De Vries,Remon De Vries,72.73
+2895,Bridji,Karim Bridji,66.67
+2896,Michalke,Kai Michalke,80.00
+2897,Biseswar,Diego Marvin Biseswar,55.17
+2898,Everton,Everton Ramos Da Silva,48.28
+2899,Zoetebier,Edwin Zoetebier,75.00
+2900,Penders,Rob Penders,77.78
+2901,Zwaanswijk,Patricius Joseph Zwaanswijk,54.05
+2902,Elshot,Kurt Elshot,70.59
+2903,Zonneveld,Mike Zonneveld,78.26
+2904,Petö,Tamás Pető,57.14
+2905,Slot,Arend Martijn Slot,36.36
+2906,Van Gessel,Sander Branko van Gessel,58.82
+2907,Diba,Anouar Diba,53.33
+2908,Leonardo Vitor,Leonardo De Vitor Santiago,70.00
+2909,Tamerus,Gerardus Johannes Paulus Tamerus,35.90
+2910,Van Zwam,Arno van Zwam,76.19
+2911,Pietersma,Ariën Pietersma,75.00
+2912,Van Engelen,Yvo van Engelen,84.62
+2913,Demir,Muhammet Aykut Demir,40.00
+2914,De Graaf,Edwin de Graaf,72.73
+2915,v. d. Broek,Benjamin Van Den Broek,58.06
+2916,Van Bremen,Jordy Van Bremen,76.92
+2917,Stam,Ronnie Theodorous Stam,30.77
+2918,Kousemaker,Wilmer Kousemaker,74.07
+2919,Sikora,Victor Tadeusz Sikora,44.44
+2920,Veenstra,Rogier Veenstra,69.57
+2921,Rigters,Maceo Rigters,70.00
+2922,Babos,Gabor Babos,62.50
+2923,Wisgerhof,Peter Wisgerhof,75.00
+2924,Olsson,Jonas Olsson,66.67
+2925,Nalbantoglu,Muslu Nalbantoglu,78.57
+2926,El-Akchaoui,Youssef El-akchaoui,73.33
+2927,Otten,Mark Otten,66.67
+2928,Snoyl,Ferne Dean Snoyl,47.62
+2929,Boutahar,Saïd Boutahar,76.19
+2930,Niedzielan,Andrzej Niedzielan,71.43
+2931,Denneboom,Romano Denneboom,72.00
+2932,Van Emmerik,Raymon van Emmerik,75.86
+2933,Pothuizen,Patrick Pothuizen,69.23
+2934,Bakker,Bas Bakker,75.00
+2935,Vanaudenaerde,Günther Vanaudenaerde,76.47
+2936,Kivuvu,Kisoka Jeadot Kivuvu,46.15
+2937,Dams,Theo Dams,61.54
+2938,Prent,Alexander Prent,50.00
+2939,Grot,Guilliano Grot,44.44
+2940,Worm,Rutger Worm,53.33
+2941,Jans,Paul Jans,61.54
+2942,Brett Holman,Brett Trevor Holman,77.42
+2943,Gomes,Heurelho Da Silva Gomes,35.71
+2944,Alex,Domingos Alexandre Rodrigo Dias da Costa,18.18
+2945,Afellay,Ibrahim Afellay,63.64
+2946,Kluivert,Patrick Stephan Kluivert,50.00
+2947,Moens,Oscar Moens,62.50
+2948,Da Costa,Manuel Marouane da Costa Trindade Senoussi,32.00
+2949,Ball,Michael Ball,50.00
+2950,Lamey,Michael Lamey,55.56
+2951,Reiziger,Michael John Reiziger,55.17
+2952,John De Jong,Johannes Jacobus de Jong,66.67
+2953,Aissati,Ismaïl Aissati,66.67
+2954,Nguyen,Lee Nguyen The Anh,50.00
+2955,Väyrynen,Mika Vayrinen,66.67
+2956,Diego Tardelli,Diego Tardelli Martins,77.78
+2957,Rob van Dijk,Robert van Dijk,88.89
+2958,Bakens,Tim Bakens,75.00
+2959,Teixeira,Virgilio Anastacio Teixeira,45.71
+2960,Van Diemen,Patrick van Diemen,71.43
+2961,Van Haaren,Ramon van Haaren,76.92
+2962,Vicelich,Ivan Robert Vicelich,57.14
+2963,Fuchs,Robert Fuchs,58.82
+2964,Reuser,Martijn Reuser,60.00
+2965,Garcia,Luwamo Fiston Garcia,46.15
+2966,Van den Bergh,Ricky van den Bergh,81.25
+2967,Van de Haar,Johannes van de Haar,70.97
+2968,Wevers,Jurgen Wevers,63.16
+2969,Donk,Ryan Henk Donk,44.44
+2970,Stephan Keller,Stephan Andrin Keller,80.00
+2971,Van Mosselveld,Frank van Mosselveld,82.35
+2972,Mulder,Dustley Roman Mulder,46.15
+2973,Van der Velden,Nick Van Der Velden,84.85
+2974,Ruud Berger,Ruud Berger,100.00
+2975,Tim Janssen,Tim Wilhelmus Janssen,68.75
+2976,Remacle,Jordan Remacle,66.67
+2977,Putter,Eddy Putter,70.59
+2978,Kujovic,Vladan Kujović,66.67
+2979,Kah,Pa Modou Kah,40.00
+2980,Saeijs,Jan-paul Saeijs,57.14
+2981,De Fauw,Davy De Fauw,73.68
+2982,Lachambre,Vincent Lachambre,69.23
+2983,Meeuwis,Marcel Meeuwis,66.67
+2984,Agustien,Germaine Augustien,61.54
+2985,Bodor,Boldizsar Bodor,50.00
+2986,Vandamme,Jamaïque Vandamme,64.00
+2987,Cissé,Sekou Cisse,62.50
+2988,Oper,Andres Oper,53.33
+2989,Bram Castro,Bram Castro,100.00
+2990,Voigt,Alexander Voigt,50.00
+2991,Pompelberg,Olaf Rompelberg,72.00
+2992,Rudge,Humphrey Rudge,52.63
+2993,Leemans,Ken Leemans,77.78
+2994,Senden,Ger Senden,75.00
+2995,Bejas,Roy Bejas,71.43
+2996,Bouchiba,Elbekay Bouchiba,66.67
+2997,van Dessel,Kevin van Dessel,76.92
+2998,De Jong,Marcel de Jong,66.67
+2999,Sonko,Edrissa Sonko,55.56
+3000,Van Tornhout,Dieter Van Tornhout,77.42
+3001,Cristiano,Cristiano Rodrigues Dos Santos,46.15
+3002,Ponk,Rene Ponk,61.54
+3003,Olfers,Steve Olfers,66.67
+3004,Schenkel,Danny Schenkel,72.73
+3005,De Roover,Sepp De Roover,78.26
+3006,Polak,Sjaak Polak,62.50
+3007,Obodai,Anthony Obodai,60.00
+3008,Medunjanin,Haris Medunjanin,76.92
+3009,Oost,Jason Oost,57.14
+3010,D. Van Dijk,Dominique van Dijk,71.43
+3011,Anastasiou,Giannis Anastasiou,71.43
+3012,Kerklaan,Dolf Kerklaan,76.19
+3013,Gudde,Wouter Gudde,58.82
+3014,Moreno Freire,Iderlindo Moreno Freire,72.22
+3015,Bruma,Marciano Bruma van Homoet,33.33
+3016,van Bueren,Edwin van Bueren,76.92
+3017,Vlug,Jeffrey Mike Vlug,38.10
+3018,Rose,Yuri Alexander Rose,34.78
+3019,Bouaouzan,Rachid Bouaouzan,72.00
+3020,Emnes,Marvin Renato Emnes,41.67
+3021,Tsvetkov,Ivan Petrov Tsvetkov,57.14
+3022,Boschker,Sander Bernard Jozef Boschker,43.24
+3023,Niemeyer,Peter Niemeyer,72.73
+3024,Zomer,Ramon Zomer,62.50
+3025,Wielaert,Robert Wielaert,69.57
+3026,Heubach,Jeroen Heubach,66.67
+3027,Sibum,Bas Sibum,71.43
+3028,Bakircioglu,Kennedy Bakircioglü,73.33
+3029,Brama,Wout Brama,66.67
+3030,Touma,Sharbel Touma,55.56
+3031,Gakhokidze,Giorgi Gakokidze,69.23
+3032,N'kufo,Blaise Isetsima Kufo,38.46
+3033,Cees Paauwe,Cees Paauwe,100.00
+3034,Schuurman,Resit Schuurman,75.00
+3035,Wellenberg,Niels Wellenberg,76.92
+3036,Ouédraogo,Rahim Ouédraogo,75.00
+3037,Vidarsson,Arnar Thor Vidarsson,62.07
+3038,El Ahmadi,Samir El Gaaouiri,46.15
+3039,Gerk,Anatoly Gerk,50.00
+3040,Bakkal,Otman Bakkal,66.67
+3041,Kleizen,Marcel Kleizen,66.67
+3042,Shoukov,Dmitry Shukov,60.00
+3043,Gerritsen,Patrick Laurentius Gerritsen,48.65
+3044,Afonso,Guilherme Afonso,54.55
+3045,Terol,Joost Adrianus Terol,40.00
+3046,Sander Keller,Sander Keller,100.00
+3047,Schut,Alje Schut,66.67
+3048,Cornelisse,Tim Cornelisse,83.33
+3049,Braafheid,Edson René Braafheid,62.07
+3050,Jean P. De Jong,Jean-Paul de Jong,90.32
+3051,G. Van Dijk,Gregoor Van Dijk,76.92
+3052,Tiendalli,Dwight Tiendalli,72.00
+3053,Van der Gun,Cedric van der Gun,75.86
+3054,Nelisse,Robin Nelisse,70.00
+3055,Grandel,Franck Grandel,66.67
+3056,Vorm,Michel Armand Vorm,36.36
+3057,Broerse,Joost Broerse,70.00
+3058,Buuren,Kees van Buuren,57.14
+3059,Shew-Atjon,Etienne Shew-Atjon,71.43
+3060,Somers,Hans Somers,70.59
+3061,Kruys,Rick Kruys,66.67
+3062,Douglas,Darl Robert Douglas,53.85
+3063,Maachi,Nassir Maachi,63.16
+3064,Rossini,Giuseppe Rossini,60.87
+3065,Fortuné,Marc-Antoine Fortune,51.85
+3066,Wapenaar,Harald Paul Wapenaar,57.14
+3067,Knol,Ruud Knol,61.54
+3068,Sansoni,Sansoni Sebastien Roger,46.67
+3069,Blondelle,Siebe Blondelle,75.00
+3070,Van Der Schaaf,Remco Jelmer van der Schaaf,68.29
+3071,Theo Janssen,Theo Janssen,100.00
+3072,Hersi,Youssouf Hersi,52.63
+3073,Due,Anders Due Hansen,30.00
+3074,Junker,Mads Junker,70.59
+3075,Lazovic,Danko Lazovic,70.00
+3076,Velthuizen,Piet Hubertus Velthuizen,58.82
+3077,Sprockel,Civard Sprockel,69.57
+3078,Jansen,Michael Jansen,60.00
+3079,Verhaegh,Paul Johannes Gerardus Verhaegh,41.03
+3080,Suart,Hesdey Suart,58.82
+3081,Fränkel,Purrel Fränkel,66.67
+3082,A. Yakubu,Abubakari Yakubu,66.67
+3083,Esajas,The Flying Dutchman,16.00
+3084,Kaya,Onur Kaya,61.54
+3085,Knopper,Richard Knopper,63.64
+3086,Rojer,Eldridge Rojer,52.63
+3087,Benson,Fredua Buadee Benson Erchiah,35.29
+3088,Van Driel,Raymond van Driel,69.23
+3089,De Meersman,Tim De Meersman,84.62
+3090,Prijor,Anduele Pryor,42.11
+3091,Meulens,Rihairo Daniël Meulens,48.28
+3092,Peersman,Tristan Peersman,66.67
+3093,Kargbo,Ibrahim Obreh Kargbo,46.15
+3094,Bælum,Thomas Bælum,58.82
+3095,Janse,Jens Christiaan Hubert Peter Willen Janse,21.74
+3096,José Valencia,José Luis Valencia Murillo,66.67
+3097,Messoudi,Mohamed Messoudi,66.67
+3098,M. Assou-Ekotto,Matthieu Assou-Ekotto,80.00
+3099,Imschoot,Kristof Imschoot,66.67
+3100,Keenan,Joseph John Keenan,50.00
+3101,El Hamdaoui,Mounir El Hamdaoui,75.86
+3102,Redan,Iwan Benito Marvin Redan,34.48
+3103,Zois,Peter Zoïs,57.14
+3104,Sengier,Björn Sengier,70.00
+3105,Swinkels,Arjan Swinkels,72.73
+3106,Van der Struijk,Frank van der Struijk,83.33
+3107,Wau,Nuelson Francisco Emanuel Wau,18.75
+3108,Ryan Holman,Ryan Holman,100.00
+3109,Nieuwendaal,Steef Nieuwendaal,78.57
+3110,Van Lieshout,Maarten Van Lieshout,75.00
+3111,Bobson,Kevin,18.18
+3112,Hadouir,Anouar Hadouir,66.67
+3113,Wilmet,Jonathan Wilmet,57.14
+3114,Aranzubia,Daniel Aranzubia Aguado,56.25
+3115,Luis Prieto,Luis Prieto Zalbidegoitia,61.11
+3116,Ustaritz,Ustaritz Aldekoaotalora Astarloa,40.00
+3117,Iraola,Andoni Iraola Sagarna,44.44
+3118,Amorebieta,Fernando Gabriel Amorebieta Mardaras,43.48
+3119,Gurpegi,Carlos Gurpegi Nausia,50.00
+3120,Pablo Orbaiz,Pablo Orbaiz Lesaka,77.42
+3121,Etxeberria,Joseba Andoni Etxeberria Lizardi,47.62
+3122,Yeste,Francisco Javier Yeste Navarro,28.57
+3123,Dañobeitia,Mikel Dañobeitia Martín,60.61
+3124,Llorente,Fernando Javier Llorente Torres,41.03
+3125,Lafuente,Iñaki Lafuente Sancha,55.17
+3126,Murillo,Ander Murillo García,51.85
+3127,Sarriegi,Josu Sarriegi Zumarraga,51.61
+3128,Expósito,Unai Expósito Medina,57.14
+3129,Tiko,Roberto Martínez Rípodas,21.43
+3130,Gabilondo,Igor Gabilondo del Campo,54.55
+3131,Aduriz,Aritz Aduriz Zubeldia,44.44
+3132,Urzaiz,Ismael Urzaiz Aranda,46.15
+3133,Víctor Valdés,Víctor Valdés Arribas,76.47
+3134,Edmilson,Edmílson José Gomes De Moraes,43.24
+3135,Jorquera,Albert Jorquera Fortia,53.33
+3136,Rubén Martínez,Rubén Iván Martínez Andrade,68.29
+3137,Oleguer,Oleguer Presas Renom,51.85
+3138,Sylvinho,Sylvio Mendes De Campos Júnior,36.84
+3139,Belletti,Juliano Haus Belletti,55.17
+3140,Thiago Motta,Thiago Motta Santon Olivares,60.00
+3141,Giuly,Ludovic Vincent Giuly,38.46
+3142,Gudjohnsen,Eiður Smári Guðjohnsen,56.25
+3143,Ezquerro,Santiago Ezquerro Marín,51.61
+3144,Peña,Carlos González Peña,33.33
+3145,Jordi Gómez,Jordi Gómez García-penche,61.11
+3146,Pitu,Josep María Comadevall Crous,18.75
+3147,Andrea Orlandi,Andrea Orlandi Stabilin,75.68
+3148,Paco Montañés,Francisco Montañés Claverías,58.54
+3149,G. Dos Santos,Giovani Álex dos Santos Ramírez,55.81
+3150,Oriol Riera,Oriol Riera Magem,78.57
+3151,Doblas,Antonio Baltasar Doblas Santana,32.43
+3152,Rivas,David Rivas Rodríguez,38.46
+3153,Melli,Juan Alberto Andreu Alvarado,12.12
+3154,Romero,José María Romero Poyón,41.38
+3155,Marcos Assunção,Marcos Assunção dos Santos,73.17
+3156,Edú,Luís Eduardo Schmidt,26.09
+3157,Rafael Sobis,Rafael Augusto Sóbis,75.00
+3158,Robert,Robert De Pinho De Souza,40.00
+3159,Contreras,Pedro Contreras González,54.55
+3160,Lembo,Daniel Alejandro Lembo Betancor,27.78
+3161,Nano,Victoriano Rivas álvaro,22.22
+3162,Fernando Vega,Fernando Vega Torres,78.79
+3163,Arzu,Arturo García Muñoz,26.09
+3164,Miguel Ángel,Miguel Ángel Lozano Ayala,64.86
+3165,Rivera,Alberto Rivera Pizarro,42.86
+3166,Damia,Damià Abella Pérez,43.48
+3167,Fernando,Fernando Miguel Fernández Escribano,37.21
+3168,Capi,Jesús Capitán Prada,34.78
+3169,Dani,Daniel Martínez Alexandre,27.59
+3170,Maldonado,Francisco José Maldonado Collantes,41.86
+3171,Xisco,Francisco Javier Muñoz Llompart,22.22
+3172,Pinto,José Manuel Pinto Colorado,32.26
+3173,Lequi,Matías Emanuel Lequi,40.00
+3174,George Lucas,George Lucas Coser,80.00
+3175,Ángel,Ángel David López Ruano,35.71
+3176,Iriney,Iriney Santos da Silva,42.86
+3177,Borja Oubiña,Francisco de Borja Lacasa Sancho,31.82
+3178,Gustavo Lopez,Gustavo Adrián López,78.79
+3179,Nene,Anderson Luís De Carvalho,27.59
+3180,Canobbio,Néstor Fabián Canobbio Bentaberry,39.02
+3181,Baiano,João Fernando Nelo Baiano,38.71
+3182,Esteban,Esteban Andres Suarez,50.00
+3183,Marcos Bermúdez,Marcos Bermúdez Martínez,76.92
+3184,Yago,Yago Yao Alonso-Fueyo Sako,26.67
+3185,Placente,Diego Rodolfo Placente,53.33
+3186,Antonio Núñez,Antonio Núñez Tena,83.87
+3187,Jorge,Jorge Larena-Avellaneda Roig,30.30
+3188,Jonathan Vila,Jonathan Aspas Juncal,58.82
+3189,Jesús Perera,José Jesús Perera López,68.57
+3190,De Ridder,Daniël Robin Frederick de Ridder,43.90
+3191,Guayre,Antonio Guayre Betancor Perdomo,32.43
+3192,Javi Guerrero,Francisco Javier García Guerrero,57.78
+3193,Aouate,David Aouate,66.67
+3194,Juanma,Juan Manuel Rodríguez,44.44
+3195,Andrade,Jorge Manuel Almeida Gomes de Andrade,31.82
+3196,Manuel Pablo,Manuel Pablo Garcia Diaz,66.67
+3197,Capdevila,Joan Capdevila Méndez,60.00
+3198,Sergio Gonzalez,Sergio González Soriano,78.95
+3199,Duscher,Aldo Pedro Duscher,56.00
+3200,Juan Rodríguez,JUAN Antonio RODRIGUEZ Villamuela,59.57
+3201,Riki,Iván Sánchez-Rico Soto,15.38
+3202,Bodipo,Rodolfo Bodipo Diaz,48.00
+3203,Munúa,Gustavo Adolfo Munúa Vera,33.33
+3204,A. Barragán,Antonio Barragán Fernández,55.56
+3205,Rodri,Sergio Rodriguez García,35.71
+3206,Lopo,Alberto Lopo Garcia,34.78
+3207,Arbeloa,Álvaro Arbeloa Coca,53.85
+3208,Juli. De Guzmán,Julian Bobby de Guzman,77.78
+3209,Joan Verdú,Joan Verdú Fernández,66.67
+3210,Valeron,Juan Carlos Valeron Santana,41.18
+3211,Taborda,Sebastián Taborda Ramos,46.67
+3212,Arizmendi,Ángel Javier Arizmendi de Lucas,45.00
+3213,Cristian,Cristian Hidalgo González,48.48
+3214,Alcántara,Carlos Alcántara Cuevas,56.25
+3215,Antonio Tomás,Antonio Tomás González,74.29
+3216,Jesus Muñoz,Jesús Muñoz Calonge,73.33
+3217,Paco Gallardo,Francisco Gallardo León,66.67
+3218,Diego Tristán,Diego Herrera Tristán,76.47
+3219,Moisés,Moisés Hurtado Pérez,46.15
+3220,Jarque,Daniel Jarque,63.16
+3221,Armando Sá,Armando Miguel Correia de Sá,52.63
+3222,David García,David García De La Cruz,68.57
+3223,Frédson Pereira,Frédson Câmara Pereira,81.08
+3224,Eduardo Costa,Eduardo Nascimento Costa,70.27
+3225,Zabaleta,Pablo Javier Zabaleta,55.17
+3226,De La Peña,Iván de la Peña López,64.52
+3227,Luis García F.,Luis García Fernández,76.47
+3228,Tamudo,Raúl Tamudo Montero,48.00
+3229,Iraizoz,Gorka Iraizoz Moreno,51.85
+3230,Biel,Gabriel Ribas Ródenas,32.00
+3231,Lacruz,Jesús María Lacruz Gómez,40.00
+3232,Sergio Sánchez,Sergio Sánchez Ortega,80.00
+3233,Velasco,Juan Velasco Damas,56.00
+3234,Ito,Antonio Alvarez Perez,16.67
+3235,Corominas,Ferrán Corominas Telechea,52.94
+3236,Moha,Mohammed El Yaagoubi Youbi,26.67
+3237,Albert Riera,Alberto Riera Ortega,75.00
+3238,Rufete,Francisco Joaquín Pérez Rufete,33.33
+3239,Pandiani,Walter Gerardo Pandiani Urquiza,41.03
+3240,Jonathan S.,Jonathan Soriano Casas,62.50
+3241,Belenguer,David Belenguer Reverte,56.25
+3242,Alexis Ruano,Alexis Ruano Delgado,75.00
+3243,Paredes,Javier Paredes Arango,50.00
+3244,Casquero,Francisco Javier Casquero Paredes,39.02
+3245,Celestini,Fabio Celestini,75.00
+3246,Mario Cotelo,Mario Gutiérrez Cotelo,70.59
+3247,Redondo,Pablo Redondo Martínez,48.28
+3248,Güiza,Daniel González Güiza,38.46
+3249,Jaja,Jakson Avelino Coelho,24.00
+3250,Luis García C.,Luis García Conde,86.67
+3251,Tena,Manuel Tena López,38.10
+3252,Pulido,Rubén Martín Pulido,48.00
+3253,Cortés,David Cortés Caballero,42.86
+3254,Alberto Aguilar,Alberto Aguilar Leiva,83.33
+3255,Nacho,Ignacio Pérez Santamaría,27.59
+3256,David Sousa,Francisco David Sousa Franquelo,52.38
+3257,Vivar Dorado,Ángel Manuel Vivar Dorado,64.86
+3258,Paunovic,Victor Veljko Paunović Ramirez,42.11
+3259,Pachón,Valentín Sergio Pachón Mosquero,32.43
+3260,Manu Del Moral,Manuel del Moral Fernández,70.00
+3261,Bizzarri,Albano Benjamín Bizzarri,50.00
+3262,Matellán,Aníbal Samuel Matellán,53.33
+3263,Ruz,Manuel Ruz Baños,31.58
+3264,Mingo,Carles Domingo Pladevall,34.48
+3265,Generelo,David Generelo Miranda,53.33
+3266,Morales,Ángel Morales Cuerva,51.85
+3267,Campano,Alejandro Campano Hernando,42.42
+3268,Juan Díaz P.,Juan Alfredo Díaz Prendes,61.11
+3269,Portillo,Javier García Portillo,53.33
+3270,Makukula,Ariza Makukula,72.73
+3271,Álvaro,Álvaro Iglesias Quintana,40.00
+3272,Rubén Pérez,Rubén Pérez Chueca,75.86
+3273,Llera,Miguel Ángel Llera Garzón,33.33
+3274,David García H.,David García,92.31
+3275,Marco,Marco Antonio Ortega Cotano,31.25
+3276,Óscar López,Òscar López Hernández,68.75
+3277,Abel Buades,Abel Buades Vendrell,70.97
+3278,Jesús Serrano,Jesús María Serrano Eugi,70.27
+3279,David Cuéllar,David Cuéllar Tainta,78.79
+3280,Carlos Merino,Carlos Merino González,74.29
+3281,Ismael Irurzun,Ismael Irurzun,100.00
+3282,Pinilla,Antoni Pinilla Miranda,48.28
+3283,López Vallejo,Javier Lopez Vallejo,78.79
+3284,César Arzo,César Arzo Amposta,71.43
+3285,Mario,Pedro Mario Álvarez Abrante,31.25
+3286,Iago Bouzón,Iago Bouzón Amoedo,75.86
+3287,Dani Bautista,Daniel Bautista Pina,78.79
+3288,Juvenal,Juvenal Edjogo-Ewono Montalbán,37.84
+3289,Barber,Rafael Barber Rodríguez,41.38
+3290,Cheli,Jose Manuel Gonzalez Ortiz,19.35
+3291,Aitor,Aitor Tornavaca Fernández,33.33
+3292,Rosu,Laurenţiu Dumitru Roşu,30.77
+3293,Pablo,Pablo Hernandez,50.00
+3294,José Ramón,Jose Ramón Rodríguez Gómez,55.56
+3295,Ramón,Ramón González Expósito,35.71
+3296,Juan Merino,Juan Merino Ruiz,81.48
+3297,Edu Moyà,Eduardo Moya Cantillo,55.17
+3298,Póli,Hipólito Fernández Serrano,26.67
+3299,Viqueira,Emilio José Viqueira Moure,47.06
+3300,Santi Cazorla,Santiago Cazorla Gonzalez,68.42
+3301,Uche,Ikechukwu Tongololiki Mawakavamba Jawarapawara Uche,14.55
+3302,Calle,Antonio Sánchez de la Calle,31.25
+3303,Cavallero,Pablo Oscar Cavallero Rodríguez,45.00
+3304,Dehu,Frédéric Déhu,47.06
+3305,Álvaro Maior,Álvaro Luiz Maior de Aquino,61.54
+3306,Ze Maria,Jose Marcelo Ferreira,48.28
+3307,Tommasi,Damiano Tommasi,63.64
+3308,Berson,Mathieu Berson,60.00
+3309,Ettien,Félix Dja Ettien,54.55
+3310,Laurent Robert,Pierre Laurent Robert,80.00
+3311,Mustapha,Rahamat Riga Mustapha,55.17
+3312,Reggi,Gustavo Enrique Reggi,38.46
+3313,Aizpurua,José Ignacio Aizpurúa Alzaga,44.44
+3314,Alexis,José Alejandro Suárez Martín,23.53
+3315,César Martín,César Martín Villar,77.42
+3316,Descarga,Iñaki Descarga Retegui,53.33
+3317,Rubiales,Luis Manuel Rubiales,57.14
+3318,Nagore,Txomin Nagore Arbizu,46.15
+3319,Diego Camacho,Diego Camacho Quesada,76.47
+3320,S. N'Diaye,Sylvain Patrick Jean N'Diaye,48.65
+3321,Courtois,Laurent Courtois,66.67
+3322,Kapo,Narcisse Olivier Kapo-Obou,26.67
+3323,Carmelo,Carmelo González Jiménez,45.16
+3324,Juanma Gómez,Juan Manuel Gómez Sánchez,64.86
+3325,Manchev,Vladimir Ivanov Manchev,46.67
+3326,Luccin,Peter Bernard Luccin,46.15
+3327,Mista,Miguel Ángel Ferrer Martínez,18.18
+3328,Roberto,Roberto Jiménez Gago,51.85
+3329,Falcón,Ismael Gómez Falcón,48.00
+3330,Galán,Francisco Gonzalo Galán Quesada,27.78
+3331,Cuellar,Iván Cuéllar Sacristán,48.28
+3332,Zé Castro,José Eduardo Rosa Vale E Castro,40.00
+3333,Juan Valera,Juan Valera Espín,78.57
+3334,Gabi,Gabriel Fernández Arenas,28.57
+3335,Jurado,José Manuel Jurado Martin,38.71
+3336,Galletti,Luciano Martín Galletti,51.61
+3337,Agüero,Sergio Leonel Agüero del Castillo,30.77
+3338,Basilio Sancho,Basilio Sancho Agudo,82.35
+3339,Mario Suárez,Mario Suárez Mata,82.76
+3340,Kezman,Mateja Kezman,63.16
+3341,Raúl Bravo,Raúl Bravo Sanfélix,68.97
+3342,M. Diarra,Mahamadou Diarra,66.67
+3343,Cassano,Antonio Cassano,63.64
+3344,Diego López,Diego López Rodríguez,68.75
+3345,Pavon,Francisco Pavón Barahona,34.48
+3346,Alvaro Mejia,Álvaro Mejía Pérez,80.00
+3347,Iván Helguera,Iván Helguera Bujía,81.25
+3348,De La Red,Rubén de la Red Gutiérrez,52.94
+3349,Miñambres,Óscar Miñambres,75.00
+3350,Guti,Jose Maria Gutierrez Hernandez,23.53
+3351,Prats,Antonio Prats Cervera,38.46
+3352,Ballesteros,Sergio Martínez Ballesteros,57.89
+3353,Nunes,José Carlos de Araújo Nunes,31.25
+3354,Varela,Fernando Varela,57.14
+3355,F. Navarro,Fernando Navarro i Corbacho,50.00
+3356,Cristiano Doni,Cristiano Doni,100.00
+3357,Jonás Gutiérrez,Jonás Manuel Gutiérrez,81.08
+3358,Arango,Juan Fernando Arango Sáenz,37.50
+3359,Maxi Lopez,Maximiliano Gastón Lopez,58.82
+3360,Pisculichi,Leonardo Nicolás Pisculichi,54.05
+3361,Moya,Miguel Ángel Moyà Rumbo,29.63
+3362,Gerardo,Gerardo José Rubio Ortuño,43.75
+3363,Ramis,Iván Andrés Ramis Barrios,33.33
+3364,Héctor,Héctor Berenguel del Pino,38.71
+3365,Dorado,Javier Dorado Bielsa,46.15
+3366,Pereyra,Guillermo Ariel Pereyra,46.67
+3367,Tuni,Antoni Lluís Adrover Colom,20.00
+3368,Jordi,Jordi López Felpeto,41.67
+3369,Ibagaza,Ariel Miguel Santiago Ibagaza,38.89
+3370,Víctor C.,Víctor Casadesús Castaño,50.00
+3371,Ricardo Lopez,Ricardo López Felipe,78.79
+3372,Cuéllar,Carlos Javier Cuéllar Jiménez,38.89
+3373,Josetxo,José Romero Urtasun,38.46
+3374,Javier Flaño,Javier Flaño Bezunartea,68.57
+3375,Corrales,Enrique Corrales Martín,51.61
+3376,Raúl García,Raúl García Escudero,70.97
+3377,Puñal,Francisco Puñal Martínez,34.48
+3378,David López,David López Moreno,75.86
+3379,Delporte,Ludovic Delporte,66.67
+3380,Milosevic,Savo Milosevic,78.26
+3381,Penedo,Jaime Manuel Penedo Cano,40.00
+3382,Juantxo Elía,Juantxo Elía Vallejo,75.00
+3383,Cruchaga,César Cruchaga Lasa,59.26
+3384,Flaño,Miguel Flaño Bezunartea,35.71
+3385,Izquierdo,José Izquierdo Martínez,56.25
+3386,Juanlu,Juan Luis Gomez Lopez,44.44
+3387,Font,Héctor Font Romero,36.36
+3388,Iñaki Muñoz,Iñaki Muñoz Oroz,81.48
+3389,Valdo,Valmiro Lopes Rochacha,29.63
+3390,Soldado,Roberto Soldado Rillo,50.00
+3391,Romeo,Bernardo Daniel Romeo,38.46
+3392,Calatayud,Juan José Calatayud Sánchez,50.00
+3393,Oriol,Oriol Lozano Farran,41.67
+3394,Pablo Alfaro,Pablo Alfaro Armengot,72.73
+3395,Pinillos,Pablo Pinillos Caro,59.26
+3396,Luis Fernandez,Luis Fernández Gutiérrez,73.68
+3397,Colsa,Gonzalo Colsa Albendea,37.04
+3398,Matabuena,Sergio Matabuena Delgado,54.55
+3399,Munitis,Pedro Manuel Munitis Alvarez,40.00
+3400,Momo,Jerónimo Figueroa Cabrera,20.69
+3401,David Aganzo,David Aganzo Méndez,77.42
+3402,Rubén Castro,Ruben Castro Martin,77.42
+3403,Chavi Pascual,Carlos Xabier Pascual Luca de Tena,46.81
+3404,Garay,Ezequiel Marcelo Garay González,27.78
+3405,Rubén,Rubén González Rocha,40.00
+3406,Regragui,Hoalid Regragui,69.57
+3407,Neru,Francisco Borja Enrique Ayesa,24.24
+3408,Álvarez,Cristian Osvaldo Álvarez,45.16
+3409,Mora,José Moratón Taeño,36.36
+3410,Rubén García,Rubén García Martínez,72.73
+3411,Balboa,Javier Angel Balboa Osa,41.38
+3412,Felipe Melo,Felipe Melo De Carvalho,64.71
+3413,Óscar Serrano,Óscar Serrano Rodríguez,72.22
+3414,Juanjo,Juan José Expósito Ruiz,41.38
+3415,Toño,Antonio Rodríguez Martínez,26.67
+3416,Vitolo,Víctor José Añino Bermúdez,31.25
+3417,C. Portilla,Cristian Portilla Rodríguez,54.05
+3418,F. Marqués,José Fernando Marqués Martín,48.65
+3419,Raúl Martín,Raúl Martín Rodríguez,68.75
+3420,Riesgo,Asier Riesgo Unamuno,46.15
+3421,Jauregi,Igor Jauregi Iraola,53.85
+3422,Juanito,Juan Jesús Gutiérrez Robles,35.29
+3423,López Rekarte,Aitor López Rekarte,81.25
+3424,Jabier Garrido,Javier Garrido Behobide,70.27
+3425,Mikel Alonso,Mikel Alonso Olano,80.00
+3426,Aranburu,Mikel Aranburu Eizagirre,50.00
+3427,Xavi Prieto,Xabier Prieto Argarate,60.61
+3428,Fábio Felício,Fábio Alexandre Duarte Felício,60.47
+3429,Gari Uranga,Garikoitz Uranga Luluaga,62.86
+3430,Ansotegui,Jon Ansotegi Gorostola,51.61
+3431,Labaka,Mikel Labaka Zurriarain,41.38
+3432,Dani Cifuentes,Daniel Cifuentes Alfaro,75.68
+3433,Garitano,Gaizka Garitano Aguirre,51.61
+3434,Diego Rivas,Diego Rivas Gutiérrez,68.75
+3435,Novo,Álvaro Novo,53.33
+3436,Stevanovic,Dalibor Stevanovič,71.43
+3437,Rossato,Fabiano Adriano Rossato,46.67
+3438,Gerardo García,Gerardo García León,84.85
+3439,Kovacevic,Darko Kovačević,75.00
+3440,Díaz de Cerio,Inigo Diaz de Cerio Conejero,63.41
+3441,A. Palop,Andres Palop Cervera,51.85
+3442,Javi Navarro,Francisco Javier Vicente Navarro,54.55
+3443,Escudé,Julien Régis Paul Escudé,40.00
+3444,Adriano Correia,Adriano Correia Claro,83.33
+3445,Renato,Renato Dirnei Florêncio Santos,33.33
+3446,Maresca,Vincenzo Maresca,60.87
+3447,Daniel Alves,Daniel Alves Da Silva,72.73
+3448,Jesús Navas,Jesús Navas González,70.97
+3449,Chevanton,Ernesto Javier Chevantón Espinosa,42.86
+3450,Luís Fabiano,Luis Fabiano Clemente,72.73
+3451,Cobeño,David Cobeño Iglesias,44.44
+3452,Aitor Ocio,Aitor Ocio Carrión,71.43
+3453,Pablo Ruíz,Pablo Ruiz Barrero,71.43
+3454,David,David Castedo Escudero,37.04
+3455,Hinkel,Andreas Benjamin Hinkel,41.38
+3456,Martí,José Luis Martí Soler,38.46
+3457,Jesúli,Jesús Mora Nieto,45.45
+3458,Duda,Sérgio Paulo Barbosa Valente,12.50
+3459,Fernando Sales,Fernando José Sales de los Cobos,60.87
+3460,Kepa,Kepa Blanco González,33.33
+3461,Kanoute,Frédéric Oumar Kanouté,48.28
+3462,Puerta,Antonio,15.38
+3463,Raúl Albiol,Raul Albiol Tortajada,68.75
+3464,Del Horno,Asier Del Horno Cosgaya,56.25
+3465,Baraja,Rubén Baraja Vegas,50.00
+3466,David Silva,David Josue Jiménez Silva,61.11
+3467,Tavano,Francesco Tavano,54.55
+3468,Butelle,Ludovic Jean-Luc Butelle,45.16
+3469,D. Navarro,David Navarro Pedrós,62.07
+3470,Curro Torres,Cristóbal Emilio Torres Ruiz,50.00
+3471,Moretti,Emiliano Moretti,60.87
+3472,Edu Gaspar,Eduardo César Daude Gaspar,55.56
+3473,Regueiro,Mario Ignacio Regueiro Pintos,43.24
+3474,Gavilán,Jaime Gavilán Martinez,48.28
+3475,Vicente,Vicente Rodríguez Guillén,43.75
+3476,Angulo,Miguel Ángel Angulo Valderrey,34.29
+3477,Morientes,Fernando Morientes Sánchez,51.43
+3478,Juan Luis Mora,Juan Luis Mora Palacios,75.68
+3479,Cerra,David Cerrajería Rubio,37.04
+3480,Jorge López,Jorge López Montaña,73.33
+3481,G. Rodríguez,Gonzalo Javier Rodríguez,62.86
+3482,Quique Álvarez,enrique Álvarez sanjuán,64.86
+3483,Javi Venta,Javi Venta Javier Rodriguez Venta,46.51
+3484,Arruabarrena,Rodolfo Martín Arruabarrena,61.54
+3485,Cani,Rubén Gracia Calmache,16.00
+3486,Pirès,Robert Emmanuel Pirès,38.46
+3487,José Mari,José María Romero Poyón,56.25
+3488,Barbosa,Mariano Damián Barbosa,48.28
+3489,Juan Carlos,Juan Carlos Sánchez Martínez,56.41
+3490,Juan M. Peña,Juan Manuel Peña,81.48
+3491,Josemi,José Miguel González Rey,40.00
+3492,José Enrique,José Enrique Sánchez Díaz,64.86
+3493,Tacchinardi,Alessio Tacchinardi,73.33
+3494,Josico,José Joaquín Moreno Verdú,32.26
+3495,Marcos,Marcos García Barreno,44.44
+3496,David Fuster,David Fuster Torrijos,72.73
+3497,Nihat,Nihat Kahveci,55.56
+3498,Jonathan P.,Jonathan Pereira Rodríguez,55.56
+3499,César Sánchez,César Sánchez Domínguez,72.22
+3500,Sergio,Sergio González Poirrier,40.00
+3501,Ponzio,Leonardo Daniel Ponzio,42.86
+3502,Juanfran,Juan Francisco García García,44.44
+3503,Zapater,Alberto Zapater Arjol,50.00
+3504,Celades,Albert Celades Lopez,51.85
+3505,Óscar,Óscar Javier González Marcos,30.30
+3506,D'alessandro,Andrés Nicolás D'Alessandro,61.54
+3507,Ewerthon,Ewerthon Henriquede Souza,48.48
+3508,D. Milito,Diego Alberto Milito,57.14
+3509,Miguel Martínez,Miguel Martinez de Corta,76.92
+3510,César Jiménez,César Jiménez Jiménez,76.47
+3511,Gerard Piqué,Gerard Pique Bernabeu,72.73
+3512,Chus Herrero,Jesús María Herrero Gómez,54.05
+3513,Cuartero,Luis Carlos Cuartero Lafarga,44.44
+3514,Aranzabal,Agustín Aranzabal,69.23
+3515,Movilla,José María Movilla Cubero,43.75
+3516,Lafita,Ángel Lafita Castillo,44.44
+3517,Sergio García,Sergio García de la Fuente,66.67
+3518,Proto,Sylvestro Proto,50.00
+3519,Deschacht,Olivier Deschacht,69.23
+3520,Vanderhaeghe,Yves Vanderhaeghe,82.76
+3521,Biglia,Lucas Rodrigo Biglia,46.15
+3522,Legear,Jonathan Fernand Jean Legear,35.29
+3523,Zitka,Daniel Zitka,58.82
+3524,Schollen,Davy Schollen,76.19
+3525,Van Steenberghe,Jan Van Steenberghe,88.24
+3526,Ofoe,Vadis Odjidja-Ofoe,36.36
+3527,Tiote,Cheick Ismaël Tioté,41.67
+3528,De Man,Mark De Man,70.59
+3529,Lamah,Roland Conde Lamah,43.48
+3530,Ahmed Hassan,Ahmed Hassan Kamel Hussein,63.16
+3531,Boussoufa,Mbark Boussoufa,75.00
+3532,Frutos,Nicolás Alejandro Frutos Cortino,31.58
+3533,Allagui,Sami Allagui,73.68
+3534,Siani,Sebastien Siani,50.00
+3535,Maertens,Birger Maertens,69.57
+3536,Valgaeren,Joos Valgaeren,78.26
+3537,P. Clement,Philippe Clement,72.00
+3538,Gvozdenovic,Ivan Gvozdenović,81.48
+3539,Vermant,Sven Vermant,73.68
+3540,Dufer,Gregory Dufer,55.56
+3541,Verbauwhede,Glenn Verbauwhede,78.57
+3542,Klukowski,Michaël Klukowski,69.23
+3543,De Cock,Olivier De Cock,63.64
+3544,Vermeulen,Jorn Vermeulen,78.26
+3545,Roelandts,Kevin Roelandts,75.00
+3546,Blondel,Jonathan Blondel,60.87
+3547,Englebert,Gaëtan Englebert,72.00
+3548,Yulu-Matondo,Jeanvion Yulu-Matondo,72.73
+3549,Ishiaku,Manasseh Ishiaku,60.87
+3550,Ibrahim,Salou Ibrahim,70.00
+3551,Chávez,Daniel Mackensi Chávez Castillo,32.43
+3552,Lenaerts,Yves Lenaerts,76.19
+3553,Vandelannoite,Jason Lee Vandelannoite,72.22
+3554,Dreesen,Timothy Dreesen,63.64
+3555,Mustapha Diallo,Moustapha Elhadji Diallo,76.92
+3556,Blazek,Jaromir Blazek,60.00
+3557,Lukas,Petr Lukas,66.67
+3558,Repka,Tomas Repka,62.50
+3559,Kadlec,Michal Kadlec,63.16
+3560,Sivok,Tomas Sivok,62.50
+3561,Sylvestre,Ludovic Sylvestre,69.23
+3562,Matusovic,Miroslav Matusovic,66.67
+3563,Jun,Tomas Jun,50.00
+3564,Grigar,Tomas Grigar,66.67
+3565,Zlamal,Zdenek Zlamal,63.16
+3566,Drobny,Vaclav Drobny,63.16
+3567,Homola,Jiri Homola,70.59
+3568,Pospech,Zdenek Pospech,66.67
+3569,Hasek,Martin Hasek,58.82
+3570,Herzan,Ondrej Herzan,63.16
+3571,Simak,Jan Simak,71.43
+3572,Dosek,Libor Dosek,62.50
+3573,Kolar,Daniel Kolar,58.82
+3574,Slepicka,Miroslav Slepicka,64.00
+3575,Jungr,Marek Jungr,62.50
+3576,Kona,Tomáš Kóňa,57.14
+3577,Silberbauer,Michael Kappelgaard Silberbauer,52.38
+3578,Bernburg,Martin Løfqvist Bernburg,50.00
+3579,Gall,Benny Gall,57.14
+3580,Villadsen,Thomas Skamby Villadsen,56.25
+3581,Fearrington,Jamil James Fearrington,64.71
+3582,Thomassen,Dan Vesterby Thomassen,58.06
+3583,Hutchinson,Atiba Hutchinson,76.92
+3584,Nikolaj Hansen,Nikolaj Steen Hansen,82.35
+3585,Wendt,Oscar Wendt,62.50
+3586,Kvist,William Vitved Kvist,40.00
+3587,Brandrup,Jeppe Feldsted Brandrup,51.61
+3588,Bergvold,Martin Bergvold,69.57
+3589,Bertolt,Morten Bertolt Andersen,46.67
+3590,Berglund,Fredrik Berglund,66.67
+3591,Rensing,Michael Rensing,63.64
+3592,Ismaël,Valérien Ismaël,57.14
+3593,Lahm,Wireless-Lahm,47.06
+3594,Demichelis,Martín Gastón Demichelis,58.82
+3595,Deisler,Sebastian Deisler,58.33
+3596,Schweinsteiger,Bastian Schweinsteiger,77.78
+3597,Karimi,Mohammad Ali Karimi Pashaki,36.36
+3598,Makaay,Roy Makaay,75.00
+3599,Dreher,Bernd Dreher,66.67
+3600,Ottl,Andreas Ottl,50.00
+3601,Fürstner,Stephan Fürstner,66.67
+3602,Görlitz,Andreas Görlitz,63.64
+3603,Salihamidzic,Hasan Salihamidzic,80.00
+3604,Scholl,Mehmet Tobias Scholl,46.15
+3605,Podolski,Łukasz Józef Podolski,57.14
+3606,Lell,Christian Lell,44.44
+3607,Kostoulas,Thanasis Kostoulas,66.67
+3608,Domi,Didier Arsène Marcel Aissa Domi,22.86
+3609,Stoltidis,Ieroklis Stoltidis,66.67
+3610,Rivaldo,Rivaldo Vítor Borba Ferreira,40.00
+3611,Okkas,Giannis Okkas,55.56
+3612,Nery Castillo,Nery Alberto Castillo Confalonieri,55.32
+3613,Lemmens,Erwin Lemmens,70.00
+3614,Ouaddou,Abdeslam Ouaddou,60.87
+3615,Pantos,Tasos Pantos,66.67
+3616,Bulut,Erol Bulut,66.67
+3617,Georgatos,Grigoris Georgatos,66.67
+3618,Milos Maric,Milos Maric,100.00
+3619,H. Babangida,Haruna Babangida,81.48
+3620,Dani García,Daniel García Lara,75.86
+3621,Konstantinou,Michalis Konstantinou,72.73
+3622,Giannou,Kleopas Giannou,63.64
+3623,Panagopoulos,Leonidas Panagopoulos,72.73
+3624,Patsatzoglou,Christos Patsatzoglou,72.73
+3625,Taralidis,Giannis Taralidis,69.23
+3626,Né,Marco Taddei Né,23.53
+3627,Hovhannisyan,Zhora Hovhannisyan,80.00
+3628,Fakinos,Giannoulis Fakinos,56.00
+3629,Pappas,Charis Pappas,63.16
+3630,Galinovic,Mario Galinović,75.00
+3631,Antonsson,Mikael Antonsson,72.00
+3632,Darlas,Filippos Darlas,57.14
+3633,Bovio,Ricardo Bóvio de Souza,37.04
+3634,Biscan,Igor Bišćan,70.59
+3635,E. González,Ezequiel Gonzalez,74.07
+3636,S. Romero,Sebastián Ariel Romero,53.33
+3637,Ebede,Pierre Romain Owono Ebéde,33.33
+3638,Tzorvas,Alexandros Tzorvas,56.00
+3639,Kotsios,Ilias Kotsios,70.00
+3640,Andric,Srdjan Andric,63.16
+3641,Víctor,Víctor Sánchez del Amo,42.86
+3642,Mikael Nilsson,Mikael Nilsson,100.00
+3643,Theodoridis,Giorgos Theodoridis,73.33
+3644,Tziolis,Alexandros Tziolis,56.00
+3645,Leontiou,Sotiris Leontiou,66.67
+3646,De Lima Freitas,José Ramalho Carvalho de Freitas,42.55
+3647,Charalambides,Konstantinos Charalabidis,57.89
+3648,Sanmartean,Lucian Iulian Sânmărtean,58.82
+3649,R. Kovac,Robert Kovač,73.68
+3650,Zébina,Jonathan Zebina,57.14
+3651,Chiellini,Giorgio Chiellini,69.23
+3652,C. Zanetti,Cristiano Zanetti,69.23
+3653,Giannichedda,Giuliano Giannichedda,72.73
+3654,Mirante,Antonio Mirante,63.64
+3655,Legrottaglie,Nicola Le Grottaglie,75.00
+3656,Tudor,Igor Tudor,66.67
+3657,Piccolo,Felice Piccolo,66.67
+3658,Balzaretti,Federico Balzaretti,68.97
+3659,Birindelli,Alessandro Birindelli,64.52
+3660,Paro,Matteo Paro,53.33
+3661,Marchionni,Marco Marchionni,76.92
+3662,Palladino,Raffaele Palladino,66.67
+3663,Sculli,Giuseppe Sculli,57.14
+3664,Masiello,Andrea Masiello,69.57
+3665,Bartolucci,Giovanni Bartolucci,68.97
+3666,Chiumiento,Davide Chiumiento,74.07
+3667,Guzman,Gaetán Tomas Guzmán,48.00
+3668,Volpato,Rej Volpato,77.78
+3669,Hirschfeld,Lars Justin Hirschfeld,62.50
+3670,Kvarme,Bjørn Tore Kvarme,52.17
+3671,Riseth,Vidar Riseth,66.67
+3672,Basma,Ole Christer Basma,43.48
+3673,Dorsin,Mikael Frank Dorsin,48.00
+3674,R. Strand,Roar Strand,84.21
+3675,Skjelbred,Per Ciljan Skjelbred,62.07
+3676,Storflor,Øyvind Storflor,72.73
+3677,Hansen,Alexander Lund Hansen,44.44
+3678,Koppinen,Miika Johannes Koppinen,51.61
+3679,Nordvik,Andreas Kristoffer Nordvik,42.42
+3680,Stensaas,Ståle Stensaas,72.73
+3681,Tettey,Alexander Banor Tettey,42.86
+3682,Berg,Frode Berg,57.14
+3683,Hyka,Jahmir Hyka,53.33
+3684,Jamtfall,Michael Kleppe Jamtfall,51.61
+3685,Yssouf Kone,Yssouf Koné,100.00
+3686,Moretto,Marcelo Moretto de Souza,45.16
+3687,Anderson Cléber,Anderson Cléber Beraldo,78.95
+3688,Nélson,Nélson Augusto Tomar Ramos,37.50
+3689,Léo,Leonardo Lourenço Bastos,22.22
+3690,Rui Costa,Rui Manuel César Costa,58.06
+3691,Miccoli,Fabrizio Miccoli,60.87
+3692,José Moreira,Jose Filipe da Silva Moreira,60.00
+3693,Alcides Eduardo,Alcides Eduardo Mendes De Araujo Alves,56.60
+3694,Ricardo Rocha,Ricardo Sérgio Rocha-Azevedo,63.41
+3695,Beto Santos,Gilberto Galdino dos Santos,57.89
+3696,Marco Ferreira,Marco Ferreira,100.00
+3697,Paulo Jorge,Paulo Jorge Vieira Alves,62.86
+3698,Manu,Emanuel de Jesus Bonfim Evaristo,22.22
+3699,Nuno Assis,Nuno Assis Lopes de Almeida,54.05
+3700,Marcel,Marcel Augusto Ortolan,42.86
+3701,Tiago Gomes,Tiago Henrique Damil Gomes,59.46
+3702,Miguelito,José Miguel Organista Simões Aguiar,40.91
+3703,Diego,Diego Lindbergh Tinoco Freire,29.41
+3704,João Coimbra,João Carlos Amaral Marques Coimbra,52.17
+3705,Vítor Baía,Vitor Manuel Martins Baia,57.14
+3706,Bosingwa,José Bosingwa da Silva,53.33
+3707,Pepe,Kepler Laveran de Lima Ferreira,17.14
+3708,Pedro Emanuel,Pedro Emanuel Santos Martins Silva,55.32
+3709,Paulo Assunçao,Paulo Assunção Da Silva,75.68
+3710,Raúl Meireles,Raúl José Trindade Meireles,65.00
+3711,Anderson,Anderson Luís De Abreu Oliveira,41.03
+3712,Quaresma,Ricardo Andrade Quaresma Bernardo,39.02
+3713,Tarik,Tarik Sektioui,52.63
+3714,Alan,Alan Osório Da Costa Silva,26.67
+3715,Helton,Helton Da Silva Arruda,42.86
+3716,Bruno Alves,Bruno Eduardo Regufe Alves,59.46
+3717,Ibson,Ibson Barreto da Silva,37.04
+3718,Jorginho,Jorge Luiz Pereira de Sousa,34.29
+3719,Diogo Valente,Diogo Jorge Moreno Valente,66.67
+3720,Vieirinha,Adelino André Vieira de Freitas,35.00
+3721,Adriano Vieira,Adriano Vieira Louzada,77.78
+3722,Lisandro López,Lisandro López,100.00
+3723,Sokota,Tomislav Sokota,57.14
+3724,Paulo Ribeiro,Paulo António Silva Ribeiro,65.00
+3725,João Paulo,João Paulo Andrade,71.43
+3726,Ezequias,Ezequias Roosevelt Tavares De Melo,38.10
+3727,Bruno Moraes,Bruno Dos Santos Moraes,68.57
+3728,Tonel,António Leonel Vilar Nogueira de Sousa,23.26
+3729,Anderson Polga,Anderson Corrêa Polga,80.00
+3730,Abel,Abel Fernando Moreira Ferreira,23.53
+3731,Tello,Rodrigo Alvaro Tello Valenzuela,27.78
+3732,Custódio,Custódio Miguel Dias Castro,45.71
+3733,João Moutinho,João Filipe Iria Santos Moutinho,57.78
+3734,João Alves,João Artur Rosa Alves,64.52
+3735,Romagnoli,Leandro Atilio Romagnoli,54.55
+3736,Deivid,Deivid De Souza,57.14
+3737,Liédson,Liédson Da Silva Muniz,48.28
+3738,Tiago Ferreira,Tiago Alexandre Baptista Ferreira,59.57
+3739,Rui Patrício,Rui Pedro dos Santos Patrício,58.54
+3740,Miguel Veloso,Miguel Luis Pinto Veloso,70.27
+3741,Miguel Garcia,Miguel Ângelo Moita Garcia,66.67
+3742,Ronny,Ronny Heberson Furtado De Araújo,27.03
+3743,Farnerud,Hans Pontus Farnerud,57.14
+3744,Carlos Martins,Carlos Jorge Neto Martins,71.79
+3745,Nani,Luís Carlos Almeida da Cunha,12.50
+3746,Bueno,Carlos Heber Bueno Suárez,33.33
+3747,Djaló,Yannick dos Santos Djaló,34.48
+3748,McManus,Stephen David Mc Manus,48.28
+3749,Telfer,Paul Norman Telfer,50.00
+3750,Wilson,Mark Wilson,70.59
+3751,Neil Lennon,Neil Francis Lennon,73.33
+3753,John Kennedy,John Kennedy,100.00
+3754,Balde,Dianbobo Baldé,52.63
+3755,Lawson,Paul William Lawson,48.00
+3756,Thompson,Alan Thompson,76.19
+3757,Sno,Evander Sno,42.86
+3758,Pearson,Stephen Paul Pearson,51.85
+3759,Jarosík,Jiri Jarosik,73.68
+3760,McGeady,Aiden John Mc Geady,53.85
+3761,Beattie,Craig Beattie,70.00
+3762,Varga,Stanislav Varga,50.00
+3763,Virgo,Adam John Virgo,50.00
+3764,Mohammed Camara,Mo Camara,75.00
+3765,Wallace,Ross Wallace,73.68
+3766,McGregor,Allan James Mc Gregor,55.17
+3767,J. Rodriguez,Julien Rodriguez,81.48
+3768,Hutton,Alan Hutton,70.59
+3769,Steven Smith,Steven Smith,100.00
+3770,Hemdani,Brahim Hemdani,66.67
+3771,Jérémy Clement,Jeremy Clement,100.00
+3772,Prso,Miladin Prso,50.00
+3773,Klos,Stefan Klos,53.33
+3774,Letizi,Lionel Letizi,63.16
+3775,Ponroy,Antoine Ponroy,60.00
+3776,Bardsley,Phillip Anthony Bardsley,50.00
+3777,G. Rae,Gavin Paul Rae,52.63
+3778,Charlie Adam,Charles Graham Adam,70.97
+3779,Burke,Christopher Robert Burke,34.48
+3780,Makhtar N'Diaye,Amadou Makhtar N'Diaye,81.08
+3781,Stanger,William Stanger,63.64
+3782,Nacho Novo,Ignacio Javier Gomez Novo,51.43
+3783,Pierre Fanfan,José-Karl Pierre-Fanfan,72.22
+3784,Bernard,Olivier Bernard,63.64
+3785,Malcolm,Robert Malcolm,66.67
+3786,Ricksen,Fernando Ricksen,60.87
+3787,Touray,Pa Dembo Touray,57.14
+3788,Johannesson,Markus Johannesson,75.86
+3789,Concha,Hernán Matías Arsenio Concha,35.29
+3790,Stoltz,Robert Stoltz,63.16
+3791,Barsom,Abgar Barsom,66.67
+3792,Arneng,Johan Arneng,66.67
+3793,Magro,Feliciano Magro,50.00
+3794,Hysén,Glenn Tobias Hysén,43.48
+3795,Kusi Asare,Jones Kusi-Asare,76.92
+3796,Wahlström,Oskar Wahlström,75.00
+3797,Storm,Elias Storm,62.50
+3798,Ottesen,Sölvi Geir Ottesen Jónsson,42.42
+3799,Rasck,Niklas Rasck,58.82
+3800,Boskailo,Dennis Boskailo,69.57
+3801,Bergtoft,Stefan Bergtoft,69.57
+3802,Árnason,Kári Árnason,73.68
+3803,Batan,Stefan Batan,58.82
+3804,Lance Davids,Lance Davids,100.00
+3805,Thiago Quirino,Thiago Quirino Da Silva,75.68
+3806,Enrico Cardoso,Enrico Cardoso Nazaré,80.00
+3807,Runje,Vedran Runje,58.82
+3808,Gökhan Zan,Gökhan Zan,100.00
+3809,Mustafa Koray,Mustafa Koray Avcı,86.67
+3810,Uzülmez,ibrahim Üzülmez,63.64
+3811,Fahri Tatan,Fahri Tatan,100.00
+3812,Yilmaz,Burak Yılmaz,55.56
+3813,Matías Delgado,Matías Emilio Delgado,80.00
+3814,Gökhan Gülec,Gökhan Güleç,100.00
+3815,Marcio Nobre,Márcio Ferreira Nobre,72.73
+3816,Kursunlu,Ramazan Kurşunlu,66.67
+3817,Murat Sahin,Murat Şahin,100.00
+3818,Dogan,Mustafa Doğan,55.56
+3819,Kurtulus,Serdar Kurtulus,69.57
+3820,Mercimek,Baki Mercimek,76.19
+3821,Mehmet Sedef,Mehmet Seyfettin Sedef,70.59
+3822,Ali Tandogan,Ali Tandogan,100.00
+3823,Karabulut,Aydın Karabulut,75.00
+3824,Günes,Ali Mehmet Güneş,47.62
+3825,Kléberson,José Kléberson Pereira,58.06
+3826,Kenan Özer,Kenan Özer,100.00
+3827,Bobô,Deyvison Rogério Da Silva,13.79
+3829,Emre Ozkan,Emre Ozkan,100.00
+3830,Can Arat,Can Arat,100.00
+3831,Onder Turaci,Onder Turaci,100.00
+3832,Mehmet Aurelio,Marco Aurélio Brito Dos Prazeres,39.13
+3833,Alex de Souza,Alexandro Quaresma De Souza,65.00
+3834,Semih,Semih Şentürk,55.56
+3835,Kulbilge,Serdar Kulbilge,69.57
+3836,Luciano,Fábio Luciano,70.00
+3837,Baris,Deniz Baris,62.50
+3838,Kemal,Kemal Aslan,62.50
+3839,Adin,Olcan Adın,42.86
+3840,Boral,Uğur Boral,66.67
+3841,Gürsoy,Gürhan Gürsoy,63.16
+3842,Zafer Biryol,Zafer Biryol,100.00
+3843,Mehmet Yozgatli,Mehmet Yozgatlı,96.55
+3844,Zengin,Kerim Zengin,66.67
+3845,Mondragon,Faryd Camilo Mondragón Aly,51.43
+3846,Cihan H.,Cihan Haspolatlı,63.64
+3847,Orhan Ak,Orhan Ak,100.00
+3848,Volkan Arslan,Volkan Arslan,100.00
+3849,Sabri,Speedy Gonzales,20.00
+3850,Hasan Sas,Hasan Gökhan Şaş,72.00
+3851,Ümit Karan,Ümit Karan,100.00
+3852,Aykut Ercetin,Aykut Erçetin,100.00
+3853,Yalçin Ayhan,Yalçın Ayhan,91.67
+3854,Ugur Uçar,Uğur Uçar,100.00
+3855,Ergün Penbe,Ergün Penbe,100.00
+3856,Mehmet Güven,Mehmet Güven,100.00
+3857,Mulayim Erdem,Mülayim Erdem,100.00
+3858,Ayhan Akman,Ayhan Akman,100.00
+3859,Aydin Yilmaz,Aydın Yılmaz,83.33
+3860,Cafercan Aksu,Cafercan Aksu,100.00
+3861,Hakan Sükür,hakan Şükür,100.00
+3862,Hasan Kabze,Hasan Salih Kabze,78.57
+3863,Fevzi Elmas,Fevzi Elmas,100.00
+3864,Emre Asik,Emre Aşık,88.89
+3865,Emrah Umut,Emrah Umut,100.00
+3866,Ferhat Öztorun,Ferhat Öztorun,100.00
+3867,Zafer Sakar,Zafer Sakar,100.00
+3869,Arda Turan,Arda Turan,100.00
+3870,Ozgurcan Ozcan,Özgür can Özcan,96.55
+3871,Fedorov,Fedorov Serhiy Vladyslavovych,38.89
+3872,Eschenko,Andréi Olégovich Yéschenko,47.06
+3873,El Kaddouri,Badr El Kaddouri,81.48
+3874,Belkevich,Valentin Belkevich,66.67
+3875,Kleber,Kléber Giacomace De Sousa Freitas,30.77
+3876,Lutsenko,Lutsenko Taras Volodymyrovych,43.24
+3877,Rodolfo,Rodolfo Bispo Dantas,51.85
+3878,Rodrigo,Rodrigo Baldasso Da Costa,43.75
+3879,Mikhalik,Taras Volodymyrovych Mykhalyk,32.43
+3880,Diogo Rincón,Diogo Augusto Pacheco da Fontoura,40.00
+3881,Chernat,Florin Cernat,60.00
+3882,Shatskikh,Shatskykh Maxym Olexandrovych,42.11
+3883,Martsvaladze,Otar Martsvaladze,82.76
+3884,Reva,Reva Vitaliy Grygorovych,28.57
+3885,Sablic,Goran Sablić,66.67
+3886,Irimia,Cristian Irimia,57.14
+3887,Peev,Georgi Ivanov Peev,36.36
+3888,Dedechko,Dedechko Denys Mykhaylovych,45.71
+3889,Aliyev,Oleksandr Aliev,47.62
+3890,M. Silvestre,Matías Agustín Silvestre,62.86
+3891,Daniel Díaz,Daniel Alberto Díaz,73.33
+3892,Ibarra,Hugo Benjamín Ibarra,46.15
+3893,Krupoviesa,Juan Ángel Krupoviesa,64.52
+3894,Gago,Fernando Rubén Gago,34.78
+3895,Battaglia,Sebastián Alejandro Battaglia,47.37
+3896,Neri Cardozo,Neri Raúl Cardozo,82.76
+3897,Palermo,Martin Palermo,66.67
+3898,Migliore,Pablo Alejandro Migliore,50.00
+3899,Maidana,Jonathan Ramón Maidana,48.28
+3900,Morel Rodríguez,Claudio Marcelo Morel Rodríguez,65.22
+3901,Calvo,José María Calvo,47.62
+3902,Pablo Ledesma,Pablo Martín Ledesma,78.79
+3903,Marino,Guillermo Andrés Marino,41.38
+3904,Schelotto,Guillermo Barros Schelotto,51.43
+3905,Delgado,Marcelo Alejandro Delgado,43.75
+3906,Lux,Germán Darío Lux,31.58
+3907,Tuzzio,Eduardo Nicolas Tuzzio,42.86
+3908,Gerlo,Danilo Telmo Gerlo,43.48
+3909,Paulo Ferrari,Paulo Andrés Ferrari,78.79
+3910,Mareque,Lucas Armando Mareque,50.00
+3911,Marcelo Sosa,Marcelo Fabián Sosa Farías,63.16
+3912,Zapata,Víctor Eduardo Zapata,44.44
+3913,Gallardo,Marcelo Daniel Gallardo,51.61
+3914,Farías,Ernesto Antonio Farías,42.86
+3915,Falcao García,Radamel Falcao García Zárate,63.41
+3916,Carrizo,Juan Pablo Carrizo,56.00
+3917,Talamonti,Leonardo José Talamonti,56.25
+3918,Lussenhoff,Federico Guillermo Lussenhoff,51.28
+3919,Domínguez,Federico Hernán Domínguez,52.94
+3920,C. Álvarez,Cristián Andrés Alvarez Valenzuela,41.86
+3921,Lima,René Martín Lima,40.00
+3922,Higuaín,Gonzalo Gerardo Higuaín,46.67
+3923,Sambueza,Rubens Oscar Sambueza,55.17
+3924,Ahumada,Oscar Adrian Ahumada,51.85
+3925,Pusineri,Lucas Andrés Pusineri,55.17
+3926,Ortega,Ariel Arnaldo Ortega,46.15
+3927,L. Figueroa,Luciano Gabriel Figueroa Herrera,47.62
+3928,Nasuti,Cristian Javier Nasuti,42.86
+3929,Domingo,Nicolás Mario Domingo,50.00
+3930,Toja,Juan Carlos Toja Vega,32.00
+3931,A. Fernández,Augusto Matías Fernández,62.86
+3932,Almenares,Federico Almerares,59.26
+3933,Abán,Gonzalo Daniel Abán,34.78
+3935,Edcarlos,Edcarlos Conceição Santos,48.48
+3936,André Dias,AndréGonçalves Dias,68.97
+3937,Fabao,José Fábio Alves de Azevedo,31.25
+3938,Josué,JosuéAnunciado de Oliveira,32.26
+3939,Junior,jenílson Ângelo de souza,26.67
+3940,Danilo,Danilo Gabriel De Andrade,38.71
+3941,Aloísio,Aloísio Joséda Silva,51.85
+3942,Rodrigo Fabri,Rodrigo Fabri,100.00
+3943,Bosco,João Bosco De Freitas Chaves,30.30
+3944,Bruno de Souza,Bruno Fernandes das Dores de Souza,58.33
+3945,Alex Bruno,Alex Bruno Costa Fernandes,55.56
+3946,Alex Silva,Alex Sandro da Silva,66.67
+3947,Denílson P.,Denílson Pereira Neves,62.50
+3948,Ramalho,José Ramalho Carvalho De Freitas,35.90
+3949,Richarlyson,Richarlyson Barbosa Felisbino,55.00
+3950,Souza,Williamis De Souza Silva,34.48
+3951,Lenílson,Lenílson Batista de Jesus,48.48
+3952,Alex Dias,Alex Dias Almeida,69.23
+3953,Leandro,Leandro Lessa Azevedo,50.00
+3954,Como,Original de KONAMI,18.18
+3955,Ranow,Original de KONAMI,26.09
+3956,Sariw,Original de KONAMI,17.39
+3957,Virota,Original de KONAMI,25.00
+3958,Nzom Gole,Original de KONAMI,22.22
+3959,Sirojuntle,Original de KONAMI,21.43
+3960,Heycory,Original de KONAMI,16.00
+3961,Romaldinho,Original de KONAMI,35.71
+3962,Kondelenan,Original de KONAMI,28.57
+3963,Ciurmira,Original de KONAMI,23.08
+3964,Agata,Original de KONAMI,17.39
+3965,Rodiguez,Original de KONAMI,30.77
+3966,Houtmael,Original de KONAMI,15.38
+3967,De Kaam,Original de KONAMI,48.00
+3968,Kmou,Original de KONAMI,18.18
+3969,Azara,Original de KONAMI,17.39
+3970,Razetow,Original de KONAMI,32.00
+3971,Boyano,Original de KONAMI,25.00
+3972,Sarto,Original de KONAMI,17.39
+3973,Dogue,Original de KONAMI,17.39
+3974,Otam,Original de KONAMI,27.27
+3975,R. Acuna,Original de KONAMI,24.00
+3976,Metelger,Original de KONAMI,7.69
+3977,Van Heert,Original de KONAMI,14.81
+3978,Chigrat,Original de KONAMI,24.00
+3979,Sutto,Original de KONAMI,8.70
+3980,Cejumi,Original de KONAMI,25.00
+3981,Pjinatnigh,Original de KONAMI,35.71
+3982,Boanerm,Original de KONAMI,32.00
+3983,Cinu Santiku,Original de KONAMI,33.33
+3984,Marsatto,Original de KONAMI,7.69
+3985,Iujimano,Original de KONAMI,23.08
+3986,Alnenda,Original de KONAMI,32.00
+3987,Jaromton,Original de KONAMI,23.08
+3988,Footyn,Original de KONAMI,25.00
+3989,Rane,Original de KONAMI,27.27
+3990,Jig,Original de KONAMI,19.05
+3991,Nirimorf,Original de KONAMI,23.08
+3992,Ita,Original de KONAMI,19.05
+3993,Pas Chiton,Original de KONAMI,28.57
+3994,Fillco,Original de KONAMI,25.00
+3995,Lanalkiss,Original de KONAMI,37.04
+3996,Legus,Original de KONAMI,17.39
+3997,Bag,Original de KONAMI,9.52
+3998,Sazi,Original de KONAMI,18.18
+3999,Aunugi,Original de KONAMI,16.67
+4414,Ivarov,Original de KONAMI,25.00
+4415,Valeny,Original de KONAMI,33.33
+4416,Jaric,Original de KONAMI,17.39
+4417,Stremer,Original de KONAMI,24.00
+4418,Dodo,Original de KONAMI,18.18
+4419,Iouga,Original de KONAMI,26.09
+4420,Espimas,Original de KONAMI,16.00
+4421,Ximelez,Original de KONAMI,16.00
+4422,Minanda,Original de KONAMI,40.00
+4423,Ordaz,Original de KONAMI,34.78
+4424,Castolo,Original de KONAMI,16.00
+4425,Lothar,Original de KONAMI,25.00
+4426,Zamenhof,Original de KONAMI,15.38
+4427,Ceciu,Original de KONAMI,17.39
+4428,Libermann,Original de KONAMI,14.81
+4429,Ruskin,Original de KONAMI,25.00
+4430,Giersen,Original de KONAMI,32.00
+4431,Stein,Original de KONAMI,17.39
+4432,Macco,Original de KONAMI,8.70
+4433,Fouque,Original de KONAMI,16.67
+4434,Burchet,Original de KONAMI,16.00
+4435,Hamsun,Original de KONAMI,16.67
+4436,Huylens,Original de KONAMI,24.00
+4437,Kerlon,Kerlon Moura Souza,50.00
+4438,Roy Keane,Roy Keane,100.00
+4439,Kevin Phillips,Kevin Mark Phillips,84.85
+4440,Roger Milla,Roger Milla,100.00
+4441,A. Mostovói,Aleksandr Vladímirovich Mostovói,47.62
+4442,Álex Aguinaga,Alex Dario Aguinaga Garzon,66.67
+4443,Alen Boksic,Alen Boksic,100.00
+4444,Jamie Redknapp,Jamie Redknapp,100.00
+4445,Roberto Sensini,Nestor Roberto Sensini,81.08
+4446,Ian Rush,Ian Rush,100.00
+4447,Fernando Hierro,Fernando Ruíz Hierro,85.71
+4448,Iván Zamorano,Iván Luis Zamorano Zamora,68.42
+4449,Hugo Sánchez,Hugo Sánchez Márquez,75.00
+4450,Eusébio,Eusébio da Silva Ferreira,43.75
+4451,Giovane Élber,Giovane Élber de Souza,74.29
+4452,Edmundo,Edmundo Alves de Souza Neto,41.18
+4453,S. Effenberg,Stefan Effenberg,81.48
+4454,Enzo Scifo,Vincenzo Daniele Scifo,62.50
+4455,E. Francescoli,Enzo Francescoli,89.66
+4456,Oleg Blokhin,Oleg Blokhin,100.00
+4457,Garrincha,Manuel Francisco dos Santos,27.78
+4458,Valeri Karpin,Valeri Georgievich Karpin,68.42
+4459,C. Alberto,Carlos Alberto Gomes de Jesus,47.37
+4460,C. Valderrama,Carlos Alberto Valderrama Palacio,53.33
+4461,Gustavo Nery,Gustavo Nery de Sá da Silva,61.54
+4462,C. Caniggia,Claudio Caniggia,76.92
+4463,Claudio López,Claudio Javier Lopez,78.79
+4464,Clemente R.,Clemente Juan Rodríguez,60.61
+4465,Gheorghe Hagi,Gheorghe Hagi,100.00
+4466,G. Popescu,Gheorghe Popescu,72.00
+4467,Kenny Dalglish,Kenny Dalglish,100.00
+4468,Sándor Kocsis,Sándor Kocsis,100.00
+4469,Darío Silva,Debray Darío Silva Pereira,59.46
+4470,Zlatko Zahovic,Zlatko Zahovič,100.00
+4471,Marcelo Salas,Jose Marcelo Salas Melinao,66.67
+4472,B. Lizarazu,Bixente Jean-Michel Lizarazu,52.63
+4473,G. Giannini,Guiseppe Giannini,74.07
+4474,J. Paulista,Oswaldo Giroldo Júnior,18.75
+4475,George Weah,George Weah,100.00
+4476,George Best,George Best,100.00
+4477,Josep Guardiola,Josep Guardiola i Sala,81.08
+4478,Zvonimir Boban,Zvonimir Boban,100.00
+4479,Ciriaco Sforza,Ciriaco Sforza,100.00
+4480,Franklin Salas,Franklin Agustín Salas Narváez,63.64
+4481,Sergi Barjuan,Sergi Barjuán Esclusa,76.47
+4482,Davor Suker,Davor Suker,100.00
+4483,A. Di Stéfano,Alfredo Di Stefano,80.00
+4484,Diego Simeone,Diego Simeone,100.00
+4485,Denis Law,Denis Law,100.00
+4486,Dejan Savicevic,Dejan Savićević,100.00
+4487,Dragan Dzajic,Dragan Dzajic,100.00
+4488,Thomas Ravelli,Thomas Ravelli,100.00
+4489,Tony Yeboah,Anthony Yeboah,88.00
+4490,Tomas Brolin,Tomas Brolin,100.00
+4491,D. Stojkovic,Dragan Stojković,81.48
+4492,Paolo Montero,Ronald Paolo Montero Iglesias,61.90
+4493,Paulo Sousa,Paulo Manuel Carvalho de Sousa,53.66
+4494,Vágner Love,Vágner Silva De Souza,56.25
+4495,P. Andersson,Patrick Andersson,78.57
+4496,Patrick M'Boma,Patrick M'bomma,96.55
+4497,K. Balakov,Krassimir Balakov,69.23
+4498,M. Delvecchio,Marco Delvecchio,85.71
+4499,P. Schmeichel,Peter Schmeichel,85.71
+4500,G. Lentini,Gianluigi Lentini,69.23
+4501,F. Cavenaghi,Fernando Ezequiel Cavenaghi,57.89
+4502,Ferenc Puskás,Ferenc Puskás,100.00
+4503,E. Butragueño,Emilio Butragueño Santos,66.67
+4504,Brian Laudrup,Brian Laudrup,100.00
+4505,Fran,Francisco Javier González Pérez,22.86
+4506,Frank de Boer,Franciscus de Boer,77.42
+4507,H. Stoichkov,Hristo Stoichkov,81.48
+4508,Freddy Adu,Fredua Koranteng Adu,53.33
+4509,P. Mijatovic,Predrag Mijatovic,78.57
+4510,Billy Bremner,William Bremner,78.57
+4511,Thomas Hässler,Thomas Hässler,100.00
+4512,K. Andersson,Daniel Andersson,74.07
+4513,José Cardozo,José Saturnino Cardozo Otazú,60.00
+4514,José M. Bakero,Jose Maria Bakero,86.67
+4515,J. Chilavert,José Luis Félix Chilavert González,48.89
+4516,René Higuita,José René Higuita Zapata,66.67
+4517,Romário,Romário de Souza Faria,48.28
+4518,Jorge Campos,Jorge Francisco Campos Navarrete,54.55
+4519,Mark Hughes,Mark Hughes,100.00
+4520,G. Signori,Giuseppe Signori,72.00
+4521,J. Vonlanthen,Johan Vonlanthen Benavidez,63.16
+4522,Marc Overmars,Marc Overmars,100.00
+4523,Marcel Desailly,Marcel Odenkey Abbey Desailly,68.18
+4524,Martin Dahlin,Martin Dahlin,100.00
+4525,Michael Laudrup,Michael Laudrup,100.00
+4526,Youri Djorkaeff,Youri Raffi Djorkaeff,83.33
+4527,A. Östlund,Jan Alexander Östlund,60.00
+4528,Matt Le Tissier,Matthew Le Tissier,90.91
+4529,Luis Enrique,Luis Enrique Martínez García,60.00
+4530,Lev Yashin,Lev Yashin,100.00
+4531,Alan Shearer,Alan Shearer,100.00
+4532,Dennis Bergkamp,Dennis Nicolaas Maria Bergkamp,66.67
+4533,Khodadad Azizi,Khodadad Azizi,100.00
+4534,F. Asprilla,Faustino Hernán Asprilla Hinestroza,44.44
+4535,Adrian Ilie,Adrian Bucurel Ilie,73.33
+4536,Allan Simonsen,Allan Simonsen,100.00
+4537,Andreas Herzog,Andreas Herzog,100.00
+4538,Íhor Belánov,Igor Belanov,91.67
+4539,Preben Elkjaer,Preben Elkjaer Larsen,80.00
+4540,Lucas Castromán,Lucas Martín Castromán,81.08
+4541,Dagoberto,Dagoberto Pelentier,64.29
+4542,Pat Jennings,Pat Jennings,100.00
+4543,Giovanni,Giovanni Silva De Oliveira,47.06
+4544,Djalminha,Djalma Feitosa Dias,50.00
+4545,S. Conceiçao,Marceneiro Paulo Sérgio Conceição,50.00
+4546,T. Begiristain,Aitor Beguiristain Mugica,68.42
+4547,Christian Ziege,Christian Ziege,100.00
+4548,Denis Irwin,Dennis Irwin,95.65
+4549,Falcao,Alessandro Rosa Vieira,28.57
+4550,Haim Revivo,Haim Revivo,100.00
+4551,Juan C. Henao,Juan Carlos Henao Valencia,63.16
+4552,Igor Protti,Igor Protti,100.00
+4553,Zbigniew Boniek,Zbigniew Boniek,100.00
+4554,Juan S. Verón,Juan Sebastián Verón Riquelme palermo,48.98
+4555,Magrao,Márcio Rodrigues,27.27
+4556,S. Matthews,Stanley Matthews,76.92
+4557,Marc-Vivien Foé,Marc Vivien Foe,100.00
+4558,M. Preud'homme,Michel Preud'homme,83.87
+4559,Luis Suárez M.,Luis Suárez Miramontes,74.29
+4560,Lucas Radebe,Lucas Radebe,100.00
+4561,Rubén Sosa,Rubén Sosa,100.00
+4562,C. Dugarry,Christophe Dugarry,66.67
+4563,Ronald de Boer,Ronaldus de Boer,93.33
+4564,Amedeo Carboni,Amedeo Carboni,100.00
+4565,S. Mihajlovic,Sinisa Mihajlovic,82.76
+4566,Rolando Zárate,Rolando Zárate,100.00
+4567,F. Ravanelli,Fabrizio Ravanelli,75.86
+4568,Jens Jeremies,Jens Jeremies,100.00
+4569,R. Prosinecki,Robert Prosinecki,82.76
+4570,Ciro Ferrara,Ciro Ferrara,100.00
+4571,Mauro Tassotti,Mauro Tassotti,100.00
+4572,Nilmar,Nilmar Honorato Da Silva,40.00
+4573,Mário Jardel,Mário Jardel Almeida Ribeiro,60.00
+4574,Jorge Costa,Jorge Manuel Guerreiro Soares,45.00
+4575,César Delgado,César Fabián Delgado Godoy,66.67
+4576,S. Shyshchenko,Serhiy Yuriyovych Shyshchenko,61.90
+4577,N. Winterburn,Nigel Winterburn,85.71
+4578,G. Pessotto,Gianluca Pessotto,74.07
+4579,Darren Anderton,Darren Anderton,100.00
+4580,M. Pochettino,Rodolfo Moises Graieb,18.18
+4581,Lee Dixon,Lee Michael Dixon,69.23
+4582,Mark Bosnich,Mark Schwarzer,61.54
+4583,D. Kühbauer,Dietmar Kühbauer,76.92
+4584,Niall Quinn,Niall Quinn,100.00
+4585,Jason McAteer,Jason Mc Ateer,96.30
+4586,M. Fernandes,Manuel Henrique Tavares Fernandes,50.00
+4587,Víktor Onopko,Víktor Savélievich Onopko,68.42
+4588,Sunday Oliseh,Sunday Oliseh,100.00
+4589,Taribo West,Taribo West,100.00
+4590,Jacques Songo'o,Jacques Célestin Songo'o,76.92
+4591,Tore André Flo,Tore André Flo,100.00
+4592,Denílson,Denílson Pereira Neves,53.33
+4593,Elvir Baljic,Elvir Baljić,100.00
+4594,C. Tiffert,Christian Tiffert,69.23
+4595,Mauro Silva,Mauro da Silva Gomes,70.97
+4596,Nigel Martyn,Nigel Howard Clough,51.61
+4597,Andrews,Original de KONAMI,16.00
+4598,Baker,Original de KONAMI,17.39
+4599,Carter,Original de KONAMI,16.67
+4600,Cooper,Original de KONAMI,16.67
+4601,Gibson,Original de KONAMI,33.33
+4602,Jackson,Original de KONAMI,32.00
+4603,Mitchell,Original de KONAMI,15.38
+4604,Murray,Original de KONAMI,8.33
+4605,Newman,Original de KONAMI,25.00
+4606,Reeves,Original de KONAMI,16.67
+4607,Rowland,Original de KONAMI,24.00
+4608,Shaw,Original de KONAMI,9.09
+4609,Simpson,Original de KONAMI,24.00
+4610,Walton,Original de KONAMI,33.33
+4611,Wilkins,Original de KONAMI,24.00
+4612,Wood,Original de KONAMI,18.18
+4613,Adam,Original de KONAMI,36.36
+4614,Andre,Original de KONAMI,17.39
+4615,Bouquet,Original de KONAMI,16.00
+4616,Clement,Original de KONAMI,24.00
+4617,Dupont,Original de KONAMI,25.00
+4618,Ettori,Original de KONAMI,25.00
+4619,Fernandez,Original de KONAMI,37.04
+4620,Guegan,Original de KONAMI,25.00
+4621,Jean,Original de KONAMI,18.18
+4622,Leclerc,Original de KONAMI,16.00
+4623,Marchand,Original de KONAMI,7.69
+4624,Martel,Original de KONAMI,8.33
+4625,Perrin,Original de KONAMI,25.00
+4626,Renard,Original de KONAMI,33.33
+4627,Riou,Original de KONAMI,27.27
+4628,Traore,Original de KONAMI,25.00
+4629,Barth,Original de KONAMI,8.70
+4630,Baumann,Original de KONAMI,16.00
+4631,Berger,Original de KONAMI,8.33
+4632,Dietrich,Original de KONAMI,15.38
+4633,Eckstein,Original de KONAMI,15.38
+4634,Fischer,Original de KONAMI,16.00
+4635,Hoffmann,Original de KONAMI,15.38
+4636,Holzer,Original de KONAMI,25.00
+4637,Kaiser,Original de KONAMI,25.00
+4638,Kremer,Original de KONAMI,16.67
+4639,Lindner,Original de KONAMI,32.00
+4640,Lorenz,Original de KONAMI,33.33
+4641,Schmidt,Original de KONAMI,16.00
+4642,Schwarz,Original de KONAMI,8.00
+4643,Wolf,Original de KONAMI,18.18
+4644,Bianchi,Original de KONAMI,32.00
+4645,Palmieri,Original de KONAMI,30.77
+4646,Arts,Original de KONAMI,9.09
+4647,Bos,Original de KONAMI,9.52
+4648,Doesburg,Original de KONAMI,15.38
+4649,Hoekstra,Original de KONAMI,30.77
+4650,Jacobs,Original de KONAMI,16.67
+4651,Koeman,Original de KONAMI,25.00
+4652,Kooistra,Original de KONAMI,23.08
+4653,Postma,Original de KONAMI,16.67
+4654,Van den Berg,Original de KONAMI,33.33
+4655,Van der Meer,Original de KONAMI,40.00
+4656,Camacho,Original de KONAMI,16.00
+4657,Chapi,Original de KONAMI,17.39
+4658,Gutierrez,Original de KONAMI,22.22
+4659,Herrero,Original de KONAMI,16.00
+4660,Menendez,Original de KONAMI,23.08
+4661,Merino,Original de KONAMI,33.33
+4662,Navarro,Original de KONAMI,24.00
+4663,Pelaez,Original de KONAMI,16.67
+4664,Prieto,Original de KONAMI,33.33
+4665,Rubio,Original de KONAMI,26.09
+4666,Sanz,Original de KONAMI,18.18
+4667,Serrano,Original de KONAMI,16.00
+4668,Soler,Original de KONAMI,26.09
+4669,Weber,Original de KONAMI,8.70
+4670,Cuypers,Original de KONAMI,8.00
+4671,Mertens,Original de KONAMI,8.00
+4672,Thijs,Original de KONAMI,8.70
+4673,Nikolov,Original de KONAMI,24.00
+4674,Bilic,Original de KONAMI,26.09
+4675,Bosnjak,Original de KONAMI,32.00
+4676,Siegl,Original de KONAMI,17.39
+4677,Jacobsen,Original de KONAMI,23.08
+4678,Aaltonen,Original de KONAMI,30.77
+4679,Delios,Original de KONAMI,25.00
+4680,Ioannidis,Original de KONAMI,29.63
+4681,Szalai,Original de KONAMI,33.33
+4682,Conwey,Original de KONAMI,16.67
+4683,O'Sullivan,Original de KONAMI,21.43
+4684,Clarke,Original de KONAMI,16.67
+4685,Jasinski,Original de KONAMI,30.77
+4686,Andre,Original de KONAMI,17.39
+4687,Sousa,Original de KONAMI,17.39
+4688,Buga,Original de KONAMI,18.18
+4689,Alexeev,Original de KONAMI,24.00
+4690,Zakharov,Original de KONAMI,23.08
+4691,Graham,Original de KONAMI,33.33
+4692,McKenzie,Original de KONAMI,15.38
+4693,Franovic,Original de KONAMI,30.77
+4694,Jovancevic,Original de KONAMI,28.57
+4695,Nikolic,Original de KONAMI,32.00
+4696,Mattsson,Original de KONAMI,23.08
+4697,Ahmet,Original de KONAMI,17.39
+4698,Cem,Original de KONAMI,19.05
+4699,Engin,Original de KONAMI,26.09
+4700,Stoyanov,Original de KONAMI,23.08
+4701,Griffiths,Original de KONAMI,22.22
+4702,Komol,Original de KONAMI,26.09
+4703,Abdel Salam,Original de KONAMI,41.38
+4704,El Moubarki,Original de KONAMI,27.59
+4705,Shittu,Original de KONAMI,8.33
+4706,Khumalo,Original de KONAMI,24.00
+4707,Mokrani,Original de KONAMI,16.00
+4708,Chacon,Original de KONAMI,25.00
+4709,Samuels,Original de KONAMI,16.00
+4710,Cervantes,Original de KONAMI,14.81
+4711,Buchanan,Original de KONAMI,23.08
+4712,Acosta,Original de KONAMI,25.00
+4713,Bustos,Original de KONAMI,8.33
+4714,Cabrera,Original de KONAMI,24.00
+4715,Juarez,Original de KONAMI,16.67
+4716,Rivero,Original de KONAMI,33.33
+4717,Zarate,Original de KONAMI,16.67
+4718,Borges,Original de KONAMI,33.33
+4719,Guimaraes,Original de KONAMI,22.22
+4720,Machado,Original de KONAMI,8.00
+4721,Nascimento,Original de KONAMI,21.43
+4722,Ribeiro,Original de KONAMI,32.00
+4723,Soares,Original de KONAMI,25.00
+4724,Cocio,Original de KONAMI,26.09
+4725,Rolong,Original de KONAMI,33.33
+4726,Fatecha,Original de KONAMI,24.00
+4727,Prandini,Original de KONAMI,30.77
+4728,Wang Mingwei,Original de KONAMI,26.67
+4729,Noushevar,Original de KONAMI,22.22
+4730,Yamada,Original de KONAMI,16.67
+4731,Kim Cyun Hi,Original de KONAMI,13.79
+4732,Sahafi,Original de KONAMI,25.00
+4733,Boffa,Original de KONAMI,17.39
+4734,Bradley,Original de KONAMI,32.00
+4735,Oliver,Original de KONAMI,25.00
+4736,Spencer,Original de KONAMI,16.00
+4737,Benon,Original de KONAMI,26.09
+4738,Moulin,Original de KONAMI,25.00
+4739,Wiart,Original de KONAMI,17.39
+4740,Gunther,Original de KONAMI,24.00
+4741,Huber,Original de KONAMI,8.70
+4742,Kruger,Original de KONAMI,8.33
+4743,Gambino,Original de KONAMI,32.00
+4744,Nijkamp,Original de KONAMI,32.00
+4745,Van Dijk,Original de KONAMI,30.77
+4746,Espinosa,Original de KONAMI,30.77
+4747,Oscar,Original de KONAMI,17.39
+4748,Ramon,Original de KONAMI,26.09
+4749,Feurer,Original de KONAMI,8.33
+4750,Matic,Original de KONAMI,17.39
+4751,Gottwald,Original de KONAMI,30.77
+4752,Frederiksen,Original de KONAMI,27.59
+4753,Duffy,Original de KONAMI,8.70
+4754,Hugo,Original de KONAMI,18.18
+4755,Yegorov,Original de KONAMI,24.00
+4756,Fredriksson,Original de KONAMI,34.48
+4757,Shubin,Original de KONAMI,16.67
+4758,Orellano,Original de KONAMI,30.77
+4759,Solimar,Original de KONAMI,24.00
+4760,Kobayashi,Original de KONAMI,29.63
+4761,Matsumoto,Original de KONAMI,7.41
+4762,Sasaki,Original de KONAMI,25.00
+4763,Shimizu,Original de KONAMI,24.00
+4764,Takahashi,Original de KONAMI,29.63
+4765,Kim U Don,Original de KONAMI,37.04
+4766,Kim Jon Yoru,Original de KONAMI,20.00
+4767,Kim Myon U,Original de KONAMI,21.43
+4768,I Gyon Fun,Original de KONAMI,28.57
+4769,I Chol Yon,Original de KONAMI,35.71
+4770,Park Jyun Hi,Original de KONAMI,26.67
+4771,Che Hyon Hon,Original de KONAMI,26.67
+4772,Hong Yon Nam,Original de KONAMI,46.67
+4773,Cho Jin Wha,Original de KONAMI,34.48
+4774,Dulic,Original de KONAMI,17.39
+4775,Celnili,Original de KONAMI,24.00
+4776,Barota,Original de KONAMI,25.00
+4777,Kelsen,Original de KONAMI,16.67
+4778,Vornander,Original de KONAMI,44.44
+4779,Edingson,Original de KONAMI,30.77
+4780,Nachdecal,Original de KONAMI,37.04
+4781,Harty,Original de KONAMI,8.70
+4782,Ostwaut,Original de KONAMI,16.00
+4783,Njorgo,Original de KONAMI,33.33

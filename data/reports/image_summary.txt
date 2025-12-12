@@ -1,0 +1,6 @@
+Players total: 4333
+Addons entries: 4333
+Faces png files: 72398
+Referenced images: 3999 (incl. placeholders)
+Missing referenced images: 185
+Unused face files: 68584

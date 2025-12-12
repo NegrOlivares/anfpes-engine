@@ -1,4 +1,11 @@
 {
   "git.ignoreLimitWarning": true,
-  "chatgpt.commentCodeLensEnabled": true
+  "chatgpt.commentCodeLensEnabled": true,
+  "files.exclude": {
+    "**/node_modules/**": true
+  },
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.tsserver.watchOptions": {
+    "excludeDirectories": ["**/node_modules/**"]
+  }
 }
