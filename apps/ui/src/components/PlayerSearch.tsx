@@ -27,6 +27,7 @@ import { getNationalityInfo } from '../data/nationalities';
 import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { openPlayerActionsMenu, closePlayerActionsMenu } from './PlayerActionsOverlay';
+import { useSearchPresetStore } from '../store/searchPresetStore';
 
 type FilterOperator = 'eq' | 'contains' | 'gte' | 'lte' | 'between';
 
@@ -154,6 +155,8 @@ export function PlayerSearch() {
   const getPlayerPreselections = usePreselectionStore(
     (state) => state.getPlayerPreselections,
   );
+  const preset = useSearchPresetStore((state) => state.preset);
+  const consumePreset = useSearchPresetStore((state) => state.consumePreset);
 
   // Cargar el último estado al iniciar
   useEffect(() => {
@@ -178,6 +181,19 @@ export function PlayerSearch() {
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [filters, positionsFilter, sortConfig, visibleColumns, saveLastViewState]);
+
+  useEffect(() => {
+    if (!preset) {
+      return;
+    }
+    const next = consumePreset();
+    if (!next) {
+      return;
+    }
+    if (typeof next.query === 'string') {
+      setQuery(next.query);
+    }
+  }, [preset, consumePreset]);
 
   const normalizedQuery = normalize(query.trim());
 

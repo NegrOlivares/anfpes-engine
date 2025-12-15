@@ -1,8 +1,9 @@
 ﻿import type { DerivedPlayer } from '@anfpes/engine';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import type { ChangeEvent } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
+import { usePreselectionViewStore } from '../store/preselectionViewStore';
 import {
   DEFAULT_TABLE_COLUMNS,
   FIELD_GROUPS,
@@ -44,28 +45,47 @@ export function PreselectionModule() {
   const addPlayerTag = usePreselectionStore((state) => state.addPlayerTag);
   const removePlayerTag = usePreselectionStore((state) => state.removePlayerTag);
   const availableTags = usePreselectionStore((state) => state.availableTags);
-
-  const [activePreselectionId, setActivePreselectionId] = useState(
-    preselections[0]?.id || '',
-  );
-  const [sortConfig, setSortConfig] = useState<SortConfig[]>([
-    { key: 'PROMEDIO', direction: 'desc' },
-  ]);
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-    new Set(DEFAULT_TABLE_COLUMNS),
-  );
-  const [columnsMenuOpen, setColumnsMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(50);
   const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
   const selectPlayer = usePreselectionStore((state) => state.selectPlayer);
   const deselectPlayer = usePreselectionStore((state) => state.deselectPlayer);
   const selectAllPlayers = usePreselectionStore((state) => state.selectAllPlayers);
   const clearSelection = usePreselectionStore((state) => state.clearSelection);
-  const [editingNoteForPlayer, setEditingNoteForPlayer] = useState<string | null>(null);
-  const [noteText, setNoteText] = useState('');
-  const [managingTagsForPlayer, setManagingTagsForPlayer] = useState<string | null>(null);
-  const [filterByTags, setFilterByTags] = useState<Set<string>>(new Set());
+
+  // View state from store
+  const activePreselectionId = usePreselectionViewStore(
+    (state) => state.activePreselectionId,
+  );
+  const setActivePreselectionId = usePreselectionViewStore(
+    (state) => state.setActivePreselectionId,
+  );
+  const sortConfig = usePreselectionViewStore((state) => state.sortConfig);
+  const setSortConfig = usePreselectionViewStore((state) => state.setSortConfig);
+  const visibleColumns = usePreselectionViewStore((state) => state.visibleColumns);
+  const setVisibleColumns = usePreselectionViewStore((state) => state.setVisibleColumns);
+  const columnsMenuOpen = usePreselectionViewStore((state) => state.columnsMenuOpen);
+  const setColumnsMenuOpen = usePreselectionViewStore(
+    (state) => state.setColumnsMenuOpen,
+  );
+  const currentPage = usePreselectionViewStore((state) => state.currentPage);
+  const setCurrentPage = usePreselectionViewStore((state) => state.setCurrentPage);
+  const filterByTags = usePreselectionViewStore((state) => state.filterByTags);
+  const setFilterByTags = usePreselectionViewStore((state) => state.setFilterByTags);
+  const editingNoteForPlayer = usePreselectionViewStore(
+    (state) => state.editingNoteForPlayer,
+  );
+  const setEditingNoteForPlayer = usePreselectionViewStore(
+    (state) => state.setEditingNoteForPlayer,
+  );
+  const noteText = usePreselectionViewStore((state) => state.noteText);
+  const setNoteText = usePreselectionViewStore((state) => state.setNoteText);
+  const managingTagsForPlayer = usePreselectionViewStore(
+    (state) => state.managingTagsForPlayer,
+  );
+  const setManagingTagsForPlayer = usePreselectionViewStore(
+    (state) => state.setManagingTagsForPlayer,
+  );
+
+  const itemsPerPage = 50;
 
   // Columnas visibles ordenadas según FIELD_ORDER
   const sortedVisibleColumns = useMemo(() => {
@@ -560,9 +580,8 @@ export function PreselectionModule() {
                         : null;
 
                     return (
-                      <>
+                      <React.Fragment key={player.ID}>
                         <tr
-                          key={player.ID}
                           className={`${player.ID === selectedId ? 'selected' : ''} ${primaryTag ? 'has-tag' : ''}`}
                           style={
                             primaryTag
@@ -853,7 +872,7 @@ export function PreselectionModule() {
                             </td>
                           </tr>
                         )}
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </tbody>

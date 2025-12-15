@@ -20226,7 +20226,7 @@ export const profileAddons: Record<number, ProfileAddon> = {
     birthDate: '11 de junio de 1984',
   },
   '4495': {
-    image: '/images/faces/L-86745032.png',
+    image: '/images/faces/L-1394715073.png',
     fullName: 'Patrick Andersson',
     birthDate: '16 de julio de 1970',
   },
@@ -20311,7 +20311,7 @@ export const profileAddons: Record<number, ProfileAddon> = {
     birthDate: '30 de mayo de 1966',
   },
   '4512': {
-    image: '\\images\\faces\\L-1394715073.png',
+    image: '\\images\\faces\\Legend.png',
     fullName: 'Kennet Andersson',
     birthDate: '06 de octubre de 1967',
   },

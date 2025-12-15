@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useRef } from 'react';
 import { useCacheLoader } from './store/cacheStore';
 import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
 import { DashboardModule } from './modules/DashboardModule';
@@ -7,8 +7,9 @@ import { PlayerProfile } from './components/PlayerProfile';
 import { PreselectionModule } from './modules/PreselectionModule';
 import { SimilarPlayersModule } from './modules/SimilarPlayersModule';
 import { ComparatorModule } from './modules/ComparatorModule';
-import { useModuleStore, MODULE_IDS } from './store/moduleStore';
+import { useModuleStore, MODULE_IDS, type ModuleId } from './store/moduleStore';
 import { PlayerActionsOverlay } from './components/PlayerActionsOverlay';
+import { useNavigationHistoryStore } from './store/navigationHistoryStore';
 
 const modules: ModuleDefinition[] = [
   { id: MODULE_IDS.dashboard, label: 'Dashboard', component: DashboardModule },
@@ -27,11 +28,35 @@ export default function App() {
   useCacheLoader();
   const activeModuleId = useModuleStore((state) => state.activeModuleId);
   const setActiveModuleId = useModuleStore((state) => state.setActiveModuleId);
+  const navigateBack = useModuleStore((state) => state.navigateBack);
+  const navigateForward = useModuleStore((state) => state.navigateForward);
 
-  const ActiveModule = useMemo(() => {
-    const target = modules.find((module) => module.id === activeModuleId);
-    return target?.component ?? modules[0].component;
-  }, [activeModuleId]);
+  // Initialize history with dashboard on mount
+  useEffect(() => {
+    const { push, history } = useNavigationHistoryStore.getState();
+    if (history.length === 0) {
+      push(MODULE_IDS.dashboard, {}); // Empty snapshot for dashboard
+    }
+  }, []);
+
+  // Keyboard shortcuts for navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Alt + Left Arrow = Back
+      if (event.altKey && event.key === 'ArrowLeft') {
+        event.preventDefault();
+        navigateBack();
+      }
+      // Alt + Right Arrow = Forward
+      if (event.altKey && event.key === 'ArrowRight') {
+        event.preventDefault();
+        navigateForward();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigateBack, navigateForward]);
 
   return (
     <div className="app-shell">
@@ -39,9 +64,21 @@ export default function App() {
         modules={modules}
         activeId={activeModuleId}
         onSelect={setActiveModuleId}
+        onNavigateBack={navigateBack}
+        onNavigateForward={navigateForward}
       />
       <main className="app-main">
-        <ActiveModule />
+        {modules.map((module) => {
+          const Component = module.component;
+          return (
+            <div
+              key={module.id}
+              className={`module-view ${module.id === activeModuleId ? 'active' : 'inactive'}`}
+            >
+              <Component />
+            </div>
+          );
+        })}
       </main>
       <PlayerActionsOverlay />
     </div>

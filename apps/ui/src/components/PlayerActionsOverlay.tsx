@@ -8,6 +8,7 @@ import { useSimilarPlayersStore } from '../store/similarPlayersStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 import { useCacheStore } from '../store/cacheStore';
+import { usePlayerProfileStore } from '../store/playerProfileStore';
 
 function usePlayerActions() {
   const isOpen = usePlayerActionsStore((state) => state.isOpen);
@@ -22,7 +23,8 @@ export function PlayerActionsOverlay() {
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
   const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
   const setComparatorPending = useComparatorLaunchStore((state) => state.setPending);
-  const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
+  const setSelectedIds = useComparatorLaunchStore((state) => state.setSelectedIds);
+  const setSelectedPlayer = usePlayerProfileStore((state) => state.setSelectedPlayerId);
   const hideCompare = usePlayerActionsStore((state) => state.hideCompare);
   const hideProfile = usePlayerActionsStore((state) => state.hideProfile);
   const [showPreselectionModal, setShowPreselectionModal] = useState(false);
@@ -70,6 +72,34 @@ export function PlayerActionsOverlay() {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [close, isOpen, showPreselectionModal]);
 
+  // Detect viewport overflow and adjust position (must be before early return)
+  const menuStyle: React.CSSProperties = useMemo(() => {
+    if (!anchor) return { top: 0, left: 0 };
+
+    const MENU_WIDTH = 280; // Approximate menu width
+    const MENU_HEIGHT = 200; // Approximate menu height
+    const PADDING = 16;
+
+    let x = anchor.x;
+    let y = anchor.y;
+
+    // Check right overflow
+    if (x + MENU_WIDTH + PADDING > window.innerWidth) {
+      x = anchor.x - MENU_WIDTH;
+    }
+
+    // Check bottom overflow
+    if (y + MENU_HEIGHT + PADDING > window.innerHeight) {
+      y = window.innerHeight - MENU_HEIGHT - PADDING;
+    }
+
+    // Ensure not negative
+    x = Math.max(PADDING, x);
+    y = Math.max(PADDING, y);
+
+    return { top: y, left: x };
+  }, [anchor]);
+
   if (!isOpen || !player || !anchor) {
     return null;
   }
@@ -88,6 +118,8 @@ export function PlayerActionsOverlay() {
 
   const handleComparePlayer = () => {
     if (!soleSelectionId) return;
+    // Clear previous comparison and start fresh
+    setSelectedIds([]);
     setComparatorPending(soleSelectionId);
     setActiveModule(MODULE_IDS.comparator);
     close();
@@ -98,11 +130,6 @@ export function PlayerActionsOverlay() {
     setSelectedPlayer(soleSelectionId);
     setActiveModule(MODULE_IDS.profile);
     close();
-  };
-
-  const menuStyle: React.CSSProperties = {
-    top: anchor.y,
-    left: anchor.x,
   };
 
   return (

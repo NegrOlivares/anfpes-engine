@@ -121,37 +121,40 @@ export function SimilarPlayersModule() {
   const selectedId = useCacheStore((state) => state.selectedPlayerId);
   const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
 
+  // All state from store
   const basePlayerId = useSimilarPlayersStore((state) => state.basePlayerId);
   const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
+  const macroSelection = useSimilarPlayersStore((state) => state.macroSelection);
+  const setMacroSelection = useSimilarPlayersStore((state) => state.setMacroSelection);
+  const mode = useSimilarPlayersStore((state) => state.mode);
+  const setMode = useSimilarPlayersStore((state) => state.setMode);
+  const minSimilarity = useSimilarPlayersStore((state) => state.minSimilarity);
+  const setMinSimilarity = useSimilarPlayersStore((state) => state.setMinSimilarity);
+  const includePositions = useSimilarPlayersStore((state) => state.includePositions);
+  const setIncludePositions = useSimilarPlayersStore(
+    (state) => state.setIncludePositions,
+  );
+  const manualLookup = useSimilarPlayersStore((state) => state.manualLookup);
+  const setManualLookup = useSimilarPlayersStore((state) => state.setManualLookup);
+  const lookupError = useSimilarPlayersStore((state) => state.lookupError);
+  const setLookupError = useSimilarPlayersStore((state) => state.setLookupError);
+  const columnsMenuOpen = useSimilarPlayersStore((state) => state.columnsMenuOpen);
+  const setColumnsMenuOpen = useSimilarPlayersStore((state) => state.setColumnsMenuOpen);
+  const sortConfig = useSimilarPlayersStore((state) => state.sortConfig);
+  const setSortConfig = useSimilarPlayersStore((state) => state.setSortConfig);
+  const visibleColumns = useSimilarPlayersStore((state) => state.visibleColumns);
+  const setVisibleColumns = useSimilarPlayersStore((state) => state.setVisibleColumns);
+  const filtersOpen = useSimilarPlayersStore((state) => state.filtersOpen);
+  const setFiltersOpen = useSimilarPlayersStore((state) => state.setFiltersOpen);
+  const filters = useSimilarPlayersStore((state) => state.filters);
+  const setFilters = useSimilarPlayersStore((state) => state.setFilters);
+  const positionsFilter = useSimilarPlayersStore((state) => state.positionsFilter);
+  const setPositionsFilter = useSimilarPlayersStore((state) => state.setPositionsFilter);
 
   const basePlayer = useMemo(() => {
     if (!players || !basePlayerId) return undefined;
     return players.find((player) => String(player.ID) === String(basePlayerId));
   }, [players, basePlayerId]);
-
-  const [macroSelection, setMacroSelection] = useState<Record<MacroKey, boolean>>({
-    ATK: true,
-    TEC: true,
-    RES: true,
-    DEF: true,
-    FUE: true,
-    VEL: true,
-  });
-  const [mode, setMode] = useState<'proportional' | 'direct'>('proportional');
-  const [minSimilarity, setMinSimilarity] = useState(95);
-  const [includePositions, setIncludePositions] = useState(false);
-  const [manualLookup, setManualLookup] = useState('');
-  const [lookupError, setLookupError] = useState('');
-  const [columnsMenuOpen, setColumnsMenuOpen] = useState(false);
-  const [sortConfig, setSortConfig] = useState<SimilarSortConfig[]>([
-    { key: 'SIMILARITY', direction: 'desc' },
-  ]);
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-    new Set(DEFAULT_TABLE_COLUMNS),
-  );
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState<FilterCondition[]>([]);
-  const [positionsFilter, setPositionsFilter] = useState<string[]>([]);
 
   const sortedVisibleColumns = useMemo(
     () => getSortedColumns(visibleColumns),

@@ -2,6 +2,10 @@ import type { DerivedPlayer } from '@anfpes/engine';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { RadarChart } from './RadarChart';
 import {
+  POSITION_HIGHLIGHTS,
+  type PositionHighlightId,
+} from '../constants/positionHighlights';
+import {
   PositionBadges,
   getPlayerPositions,
   getPositionLine,
@@ -9,6 +13,7 @@ import {
 } from './PositionBadges';
 import { PositionMap, getActivePositionCells } from './PositionMap';
 import { useCacheStore } from '../store/cacheStore';
+import { usePlayerProfileStore } from '../store/playerProfileStore';
 import { formatPlayerValue, ensureNumber } from '../utils/format';
 import goalStatsData from '../../../../data/processed/player-goal-stats.json';
 import {
@@ -1977,22 +1982,31 @@ function findPlayerByQuery(players: DerivedPlayer[] | undefined, query: string) 
 
 export function PlayerProfile() {
   const players = useCacheStore((state) => state.players);
-  const selectedPlayerId = useCacheStore((state) => state.selectedPlayerId);
-  const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
   const status = useCacheStore((state) => state.status);
   const error = useCacheStore((state) => state.error);
 
+  // Profile-specific state (independent from search)
+  const selectedPlayerId = usePlayerProfileStore((state) => state.selectedPlayerId);
+  const setSelectedPlayer = usePlayerProfileStore((state) => state.setSelectedPlayerId);
+  const formById = usePlayerProfileStore((state) => state.formById);
+  const setFormById = usePlayerProfileStore((state) => state.setFormById);
+
   const [query, setQuery] = useState('');
   const [lookupError, setLookupError] = useState('');
-  const [formById, setFormById] = useState<Record<string, FormStateId>>({});
   const [formOpen, setFormOpen] = useState(false);
   const [faceSrc, setFaceSrc] = useState<string>('/images/faces/missing.png');
+  const [selectedPosition, setSelectedPosition] = useState<PositionHighlightId | null>(
+    null,
+  );
+  const [showPositions, setShowPositions] = useState(false);
 
   const playerKey = String(selectedPlayerId ?? '');
-  const formState = formById[playerKey] ?? DEFAULT_FORM_STATE;
+  const formState = (formById[playerKey] ?? DEFAULT_FORM_STATE) as FormStateId;
 
   useEffect(() => {
     setFormOpen(false);
+    setSelectedPosition(null);
+    setShowPositions(false);
   }, [playerKey]);
 
   const loading = status === 'idle' || status === 'loading';
@@ -2073,10 +2087,13 @@ export function PlayerProfile() {
   const handleChangeForm = useCallback(
     (next: FormStateId) => {
       if (!playerKey) return;
-      setFormById((prev) => ({ ...prev, [playerKey]: next }));
+      setFormById((prev: Record<string, FormStateId>) => ({
+        ...prev,
+        [playerKey]: next,
+      }));
       setFormOpen(false);
     },
-    [playerKey],
+    [playerKey, setFormById],
   );
 
   // Aplicar form multipliers a los valores
@@ -2388,13 +2405,74 @@ export function PlayerProfile() {
         </div>
 
         <div className="profile-panel">
-          <h3>STATS</h3>
+          <header className="stats-header-with-selector">
+            <h3>STATS</h3>
+            <div className="position-selector">
+              {(() => {
+                const meta = POSITION_HIGHLIGHTS.find((p) => p.id === selectedPosition);
+                const chipColor = meta?.color ?? 'rgba(0, 0, 0, 1)';
+                const chipLabel = meta?.label ?? '-';
+                return (
+                  <button
+                    type="button"
+                    className={`pos-trigger ${selectedPosition ? 'active' : ''}`}
+                    title="Destacar Stats para la Posición"
+                    onClick={() => setShowPositions((v: boolean) => !v)}
+                    style={{
+                      background: chipColor,
+                    }}
+                  >
+                    {chipLabel}
+                  </button>
+                );
+              })()}
+              {showPositions && (
+                <div className="pos-menu">
+                  <button
+                    type="button"
+                    className={`pos-option none ${!selectedPosition ? 'active' : ''}`}
+                    onClick={() => {
+                      setSelectedPosition(null);
+                      setShowPositions(false);
+                    }}
+                  >
+                    -
+                  </button>
+
+                  {POSITION_HIGHLIGHTS.map((pos) => (
+                    <button
+                      key={pos.id}
+                      type="button"
+                      className={`pos-option ${selectedPosition === pos.id ? 'active' : ''}`}
+                      style={{
+                        background: pos.color,
+                      }}
+                      onClick={() => {
+                        setSelectedPosition(pos.id);
+                        setShowPositions(false);
+                      }}
+                    >
+                      {pos.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </header>
           <div className="profile-stats-grid compact">
             {CORE_STATS.map((field) => {
               const value = getAdjustedValue(field) ?? 0;
               const color = getStatColor(value) ?? '#7ac9ff';
+              const isHighlighted =
+                !!selectedPosition &&
+                POSITION_HIGHLIGHTS.find(
+                  (p) => p.id === selectedPosition,
+                )?.stats.includes(field as any);
               return (
-                <div key={field as string} className="stat-block row compact">
+                <div
+                  key={field as string}
+                  className={`stat-block row compact ${isHighlighted ? 'highlighted' : ''}`}
+                >
                   <span className="stat-label">{getFieldLabel(field as string)}</span>
                   <span className="stat-value" style={{ color }}>
                     {formatPlayerValue(value, 0)}
@@ -2429,9 +2507,17 @@ export function PlayerProfile() {
               // Resto de stats: siguen siendo numéricos
               const value = ensureNumber(rawValue) ?? 0;
               const color = getStatColor(value) ?? '#7ac9ff';
+              const isHighlighted =
+                !!selectedPosition &&
+                POSITION_HIGHLIGHTS.find(
+                  (p) => p.id === selectedPosition,
+                )?.stats.includes(field as any);
 
               return (
-                <div key={field as string} className="stat-block row compact">
+                <div
+                  key={field as string}
+                  className={`stat-block row compact ${isHighlighted ? 'highlighted' : ''}`}
+                >
                   <span className="stat-label">{getFieldLabel(field as string)}</span>
                   <span className="stat-value" style={{ color }}>
                     {formatPlayerValue(value, 0)}
