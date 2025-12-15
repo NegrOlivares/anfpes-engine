@@ -411,16 +411,16 @@ export function SimilarPlayersModule() {
           }
           return current.filter((s) => s.key !== key);
         }
-        return [...current, { key, direction: 'desc' }];
+        return [...current, { key, direction: 'desc' as SortDirection }];
       }
       const existing = current.find((s) => s.key === key);
       if (existing && existing.direction === 'desc') {
-        return [{ key, direction: 'asc' }];
+        return [{ key, direction: 'asc' as SortDirection }];
       }
       if (existing && existing.direction === 'asc') {
         return [];
       }
-      return [{ key, direction: 'desc' }];
+      return [{ key, direction: 'desc' as SortDirection }];
     });
   };
 

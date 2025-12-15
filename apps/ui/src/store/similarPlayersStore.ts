@@ -4,7 +4,7 @@ import { DEFAULT_TABLE_COLUMNS } from '../constants/playerFields';
 
 type MacroKey = 'ATK' | 'TEC' | 'RES' | 'DEF' | 'FUE' | 'VEL';
 type SortDirection = 'asc' | 'desc';
-type SimilarSortKey = string | 'SIMILARITY';
+type SimilarSortKey = string | number;
 
 interface SimilarSortConfig {
   key: SimilarSortKey;
@@ -18,7 +18,11 @@ interface SimilarPlayersState {
 
   // Macro selection
   macroSelection: Record<MacroKey, boolean>;
-  setMacroSelection: (selection: Record<MacroKey, boolean>) => void;
+  setMacroSelection: (
+    selection:
+      | Record<MacroKey, boolean>
+      | ((prev: Record<MacroKey, boolean>) => Record<MacroKey, boolean>),
+  ) => void;
 
   // Mode and similarity
   mode: 'proportional' | 'direct';
@@ -26,7 +30,7 @@ interface SimilarPlayersState {
   minSimilarity: number;
   setMinSimilarity: (value: number) => void;
   includePositions: boolean;
-  setIncludePositions: (value: boolean) => void;
+  setIncludePositions: (value: boolean | ((prev: boolean) => boolean)) => void;
 
   // Manual lookup
   manualLookup: string;
@@ -36,23 +40,29 @@ interface SimilarPlayersState {
 
   // UI state
   columnsMenuOpen: boolean;
-  setColumnsMenuOpen: (open: boolean) => void;
+  setColumnsMenuOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
   filtersOpen: boolean;
-  setFiltersOpen: (open: boolean) => void;
+  setFiltersOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
 
   // Sorting
   sortConfig: SimilarSortConfig[];
-  setSortConfig: (config: SimilarSortConfig[]) => void;
+  setSortConfig: (
+    config: SimilarSortConfig[] | ((prev: SimilarSortConfig[]) => SimilarSortConfig[]),
+  ) => void;
 
   // Visible columns
   visibleColumns: Set<string>;
-  setVisibleColumns: (columns: Set<string>) => void;
+  setVisibleColumns: (
+    columns: Set<string> | ((prev: Set<string>) => Set<string>),
+  ) => void;
 
   // Filters
   filters: FilterCondition[];
-  setFilters: (filters: FilterCondition[]) => void;
+  setFilters: (
+    filters: FilterCondition[] | ((prev: FilterCondition[]) => FilterCondition[]),
+  ) => void;
   positionsFilter: string[];
-  setPositionsFilter: (positions: string[]) => void;
+  setPositionsFilter: (positions: string[] | ((prev: string[]) => string[])) => void;
 
   // Reset
   reset: () => void;
@@ -78,7 +88,11 @@ export const useSimilarPlayersStore = create<SimilarPlayersState>((set, get) => 
 
   // Macro selection
   macroSelection: DEFAULT_MACRO_SELECTION,
-  setMacroSelection: (selection) => set({ macroSelection: selection }),
+  setMacroSelection: (selection) => {
+    const newSelection =
+      typeof selection === 'function' ? selection(get().macroSelection) : selection;
+    set({ macroSelection: newSelection });
+  },
 
   // Mode and similarity
   mode: 'proportional',
@@ -86,7 +100,10 @@ export const useSimilarPlayersStore = create<SimilarPlayersState>((set, get) => 
   minSimilarity: 95,
   setMinSimilarity: (value) => set({ minSimilarity: value }),
   includePositions: false,
-  setIncludePositions: (value) => set({ includePositions: value }),
+  setIncludePositions: (value) => {
+    const newValue = typeof value === 'function' ? value(get().includePositions) : value;
+    set({ includePositions: newValue });
+  },
 
   // Manual lookup
   manualLookup: '',
@@ -96,23 +113,43 @@ export const useSimilarPlayersStore = create<SimilarPlayersState>((set, get) => 
 
   // UI state
   columnsMenuOpen: false,
-  setColumnsMenuOpen: (open) => set({ columnsMenuOpen: open }),
+  setColumnsMenuOpen: (open) => {
+    const newOpen = typeof open === 'function' ? open(get().columnsMenuOpen) : open;
+    set({ columnsMenuOpen: newOpen });
+  },
   filtersOpen: false,
-  setFiltersOpen: (open) => set({ filtersOpen: open }),
+  setFiltersOpen: (open) => {
+    const newOpen = typeof open === 'function' ? open(get().filtersOpen) : open;
+    set({ filtersOpen: newOpen });
+  },
 
   // Sorting
   sortConfig: [{ key: 'SIMILARITY', direction: 'desc' }],
-  setSortConfig: (config) => set({ sortConfig: config }),
+  setSortConfig: (config) => {
+    const newConfig = typeof config === 'function' ? config(get().sortConfig) : config;
+    set({ sortConfig: newConfig });
+  },
 
   // Visible columns
   visibleColumns: new Set(DEFAULT_TABLE_COLUMNS),
-  setVisibleColumns: (columns) => set({ visibleColumns: columns }),
+  setVisibleColumns: (columns) => {
+    const newColumns =
+      typeof columns === 'function' ? columns(get().visibleColumns) : columns;
+    set({ visibleColumns: newColumns });
+  },
 
   // Filters
   filters: [],
-  setFilters: (filters) => set({ filters }),
+  setFilters: (filters) => {
+    const newFilters = typeof filters === 'function' ? filters(get().filters) : filters;
+    set({ filters: newFilters });
+  },
   positionsFilter: [],
-  setPositionsFilter: (positions) => set({ positionsFilter: positions }),
+  setPositionsFilter: (positions) => {
+    const newPositions =
+      typeof positions === 'function' ? positions(get().positionsFilter) : positions;
+    set({ positionsFilter: newPositions });
+  },
 
   // Reset
   reset: () =>

@@ -9,11 +9,13 @@ interface PreselectionViewState {
 
   // Sorting
   sortConfig: SortConfig[];
-  setSortConfig: (config: SortConfig[]) => void;
+  setSortConfig: (config: SortConfig[] | ((prev: SortConfig[]) => SortConfig[])) => void;
 
   // Visible columns
   visibleColumns: Set<string>;
-  setVisibleColumns: (columns: Set<string>) => void;
+  setVisibleColumns: (
+    columns: Set<string> | ((prev: Set<string>) => Set<string>),
+  ) => void;
 
   // UI state
   columnsMenuOpen: boolean;
@@ -21,11 +23,11 @@ interface PreselectionViewState {
 
   // Pagination
   currentPage: number;
-  setCurrentPage: (page: number) => void;
+  setCurrentPage: (page: number | ((prev: number) => number)) => void;
 
   // Filter by tags
   filterByTags: Set<string>;
-  setFilterByTags: (tags: Set<string>) => void;
+  setFilterByTags: (tags: Set<string> | ((prev: Set<string>) => Set<string>)) => void;
 
   // Note editing
   editingNoteForPlayer: string | null;
@@ -52,11 +54,18 @@ export const usePreselectionViewStore = create<PreselectionViewState>((set, get)
 
   // Sorting
   sortConfig: [{ key: 'PROMEDIO', direction: 'desc' }],
-  setSortConfig: (config) => set({ sortConfig: config }),
+  setSortConfig: (config) => {
+    const newConfig = typeof config === 'function' ? config(get().sortConfig) : config;
+    set({ sortConfig: newConfig });
+  },
 
   // Visible columns
   visibleColumns: new Set(DEFAULT_TABLE_COLUMNS),
-  setVisibleColumns: (columns) => set({ visibleColumns: columns }),
+  setVisibleColumns: (columns) => {
+    const newColumns =
+      typeof columns === 'function' ? columns(get().visibleColumns) : columns;
+    set({ visibleColumns: newColumns });
+  },
 
   // UI state
   columnsMenuOpen: false,
@@ -64,11 +73,17 @@ export const usePreselectionViewStore = create<PreselectionViewState>((set, get)
 
   // Pagination
   currentPage: 1,
-  setCurrentPage: (page) => set({ currentPage: page }),
+  setCurrentPage: (page) => {
+    const newPage = typeof page === 'function' ? page(get().currentPage) : page;
+    set({ currentPage: newPage });
+  },
 
   // Filter by tags
   filterByTags: new Set(),
-  setFilterByTags: (tags) => set({ filterByTags: tags }),
+  setFilterByTags: (tags) => {
+    const newTags = typeof tags === 'function' ? tags(get().filterByTags) : tags;
+    set({ filterByTags: newTags });
+  },
 
   // Note editing
   editingNoteForPlayer: null,
