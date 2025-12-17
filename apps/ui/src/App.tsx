@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useCacheLoader } from './store/cacheStore';
 import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
 import { GlossaryModal } from './components/GlossaryModal';
-import { DashboardModule } from './modules/DashboardModule';
+import { HomeModule } from './modules/HomeModule';
 import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
 import { PreselectionModule } from './modules/PreselectionModule';
@@ -13,7 +13,7 @@ import { PlayerActionsOverlay } from './components/PlayerActionsOverlay';
 import { useNavigationHistoryStore } from './store/navigationHistoryStore';
 
 const modules: ModuleDefinition[] = [
-  { id: MODULE_IDS.dashboard, label: 'Dashboard', component: DashboardModule },
+  { id: MODULE_IDS.dashboard, label: 'Home', component: HomeModule },
   { id: MODULE_IDS.search, label: 'Buscador', component: PlayerSearch },
   {
     id: MODULE_IDS.preselections,

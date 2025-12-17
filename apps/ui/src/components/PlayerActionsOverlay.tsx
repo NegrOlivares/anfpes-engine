@@ -9,6 +9,7 @@ import { usePreselectionStore } from '../store/preselectionStore';
 import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 import { useCacheStore } from '../store/cacheStore';
 import { usePlayerProfileStore } from '../store/playerProfileStore';
+import { useActivityHistoryStore } from '../store/activityHistoryStore';
 
 function usePlayerActions() {
   const isOpen = usePlayerActionsStore((state) => state.isOpen);
@@ -30,6 +31,7 @@ export function PlayerActionsOverlay() {
   const [showPreselectionModal, setShowPreselectionModal] = useState(false);
   const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
   const clearSelection = usePreselectionStore((state) => state.clearSelection);
+  const addActivity = useActivityHistoryStore((state) => state.addActivity);
 
   const effectiveSelection = useMemo(() => {
     if (selectedPlayerIds.size > 0) {
@@ -112,6 +114,12 @@ export function PlayerActionsOverlay() {
   const handleSimilarPlayers = () => {
     if (!soleSelectionId) return;
     setBasePlayerId(soleSelectionId);
+    addActivity({
+      type: 'similar',
+      playerId: soleSelectionId,
+      playerName: player.NOMBRE as string,
+      details: 'Búsqueda de similares',
+    });
     setActiveModule(MODULE_IDS.similar);
     close();
   };
@@ -121,6 +129,12 @@ export function PlayerActionsOverlay() {
     // Clear previous comparison and start fresh
     setSelectedIds([]);
     setComparatorPending(soleSelectionId);
+    addActivity({
+      type: 'comparison',
+      playerId: soleSelectionId,
+      playerName: player.NOMBRE as string,
+      details: 'Nueva comparación',
+    });
     setActiveModule(MODULE_IDS.comparator);
     close();
   };
@@ -128,6 +142,11 @@ export function PlayerActionsOverlay() {
   const handleOpenProfile = () => {
     if (!soleSelectionId) return;
     setSelectedPlayer(soleSelectionId);
+    addActivity({
+      type: 'profile',
+      playerId: soleSelectionId,
+      playerName: player.NOMBRE as string,
+    });
     setActiveModule(MODULE_IDS.profile);
     close();
   };
