@@ -9,6 +9,7 @@ build/
 coverage/
 legacy playerprofile/
 apps/ui/public/images/faces/
+apps/ui/public/images/thumbs/
 
 # Logs
 npm-debug.log*

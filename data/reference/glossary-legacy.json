@@ -1,0 +1,452 @@
+[
+  {
+    "id": 1,
+    "term": "ATAQUE",
+    "definition": "Capacidad del jugador para crear peligro en una jugada ofensiva. Puede ser interpretado también como inteligencia ofensiva (capacidad del jugador para tomar la mejor decisión cuando tiene la pelota y que la jugada termine en una ocasión de gol) o qué tan incisivo es un jugador cuando ataca. Los jugadores con mucho ataque son propensos a estar en \"situaciones\" de gol y perder la marca rápidamente. "
+  },
+  {
+    "id": 2,
+    "term": "DEFENSA",
+    "definition": "Capacidad del jugador para defender cuando no tiene el balón. Se puede interpretar como inteligencia defensiva. Cuanta más alta sea la Defensa del jugador, mejor será su lectura del juego y podrá tomar mejores decisiones a la hora de marcar. Este stat se utiliza principalmente para medir qué tan bueno es el jugador recuperando el balón, quitándole la pelota al rival de forma limpia. Cuanto mejor sea el jugador en los tackles, mejor será su valor en Defensa. "
+  },
+  {
+    "id": 3,
+    "term": "ESTABILIDAD",
+    "definition": "La fuerza del jugador. Jugadores con niveles altos en Estabilidad podrán aguantar embestidas rivales y salir airosos de duelos físicos sin caer al suelo. La altura y el peso de los jugadores no influyen en la fuerza del jugador."
+  },
+  {
+    "id": 4,
+    "term": "RESISTENCIA",
+    "definition": "El nivel de energía del jugador. Con valores altos el jugador será propenso a correr durante mucho tiempo en el partido. El valor estándar es de 80, ya que con ese valor en el PES un jugador llega a correr los 90 minutos con lo justo para llegar a terminar un partido."
+  },
+  {
+    "id": 5,
+    "term": "VELOCIDAD MÁXIMA",
+    "definition": "El tope de velocidad que alcanza un jugador al correr sin el balón. "
+  },
+  {
+    "id": 6,
+    "term": "ACELERACIÓN",
+    "definition": "La capacidad del jugador de alcanzar con mayor rapidez su velocidad máxima. Mientras más alto sea el valor, más rapido alcanzará su velocidad tope."
+  },
+  {
+    "id": 7,
+    "term": "REPUESTA",
+    "definition": " La respuesta puede asumirse como la manera en la que un jugador \"lee el juego\", los reflejos del jugador. Cuanto más alto sea este stat, más rápido reaccionará el jugador en cualquier situación del juego."
+  },
+  {
+    "id": 8,
+    "term": "AGILIDAD",
+    "definition": "Determina qué tan rápido un jugador es capaz de cambiar de dirección con el balón en los pies."
+  },
+  {
+    "id": 9,
+    "term": "PRECISIÓN DRIBBLE",
+    "definition": "Capacidad del jugador de llevar el balón pegado al pie mientras conduce. Cuanto más alto sea este stat, más difícil será que se le vaya largo el balón y al regatear será más difícil para el rival quitarle el balón"
+  },
+  {
+    "id": 10,
+    "term": "VELOCIDAD DRIBBLE",
+    "definition": "Qué tan rápido puede correr un jugador con el balón controlado."
+  },
+  {
+    "id": 11,
+    "term": "PRECISIÓN PASE CORTO",
+    "definition": "La precisión de los pases al ras del piso. Este stat determina la calidad y qué tipo de pases es capaz de dar el jugador teniendo en cuenta la dificultad de estos."
+  },
+  {
+    "id": 12,
+    "term": "VELOCIDAD PASE CORTO",
+    "definition": "La fuerza que el jugador puede darle a los pases. Con un valor alto, los pases no serán interceptados por los jugadores rivales y se desplazarán con mayor velocidad. Además, añade más rango a los pases."
+  },
+  {
+    "id": 13,
+    "term": "PRECISIÓN PASE LARGO",
+    "definition": "Determina la precisión de los pases por el aire, pases largos, los cambios de frente y centros aéreos."
+  },
+  {
+    "id": 14,
+    "term": "VELOCIDAD PASE LARGO",
+    "definition": "La velocidad con lo que los pases largos van hacia su destino y el rango que pueden alcanzar estos. Cabe destacar que este estat actua junto a \"Potencia de disparo\" para determinar ese valor."
+  },
+  {
+    "id": 15,
+    "term": "PRECISIÓN DISPARO",
+    "definition": "Determina la puntería en los disparos. Con valores altos, el jugador será capaz de apuntar a áreas más difícil del arco, lejos del arquero y en los ángulos."
+  },
+  {
+    "id": 16,
+    "term": "POTENCIA DISPARO",
+    "definition": "El poder con que se dispara. Determina qué tan rápido y qué tan fuerte el jugador puede patear el balón."
+  },
+  {
+    "id": 17,
+    "term": "TÉCNICA DISPARO",
+    "definition": "Con esta habilidad los jugadores serán capaces de disparar al arco bajo presión de algún jugador rival, también permite a los jugadores disparar de ángulos difíciles y ayuda a los jugadores que disparan de lejos a pegarle bien al balón."
+  },
+  {
+    "id": 18,
+    "term": "PRECISIÓN TIRO LIBRE",
+    "definition": "Nivel de precisión que tiene el jugador al realizar pelotas paradas: Tiros libres y saques de esquina."
+  },
+  {
+    "id": 19,
+    "term": "EFECTO",
+    "definition": "Capacidad de patear con comba de un jugador. Qué tan efectiva es la curva que le dan los jugadores a tiros libres, pases largos y cortos, cambios de juego y disparos."
+  },
+  {
+    "id": 20,
+    "term": "CABEZAZO",
+    "definition": "Precisión del jugador golpeando la pelota con la cabeza y nivel de potencia que es capaz de darle al cabezazo."
+  },
+  {
+    "id": 21,
+    "term": "SALTO",
+    "definition": "Capacidad del jugador de despegarse del suelo. Qué tanta altura puede alcanzar y que tan rápido puede hacerlo."
+  },
+  {
+    "id": 22,
+    "term": "TÉCNICA",
+    "definition": "Capacidad del jugador para controlar el balón. Cuanto más alto sea el valor, el jugador tendrá más probabilidades de controlar bien el balón, bajarlo y que no se le escape. Es esencialmente el primer toque, sea atrapando valores aéreos o que vengan al ras del piso."
+  },
+  {
+    "id": 23,
+    "term": "AGRESIVIDAD",
+    "definition": "Determina qué tanto se desprende en ataque un jugador. Cuanto más alto el valor, más se adelantará el jugador cuando no tenga el balón, avanzando en el campo y buscando atacar constantemente."
+  },
+  {
+    "id": 24,
+    "term": "MENTALIDAD",
+    "definition": "Capacidad del jugador para sobreponerse al cansancio y a condiciones adversas. Hace a los jugadores “más temperamentales”. Con valores altos en esta habilidad, los jugadores seguirán corriendo así estén cansados, dando todo de sí y lucharán cada pelota a muerte."
+  },
+  {
+    "id": 25,
+    "term": "ARQUERO",
+    "definition": "Determina la capacidad del arquero de atrapar el balón con las manos. Cuanto más alto sea el valor, mayores chances tendrá el arquero de atrapar el balón y dará menos rebote."
+  },
+  {
+    "id": 26,
+    "term": "TRABAJO EN EQUIPO",
+    "definition": "Movimiento del jugador sin el balón. Hace que el jugador participe y de buena manera en jugadas colectivas en su equipo. Un jugador con este valor alto se ofrecerá como opción desmarcada de pase con mucha mayor frecuencia. En la parte defensiva hace que ayude a organizar su sector del campo. En la parte ofensiva, los jugadores irán mejor a correr para recibir pases y triangular, además bajarán para recibir el balón."
+  },
+  {
+    "id": 27,
+    "term": "TOLERANCIA A LESIONES",
+    "definition": "Qué tan frecuentemente se lesiona el jugador, en un rango de A a C, donde C es muy frecuente."
+  },
+  {
+    "id": 28,
+    "term": "CONSISTENCIA",
+    "definition": "La fiabilidad con la que un jugador puede desempeñar sus funciones. Con un valor alto, el jugador responderá a las expectativas de sus habilidades. Por el contrario, con un valor bajo, el jugador tenderá a cometer más errores, aunque su habilidad diga lo contrario."
+  },
+  {
+    "id": 29,
+    "term": "CONDICIÓN",
+    "definition": "Capacidad del jugador para jugar bien muchos partidos. Cuanto más alto sea el stat, más probabilidad habrá de que el jugador tenga flechas amarillas o rojas, de modo que su nivel en los partidos será mejor."
+  },
+  {
+    "id": 30,
+    "term": "PRECISIÓN PIE MALO",
+    "definition": "Es la capacidad proporcional del jugador de poder ocupar su pie menos hábil igual que su pie principal."
+  },
+  {
+    "id": 31,
+    "term": "FRECUENCIA PIE MALO",
+    "definition": "Qué tan frecuentemente usa su pierna menos hábil. Con un valor alto el jugador no intentará acomodarse para patear con su pierna hábil y lo hará directamente con la pierna opuesta sin perder tiempo ni espacio."
+  },
+  {
+    "id": 32,
+    "term": "★ REGATE ",
+    "definition": "Esta habilidad especial determina si los jugadores son buenos regateando o no."
+  },
+  {
+    "id": 33,
+    "term": "★ HABILIDAD DE REGATE",
+    "definition": "El jugador \"aguanta\" y cubre el balón esperando a sus compañeros."
+  },
+  {
+    "id": 34,
+    "term": "★ BUSCAR ESPACIOS",
+    "definition": "Mejora el posicionamiento dentro del área rival. Ideal para \"cazagoles\", ya que estarán mejor ubicados a la hora de atrapar rebotes y recibir centros y pases en profundidad."
+  },
+  {
+    "id": 35,
+    "term": "★ REACCIÓN",
+    "definition": "El jugador correrá por detrás de la defensa para recibir un pase que lo deje mano a mano con el arquero."
+  },
+  {
+    "id": 36,
+    "term": "★ PLAYMAKING",
+    "definition": "Ayuda a los jugadores a \"distribuir\". Esta habilidad especial significa que los jugadores que la posean son propensos a hacer que los demás jugadores se posicionen mejor en jugadas ofensivas, como generar espacios ellos mismos."
+  },
+  {
+    "id": 37,
+    "term": "★ PASES",
+    "definition": "Ayuda a los jugadores a hacer pases decisivos de 3/4 de cancha para arriba, habilitando a otros compañeros y dejándolos en situaciones de 1 contra 1."
+  },
+  {
+    "id": 38,
+    "term": "★ GOLEADOR",
+    "definition": "Mejora la habilidad del jugador a la hora de disparar/definir dentro del área o cerca de ésta. Además, mejora el posicionamiento ofensivo del jugador."
+  },
+  {
+    "id": 39,
+    "term": "★ EXPERTO EN 1 V 1",
+    "definition": "Mejora la habilidad del jugador al definir en un 1 a 1 contra el portero rival."
+  },
+  {
+    "id": 40,
+    "term": "★ JUGADOR POSTE",
+    "definition": "El jugador utilizará el cuerpo para proteger el balón de espaldas al arco. Jugará generalmente adelantado y de espaldas, en posición ideal para recibir pelotazos y utilizar el cuerpo para aguantar al rival mientras se acerca un compañero para pasarle el balón."
+  },
+  {
+    "id": 41,
+    "term": "★ EVADIR EL OFFSIDE",
+    "definition": "Los jugadores serán menos propensos a caer en posición adelantada."
+  },
+  {
+    "id": 42,
+    "term": "★ DISPAROS MEDIOS",
+    "definition": "Hace que los jugadores disparen de lejos de forma usual y las da una cierta dosis de efectividad en estos tiros lejanos, pero también tiene la tendencia a reducir el efecto de los disparos."
+  },
+  {
+    "id": 43,
+    "term": "★ LADO",
+    "definition": "A los jugadores les será más fácil jugar y ser efectivos por las bandas, lograrán desbordar por los lados."
+  },
+  {
+    "id": 44,
+    "term": "★ CENTRO",
+    "definition": "Primeramente hace que los CC o CCD se peguen al centro del campo para realizar un juego efectivo. Así mismo los jugadores de “bandas” (VOL, EX) se pegarán a veces al medio."
+  },
+  {
+    "id": 45,
+    "term": "★ PENALES",
+    "definition": "Los jugadores serán más certeros para patear desde los 12 pasos. Les será muy difícil errarle al arco."
+  },
+  {
+    "id": 46,
+    "term": "★ JUEGO A 1 TOQUE",
+    "definition": "Mejora los pases y disparos de primera."
+  },
+  {
+    "id": 47,
+    "term": "★ EXTERIOR DEL PIE",
+    "definition": "Los jugadores usarán la parte exterior de su botín, ya sea para mandar pases o rematar."
+  },
+  {
+    "id": 48,
+    "term": "★ MARCA AL HOMBRE",
+    "definition": "Mejora la habilidad del jugador al quedarse pegado a su marca individual designada en la estrategia, de manera efectiva durante el juego."
+  },
+  {
+    "id": 49,
+    "term": "★ ENTRADAS DESLIZANTES",
+    "definition": "Los jugadores harán entradas deslizantes de forma usual y mejorará su efectividad, teniendo más chances de llevarse sólo el balón y no golpear al rival cometiendo una falta."
+  },
+  {
+    "id": 50,
+    "term": "★ COBERTURA",
+    "definition": "Los jugadores cubren bien los espacios defensivos dejados por su otro acompañante."
+  },
+  {
+    "id": 51,
+    "term": "★ PROVOCAR OFFSIDE",
+    "definition": "Se convierte en el \"mariscal de la defensa\", haciendo que la línea defensiva pueda mantenerse de manera correcta y ordenada. Además, permite hacer bien la trampa del offside."
+  },
+  {
+    "id": 52,
+    "term": "★ ATAJA PENALES",
+    "definition": "Los arqueros serán más propensos a atajar penales."
+  },
+  {
+    "id": 53,
+    "term": "★ ACHIQUE 1 V 1",
+    "definition": "Los porteros tendrán mayor éxito de bloquear o atajar en situaciones de 1 contra 1."
+  },
+  {
+    "id": 54,
+    "term": "★ SAQUE DE BANDA LARGO",
+    "definition": "Los jugadores serán más precisos y aumentará su rango en los saques de banda, permitiendo hacer laterales-centro."
+  },
+  {
+    "id": 55,
+    "term": "DESTREZA ATAQUE",
+    "definition": "Parámetro inventado por el autor del excel original. Combina las habilidades de \"Ataque\", \"Respuesta\" y \"Agresividad\", para así consolidar en un solo valor la capacidad ofensiva de un jugador."
+  },
+  {
+    "id": 56,
+    "term": "FINIQUITO",
+    "definition": "Parámetro inventado por el autor del excel original. Combina las habilidades de \"Precisión de Disparo\" y \"Técnica de Disparo\", para así consolidar en un solo valor que tan bien define frente al arco un jugador."
+  },
+  {
+    "id": 57,
+    "term": "VELOCIDAD",
+    "definition": "Parámetro inventado por el autor del excel original. Combina las habilidades de \"Velocidad Máxima\" y \"Velocidad de Dribble\", para así consolidar en un solo valor el tope de velocidad promedio de un jugador, tanto sin balón como con balón."
+  },
+  {
+    "id": 58,
+    "term": "EXPLOSIVIDAD",
+    "definition": "Parámetro inventado por el autor del excel original. Combina las habilidades de \"Aceleración\" y \"Agilidad\", para así consolidar en un solo valor la capacidad de rapidéz de un jugador, tanto para correr como para moverse."
+  },
+  {
+    "id": 59,
+    "term": "AGILIDADES",
+    "definition": "Parámetro inventado que combina los valores de \"Velocidad\" y \"Explosividad\"  -inventados por el autor- que a su vez engloban \"Velocidad\", \"Velocidad de Dribble\", \"Aceleración\" y \"Agilidad\"; para así consolidar en un solo valor lo rápido que puede ser un jugador en su totalidad."
+  },
+  {
+    "id": 60,
+    "term": "POTENCIA DE PATADA",
+    "definition": "Parámetro inventado por el autor del excel original. Combina las habilidades de \"Potencia de Disparo\", \"Velocidad de Pase Corto\" y \"Velocidad de Pase Largo\", para así consolidar en un solo valor la capacidad de patear fuerte el balón del jugador."
+  },
+  {
+    "id": 61,
+    "term": "DESTREZA DEFENSA",
+    "definition": "Parámetro inventado por el autor del excel original. Combina las habilidades de \"Defensa\", \"Respuesta\" y \"Trabajo en Equipo\", para así consolidar en un solo valor la capacidad defensiva de un jugador."
+  },
+  {
+    "id": 62,
+    "term": "RECUPERACIÓN DE BALÓN",
+    "definition": "Parámetro inventado por el autor del excel original. Combina las habilidades de \"Defensa\", \"Estabilidad\" y \"Mentalidad\", para así consolidar en un solo valor la capacidad de recuperar el balón de un jugador."
+  },
+  {
+    "id": 63,
+    "term": "ATLETISMO",
+    "definition": "Parámetro inventado que muestra la capacidad atlética del jugador, atributos como \"Salto\", \"Resistencia\", \"Velocidad\", entre otros además de algunos parámetros anteriormente mencionados como \"Potencia de patada\", lo componen."
+  },
+  {
+    "id": 64,
+    "term": "CREATIVIDAD",
+    "definition": "Parámetro inventado que combina todos los atributos tecnicos de un jugador: \"Precisión de Pase Corto\", \"Precisión de Pase Largo\", \"Precisión de Dribble\", \"Técnica\", \"Presición de Tiro Libre\" y \"Efecto\". Mientras más alto sea este valor, más técnico es un jugador."
+  },
+  {
+    "id": 65,
+    "term": "HC",
+    "definition": "Parametro inventado que muestra la suma de todas los promedios de los jugadores del club."
+  },
+  {
+    "id": 66,
+    "term": "ATK",
+    "definition": "Parametro inventado que muestra el valor del ataque del jugador en el grafico hexagonal."
+  },
+  {
+    "id": 67,
+    "term": "TEC",
+    "definition": "Parametro inventado que muestra el valor de la técnica del jugador en el grafico hexagonal."
+  },
+  {
+    "id": 68,
+    "term": "RES",
+    "definition": "Parametro inventado que muestra el valor de la resistencia del jugador en el grafico hexagonal."
+  },
+  {
+    "id": 69,
+    "term": "DEF",
+    "definition": "Parametro inventado que muestra el valor de la defensa del jugador en el grafico hexagonal."
+  },
+  {
+    "id": 70,
+    "term": "FUE",
+    "definition": "Parametro inventado que muestra el valor de la fuerza del jugador en el grafico hexagonal."
+  },
+  {
+    "id": 71,
+    "term": "VEL",
+    "definition": "Parametro inventado que muestra el valor de la velocidad del jugador en el grafico hexagonal."
+  },
+  {
+    "id": 72,
+    "term": "GK",
+    "definition": "Goalkeeper"
+  },
+  {
+    "id": 73,
+    "term": "SWP",
+    "definition": "Sweeper"
+  },
+  {
+    "id": 74,
+    "term": "CB",
+    "definition": "Center Back"
+  },
+  {
+    "id": 75,
+    "term": "SB",
+    "definition": "Side Back"
+  },
+  {
+    "id": 76,
+    "term": "RB",
+    "definition": "Right Back"
+  },
+  {
+    "id": 77,
+    "term": "LB",
+    "definition": "Left Back"
+  },
+  {
+    "id": 78,
+    "term": "DMF",
+    "definition": "Defensive Midfielder"
+  },
+  {
+    "id": 79,
+    "term": "CMF",
+    "definition": "Central Midfielder"
+  },
+  {
+    "id": 80,
+    "term": "SMF",
+    "definition": "Side Midfielder"
+  },
+  {
+    "id": 81,
+    "term": "RMF",
+    "definition": "Right Midfielder"
+  },
+  {
+    "id": 82,
+    "term": "LMF",
+    "definition": "Left Midfielder"
+  },
+  {
+    "id": 83,
+    "term": "AMF",
+    "definition": "Attacking Midfielder"
+  },
+  {
+    "id": 84,
+    "term": "SS",
+    "definition": "Second Striker"
+  },
+  {
+    "id": 85,
+    "term": "WF",
+    "definition": "Wing Forward"
+  },
+  {
+    "id": 86,
+    "term": "RWF",
+    "definition": "Right Wing Forward"
+  },
+  {
+    "id": 87,
+    "term": "LWF",
+    "definition": "Left Wing Forward"
+  },
+  {
+    "id": 88,
+    "term": "CF",
+    "definition": "Central Forward"
+  },
+  {
+    "id": 89,
+    "term": "Leyenda",
+    "definition": "Todos los jugadores \"Leyenda\", vale decir, jugadores retirados representados en el PES6 con su versión prime, están resaltados con color dorado tanto en la pestaña \"CLUBES\" como en la pestaña \"JUGADORES\"."
+  },
+  {
+    "id": 90,
+    "term": "Master League (ML)",
+    "definition": "Todos los jugadores \"Master League\", vale decir, jugadores inventados por KONAMI para ser usados en el modo Master League del juego, están resaltados con color celeste tanto en la pestaña \"CLUBES\" como en la pestaña \"JUGADORES\", además se incluyen los jugadores de los equipos inventados por KONAMI, el equipo ML, WE United y PES United."
+  }
+]

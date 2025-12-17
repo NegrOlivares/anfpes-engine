@@ -14,6 +14,7 @@ interface ModuleTabsProps {
   onSelect: (id: ModuleId) => void;
   onNavigateBack: () => void;
   onNavigateForward: () => void;
+  onOpenGlossary: () => void;
 }
 
 export function ModuleTabs({
@@ -22,6 +23,7 @@ export function ModuleTabs({
   onSelect,
   onNavigateBack,
   onNavigateForward,
+  onOpenGlossary,
 }: ModuleTabsProps) {
   const canGoBack = useNavigationHistoryStore((state) => state.canGoBack);
   const canGoForward = useNavigationHistoryStore((state) => state.canGoForward);
@@ -61,6 +63,14 @@ export function ModuleTabs({
             {module.label}
           </button>
         ))}
+        <button
+          type="button"
+          className="glossary-tab"
+          onClick={onOpenGlossary}
+          title="Ver glosario completo de términos"
+        >
+          Glosario
+        </button>
       </div>
     </nav>
   );

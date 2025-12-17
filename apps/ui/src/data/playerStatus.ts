@@ -520,7 +520,6 @@ export const LEGEND_PLAYERS = new Set([
   'Andreas Herzog',
   'Denis Irwin',
   'Djalminha',
-  'Falcao',
   'Haim Revivo',
   'Igor Protti',
   'Íhor Belánov',

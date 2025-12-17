@@ -12,6 +12,8 @@ import {
 import { POSITION_COLORS, type SortConfig } from '../types/table';
 import { TableCell } from './TableCell';
 import { PositionBadges } from './PositionBadges';
+import { GlossaryTooltip, useGlossaryTitle } from './GlossaryTooltip';
+import { EnhancedTooltip } from './EnhancedTooltip';
 import {
   formatClub,
   formatNationality,
@@ -24,7 +26,11 @@ import {
 } from '../utils/playerDisplay';
 import { usePlayerViews, type FilterCondition } from '../hooks/usePlayerViews';
 import { getNationalityInfo } from '../data/nationalities';
-import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
+import {
+  getFlagImagePath,
+  getClubShieldPath,
+  getPlayerThumbPath,
+} from '../utils/imageHelpers';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { openPlayerActionsMenu, closePlayerActionsMenu } from './PlayerActionsOverlay';
 import { useSearchPresetStore } from '../store/searchPresetStore';
@@ -131,6 +137,7 @@ export function PlayerSearch() {
   } = usePlayerViews();
 
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<FilterCondition[]>([]);
   const [positionsFilter, setPositionsFilter] = useState<string[]>([]);
@@ -195,7 +202,16 @@ export function PlayerSearch() {
     }
   }, [preset, consumePreset]);
 
-  const normalizedQuery = normalize(query.trim());
+  // Debouncing del query para mejorar performance con imágenes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const normalizedQuery = normalize(debouncedQuery.trim());
 
   // Columnas visibles ordenadas según FIELD_ORDER
   const sortedVisibleColumns = useMemo(() => {
@@ -321,7 +337,7 @@ export function PlayerSearch() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [normalizedQuery, filters, positionsFilter]);
+  }, [debouncedQuery, filters, positionsFilter]);
 
   useEffect(() => {
     if (!paginatedResults.length) {
@@ -1016,10 +1032,11 @@ export function PlayerSearch() {
                             onClick={(e) =>
                               handleSort(column as keyof DerivedPlayer, e.shiftKey)
                             }
-                            title={headerLabel}
                           >
                             <div className="th-content">
-                              <span>{headerLabel}</span>
+                              <GlossaryTooltip fieldName={column}>
+                                <span>{headerLabel}</span>
+                              </GlossaryTooltip>
                               {sortDir && (
                                 <span className="sort-indicator">
                                   {sortDir === 'asc' ? '▲' : '▼'}
@@ -1071,60 +1088,74 @@ export function PlayerSearch() {
                                 hasClassic !== 'No' || LEGEND_PLAYERS.has(playerName);
                               const isMLPlayer = ML_PLAYERS.has(playerName);
                               const isAnfpes = ANFPES_CLUBS.has(rawClub);
+                              const thumbPath = getPlayerThumbPath(player.ID);
 
                               return (
                                 <td key={column} className="player-name-cell">
-                                  <div className="player-name-primary">
-                                    <button
-                                      type="button"
-                                      className="player-name-button"
-                                      onClick={(event) =>
-                                        openPlayerActionsMenu(event, player)
-                                      }
-                                    >
-                                      <span className="player-name-text">
-                                        {player.NOMBRE}
-                                      </span>
-                                    </button>
-                                    <span className="player-badges">
-                                      {hasNationalTeam !== 'No' && (
-                                        <span
-                                          className="badge"
-                                          title="Seleccionado Nacional"
+                                  <div className="player-name-with-thumb">
+                                    <img
+                                      src={thumbPath}
+                                      alt=""
+                                      className="player-thumb"
+                                      loading="lazy"
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        // Detectar si es una leyenda (prefijo L-) para usar Legend.png
+                                        const isLegend = img.src.includes('/L-');
+                                        const fallbackSrc = isLegend
+                                          ? '/images/thumbs/Legend.png'
+                                          : '/images/thumbs/missing.png';
+                                        if (img.src !== fallbackSrc) {
+                                          img.src = fallbackSrc;
+                                        }
+                                      }}
+                                    />
+                                    <div className="player-name-content">
+                                      <div className="player-name-primary">
+                                        <button
+                                          type="button"
+                                          className="player-name-button"
+                                          onClick={(event) =>
+                                            openPlayerActionsMenu(event, player)
+                                          }
                                         >
-                                          🌍
+                                          <span className="player-name-text">
+                                            {player.NOMBRE}
+                                          </span>
+                                        </button>
+                                        <span className="player-badges">
+                                          {hasNationalTeam !== 'No' && (
+                                            <EnhancedTooltip content="Seleccionado Nacional">
+                                              <span className="badge">🌍</span>
+                                            </EnhancedTooltip>
+                                          )}
+                                          {isLegend && (
+                                            <EnhancedTooltip content="Jugador Leyenda">
+                                              <span className="badge legend">★</span>
+                                            </EnhancedTooltip>
+                                          )}
+                                          {isMLPlayer && (
+                                            <EnhancedTooltip content="Jugador ML">
+                                              <span className="badge ml">ML</span>
+                                            </EnhancedTooltip>
+                                          )}
+                                          {isAnfpes && (
+                                            <EnhancedTooltip content="Afiliado a la ANFPES">
+                                              <span className="badge anfpes">ANFPES</span>
+                                            </EnhancedTooltip>
+                                          )}
+                                          {playerPreselections.length > 0 && (
+                                            <EnhancedTooltip
+                                              content={`En ${playerPreselections.length} preselección${playerPreselections.length > 1 ? 'es' : ''}: ${playerPreselections.map((p) => p.name).join(', ')}`}
+                                            >
+                                              <span className="badge preselection">
+                                                📋
+                                              </span>
+                                            </EnhancedTooltip>
+                                          )}
                                         </span>
-                                      )}
-                                      {isLegend && (
-                                        <span
-                                          className="badge legend"
-                                          title="Jugador Leyenda"
-                                        >
-                                          ★
-                                        </span>
-                                      )}
-                                      {isMLPlayer && (
-                                        <span className="badge ml" title="Jugador ML">
-                                          ML
-                                        </span>
-                                      )}
-                                      {isAnfpes && (
-                                        <span
-                                          className="badge anfpes"
-                                          title="Afiliado a la ANFPES"
-                                        >
-                                          ANFPES
-                                        </span>
-                                      )}
-                                      {playerPreselections.length > 0 && (
-                                        <span
-                                          className="badge preselection"
-                                          title={`En ${playerPreselections.length} preselección${playerPreselections.length > 1 ? 'es' : ''}: ${playerPreselections.map((p) => p.name).join(', ')}`}
-                                        >
-                                          📋
-                                        </span>
-                                      )}
-                                    </span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </td>
                               );
@@ -1140,10 +1171,11 @@ export function PlayerSearch() {
                                 <td
                                   key={column}
                                   className="image-cell nationality-column"
-                                  title={displayName}
                                 >
                                   {flagPath && (
-                                    <img src={flagPath} alt="" className="flag-icon" />
+                                    <EnhancedTooltip content={displayName}>
+                                      <img src={flagPath} alt="" className="flag-icon" />
+                                    </EnhancedTooltip>
                                   )}
                                 </td>
                               );
@@ -1156,20 +1188,18 @@ export function PlayerSearch() {
                               const clubDisplay = formatClub(rawClub, rawNationality);
 
                               return (
-                                <td
-                                  key={column}
-                                  className="image-cell club-column"
-                                  title={clubDisplay}
-                                >
-                                  {shieldPath ? (
-                                    <img
-                                      src={shieldPath}
-                                      alt=""
-                                      className="club-shield"
-                                    />
-                                  ) : (
-                                    <span className="club-icon">⚽</span>
-                                  )}
+                                <td key={column} className="image-cell club-column">
+                                  <EnhancedTooltip content={clubDisplay}>
+                                    {shieldPath ? (
+                                      <img
+                                        src={shieldPath}
+                                        alt=""
+                                        className="club-shield"
+                                      />
+                                    ) : (
+                                      <span className="club-icon">⚽</span>
+                                    )}
+                                  </EnhancedTooltip>
                                 </td>
                               );
                             }

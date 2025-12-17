@@ -13,6 +13,8 @@ import {
 import { type SortConfig } from '../types/table';
 import { TableCell } from '../components/TableCell';
 import { PositionBadges } from '../components/PositionBadges';
+import { GlossaryTooltip } from '../components/GlossaryTooltip';
+import { EnhancedTooltip } from '../components/EnhancedTooltip';
 import {
   formatClub,
   formatSelectionDisplay,
@@ -20,7 +22,11 @@ import {
   shouldDisplayField,
 } from '../utils/playerDisplay';
 import { getNationalityInfo } from '../data/nationalities';
-import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
+import {
+  getFlagImagePath,
+  getClubShieldPath,
+  getPlayerThumbPath,
+} from '../utils/imageHelpers';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import {
   openPlayerActionsMenu,
@@ -355,33 +361,36 @@ export function PreselectionModule() {
         <>
           <div className="preselection-toolbar">
             <div className="toolbar-left">
-              <button
-                type="button"
-                className="icon-button"
-                onClick={() => setColumnsMenuOpen(!columnsMenuOpen)}
-                title="Seleccionar columnas"
-              >
-                ⚙️
-              </button>
-
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={handleRenamePreselection}
-                title="Renombrar preselección"
-              >
-                ✏️ Renombrar
-              </button>
-
-              {activePreselection.id !== 'general' && (
+              <EnhancedTooltip content="Seleccionar columnas">
                 <button
                   type="button"
-                  className="secondary-button danger"
-                  onClick={handleDeletePreselection}
-                  title="Eliminar preselección"
+                  className="icon-button"
+                  onClick={() => setColumnsMenuOpen(!columnsMenuOpen)}
                 >
-                  🗑️ Eliminar
+                  ⚙️
                 </button>
+              </EnhancedTooltip>
+
+              <EnhancedTooltip content="Renombrar preselección">
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={handleRenamePreselection}
+                >
+                  ✏️ Renombrar
+                </button>
+              </EnhancedTooltip>
+
+              {activePreselection.id !== 'general' && (
+                <EnhancedTooltip content="Eliminar preselección">
+                  <button
+                    type="button"
+                    className="secondary-button danger"
+                    onClick={handleDeletePreselection}
+                  >
+                    🗑️ Eliminar
+                  </button>
+                </EnhancedTooltip>
               )}
 
               {/* Tag filters inline */}
@@ -407,14 +416,15 @@ export function PreselectionModule() {
                     </button>
                   ))}
                   {filterByTags.size > 0 && (
-                    <button
-                      type="button"
-                      className="tag-filter-clear"
-                      onClick={() => setFilterByTags(new Set())}
-                      title="Limpiar filtros"
-                    >
-                      ✕ Limpiar
-                    </button>
+                    <EnhancedTooltip content="Limpiar filtros">
+                      <button
+                        type="button"
+                        className="tag-filter-clear"
+                        onClick={() => setFilterByTags(new Set())}
+                      >
+                        ✕ Limpiar
+                      </button>
+                    </EnhancedTooltip>
                   )}
                 </>
               )}
@@ -443,24 +453,26 @@ export function PreselectionModule() {
             </div>
             {totalPages > 1 && (
               <div className="pagination-inline">
-                <button
-                  type="button"
-                  className="pagination-button"
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  title="Página anterior"
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  className="pagination-button"
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  title="Página siguiente"
-                >
-                  →
-                </button>
+                <EnhancedTooltip content="Página anterior">
+                  <button
+                    type="button"
+                    className="pagination-button"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  >
+                    ←
+                  </button>
+                </EnhancedTooltip>
+                <EnhancedTooltip content="Página siguiente">
+                  <button
+                    type="button"
+                    className="pagination-button"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  >
+                    →
+                  </button>
+                </EnhancedTooltip>
               </div>
             )}
           </div>
@@ -511,15 +523,16 @@ export function PreselectionModule() {
                 <thead className="sticky-header">
                   <tr>
                     <th className="checkbox-column">
-                      <input
-                        type="checkbox"
-                        onChange={handleToggleAllVisible}
-                        checked={
-                          paginatedResults.length > 0 &&
-                          paginatedResults.every((p) => selectedPlayerIds.has(p.ID))
-                        }
-                        title="Seleccionar todos los visibles"
-                      />
+                      <EnhancedTooltip content="Seleccionar todos los visibles">
+                        <input
+                          type="checkbox"
+                          onChange={handleToggleAllVisible}
+                          checked={
+                            paginatedResults.length > 0 &&
+                            paginatedResults.every((p) => selectedPlayerIds.has(p.ID))
+                          }
+                        />
+                      </EnhancedTooltip>
                     </th>
                     {sortedVisibleColumns.map((column) => {
                       const sortIndex = sortConfig.findIndex((s) => s.key === column);
@@ -547,10 +560,11 @@ export function PreselectionModule() {
                           onClick={(e) =>
                             handleSort(column as keyof DerivedPlayer, e.shiftKey)
                           }
-                          title={headerLabel}
                         >
                           <div className="th-content">
-                            <span>{headerLabel}</span>
+                            <GlossaryTooltip fieldName={column}>
+                              <span>{headerLabel}</span>
+                            </GlossaryTooltip>
                             {sortDir && (
                               <span className="sort-indicator">
                                 {sortDir === 'asc' ? '▲' : '▼'}
@@ -619,59 +633,72 @@ export function PreselectionModule() {
                                 hasClassic !== 'No' || LEGEND_PLAYERS.has(playerName);
                               const isMLPlayer = ML_PLAYERS.has(playerName);
                               const isAnfpes = ANFPES_CLUBS.has(rawClub);
+                              const thumbPath = getPlayerThumbPath(player.ID);
 
                               return (
                                 <td key={column} className="player-name-cell">
-                                  <div className="player-name-primary">
-                                    <button
-                                      type="button"
-                                      className="player-name-button"
-                                      onClick={(event) =>
-                                        openPlayerActionsMenu(event, player)
-                                      }
-                                    >
-                                      <span
-                                        className="player-name-text"
-                                        style={
-                                          primaryTag
-                                            ? { color: primaryTag.color }
-                                            : undefined
+                                  <div className="player-name-with-thumb">
+                                    <img
+                                      src={thumbPath}
+                                      alt=""
+                                      className="player-thumb"
+                                      loading="lazy"
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        // Detectar si es una leyenda (prefijo L-) para usar Legend.png
+                                        const isLegend = img.src.includes('/L-');
+                                        const fallbackSrc = isLegend
+                                          ? '/images/thumbs/Legend.png'
+                                          : '/images/thumbs/missing.png';
+                                        if (img.src !== fallbackSrc) {
+                                          img.src = fallbackSrc;
                                         }
-                                      >
-                                        {player.NOMBRE}
-                                      </span>
-                                    </button>
-                                    <span className="player-badges">
-                                      {hasNationalTeam !== 'No' && (
-                                        <span
-                                          className="badge"
-                                          title="Seleccionado Nacional"
+                                      }}
+                                    />
+                                    <div className="player-name-content">
+                                      <div className="player-name-primary">
+                                        <button
+                                          type="button"
+                                          className="player-name-button"
+                                          onClick={(event) =>
+                                            openPlayerActionsMenu(event, player)
+                                          }
                                         >
-                                          🌍
+                                          <span
+                                            className="player-name-text"
+                                            style={
+                                              primaryTag
+                                                ? { color: primaryTag.color }
+                                                : undefined
+                                            }
+                                          >
+                                            {player.NOMBRE}
+                                          </span>
+                                        </button>
+                                        <span className="player-badges">
+                                          {hasNationalTeam !== 'No' && (
+                                            <EnhancedTooltip content="Seleccionado Nacional">
+                                              <span className="badge">🌍</span>
+                                            </EnhancedTooltip>
+                                          )}
+                                          {isLegend && (
+                                            <EnhancedTooltip content="Jugador Leyenda">
+                                              <span className="badge legend">★</span>
+                                            </EnhancedTooltip>
+                                          )}
+                                          {isMLPlayer && (
+                                            <EnhancedTooltip content="Jugador ML">
+                                              <span className="badge ml">ML</span>
+                                            </EnhancedTooltip>
+                                          )}
+                                          {isAnfpes && (
+                                            <EnhancedTooltip content="Afiliado a la ANFPES">
+                                              <span className="badge anfpes">ANFPES</span>
+                                            </EnhancedTooltip>
+                                          )}
                                         </span>
-                                      )}
-                                      {isLegend && (
-                                        <span
-                                          className="badge legend"
-                                          title="Jugador Leyenda"
-                                        >
-                                          ★
-                                        </span>
-                                      )}
-                                      {isMLPlayer && (
-                                        <span className="badge ml" title="Jugador ML">
-                                          ML
-                                        </span>
-                                      )}
-                                      {isAnfpes && (
-                                        <span
-                                          className="badge anfpes"
-                                          title="Afiliado a la ANFPES"
-                                        >
-                                          ANFPES
-                                        </span>
-                                      )}
-                                    </span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </td>
                               );
@@ -687,10 +714,11 @@ export function PreselectionModule() {
                                 <td
                                   key={column}
                                   className="image-cell nationality-column"
-                                  title={displayName}
                                 >
                                   {flagPath && (
-                                    <img src={flagPath} alt="" className="flag-icon" />
+                                    <EnhancedTooltip content={displayName}>
+                                      <img src={flagPath} alt="" className="flag-icon" />
+                                    </EnhancedTooltip>
                                   )}
                                 </td>
                               );
@@ -703,20 +731,18 @@ export function PreselectionModule() {
                               const clubDisplay = formatClub(rawClub, rawNationality);
 
                               return (
-                                <td
-                                  key={column}
-                                  className="image-cell club-column"
-                                  title={clubDisplay}
-                                >
-                                  {shieldPath ? (
-                                    <img
-                                      src={shieldPath}
-                                      alt=""
-                                      className="club-shield"
-                                    />
-                                  ) : (
-                                    <span className="club-icon">⚽</span>
-                                  )}
+                                <td key={column} className="image-cell club-column">
+                                  <EnhancedTooltip content={clubDisplay}>
+                                    {shieldPath ? (
+                                      <img
+                                        src={shieldPath}
+                                        alt=""
+                                        className="club-shield"
+                                      />
+                                    ) : (
+                                      <span className="club-icon">⚽</span>
+                                    )}
+                                  </EnhancedTooltip>
                                 </td>
                               );
                             }
@@ -744,34 +770,36 @@ export function PreselectionModule() {
                             onClick={(e) => e.stopPropagation()}
                           >
                             <div className="action-buttons">
-                              <button
-                                type="button"
-                                className="icon-button small"
-                                onClick={() =>
-                                  isEditingNote
-                                    ? setEditingNoteForPlayer(null)
-                                    : handleStartEditingNote(player.ID, playerNote)
-                                }
-                                title={playerNote || 'Agregar nota'}
-                                data-has-note={!!playerNote}
-                              >
-                                {playerNote ? '📝' : '📄'}
-                              </button>
-                              <button
-                                type="button"
-                                className={`icon-button small${isManagingTags ? ' active' : ''}`}
-                                onClick={() =>
-                                  setManagingTagsForPlayer(
-                                    isManagingTags ? null : player.ID,
-                                  )
-                                }
-                                title="Gestionar etiquetas"
-                              >
-                                🏷️
-                                {playerTags.length > 0 && (
-                                  <span className="tag-count">{playerTags.length}</span>
-                                )}
-                              </button>
+                              <EnhancedTooltip content={playerNote || 'Agregar nota'}>
+                                <button
+                                  type="button"
+                                  className="icon-button small"
+                                  onClick={() =>
+                                    isEditingNote
+                                      ? setEditingNoteForPlayer(null)
+                                      : handleStartEditingNote(player.ID, playerNote)
+                                  }
+                                  data-has-note={!!playerNote}
+                                >
+                                  {playerNote ? '📝' : '📄'}
+                                </button>
+                              </EnhancedTooltip>
+                              <EnhancedTooltip content="Gestionar etiquetas">
+                                <button
+                                  type="button"
+                                  className={`icon-button small${isManagingTags ? ' active' : ''}`}
+                                  onClick={() =>
+                                    setManagingTagsForPlayer(
+                                      isManagingTags ? null : player.ID,
+                                    )
+                                  }
+                                >
+                                  🏷️
+                                  {playerTags.length > 0 && (
+                                    <span className="tag-count">{playerTags.length}</span>
+                                  )}
+                                </button>
+                              </EnhancedTooltip>
                             </div>
                           </td>
                         </tr>
@@ -860,14 +888,15 @@ export function PreselectionModule() {
                                     );
                                   })}
                                 </div>
-                                <button
-                                  type="button"
-                                  className="icon-button small"
-                                  onClick={() => setManagingTagsForPlayer(null)}
-                                  title="Cerrar"
-                                >
-                                  ✓
-                                </button>
+                                <EnhancedTooltip content="Cerrar">
+                                  <button
+                                    type="button"
+                                    className="icon-button small"
+                                    onClick={() => setManagingTagsForPlayer(null)}
+                                  >
+                                    ✓
+                                  </button>
+                                </EnhancedTooltip>
                               </div>
                             </td>
                           </tr>

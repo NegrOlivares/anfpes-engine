@@ -4,6 +4,7 @@ import {
   SPECIAL_IMAGES,
   CLUB_SHIELDS_MAPPING,
 } from '../data/imageMapping';
+import profileAddons from '../data/profileAddons';
 
 export function getFlagImagePath(countryName: string): string | null {
   const imageName = COUNTRY_FLAG_MAPPING[countryName];
@@ -34,4 +35,17 @@ export function getClubShieldPath(clubName: string): string | null {
     return null;
   }
   return `/images/clubs/${imageName}`;
+}
+
+export function getPlayerThumbPath(playerId: string | number): string {
+  const addon = (profileAddons as Record<string, { image?: string }>)[String(playerId)];
+
+  // Si no hay imagen asignada, usar missing.png como fallback
+  if (!addon?.image) {
+    return '/images/thumbs/missing.png';
+  }
+
+  const imagePath = addon.image;
+  // Cambiar /images/faces/ por /images/thumbs/
+  return imagePath.replace('/images/faces/', '/images/thumbs/');
 }

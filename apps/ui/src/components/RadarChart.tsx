@@ -1,4 +1,8 @@
 import type { CSSProperties } from 'react';
+import { useState } from 'react';
+import ReactDOM from 'react-dom';
+import { GlossaryTooltip } from './GlossaryTooltip';
+import { getStatColor } from '../types/table';
 
 export interface RadarChartDataset {
   id: string;
@@ -10,6 +14,7 @@ export interface RadarChartDataset {
 
 interface RadarChartProps {
   labels: string[];
+  labelFieldNames?: string[];
   datasets: RadarChartDataset[];
   maxValue?: number;
   size?: number;
@@ -19,12 +24,20 @@ interface RadarChartProps {
 
 export function RadarChart({
   labels,
+  labelFieldNames,
   datasets,
   maxValue = 100,
   size = 240,
   showLegend = true,
   className,
 }: RadarChartProps) {
+  const [hoveredPoint, setHoveredPoint] = useState<{
+    label: string;
+    value: number;
+    color: string;
+    x: number;
+    y: number;
+  } | null>(null);
   const center = size / 2;
   const radius = size / 2 - 20;
   const steps = 4;
@@ -137,25 +150,36 @@ export function RadarChart({
       const point = getPoint(value ?? 0, index);
       const label = labels[index] ?? '';
       const rounded = typeof value === 'number' ? Math.round(value) : (value ?? 0);
+      const valueColor = getStatColor(rounded) || dataset.color;
       return (
-        <circle
-          key={`${dataset.id}-point-${index}`}
-          cx={point.x}
-          cy={point.y}
-          r={4}
-          className="radar-point"
-          style={{ fill: dataset.color }}
-        >
-          <title>
-            {dataset.label}: {label} {rounded}
-          </title>
-        </circle>
+        <g key={`${dataset.id}-point-${index}`}>
+          <circle
+            cx={point.x}
+            cy={point.y}
+            r={4}
+            className="radar-point"
+            style={{ fill: dataset.color, cursor: 'pointer' }}
+            data-value={rounded}
+            data-label={label}
+            onMouseEnter={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setHoveredPoint({
+                label,
+                value: rounded,
+                color: valueColor,
+                x: rect.left + rect.width / 2,
+                y: rect.top,
+              });
+            }}
+            onMouseLeave={() => setHoveredPoint(null)}
+          />
+        </g>
       );
     }),
   );
 
   return (
-    <div className={containerClassName}>
+    <div className={containerClassName} style={{ position: 'relative' }}>
       {shouldShowLegend && leftLegend.length > 0 && renderLegend(leftLegend)}
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img">
         <g>{gridPolygons}</g>
@@ -166,6 +190,48 @@ export function RadarChart({
         <g>{labelElements}</g>
       </svg>
       {shouldShowLegend && rightLegend.length > 0 && renderLegend(rightLegend)}
+
+      {hoveredPoint &&
+        ReactDOM.createPortal(
+          <div
+            className="glossary-tooltip-popup"
+            style={{
+              position: 'fixed',
+              left: `${hoveredPoint.x}px`,
+              top: `${hoveredPoint.y - 40}px`,
+              transform: 'translateX(-50%)',
+              pointerEvents: 'none',
+              zIndex: 10000,
+              padding: '0.4rem 0.6rem',
+              minWidth: 'auto',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.1rem',
+                alignItems: 'center',
+              }}
+            >
+              <strong style={{ color: '#7ac9ff', fontSize: '0.8rem', margin: 0 }}>
+                {hoveredPoint.label}
+              </strong>
+              <div
+                style={{
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  color: hoveredPoint.color,
+                  margin: 0,
+                  lineHeight: 1,
+                }}
+              >
+                {hoveredPoint.value}
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

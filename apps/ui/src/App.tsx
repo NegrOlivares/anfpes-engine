@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCacheLoader } from './store/cacheStore';
 import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
+import { GlossaryModal } from './components/GlossaryModal';
 import { DashboardModule } from './modules/DashboardModule';
 import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
@@ -30,6 +31,7 @@ export default function App() {
   const setActiveModuleId = useModuleStore((state) => state.setActiveModuleId);
   const navigateBack = useModuleStore((state) => state.navigateBack);
   const navigateForward = useModuleStore((state) => state.navigateForward);
+  const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
 
   // Initialize history with dashboard on mount
   useEffect(() => {
@@ -66,6 +68,7 @@ export default function App() {
         onSelect={setActiveModuleId}
         onNavigateBack={navigateBack}
         onNavigateForward={navigateForward}
+        onOpenGlossary={() => setIsGlossaryOpen(true)}
       />
       <main className="app-main">
         {modules.map((module) => {
@@ -81,6 +84,7 @@ export default function App() {
         })}
       </main>
       <PlayerActionsOverlay />
+      <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} />
     </div>
   );
 }

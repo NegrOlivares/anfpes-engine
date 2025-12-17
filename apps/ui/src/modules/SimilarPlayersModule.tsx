@@ -9,6 +9,8 @@ import {
   getTableHeaderLabel,
 } from '../constants/playerFields';
 import { TableCell } from '../components/TableCell';
+import { GlossaryTooltip } from '../components/GlossaryTooltip';
+import { EnhancedTooltip } from '../components/EnhancedTooltip';
 import {
   PositionBadges,
   getPlayerPositions,
@@ -31,7 +33,11 @@ import {
 } from '../utils/playerFilters';
 import { FiltersPanel } from '../components/FiltersPanel';
 import type { FilterCondition } from '../hooks/usePlayerViews';
-import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
+import {
+  getFlagImagePath,
+  getClubShieldPath,
+  getPlayerThumbPath,
+} from '../utils/imageHelpers';
 import { getNationalityInfo } from '../data/nationalities';
 import { openPlayerActionsMenu } from '../components/PlayerActionsOverlay';
 import { getStatColor, type SortDirection } from '../types/table';
@@ -492,33 +498,23 @@ export function SimilarPlayersModule() {
                     </strong>
                     <span className="player-badges">
                       {baseStatusBadges.map((badge) => (
-                        <span
-                          key={badge.key}
-                          className={badge.className}
-                          title={badge.title}
-                        >
-                          {badge.label}
-                        </span>
+                        <EnhancedTooltip key={badge.key} content={badge.title}>
+                          <span className={badge.className}>{badge.label}</span>
+                        </EnhancedTooltip>
                       ))}
                     </span>
                   </div>
                   <div className="base-player-row meta-row">
                     <div className="base-player-icons">
                       {baseFlagPath && (
-                        <img
-                          src={baseFlagPath}
-                          alt=""
-                          className="flag-icon"
-                          title={basePlayer.NACIONALIDAD as string}
-                        />
+                        <EnhancedTooltip content={basePlayer.NACIONALIDAD as string}>
+                          <img src={baseFlagPath} alt="" className="flag-icon" />
+                        </EnhancedTooltip>
                       )}
                       {baseShieldPath && (
-                        <img
-                          src={baseShieldPath}
-                          alt=""
-                          className="club-shield"
-                          title={baseClubDisplay}
-                        />
+                        <EnhancedTooltip content={baseClubDisplay}>
+                          <img src={baseShieldPath} alt="" className="club-shield" />
+                        </EnhancedTooltip>
                       )}
                     </div>
                     <span
@@ -566,12 +562,9 @@ export function SimilarPlayersModule() {
           </div>
 
           <div className="control-block stack-block chip-panel">
-            <p
-              className="control-title"
-              title="Activa o desactiva los macrostats que se cruzan en la comparación."
-            >
-              Macrostats comparados
-            </p>
+            <EnhancedTooltip content="Activa o desactiva los macrostats que se cruzan en la comparación.">
+              <p className="control-title">Macrostats comparados</p>
+            </EnhancedTooltip>
             <div className="macro-pill-group compact macro-pill-grid">
               {MACRO_KEYS.map((key) => (
                 <button
@@ -587,12 +580,9 @@ export function SimilarPlayersModule() {
           </div>
 
           <div className="control-block stack-block">
-            <p
-              className="control-title"
-              title="Define si la similitud se basa en proporciones o en valores absolutos."
-            >
-              Modo
-            </p>
+            <EnhancedTooltip content="Define si la similitud se basa en proporciones o en valores absolutos.">
+              <p className="control-title">Modo</p>
+            </EnhancedTooltip>
             <div className="toggle-pill-group">
               <button
                 type="button"
@@ -614,12 +604,9 @@ export function SimilarPlayersModule() {
           </div>
 
           <div className="control-block stack-block">
-            <p
-              className="control-title"
-              title="Incluye los promedios por posición dentro del cálculo de similitud."
-            >
-              Promedios
-            </p>
+            <EnhancedTooltip content="Incluye los promedios por posición dentro del cálculo de similitud.">
+              <p className="control-title">Promedios</p>
+            </EnhancedTooltip>
             <div className="toggle-pill-group">
               <button
                 type="button"
@@ -633,12 +620,9 @@ export function SimilarPlayersModule() {
           </div>
 
           <div className="control-block slider-chip">
-            <p
-              className="control-title"
-              title="Establece el porcentaje mínimo requerido para mostrar coincidencias."
-            >
-              Porcentaje de similitud
-            </p>
+            <EnhancedTooltip content="Establece el porcentaje mínimo requerido para mostrar coincidencias.">
+              <p className="control-title">Porcentaje de similitud</p>
+            </EnhancedTooltip>
             <div className="slider-row">
               <span className="slider-value">{minSimilarity}%</span>
               <input
@@ -743,18 +727,19 @@ export function SimilarPlayersModule() {
                   <th
                     className="similarity-column sortable"
                     onClick={(e) => handleSort('SIMILARITY', e.shiftKey)}
-                    title="Porcentaje de similitud respecto al jugador base."
                   >
-                    <div className="th-content">
-                      <span>
-                        <strong>%</strong>
-                      </span>
-                      {similaritySortConfig && (
-                        <span className="sort-indicator">
-                          {similaritySortConfig.direction === 'asc' ? '↑' : '↓'}
+                    <EnhancedTooltip content="Porcentaje de similitud respecto al jugador base.">
+                      <div className="th-content">
+                        <span>
+                          <strong>%</strong>
                         </span>
-                      )}
-                    </div>
+                        {similaritySortConfig && (
+                          <span className="sort-indicator">
+                            {similaritySortConfig.direction === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </div>
+                    </EnhancedTooltip>
                   </th>
                   {sortedVisibleColumns.map((column) => {
                     const headerLabel = getTableHeaderLabel(column);
@@ -783,10 +768,11 @@ export function SimilarPlayersModule() {
                         onClick={(e) =>
                           handleSort(column as keyof DerivedPlayer, e.shiftKey)
                         }
-                        title={headerLabel}
                       >
                         <div className="th-content">
-                          <span>{headerLabel}</span>
+                          <GlossaryTooltip fieldName={column}>
+                            <span>{headerLabel}</span>
+                          </GlossaryTooltip>
                           {sortDir && (
                             <span className="sort-indicator">
                               {sortDir === 'asc' ? '↑' : '↓'}
@@ -828,33 +814,56 @@ export function SimilarPlayersModule() {
                         {sortedVisibleColumns.map((column) => {
                           if (column === 'NOMBRE') {
                             const rowStatusBadges = getStatusBadges(player);
+                            const thumbPath = getPlayerThumbPath(player.ID);
                             return (
                               <td key={column} className="player-name-cell">
-                                <div className="player-name-primary">
-                                  <button
-                                    type="button"
-                                    className="player-name-button"
-                                    onClick={(event) =>
-                                      openPlayerActionsMenu(event, player)
-                                    }
-                                  >
-                                    <span className="player-name-text">
-                                      {player.NOMBRE}
-                                    </span>
-                                  </button>
-                                  {rowStatusBadges.length > 0 && (
-                                    <span className="player-badges">
-                                      {rowStatusBadges.map((badge) => (
-                                        <span
-                                          key={badge.key}
-                                          className={badge.className}
-                                          title={badge.title}
-                                        >
-                                          {badge.label}
+                                <div className="player-name-with-thumb">
+                                  <img
+                                    src={thumbPath}
+                                    alt=""
+                                    className="player-thumb"
+                                    loading="lazy"
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      // Detectar si es una leyenda (prefijo L-) para usar Legend.png
+                                      const isLegend = img.src.includes('/L-');
+                                      const fallbackSrc = isLegend
+                                        ? '/images/thumbs/Legend.png'
+                                        : '/images/thumbs/missing.png';
+                                      if (img.src !== fallbackSrc) {
+                                        img.src = fallbackSrc;
+                                      }
+                                    }}
+                                  />
+                                  <div className="player-name-content">
+                                    <div className="player-name-primary">
+                                      <button
+                                        type="button"
+                                        className="player-name-button"
+                                        onClick={(event) =>
+                                          openPlayerActionsMenu(event, player)
+                                        }
+                                      >
+                                        <span className="player-name-text">
+                                          {player.NOMBRE}
                                         </span>
-                                      ))}
-                                    </span>
-                                  )}
+                                      </button>
+                                      {rowStatusBadges.length > 0 && (
+                                        <span className="player-badges">
+                                          {rowStatusBadges.map((badge) => (
+                                            <EnhancedTooltip
+                                              key={badge.key}
+                                              content={badge.title}
+                                            >
+                                              <span className={badge.className}>
+                                                {badge.label}
+                                              </span>
+                                            </EnhancedTooltip>
+                                          ))}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
                               </td>
                             );
@@ -867,13 +876,11 @@ export function SimilarPlayersModule() {
                             const displayName = nationalityInfo?.name || rawNationality;
 
                             return (
-                              <td
-                                key={column}
-                                className="image-cell nationality-column"
-                                title={displayName}
-                              >
+                              <td key={column} className="image-cell nationality-column">
                                 {flagPath && (
-                                  <img src={flagPath} alt="" className="flag-icon" />
+                                  <EnhancedTooltip content={displayName}>
+                                    <img src={flagPath} alt="" className="flag-icon" />
+                                  </EnhancedTooltip>
                                 )}
                               </td>
                             );
@@ -886,15 +893,19 @@ export function SimilarPlayersModule() {
                             const clubDisplay = formatClub(rawClub, rawNationality);
 
                             return (
-                              <td
-                                key={column}
-                                className="image-cell club-column"
-                                title={clubDisplay}
-                              >
+                              <td key={column} className="image-cell club-column">
                                 {shieldPath ? (
-                                  <img src={shieldPath} alt="" className="club-shield" />
+                                  <EnhancedTooltip content={clubDisplay}>
+                                    <img
+                                      src={shieldPath}
+                                      alt=""
+                                      className="club-shield"
+                                    />
+                                  </EnhancedTooltip>
                                 ) : (
-                                  <span className="club-icon">⚽</span>
+                                  <EnhancedTooltip content={clubDisplay}>
+                                    <span className="club-icon">⚽</span>
+                                  </EnhancedTooltip>
                                 )}
                               </td>
                             );

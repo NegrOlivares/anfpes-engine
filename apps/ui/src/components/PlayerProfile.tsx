@@ -1,6 +1,9 @@
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { RadarChart } from './RadarChart';
+import { GlossaryTooltip } from './GlossaryTooltip';
+import { EnhancedTooltip } from './EnhancedTooltip';
+import { GLOSSARY_DATA } from '../data/glossary';
 import {
   POSITION_HIGHLIGHTS,
   type PositionHighlightId,
@@ -636,7 +639,7 @@ function getShirtStyle(
     {
       token: 'manchester united',
       background: solidWithCuffs('#c00000', '#000000'),
-      color: '#000000',
+      color: '#fff',
     },
     {
       token: 'messina',
@@ -1923,17 +1926,37 @@ interface StatusBadge {
   label: string;
   className: string;
   title: string;
+  glossaryId?: string;
 }
 
 const STATUS_BADGES: StatusBadge[] = [
-  { key: 'national', label: '🌍', className: 'badge', title: 'Seleccionado Nacional' },
-  { key: 'legend', label: '★', className: 'badge legend', title: 'Jugador Leyenda' },
-  { key: 'ml', label: 'ML', className: 'badge ml', title: 'Jugador ML' },
+  {
+    key: 'national',
+    label: '🌍',
+    className: 'badge',
+    title: 'Seleccionado Nacional',
+    glossaryId: 'seleccionado-nacional',
+  },
+  {
+    key: 'legend',
+    label: '★',
+    className: 'badge legend',
+    title: 'Jugador Leyenda',
+    glossaryId: 'leyenda',
+  },
+  {
+    key: 'ml',
+    label: 'ML',
+    className: 'badge ml',
+    title: 'Jugador ML',
+    glossaryId: 'master-league',
+  },
   {
     key: 'anfpes',
     label: 'ANFPES',
     className: 'badge anfpes',
     title: 'Afiliado a la ANFPES',
+    glossaryId: 'anfpes',
   },
 ];
 
@@ -1976,6 +1999,10 @@ function findPlayerByQuery(players: DerivedPlayer[] | undefined, query: string) 
     players.find((player) =>
       normalize(String(player.NOMBRE ?? '')).includes(normalized),
     ) ??
+    players.find((player) => {
+      const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+      return addon?.fullName ? normalize(addon.fullName).includes(normalized) : false;
+    }) ??
     players.find((player) => normalize(String(player.CLUB ?? '')).includes(normalized))
   );
 }
@@ -1999,6 +2026,7 @@ export function PlayerProfile() {
     null,
   );
   const [showPositions, setShowPositions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
 
   const playerKey = String(selectedPlayerId ?? '');
   const formState = (formById[playerKey] ?? DEFAULT_FORM_STATE) as FormStateId;
@@ -2047,14 +2075,21 @@ export function PlayerProfile() {
         const name = normalize(String(player.NOMBRE ?? ''));
         const id = normalize(String(player.ID ?? ''));
         const club = normalize(String(player.CLUB ?? ''));
+        const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+        const fullName = addon?.fullName ? normalize(addon.fullName) : '';
         return (
           name.includes(normalized) ||
           id.includes(normalized) ||
-          club.includes(normalized)
+          club.includes(normalized) ||
+          fullName.includes(normalized)
         );
       })
       .slice(0, 8);
   }, [players, query]);
+
+  useEffect(() => {
+    setSelectedSuggestionIndex(-1);
+  }, [query]);
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {
@@ -2079,6 +2114,29 @@ export function PlayerProfile() {
       setSelectedPlayer(String(selectedPlayer.ID));
     },
     [setSelectedPlayer],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (suggestions.length === 0) return;
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setSelectedSuggestionIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : prev,
+        );
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setSelectedSuggestionIndex((prev) => (prev > 0 ? prev - 1 : -1));
+      } else if (event.key === 'Enter' && selectedSuggestionIndex >= 0) {
+        event.preventDefault();
+        const selectedPlayer = suggestions[selectedSuggestionIndex];
+        if (selectedPlayer) {
+          handleSelectSuggestion(selectedPlayer);
+        }
+      }
+    },
+    [suggestions, selectedSuggestionIndex, handleSelectSuggestion],
   );
 
   const showSuggestions = Boolean(query.trim() && suggestions.length > 0);
@@ -2159,6 +2217,7 @@ export function PlayerProfile() {
               placeholder="Buscar jugador por nombre, ID o club..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={handleKeyDown}
               autoFocus
             />
             <button type="submit" className="secondary-button" disabled={!query.trim()}>
@@ -2172,11 +2231,11 @@ export function PlayerProfile() {
             {lookupError && <p className="error">{lookupError}</p>}
             {showSuggestions && (
               <div className="profile-suggestions">
-                {suggestions.map((suggestion) => (
+                {suggestions.map((suggestion, index) => (
                   <button
                     key={suggestion.ID as string}
                     type="button"
-                    className="suggestion-button"
+                    className={`suggestion-button ${index === selectedSuggestionIndex ? 'active' : ''}`}
                     onClick={() => handleSelectSuggestion(suggestion)}
                   >
                     <span className="suggestion-name">{suggestion.NOMBRE}</span>
@@ -2313,11 +2372,36 @@ export function PlayerProfile() {
                   </div>
                 )}
               </div>
-              {badges.map((badge) => (
-                <span key={badge.key} className={badge.className} title={badge.title}>
-                  {badge.label}
-                </span>
-              ))}
+              {badges.map((badge) => {
+                const glossaryTerm = badge.glossaryId
+                  ? GLOSSARY_DATA.find((t) => t.id === badge.glossaryId)
+                  : null;
+                const tooltipContent = glossaryTerm ? (
+                  <div
+                    style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}
+                  >
+                    <div style={{ color: '#7ac9ff', fontWeight: 600 }}>
+                      {glossaryTerm.term}
+                    </div>
+                    <div
+                      style={{
+                        color: 'rgba(255, 255, 255, 0.85)',
+                        fontWeight: 400,
+                        fontSize: '0.85rem',
+                      }}
+                    >
+                      {glossaryTerm.definition}
+                    </div>
+                  </div>
+                ) : (
+                  badge.title
+                );
+                return (
+                  <EnhancedTooltip key={badge.key} content={tooltipContent}>
+                    <span className={badge.className}>{badge.label}</span>
+                  </EnhancedTooltip>
+                );
+              })}
             </div>
           </div>
 
@@ -2340,42 +2424,43 @@ export function PlayerProfile() {
         </div>
 
         <div className="profile-average-position">
-          <div
-            className="player-average"
-            style={{ color: promedioColor }}
-            title={`Promedio principal: ${promedio}`}
-          >
-            {promedio}
-          </div>
+          <EnhancedTooltip content={`Promedio principal: ${promedio}`}>
+            <div className="player-average" style={{ color: promedioColor }}>
+              {promedio}
+            </div>
+          </EnhancedTooltip>
           {primaryPosition && (
-            <span
-              className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
-              title={`Posición Principal: ${getPositionFullName(primaryPosition)}`}
+            <EnhancedTooltip
+              content={`Posición Principal: ${getPositionFullName(primaryPosition)}`}
             >
-              {primaryPosition}
-            </span>
+              <span
+                className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
+              >
+                {primaryPosition}
+              </span>
+            </EnhancedTooltip>
           )}
         </div>
 
         <div className="profile-club-flag">
           {clubShield && (
-            <img src={clubShield} title={clubLabel} alt="" className="club-shield" />
+            <EnhancedTooltip content={clubLabel}>
+              <img src={clubShield} alt="" className="club-shield" />
+            </EnhancedTooltip>
           )}
           {flagPath && (
-            <img src={flagPath} alt="" title={nationalityInfo?.name} className="flag" />
+            <EnhancedTooltip content={nationalityInfo?.name || ''}>
+              <img src={flagPath} alt="" className="flag" />
+            </EnhancedTooltip>
           )}
         </div>
         <div className="profile-foot">
-          <div
-            className="profile-foot-left"
-            title={getFootTitle(player, 'left')}
-            style={getFootStyle(player, 'left')}
-          />
-          <div
-            className="profile-foot-right"
-            title={getFootTitle(player, 'right')}
-            style={getFootStyle(player, 'right')}
-          />
+          <EnhancedTooltip content={getFootTitle(player, 'left')}>
+            <div className="profile-foot-left" style={getFootStyle(player, 'left')} />
+          </EnhancedTooltip>
+          <EnhancedTooltip content={getFootTitle(player, 'right')}>
+            <div className="profile-foot-right" style={getFootStyle(player, 'right')} />
+          </EnhancedTooltip>
         </div>
         <button
           type="button"
@@ -2393,6 +2478,7 @@ export function PlayerProfile() {
           <div className="profile-radar-row">
             <RadarChart
               labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
+              labelFieldNames={MACRO_FIELDS.map((field) => field as string)}
               datasets={[macroDataset]}
               size={220}
               showLegend={false}
@@ -2473,7 +2559,9 @@ export function PlayerProfile() {
                   key={field as string}
                   className={`stat-block row compact ${isHighlighted ? 'highlighted' : ''}`}
                 >
-                  <span className="stat-label">{getFieldLabel(field as string)}</span>
+                  <GlossaryTooltip fieldName={field as string}>
+                    <span className="stat-label">{getFieldLabel(field as string)}</span>
+                  </GlossaryTooltip>
                   <span className="stat-value" style={{ color }}>
                     {formatPlayerValue(value, 0)}
                   </span>
@@ -2496,7 +2584,9 @@ export function PlayerProfile() {
 
                 return (
                   <div key={field as string} className="stat-block row compact">
-                    <span className="stat-label">{getFieldLabel(field as string)}</span>
+                    <GlossaryTooltip fieldName={field as string}>
+                      <span className="stat-label">{getFieldLabel(field as string)}</span>
+                    </GlossaryTooltip>
                     <span className="stat-value" style={{ color }}>
                       {displayValue}
                     </span>
@@ -2518,7 +2608,9 @@ export function PlayerProfile() {
                   key={field as string}
                   className={`stat-block row compact ${isHighlighted ? 'highlighted' : ''}`}
                 >
-                  <span className="stat-label">{getFieldLabel(field as string)}</span>
+                  <GlossaryTooltip fieldName={field as string}>
+                    <span className="stat-label">{getFieldLabel(field as string)}</span>
+                  </GlossaryTooltip>
                   <span className="stat-value" style={{ color }}>
                     {formatPlayerValue(value, 0)}
                   </span>
@@ -2791,9 +2883,9 @@ function PlayerSkills({ player }: { player: DerivedPlayer }) {
   return (
     <div className="skills-grid">
       {activeSkills.map((skill) => (
-        <span key={skill.field} className="skill-pill active">
-          {skill.label}
-        </span>
+        <GlossaryTooltip key={skill.field} fieldName={skill.field}>
+          <span className="skill-pill active">{skill.label}</span>
+        </GlossaryTooltip>
       ))}
     </div>
   );

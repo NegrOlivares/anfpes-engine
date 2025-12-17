@@ -10,6 +10,9 @@ import type { CSSProperties } from 'react';
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useCacheStore } from '../store/cacheStore';
 import { RadarChart } from '../components/RadarChart';
+import { GlossaryTooltip } from '../components/GlossaryTooltip';
+import { EnhancedTooltip } from '../components/EnhancedTooltip';
+import { GLOSSARY_DATA } from '../data/glossary';
 import type { RadarChartDataset } from '../components/RadarChart';
 import { FAV_SIDE_FIELD, INJURY_FIELD, FITNESS_FIELD } from '../constants/playerFields';
 import {
@@ -27,8 +30,14 @@ import {
   getPositionFullName,
 } from '../components/PositionBadges';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
-import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
+import {
+  getFlagImagePath,
+  getClubShieldPath,
+  getPlayerThumbPath,
+} from '../utils/imageHelpers';
 import { getNationalityInfo } from '../data/nationalities';
+import profileAddons from '../data/profileAddons';
+import type { ProfileAddon } from '../data/profileAddons';
 import { getStatColor, getInjuryColor } from '../types/table';
 import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 import { openPlayerActionsMenu } from '../components/PlayerActionsOverlay';
@@ -221,17 +230,37 @@ interface StatusBadge {
   label: string;
   className: string;
   title: string;
+  glossaryId?: string;
 }
 
 const STATUS_BADGES: StatusBadge[] = [
-  { key: 'national', label: '🌍', className: 'badge', title: 'Seleccionado Nacional' },
-  { key: 'legend', label: '★', className: 'badge legend', title: 'Jugador Leyenda' },
-  { key: 'ml', label: 'ML', className: 'badge ml', title: 'Jugador ML' },
+  {
+    key: 'national',
+    label: '🌍',
+    className: 'badge',
+    title: 'Seleccionado Nacional',
+    glossaryId: 'seleccionado-nacional',
+  },
+  {
+    key: 'legend',
+    label: '★',
+    className: 'badge legend',
+    title: 'Jugador Leyenda',
+    glossaryId: 'leyenda',
+  },
+  {
+    key: 'ml',
+    label: 'ML',
+    className: 'badge ml',
+    title: 'Jugador ML',
+    glossaryId: 'master-league',
+  },
   {
     key: 'anfpes',
     label: 'ANFPES',
     className: 'badge anfpes',
     title: 'Afiliado a la ANFPES',
+    glossaryId: 'anfpes',
   },
 ];
 
@@ -278,6 +307,10 @@ function findPlayerByQuery(players: DerivedPlayer[] | undefined, query: string) 
     players.find((player) =>
       normalize(String(player.NOMBRE ?? '')).includes(normalized),
     ) ??
+    players.find((player) => {
+      const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+      return addon?.fullName ? normalize(addon.fullName).includes(normalized) : false;
+    }) ??
     players.find((player) => normalize(String(player.CLUB ?? '')).includes(normalized))
   );
 }
@@ -287,6 +320,9 @@ export function ComparatorModule() {
   const status = useCacheStore((state) => state.status);
   const error = useCacheStore((state) => state.error);
   const loading = status === 'idle' || status === 'loading';
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [gridColumns, setGridColumns] = useState(1);
+  const suggestionsGridRef = useRef<HTMLDivElement>(null);
 
   // All state from store
   const query = useComparatorLaunchStore((state) => state.query);
@@ -320,14 +356,55 @@ export function ComparatorModule() {
         const name = normalize(String(player.NOMBRE ?? ''));
         const id = normalize(String(player.ID ?? ''));
         const club = normalize(String(player.CLUB ?? ''));
+        const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+        const fullName = addon?.fullName ? normalize(addon.fullName) : '';
         return (
           name.includes(normalized) ||
           id.includes(normalized) ||
-          club.includes(normalized)
+          club.includes(normalized) ||
+          fullName.includes(normalized)
         );
       })
       .slice(0, 8);
   }, [players, query]);
+
+  useEffect(() => {
+    setSelectedSuggestionIndex(-1);
+  }, [query]);
+
+  const showSuggestions = Boolean(query.trim() && suggestions.length > 0);
+  const showSelector = Boolean(lookupError || showSuggestions);
+
+  useLayoutEffect(() => {
+    if (!showSuggestions || !suggestionsGridRef.current) return;
+
+    const calculateColumns = () => {
+      const grid = suggestionsGridRef.current;
+      if (!grid) return;
+
+      const buttons = grid.querySelectorAll('.suggestion-button');
+      if (buttons.length === 0) return;
+
+      // Get the top position of the first element
+      const firstTop = buttons[0].getBoundingClientRect().top;
+
+      // Count how many elements are on the same row
+      let cols = 0;
+      for (const button of buttons) {
+        if (button.getBoundingClientRect().top === firstTop) {
+          cols++;
+        } else {
+          break;
+        }
+      }
+
+      setGridColumns(cols > 0 ? cols : 1);
+    };
+
+    calculateColumns();
+    window.addEventListener('resize', calculateColumns);
+    return () => window.removeEventListener('resize', calculateColumns);
+  }, [showSuggestions, suggestions]);
 
   const statsRows = useMemo(() => {
     return CORE_STATS.map((field) => ({
@@ -490,8 +567,51 @@ export function ComparatorModule() {
     });
   };
 
-  const showSuggestions = Boolean(query.trim() && suggestions.length > 0);
-  const showSelector = Boolean(lookupError || showSuggestions);
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (suggestions.length === 0) return;
+
+      const cols = gridColumns;
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setSelectedSuggestionIndex((prev) => {
+          const nextIndex = prev + cols;
+          return nextIndex < suggestions.length ? nextIndex : prev;
+        });
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setSelectedSuggestionIndex((prev) => {
+          if (prev === -1) return suggestions.length - 1;
+          const nextIndex = prev - cols;
+          return nextIndex >= 0 ? nextIndex : -1;
+        });
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        setSelectedSuggestionIndex((prev) => {
+          if (prev === -1) return 0;
+          return prev < suggestions.length - 1 ? prev + 1 : prev;
+        });
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        setSelectedSuggestionIndex((prev) => {
+          if (prev <= 0) return -1;
+          return prev - 1;
+        });
+      } else if (event.key === 'Enter' && selectedSuggestionIndex >= 0) {
+        event.preventDefault();
+        const selectedPlayer = suggestions[selectedSuggestionIndex];
+        if (
+          selectedPlayer &&
+          !selectedIds.includes(String(selectedPlayer.ID)) &&
+          selectedIds.length < MAX_PLAYERS
+        ) {
+          handleAddPlayer(selectedPlayer);
+        }
+      }
+    },
+    [suggestions, selectedSuggestionIndex, selectedIds, handleAddPlayer, gridColumns],
+  );
 
   return (
     <section className="card comparator-module">
@@ -503,6 +623,7 @@ export function ComparatorModule() {
               placeholder="Selecciona hasta 4 jugadores para comparar"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <button
               type="submit"
@@ -537,12 +658,12 @@ export function ComparatorModule() {
         <div className="comparator-selector">
           {lookupError && <p className="error">{lookupError}</p>}
           {showSuggestions && (
-            <div className="comparator-suggestions">
-              {suggestions.map((player) => (
+            <div className="comparator-suggestions" ref={suggestionsGridRef}>
+              {suggestions.map((player, index) => (
                 <button
                   key={player.ID as string}
                   type="button"
-                  className="suggestion-button"
+                  className={`suggestion-button ${index === selectedSuggestionIndex ? 'active' : ''}`}
                   disabled={
                     selectedIds.includes(String(player.ID)) ||
                     selectedIds.length >= MAX_PLAYERS
@@ -693,7 +814,14 @@ function DuelComparison({
             {statsRows.map((row) => (
               <DuelStatRow
                 key={row.field as string}
-                label={row.label}
+                label={
+                  <GlossaryTooltip
+                    fieldName={row.field as string}
+                    displayLabel={row.label}
+                  >
+                    {row.label}
+                  </GlossaryTooltip>
+                }
                 leftValue={row.values[0]}
                 rightValue={row.values[1]}
                 showBars
@@ -711,6 +839,7 @@ function DuelComparison({
           <header>RADAR</header>
           <RadarChart
             labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
+            labelFieldNames={MACRO_FIELDS.map((field) => field as string)}
             datasets={datasets.slice(0, 2)}
           />
         </section>
@@ -793,7 +922,7 @@ function MultiComparison({
 }
 
 interface DuelStatRowProps {
-  label: string;
+  label: React.ReactNode;
   leftValue?: number;
   rightValue?: number;
   showBars?: boolean;
@@ -849,9 +978,7 @@ function DuelStatRow({
           />
         </div>
       </div>
-      <div className="stat-label">
-        <span>{label}</span>
-      </div>
+      <div className="stat-label">{label}</div>
       <div className={`player-value ${winner === 'right' ? 'winner' : ''}`}>
         <div className="stat-bar mini">
           <div
@@ -925,15 +1052,34 @@ function ComparatorPlayerCard({
     promedioValue !== undefined ? (getStatColor(promedioValue) ?? '#ffd166') : '#ffd166';
   const primaryLine = primaryPosition ? getPositionLine(primaryPosition) : undefined;
 
+  const thumbPath = getPlayerThumbPath(player.ID);
+
   const identityBlock = (
     <div className="player-identity">
       <div className="player-identity-header">
-        <h3
-          className="clickable-name"
-          style={{ cursor: 'pointer' }}
-          onClick={(e) => openPlayerActionsMenu(e, player, { hideCompare: true })}
-        >
-          {player.NOMBRE}
+        <h3 className="player-name-with-thumb">
+          <img
+            src={thumbPath}
+            alt=""
+            className="player-thumb"
+            onError={(e) => {
+              const img = e.currentTarget;
+              const isLegend = img.src.includes('/L-');
+              const fallback = isLegend
+                ? '/images/thumbs/Legend.png'
+                : '/images/thumbs/missing.png';
+              if (!img.src.endsWith(fallback)) {
+                img.src = fallback;
+              }
+            }}
+          />
+          <span
+            className="clickable-name"
+            style={{ cursor: 'pointer' }}
+            onClick={(e) => openPlayerActionsMenu(e, player, { hideCompare: true })}
+          >
+            {player.NOMBRE}
+          </span>
         </h3>
         {onChangeForm && (
           <div className="form-dropdown" title="Forma del jugador">
@@ -973,11 +1119,28 @@ function ComparatorPlayerCard({
           </div>
         )}
         <div className="player-badges">
-          {badges.map((badge) => (
-            <span key={badge.key} className={badge.className} title={badge.title}>
-              {badge.label}
-            </span>
-          ))}
+          {badges.map((badge) => {
+            const glossaryTerm = badge.glossaryId
+              ? GLOSSARY_DATA.find((t) => t.id === badge.glossaryId)
+              : null;
+            const tooltipContent = glossaryTerm ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                <div style={{ color: '#7ac9ff', fontWeight: 600 }}>
+                  {glossaryTerm.term}
+                </div>
+                <div style={{ color: 'rgba(255, 255, 255, 0.85)', fontWeight: 400 }}>
+                  {glossaryTerm.definition}
+                </div>
+              </div>
+            ) : (
+              badge.title
+            );
+            return (
+              <EnhancedTooltip key={badge.key} content={tooltipContent}>
+                <span className={badge.className}>{badge.label}</span>
+              </EnhancedTooltip>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -986,31 +1149,30 @@ function ComparatorPlayerCard({
   const overviewBlock = (
     <div className="player-overview">
       <div className="player-average">
-        <strong
-          style={{ color: promedioColor }}
-          title={`Promedio principal: ${promedio}`}
-        >
-          {promedio}
-        </strong>
+        <EnhancedTooltip content={`Promedio principal: ${promedio}`}>
+          <strong style={{ color: promedioColor }}>{promedio}</strong>
+        </EnhancedTooltip>
       </div>
       {primaryPosition && (
-        <span
-          className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
-          title={getPositionFullName(primaryPosition)}
-        >
-          {primaryPosition}
-        </span>
+        <EnhancedTooltip content={getPositionFullName(primaryPosition)}>
+          <span
+            className={`primary-position-tag position-badge primary position-${primaryLine ?? 'DEF'}`}
+          >
+            {primaryPosition}
+          </span>
+        </EnhancedTooltip>
       )}
       <div className="player-flags">
         {clubShield && (
-          <img
-            src={clubShield}
-            alt={clubLabel}
-            title={clubLabel}
-            className="club-shield"
-          />
+          <EnhancedTooltip content={clubLabel}>
+            <img src={clubShield} alt={clubLabel} className="club-shield" />
+          </EnhancedTooltip>
         )}
-        {flagPath && <img src={flagPath} alt="" title={nationalityInfo?.name} />}
+        {flagPath && (
+          <EnhancedTooltip content={nationalityInfo?.name || ''}>
+            <img src={flagPath} alt="" />
+          </EnhancedTooltip>
+        )}
       </div>
     </div>
   );
@@ -1066,6 +1228,7 @@ function ComparatorPlayerCard({
           {DETAIL_FIELDS.map((field) => (
             <DetailField
               key={field as string}
+              field={field as string}
               label={getFieldLabel(field as string)}
               value={formatDetailFieldValue(field, player)}
             />
@@ -1106,7 +1269,11 @@ function ComparatorPlayerCard({
 
                 return (
                   <div key={row.field as string} className="stat-row">
-                    <span className="stat-label">{row.label}</span>
+                    <GlossaryTooltip fieldName={row.field as string}>
+                      <span className="stat-label" style={{ pointerEvents: 'auto' }}>
+                        {row.label}
+                      </span>
+                    </GlossaryTooltip>
                     <span
                       className={`stat-value ${isMax ? 'stat-winner' : ''}`}
                       style={
@@ -1140,6 +1307,7 @@ function ComparatorPlayerCard({
             <header>RADAR</header>
             <RadarChart
               labels={MACRO_FIELDS.map((field) => getFieldLabel(field as string))}
+              labelFieldNames={MACRO_FIELDS.map((field) => field as string)}
               datasets={[radarDataset]}
               size={180}
               showLegend={false}
@@ -1156,7 +1324,15 @@ type DetailValue = {
   color?: string;
 };
 
-function DetailField({ label, value }: { label: string; value: DetailValue }) {
+function DetailField({
+  field,
+  label,
+  value,
+}: {
+  field?: string;
+  label: string;
+  value: DetailValue;
+}) {
   const textRef = useRef<HTMLSpanElement>(null);
   const [scrollDistance, setScrollDistance] = useState(0);
 
@@ -1184,11 +1360,21 @@ function DetailField({ label, value }: { label: string; value: DetailValue }) {
 
   return (
     <div>
-      <small className={`meta-label ${scrollable ? 'scrollable' : ''}`}>
-        <span ref={textRef} style={spanStyle}>
-          {label}
-        </span>
-      </small>
+      {field ? (
+        <GlossaryTooltip fieldName={field}>
+          <small className={`meta-label ${scrollable ? 'scrollable' : ''}`}>
+            <span ref={textRef} style={spanStyle}>
+              {label}
+            </span>
+          </small>
+        </GlossaryTooltip>
+      ) : (
+        <small className={`meta-label ${scrollable ? 'scrollable' : ''}`}>
+          <span ref={textRef} style={spanStyle}>
+            {label}
+          </span>
+        </small>
+      )}
       <p style={value.color ? ({ color: value.color } as CSSProperties) : undefined}>
         {value.text}
       </p>
@@ -1260,9 +1446,9 @@ function PlayerSkills({ player }: { player: DerivedPlayer }) {
       <h4>Habilidades Especiales</h4>
       <div className="skills-grid">
         {activeSkills.map((skill) => (
-          <span key={skill.field} className="skill-pill active">
-            ★ {skill.label}
-          </span>
+          <GlossaryTooltip key={skill.field} fieldName={skill.field}>
+            <span className="skill-pill active">★ {skill.label}</span>
+          </GlossaryTooltip>
         ))}
       </div>
     </div>
