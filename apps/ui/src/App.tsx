@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useCacheLoader } from './store/cacheStore';
 import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
 import { GlossaryModal } from './components/GlossaryModal';
+import { SplashScreen } from './components/SplashScreen';
+import { ExitConfirmModal } from './components/ExitConfirmModal';
 import { HomeModule } from './modules/HomeModule';
 import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
@@ -32,6 +34,8 @@ export default function App() {
   const navigateBack = useModuleStore((state) => state.navigateBack);
   const navigateForward = useModuleStore((state) => state.navigateForward);
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const [showExitModal, setShowExitModal] = useState(false);
 
   // Initialize history with dashboard on mount
   useEffect(() => {
@@ -40,6 +44,15 @@ export default function App() {
       push(MODULE_IDS.dashboard, {}); // Empty snapshot for dashboard
     }
   }, []);
+
+  // Handle exit modal
+  const handleExitClick = () => {
+    setShowExitModal(true);
+  };
+
+  const handleExitModalClose = () => {
+    setShowExitModal(false);
+  };
 
   // Keyboard shortcuts for navigation
   useEffect(() => {
@@ -62,14 +75,25 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <ModuleTabs
-        modules={modules}
-        activeId={activeModuleId}
-        onSelect={setActiveModuleId}
-        onNavigateBack={navigateBack}
-        onNavigateForward={navigateForward}
-        onOpenGlossary={() => setIsGlossaryOpen(true)}
-      />
+      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+      <div className="app-header">
+        <ModuleTabs
+          modules={modules}
+          activeId={activeModuleId}
+          onSelect={setActiveModuleId}
+          onNavigateBack={navigateBack}
+          onNavigateForward={navigateForward}
+          onOpenGlossary={() => setIsGlossaryOpen(true)}
+        />
+        <button
+          type="button"
+          className="exit-button"
+          onClick={handleExitClick}
+          title="Salir de la aplicación"
+        >
+          Salir
+        </button>
+      </div>
       <main className="app-main">
         {modules.map((module) => {
           const Component = module.component;
@@ -85,6 +109,7 @@ export default function App() {
       </main>
       <PlayerActionsOverlay />
       <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} />
+      {showExitModal && <ExitConfirmModal onClose={handleExitModalClose} />}
     </div>
   );
 }

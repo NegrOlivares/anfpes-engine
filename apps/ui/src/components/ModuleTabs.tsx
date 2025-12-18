@@ -60,7 +60,11 @@ export function ModuleTabs({
             className={module.id === activeId ? 'active' : undefined}
             onClick={() => onSelect(module.id)}
           >
-            {module.label}
+            {module.id === 'dashboard' ? (
+              <img src="/images/logo.png" alt="Home" className="home-logo" />
+            ) : (
+              module.label
+            )}
           </button>
         ))}
         <button

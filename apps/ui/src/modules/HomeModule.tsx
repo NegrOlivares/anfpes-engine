@@ -4,7 +4,7 @@ import { usePreselectionStore } from '../store/preselectionStore';
 import { useSearchPresetStore } from '../store/searchPresetStore';
 import { MODULE_IDS, useModuleStore } from '../store/moduleStore';
 import { ANFPES_CLUBS } from '../data/playerStatus';
-import { getClubShieldPath } from '../utils/imageHelpers';
+import { getClubShieldPath, getPlayerThumbPath } from '../utils/imageHelpers';
 import { ensureNumber } from '../utils/format';
 import { getPlayerPositions, getPositionLine } from '../components/PositionBadges';
 import { EnhancedTooltip } from '../components/EnhancedTooltip';
@@ -342,6 +342,16 @@ export function HomeModule() {
                   onClick={() => handleActivityClick(activity)}
                 >
                   <div className="recent-item-icon">{getActivityIcon(activity.type)}</div>
+                  {activity.playerId && (
+                    <img
+                      src={getPlayerThumbPath(activity.playerId)}
+                      alt={activity.playerName || 'Jugador'}
+                      className="player-thumb"
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/faces/missing.png';
+                      }}
+                    />
+                  )}
                   <div className="recent-item-content">
                     <div className="recent-item-title">
                       {activity.playerName || 'Sin nombre'}
