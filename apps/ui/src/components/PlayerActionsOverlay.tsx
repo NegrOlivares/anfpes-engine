@@ -196,12 +196,13 @@ export function PlayerActionsOverlay() {
 }
 
 export function openPlayerActionsMenu(
-  event: SyntheticEvent<HTMLElement>,
+  event: React.SyntheticEvent,
   player: DerivedPlayer,
   opts?: { hideCompare?: boolean; hideProfile?: boolean },
 ) {
   event.stopPropagation();
-  const rect = event.currentTarget.getBoundingClientRect();
+  const target = event.currentTarget as HTMLElement;
+  const rect = target.getBoundingClientRect();
   const anchor = {
     x: rect.left + rect.width / 2,
     y: rect.bottom + 8,
