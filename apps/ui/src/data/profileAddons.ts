@@ -5092,7 +5092,7 @@ export const profileAddons: Record<number, ProfileAddon> = {
   },
   '1044': {
     image: '/images/faces/A-3301294.png',
-    fullName: 'Ronaldode Assis Moreira',
+    fullName: 'Ronaldo de Assis Moreira',
     birthDate: '21 de marzo de 1980',
   },
   '1045': {

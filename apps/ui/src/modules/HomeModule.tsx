@@ -2,7 +2,11 @@ import { useMemo, useState } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import { useSearchPresetStore } from '../store/searchPresetStore';
+import { useTacticsStore } from '../store/tacticsStore';
 import { MODULE_IDS, useModuleStore } from '../store/moduleStore';
+import { useSimilarPlayersStore } from '../store/similarPlayersStore';
+import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
+import { usePlayerProfileStore } from '../store/playerProfileStore';
 import { ANFPES_CLUBS } from '../data/playerStatus';
 import { getClubShieldPath, getPlayerThumbPath } from '../utils/imageHelpers';
 import { ensureNumber } from '../utils/format';
@@ -39,8 +43,18 @@ export function HomeModule() {
     (state) => state.getPlayersInPreselection,
   );
 
+  const savedTactics = useTacticsStore((state) => state.savedTactics);
+  const loadTactic = useTacticsStore((state) => state.loadTactic);
+
   const setSearchPreset = useSearchPresetStore((state) => state.setPreset);
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
+
+  const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
+  const setComparatorPending = useComparatorLaunchStore((state) => state.setPending);
+  const setComparatorSelectedIds = useComparatorLaunchStore(
+    (state) => state.setSelectedIds,
+  );
+  const setProfilePlayerId = usePlayerProfileStore((state) => state.setSelectedPlayerId);
 
   const allActivities = useActivityHistoryStore((state) => state.activities);
   const clearActivities = useActivityHistoryStore((state) => state.clearActivities);
@@ -114,22 +128,37 @@ export function HomeModule() {
     setActiveModule(MODULE_IDS.preselections);
   };
 
-  const handleActivityClick = (activity: (typeof recentActivities)[0]) => {
-    if (activity.playerId) {
-      setSelectedPlayer(activity.playerId);
-    }
+  const handleOpenTactic = (tacticId: string) => {
+    loadTactic(tacticId);
+    setActiveModule(MODULE_IDS.planning);
+  };
 
+  const handleOpenAllTactics = () => {
+    setActiveModule(MODULE_IDS.planning);
+  };
+
+  const handleActivityClick = (activity: (typeof recentActivities)[0]) => {
     switch (activity.type) {
       case 'search':
         setActiveModule(MODULE_IDS.search);
         break;
       case 'similar':
+        if (activity.playerId) {
+          setBasePlayerId(activity.playerId);
+        }
         setActiveModule(MODULE_IDS.similar);
         break;
       case 'comparison':
+        if (activity.playerId) {
+          setComparatorSelectedIds([]);
+          setComparatorPending(activity.playerId);
+        }
         setActiveModule(MODULE_IDS.comparator);
         break;
       case 'profile':
+        if (activity.playerId) {
+          setProfilePlayerId(activity.playerId);
+        }
         setActiveModule(MODULE_IDS.profile);
         break;
     }
@@ -238,78 +267,160 @@ export function HomeModule() {
 
       {/* Contenido principal */}
       <main className="home-main-content">
-        {/* Mis Preselecciones */}
-        <section className="home-section preselections-section">
-          <div className="home-section-header">
-            <h3 className="home-section-title">Mis Preselecciones</h3>
-            {preselections.length > 0 && (
-              <button
-                type="button"
-                onClick={handleOpenAllPreselections}
-                className="home-section-link"
-              >
-                Ver todas →
-              </button>
-            )}
-          </div>
-          {activePreselections.length === 0 ? (
-            <div className="home-empty-state">
-              <p>No tienes preselecciones guardadas</p>
-              <button
-                type="button"
-                onClick={handleOpenAllPreselections}
-                className="home-action-button"
-              >
-                Crear preselección
-              </button>
-            </div>
-          ) : (
-            <div className="home-preselection-cards">
-              {activePreselections.map((preset) => (
-                <div
-                  key={preset.id}
-                  className="home-preselection-card"
-                  onClick={() => handleOpenPreselection(preset.id)}
+        {/* Contenedor para Preselecciones y Planificaciones */}
+        <div className="home-dual-section">
+          {/* Mis Preselecciones */}
+          <section className="home-section preselections-section">
+            <div className="home-section-header">
+              <h3 className="home-section-title">Mis Preselecciones</h3>
+              {preselections.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleOpenAllPreselections}
+                  className="home-section-link"
                 >
-                  <div className="preselection-card-header">
-                    <h4 className="preselection-card-name">{preset.name}</h4>
-                    <span className="preselection-card-count">
-                      {preset.count} jugadores
-                    </span>
-                  </div>
-                  <div className="preselection-card-stats">
-                    <div className="preselection-card-avg">
-                      <span className="stat-label">Promedio:</span>
-                      <span className="stat-value">{formatNumber(preset.avg, 1)}</span>
-                    </div>
-                    <div className="preselection-card-lines">
-                      {preset.lineDistribution.PT > 0 && (
-                        <span className="line-badge">
-                          PT: {preset.lineDistribution.PT}
-                        </span>
-                      )}
-                      {preset.lineDistribution.DEF > 0 && (
-                        <span className="line-badge">
-                          DEF: {preset.lineDistribution.DEF}
-                        </span>
-                      )}
-                      {preset.lineDistribution.MED > 0 && (
-                        <span className="line-badge">
-                          MED: {preset.lineDistribution.MED}
-                        </span>
-                      )}
-                      {preset.lineDistribution.ATA > 0 && (
-                        <span className="line-badge">
-                          ATA: {preset.lineDistribution.ATA}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  Ver todas →
+                </button>
+              )}
             </div>
-          )}
-        </section>
+            {activePreselections.length === 0 ? (
+              <div className="home-empty-state">
+                <p>No tienes preselecciones guardadas</p>
+                <button
+                  type="button"
+                  onClick={handleOpenAllPreselections}
+                  className="home-action-button"
+                >
+                  Crear preselección
+                </button>
+              </div>
+            ) : (
+              <div className="home-preselection-cards">
+                {activePreselections.map((preset) => (
+                  <div
+                    key={preset.id}
+                    className="home-preselection-card"
+                    onClick={() => handleOpenPreselection(preset.id)}
+                  >
+                    <div className="preselection-card-header">
+                      <h4 className="preselection-card-name">{preset.name}</h4>
+                      <span className="preselection-card-count">
+                        {preset.count} jugadores
+                      </span>
+                    </div>
+                    <div className="preselection-card-stats">
+                      <div className="preselection-card-avg">
+                        <span className="stat-label">Promedio:</span>
+                        <span className="stat-value">{formatNumber(preset.avg, 1)}</span>
+                      </div>
+                      <div className="preselection-card-lines">
+                        {preset.lineDistribution.PT > 0 && (
+                          <span className="line-badge">
+                            PT: {preset.lineDistribution.PT}
+                          </span>
+                        )}
+                        {preset.lineDistribution.DEF > 0 && (
+                          <span className="line-badge">
+                            DEF: {preset.lineDistribution.DEF}
+                          </span>
+                        )}
+                        {preset.lineDistribution.MED > 0 && (
+                          <span className="line-badge">
+                            MED: {preset.lineDistribution.MED}
+                          </span>
+                        )}
+                        {preset.lineDistribution.ATA > 0 && (
+                          <span className="line-badge">
+                            ATA: {preset.lineDistribution.ATA}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Mis Planificaciones */}
+          <section className="home-section planning-section">
+            <div className="home-section-header">
+              <h3 className="home-section-title">Mis Planificaciones</h3>
+              {savedTactics.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleOpenAllTactics}
+                  className="home-section-link"
+                >
+                  Ver todas →
+                </button>
+              )}
+            </div>
+            {savedTactics.length === 0 ? (
+              <div className="home-empty-state">
+                <p>No tienes tácticas guardadas</p>
+                <button
+                  type="button"
+                  onClick={handleOpenAllTactics}
+                  className="home-action-button"
+                >
+                  Crear táctica
+                </button>
+              </div>
+            ) : (
+              <div className="home-preselection-cards">
+                {savedTactics.slice(0, 3).map((tactic) => (
+                  <div
+                    key={tactic.tacticId}
+                    className="home-preselection-card"
+                    onClick={() => handleOpenTactic(tactic.tacticId)}
+                  >
+                    <div className="preselection-card-header">
+                      <h4 className="preselection-card-name">{tactic.name}</h4>
+                      {tactic.clubId && (
+                        <img
+                          src={getClubShieldPath(tactic.clubId) || ''}
+                          alt={tactic.clubId}
+                          style={{
+                            width: '20px',
+                            height: '20px',
+                            objectFit: 'contain',
+                          }}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="preselection-card-stats">
+                      <div className="preselection-card-avg">
+                        <span className="stat-label">Plan Base:</span>
+                        <span className="stat-value">
+                          {tactic.basePlan.slots.filter((s) => s.playerId).length}/11
+                        </span>
+                      </div>
+                      <div className="preselection-card-lines">
+                        {tactic.planA && <span className="line-badge">Plan A</span>}
+                        {tactic.planB && <span className="line-badge">Plan B</span>}
+                        {tactic.strategySlots.filter((s) => s.strategy !== 'NO_STRATEGY')
+                          .length > 0 && (
+                          <span className="line-badge">
+                            {
+                              tactic.strategySlots.filter(
+                                (s) => s.strategy !== 'NO_STRATEGY',
+                              ).length
+                            }{' '}
+                            Estrategias
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
 
         {/* Últimas Actividades */}
         <section className="home-section recent-section">

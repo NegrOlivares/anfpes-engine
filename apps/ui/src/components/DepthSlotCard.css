@@ -1,0 +1,150 @@
+/* Depth Slot Card - Compact view for squad depth planning */
+.depth-slot-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(30, 30, 40, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.depth-slot-header {
+  background: rgba(66, 165, 245, 0.2);
+  border-bottom: 1px solid rgba(66, 165, 245, 0.4);
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.depth-slot-header .position-badge {
+  font-size: 10px;
+  padding: 0 6px;
+  letter-spacing: 0.5px;
+}
+
+.depth-slot-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.depth-slot-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  border-radius: 3px;
+  max-width: 6vw;
+  min-width: 6vw;
+  width: 6vw;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.depth-slot-line.depth-1 {
+  background: rgba(16, 216, 23, 0.267);
+  border-left: 2px solid #4CAF50;
+}
+
+.depth-slot-line.depth-2,
+.depth-slot-line.depth-3 {
+  background: rgba(33, 150, 243, 0.1);
+  border-left: 2px solid #2196F3;
+}
+
+.depth-slot-line.depth-4,
+.depth-slot-line.depth-5 {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid #757575;
+}
+
+.depth-slot-line.empty {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-left-width: 2px;
+}
+
+.depth-slot-line.drag-over {
+  background: rgba(76, 175, 80, 0.25);
+  border-color: #4CAF50;
+  transform: translateX(2px);
+}
+
+.depth-slot-line:hover:not(.empty) {
+  transform: translateX(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.depth-slot-line:hover.empty {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.depth-slot-line .depth-player-name {
+  display: flex;
+  flex: 1;
+  font-size: 11px;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #fff;
+  text-overflow: ellipsis;
+  margin-bottom: 0;
+  min-width: 4.5vw;
+  max-width: 4.5vw;
+  width: 4.5vw;
+}
+
+.depth-player-avg {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.depth-remove-btn {
+  position: absolute;
+  top: 50%;
+  left: -0.5vw;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(244, 67, 54, 0.95);
+  border: none;
+  border-radius: 15%;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.depth-slot-line:hover .depth-remove-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.depth-remove-btn:hover {
+  background: rgba(244, 67, 54, 1);
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.depth-empty-text {
+  flex: 1;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}

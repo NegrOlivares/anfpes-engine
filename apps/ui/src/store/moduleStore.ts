@@ -11,7 +11,8 @@ export type ModuleId =
   | 'preselections'
   | 'profile'
   | 'similar'
-  | 'comparator';
+  | 'comparator'
+  | 'planning';
 
 interface ModuleState {
   activeModuleId: ModuleId;
@@ -29,6 +30,7 @@ export const MODULE_IDS: Record<string, ModuleId> = {
   profile: 'profile',
   similar: 'similar',
   comparator: 'comparator',
+  planning: 'planning',
 };
 
 // Helper to capture current state snapshot of all stores

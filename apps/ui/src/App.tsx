@@ -10,6 +10,7 @@ import { PlayerProfile } from './components/PlayerProfile';
 import { PreselectionModule } from './modules/PreselectionModule';
 import { SimilarPlayersModule } from './modules/SimilarPlayersModule';
 import { ComparatorModule } from './modules/ComparatorModule';
+import { PlanningModule } from './modules/PlanningModule';
 import { useModuleStore, MODULE_IDS, type ModuleId } from './store/moduleStore';
 import { PlayerActionsOverlay } from './components/PlayerActionsOverlay';
 import { useNavigationHistoryStore } from './store/navigationHistoryStore';
@@ -24,6 +25,7 @@ const modules: ModuleDefinition[] = [
   },
   { id: MODULE_IDS.similar, label: 'Similares', component: SimilarPlayersModule },
   { id: MODULE_IDS.comparator, label: 'Comparador', component: ComparatorModule },
+  { id: MODULE_IDS.planning, label: 'Planificación', component: PlanningModule },
   { id: MODULE_IDS.profile, label: 'Perfil', component: PlayerProfile },
 ];
 

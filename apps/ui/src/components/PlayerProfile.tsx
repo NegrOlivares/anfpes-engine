@@ -1,5 +1,5 @@
 import type { DerivedPlayer } from '@anfpes/engine';
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { RadarChart } from './RadarChart';
 import { GlossaryTooltip } from './GlossaryTooltip';
 import { EnhancedTooltip } from './EnhancedTooltip';
@@ -421,7 +421,7 @@ function diagonalHalf(
   );
 }
 
-function getShirtStyle(
+export function getShirtStyle(
   origin: 'club' | 'seleccion' | 'clasica' | 'shop' | 'libre',
   clubName: string,
   nationality: string,
@@ -1282,7 +1282,7 @@ function getShirtStyle(
         '#ffffff', // franjas claras
         '#000000', // franjas oscuras
       ),
-      color: '#d3a203ff',
+      color: '#af8c1aff',
     },
     {
       token: 'newcastle',
@@ -1516,7 +1516,7 @@ function getShirtStyle(
           '#ffffff', // mangas blancas
         ),
       ),
-      color: '#031e58ff', // dorsales azul oscuro
+      color: '#010911ff', // dorsales azul oscuro
     },
 
     // Tipo G – half & half vertical
@@ -2664,6 +2664,7 @@ interface SeasonStats {
 }
 
 function PlayerStatsHistory({ player }: { player: DerivedPlayer }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const playerName = normalizeName(String(player.NOMBRE || ''));
   const records = (goalStatsData.records as GoalRecord[]).filter((r) => {
     // Intentar match exacto con nameNormalized
@@ -2673,6 +2674,13 @@ function PlayerStatsHistory({ player }: { player: DerivedPlayer }) {
     const originalNormalized = normalizeName(r.name || '');
     return originalNormalized === playerName;
   });
+
+  // Scroll al final cuando se carga el componente
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, []);
 
   if (records.length === 0) {
     return <p className="stats-empty">Sin historial de goles registrado</p>;
@@ -2796,7 +2804,7 @@ function PlayerStatsHistory({ player }: { player: DerivedPlayer }) {
 
       {/* Tabla detallada */}
       <div className="stats-table-section">
-        <div className="stats-history-scroll">
+        <div className="stats-history-scroll" ref={scrollRef}>
           <table className="stats-history-table">
             <thead>
               <tr>

@@ -1,0 +1,222 @@
+/* Depth Analysis Panel */
+.depth-analysis-panel {
+  background: rgba(20, 25, 35, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.depth-analysis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.depth-analysis-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #42A5F5;
+}
+
+.depth-summary {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.summary-item {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.summary-item.excellent {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.summary-item.good {
+  background: rgba(139, 195, 74, 0.15);
+  color: #8BC34A;
+}
+
+.summary-item.warning {
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+}
+
+.summary-item.critical {
+  background: rgba(244, 67, 54, 0.15);
+  color: #F44336;
+}
+
+/* Grid Layout */
+.depth-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.depth-analysis-item {
+  background: rgba(30, 35, 45, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid;
+  border-radius: 6px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.depth-analysis-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.depth-analysis-item.status-excellent {
+  border-left-color: #4CAF50;
+}
+
+.depth-analysis-item.status-good {
+  border-left-color: #8BC34A;
+}
+
+.depth-analysis-item.status-warning {
+  border-left-color: #FF9800;
+}
+
+.depth-analysis-item.status-critical {
+  border-left-color: #F44336;
+}
+
+/* Position Header */
+.position-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.position-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.position-status {
+  font-size: 1.25rem;
+}
+
+/* Stats */
+.position-stats {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Players List */
+.position-players {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.player-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.depth-badge {
+  background: rgba(66, 165, 245, 0.2);
+  color: #42A5F5;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+}
+
+.player-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.player-avg {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.more-players {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  padding: 0.25rem;
+}
+
+.no-players {
+  font-size: 0.85rem;
+  color: #F44336;
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+}
+
+/* Legend */
+.depth-analysis-legend {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.depth-analysis-legend h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legend-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.legend-icon {
+  font-size: 1rem;
+}
