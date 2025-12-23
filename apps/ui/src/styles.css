@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'SoccerLeague';
-  src: url('./assets/Double Pivot Personal Used.ttf') format('truetype');
+  src: url('./assets/Double_Pivot_Personal_Used.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
@@ -1739,6 +1739,7 @@ tbody tr:hover {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.75rem;
   margin: 0;
+  padding-bottom: 2.5rem;
 }
 
 .player-table {
@@ -6468,9 +6469,9 @@ fill-opacity: 0.16!important
   flex-shrink: 0;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 8px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
 .planning-main {
@@ -6499,12 +6500,16 @@ fill-opacity: 0.16!important
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-y: auto;
 }
 
 .roster-panel-header {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .roster-panel-header h3 {
@@ -6735,12 +6740,16 @@ fill-opacity: 0.16!important
   flex-direction: column;
   height: 100%;
   background: rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
 }
 
 .tactical-panel-header {
   padding: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .tactical-panel-header h3 {
@@ -6752,7 +6761,6 @@ fill-opacity: 0.16!important
 
 .tactical-panel-content {
   flex: 1;
-  overflow-y: auto;
   padding: 0;
 }
 
@@ -8158,12 +8166,25 @@ fill-opacity: 0.16!important
   animation: pulse-target 1.5s ease-in-out infinite;
 }
 
+.tactical-slot.selected-for-swap {
+  animation: pulse-swap 1s ease-in-out infinite;
+}
+
 @keyframes pulse-target {
   0%, 100% {
     box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
   }
   50% {
     box-shadow: 0 0 0 8px rgba(76, 175, 80, 0);
+  }
+}
+
+@keyframes pulse-swap {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.6), 0 0 15px rgba(33, 150, 243, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(33, 150, 243, 0), 0 0 20px rgba(33, 150, 243, 0.2);
   }
 }
 

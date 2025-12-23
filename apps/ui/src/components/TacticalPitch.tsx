@@ -51,7 +51,6 @@ interface TacticalPitchProps {
   ) => void;
   onRoleChange?: (slotId: string, role: string) => void;
   onPositionChange?: (slotId: string, coords: { x: number; y: number }) => void;
-  onPlayerClick?: (player: DerivedPlayer, event: React.MouseEvent) => void;
 }
 
 export function TacticalPitch({
@@ -85,7 +84,6 @@ export function TacticalPitch({
   onUpdateInstruction,
   onRoleChange,
   onPositionChange,
-  onPlayerClick,
 }: TacticalPitchProps) {
   const playerMap = useMemo(() => {
     return new Map(players.map((p) => [p.ID, p]));
@@ -98,6 +96,7 @@ export function TacticalPitch({
     y: number;
   } | null>(null);
   const [autoOpenRoleFor, setAutoOpenRoleFor] = useState<string | null>(null);
+  const [selectedSlotForSwap, setSelectedSlotForSwap] = useState<string | null>(null);
   const [selectedPlayerForConnections, setSelectedPlayerForConnections] = useState<
     string | null
   >(null);
@@ -736,7 +735,7 @@ export function TacticalPitch({
           return (
             <div
               key={slot.slotId}
-              className={`tactical-slot ${selectedPlayerId && selectedFromRoster && !player ? 'target-available' : ''}`}
+              className={`tactical-slot ${selectedPlayerId && selectedFromRoster && !player ? 'target-available' : ''} ${selectedSlotForSwap === slot.slotId ? 'selected-for-swap' : ''}`}
               style={{
                 left: `${displayX}%`,
                 top: `${displayY}%`,
@@ -794,32 +793,55 @@ export function TacticalPitch({
                       onPlayerRemove={(depth) => {
                         onDepthSlotRemove?.(slot.slotId, depth);
                       }}
-                      onPlayerClick={onPlayerClick}
                     />
                   );
                 })()
               ) : player ? (
-                <TacticalPlayerCard
-                  player={player}
-                  clubId={clubId}
-                  slotRole={slot.role}
-                  isCandidate={isCandidate}
-                  isMarkedOut={isMarkedOut}
-                  movementArrows={playerInstructions[player.ID]?.runArrows || []}
-                  onUpdateInstruction={onUpdateInstruction}
-                  ghostPosition={ghostPositions.get(player.ID)}
-                  defensiveAttitude={playerInstructions[player.ID]?.defensiveAttitude}
-                  showAttitudeColors={showAttitudeColors}
-                  roleOptions={onRoleChange ? allowedRoles : undefined}
-                  autoOpenRoleMenu={autoOpenRoleFor === slot.slotId}
-                  onRoleMenuClose={() => setAutoOpenRoleFor(null)}
-                  onRoleChange={
-                    onRoleChange
-                      ? (newRole) => onRoleChange(slot.slotId, newRole)
-                      : undefined
-                  }
-                  onClick={onPlayerClick ? (e) => onPlayerClick(player, e) : undefined}
-                />
+                <div
+                  onClick={(e) => {
+                    // Prevent if clicking inside role menu or arrow editor
+                    const target = e.target as HTMLElement;
+                    if (target.closest('.role-menu') || target.closest('.arrow-editor')) {
+                      return;
+                    }
+
+                    if (!selectedSlotForSwap) {
+                      // First click: select this slot
+                      setSelectedSlotForSwap(slot.slotId);
+                    } else if (selectedSlotForSwap === slot.slotId) {
+                      // Click same slot: deselect
+                      setSelectedSlotForSwap(null);
+                    } else {
+                      // Second click: swap players
+                      if (onSlotDrag) {
+                        onSlotDrag(selectedSlotForSwap, slot.slotId);
+                      }
+                      setSelectedSlotForSwap(null);
+                    }
+                  }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <TacticalPlayerCard
+                    player={player}
+                    clubId={clubId}
+                    slotRole={slot.role}
+                    isCandidate={isCandidate}
+                    isMarkedOut={isMarkedOut}
+                    movementArrows={playerInstructions[player.ID]?.runArrows || []}
+                    onUpdateInstruction={onUpdateInstruction}
+                    ghostPosition={ghostPositions.get(player.ID)}
+                    defensiveAttitude={playerInstructions[player.ID]?.defensiveAttitude}
+                    showAttitudeColors={showAttitudeColors}
+                    roleOptions={onRoleChange ? allowedRoles : undefined}
+                    autoOpenRoleMenu={autoOpenRoleFor === slot.slotId}
+                    onRoleMenuClose={() => setAutoOpenRoleFor(null)}
+                    onRoleChange={
+                      onRoleChange
+                        ? (newRole) => onRoleChange(slot.slotId, newRole)
+                        : undefined
+                    }
+                  />
+                </div>
               ) : (
                 <div className="tactical-empty-slot">
                   <div className="empty-slot-role">{slot.role}</div>

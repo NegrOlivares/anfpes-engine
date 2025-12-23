@@ -59,6 +59,61 @@ const POSITION_RATING_KEYS = [
   'DC',
 ] as const;
 
+const POSITION_SORT_ORDER = [
+  'PT',
+  'LIB',
+  'CT',
+  'SA',
+  'DD',
+  'DI',
+  'CCD',
+  'LA',
+  'DLD',
+  'DLI',
+  'CC',
+  'VOL',
+  'CDR',
+  'CIZ',
+  'MP',
+  'SD',
+  'EX',
+  'ED',
+  'EI',
+  'DC',
+] as const;
+
+function comparePositions(a: DerivedPlayer, b: DerivedPlayer): number {
+  const rank = (pos?: string) => {
+    const idx = POSITION_SORT_ORDER.indexOf(pos as any);
+    return idx === -1 ? POSITION_SORT_ORDER.length : idx;
+  };
+  const aPositions = getPlayerPositions(a);
+  const bPositions = getPlayerPositions(b);
+
+  const primaryCmp = rank(aPositions[0]) - rank(bPositions[0]);
+  if (primaryCmp !== 0) return primaryCmp;
+
+  const aSecondary = aPositions
+    .slice(1)
+    .map(rank)
+    .sort((x, y) => x - y);
+  const bSecondary = bPositions
+    .slice(1)
+    .map(rank)
+    .sort((x, y) => x - y);
+
+  if (aSecondary.length !== bSecondary.length) {
+    return aSecondary.length - bSecondary.length;
+  }
+
+  for (let i = 0; i < aSecondary.length; i += 1) {
+    const diff = aSecondary[i] - bSecondary[i];
+    if (diff !== 0) return diff;
+  }
+
+  return 0;
+}
+
 type MacroKey = (typeof MACRO_KEYS)[number];
 
 interface StatusBadge {
@@ -360,6 +415,8 @@ export function SimilarPlayersModule() {
         let comparison = 0;
         if (sort.key === 'SIMILARITY') {
           comparison = a.similarity - b.similarity;
+        } else if (sort.key === 'POSICIONES') {
+          comparison = comparePositions(a.player, b.player);
         } else {
           const aValue = a.player[sort.key];
           const bValue = b.player[sort.key];
@@ -417,7 +474,8 @@ export function SimilarPlayersModule() {
           }
           return current.filter((s) => s.key !== key);
         }
-        return [...current, { key, direction: 'desc' as SortDirection }];
+        const initialDir = key === 'POSICIONES' ? 'asc' : 'desc';
+        return [...current, { key, direction: initialDir as SortDirection }];
       }
       const existing = current.find((s) => s.key === key);
       if (existing && existing.direction === 'desc') {
@@ -426,7 +484,8 @@ export function SimilarPlayersModule() {
       if (existing && existing.direction === 'asc') {
         return [];
       }
-      return [{ key, direction: 'desc' as SortDirection }];
+      const initialDir = key === 'POSICIONES' ? 'asc' : 'desc';
+      return [{ key, direction: initialDir as SortDirection }];
     });
   };
 

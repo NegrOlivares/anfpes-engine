@@ -11,7 +11,7 @@ import {
 } from '../constants/playerFields';
 import { POSITION_COLORS, type SortConfig } from '../types/table';
 import { TableCell } from './TableCell';
-import { PositionBadges } from './PositionBadges';
+import { PositionBadges, getPlayerPositions } from './PositionBadges';
 import { GlossaryTooltip, useGlossaryTitle } from './GlossaryTooltip';
 import { EnhancedTooltip } from './EnhancedTooltip';
 import {
@@ -59,6 +59,57 @@ const POSITION_CODES = [
   { code: 'SS', label: 'SD', color: POSITION_COLORS.SD },
   { code: 'CF', label: 'DC', color: POSITION_COLORS.DC },
 ];
+
+const POSITION_SORT_ORDER = [
+  'PT',
+  'LIB',
+  'CT',
+  'SA',
+  'DD',
+  'DI',
+  'CCD',
+  'LA',
+  'DLD',
+  'DLI',
+  'CC',
+  'VOL',
+  'CDR',
+  'CIZ',
+  'MP',
+  'SD',
+  'EX',
+  'ED',
+  'EI',
+  'DC',
+] as const;
+
+function comparePositions(a: DerivedPlayer, b: DerivedPlayer): number {
+  const rank = (pos?: string) => {
+    const idx = POSITION_SORT_ORDER.indexOf(pos as any);
+    return idx === -1 ? POSITION_SORT_ORDER.length : idx;
+  };
+  const aPositions = getPlayerPositions(a);
+  const bPositions = getPlayerPositions(b);
+
+  // Compare primary position first
+  const primaryCmp = rank(aPositions[0]) - rank(bPositions[0]);
+  if (primaryCmp !== 0) return primaryCmp;
+
+  // If primary is same, prioritize players with fewer positions (specialists go first)
+  const aSecondaryLength = aPositions.length - 1;
+  const bSecondaryLength = bPositions.length - 1;
+  if (aSecondaryLength !== bSecondaryLength) {
+    return aSecondaryLength - bSecondaryLength;
+  }
+
+  // If same number of positions, compare secondary positions in order (not sorted)
+  for (let i = 1; i < aPositions.length; i += 1) {
+    const diff = rank(aPositions[i]) - rank(bPositions[i]);
+    if (diff !== 0) return diff;
+  }
+
+  return 0;
+}
 
 const DEMARCATION_COLUMNS = [
   'D',
@@ -306,6 +357,14 @@ export function PlayerSearch() {
     if (sortConfig.length > 0) {
       filtered = [...filtered].sort((a, b) => {
         for (const sort of sortConfig) {
+          if (sort.key === 'POSICIONES') {
+            const comparison = comparePositions(a, b);
+            if (comparison !== 0) {
+              return sort.direction === 'asc' ? comparison : -comparison;
+            }
+            continue;
+          }
+
           const aValue = a[sort.key];
           const bValue = b[sort.key];
 
@@ -487,16 +546,19 @@ export function PlayerSearch() {
           }
           return current.filter((s) => s.key !== key);
         }
-        return [...current, { key, direction: 'desc' }];
+        const initialDir = key === 'POSICIONES' ? 'asc' : 'desc';
+        return [...current, { key, direction: initialDir }];
       }
       const existing = current.find((s) => s.key === key);
       if (existing && existing.direction === 'desc') {
         return [{ key, direction: 'asc' }];
       }
       if (existing && existing.direction === 'asc') {
-        return [];
+        const nextDir = key === 'POSICIONES' ? 'desc' : undefined;
+        return nextDir ? [{ key, direction: nextDir }] : [];
       }
-      return [{ key, direction: 'desc' }];
+      const initialDir = key === 'POSICIONES' ? 'asc' : 'desc';
+      return [{ key, direction: initialDir }];
     });
   };
 

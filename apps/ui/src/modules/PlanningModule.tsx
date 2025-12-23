@@ -440,9 +440,7 @@ export function PlanningModule() {
                   />
                 ) : (
                   <div className="tactical-instructions-panel">
-                    <div className="tactical-panel-header">
-                      <h3>Instrucciones Tácticas</h3>
-                    </div>
+                    <div className="tactical-panel-header"></div>
 
                     <div className="tactical-panel-content">
                       <div className="tactical-section">
@@ -908,9 +906,6 @@ export function PlanningModule() {
                       onUpdateInstruction={(playerId, instruction) =>
                         updatePlayerInstruction('base', playerId, instruction)
                       }
-                      onPlayerClick={(player, event) => {
-                        openPlayerActionsMenu(event, player);
-                      }}
                       onRoleChange={(slotId, role) =>
                         handleRoleChange('base', slotId, role)
                       }
@@ -960,9 +955,6 @@ export function PlanningModule() {
                         onUpdateInstruction={(playerId, instruction) =>
                           updatePlayerInstruction('planA', playerId, instruction)
                         }
-                        onPlayerClick={(player, event) => {
-                          openPlayerActionsMenu(event, player);
-                        }}
                         onRoleChange={(slotId, role) =>
                           handleRoleChange('planA', slotId, role)
                         }
@@ -1013,9 +1005,6 @@ export function PlanningModule() {
                         onUpdateInstruction={(playerId, instruction) =>
                           updatePlayerInstruction('planB', playerId, instruction)
                         }
-                        onPlayerClick={(player, event) => {
-                          openPlayerActionsMenu(event, player);
-                        }}
                         onRoleChange={(slotId, role) =>
                           handleRoleChange('planB', slotId, role)
                         }

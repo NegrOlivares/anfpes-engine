@@ -12,7 +12,7 @@ import {
 } from '../constants/playerFields';
 import { type SortConfig } from '../types/table';
 import { TableCell } from '../components/TableCell';
-import { PositionBadges } from '../components/PositionBadges';
+import { PositionBadges, getPlayerPositions } from '../components/PositionBadges';
 import { GlossaryTooltip } from '../components/GlossaryTooltip';
 import { EnhancedTooltip } from '../components/EnhancedTooltip';
 import {
@@ -32,6 +32,61 @@ import {
   openPlayerActionsMenu,
   closePlayerActionsMenu,
 } from '../components/PlayerActionsOverlay';
+
+const POSITION_SORT_ORDER = [
+  'PT',
+  'LIB',
+  'CT',
+  'SA',
+  'DD',
+  'DI',
+  'CCD',
+  'LA',
+  'DLD',
+  'DLI',
+  'CC',
+  'VOL',
+  'CDR',
+  'CIZ',
+  'MP',
+  'SD',
+  'EX',
+  'ED',
+  'EI',
+  'DC',
+] as const;
+
+function comparePositions(a: DerivedPlayer, b: DerivedPlayer): number {
+  const rank = (pos?: string) => {
+    const idx = POSITION_SORT_ORDER.indexOf(pos as any);
+    return idx === -1 ? POSITION_SORT_ORDER.length : idx;
+  };
+  const aPositions = getPlayerPositions(a);
+  const bPositions = getPlayerPositions(b);
+
+  const primaryCmp = rank(aPositions[0]) - rank(bPositions[0]);
+  if (primaryCmp !== 0) return primaryCmp;
+
+  const aSecondary = aPositions
+    .slice(1)
+    .map(rank)
+    .sort((x, y) => x - y);
+  const bSecondary = bPositions
+    .slice(1)
+    .map(rank)
+    .sort((x, y) => x - y);
+
+  if (aSecondary.length !== bSecondary.length) {
+    return aSecondary.length - bSecondary.length;
+  }
+
+  for (let i = 0; i < aSecondary.length; i += 1) {
+    const diff = aSecondary[i] - bSecondary[i];
+    if (diff !== 0) return diff;
+  }
+
+  return 0;
+}
 
 export function PreselectionModule() {
   const players = useCacheStore((state) => state.players);
@@ -121,6 +176,14 @@ export function PreselectionModule() {
 
     return [...filteredPlayers].sort((a, b) => {
       for (const sort of sortConfig) {
+        if (sort.key === 'POSICIONES') {
+          const comparison = comparePositions(a, b);
+          if (comparison !== 0) {
+            return sort.direction === 'asc' ? comparison : -comparison;
+          }
+          continue;
+        }
+
         const aValue = a[sort.key];
         const bValue = b[sort.key];
 
@@ -170,7 +233,8 @@ export function PreselectionModule() {
           }
           return current.filter((s) => s.key !== key);
         }
-        return [...current, { key, direction: 'desc' }];
+        const initialDir = key === 'POSICIONES' ? 'asc' : 'desc';
+        return [...current, { key, direction: initialDir }];
       }
       const existing = current.find((s) => s.key === key);
       if (existing && existing.direction === 'desc') {
@@ -179,7 +243,8 @@ export function PreselectionModule() {
       if (existing && existing.direction === 'asc') {
         return [];
       }
-      return [{ key, direction: 'desc' }];
+      const initialDir = key === 'POSICIONES' ? 'asc' : 'desc';
+      return [{ key, direction: initialDir }];
     });
   };
 

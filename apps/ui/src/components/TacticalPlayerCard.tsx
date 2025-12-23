@@ -50,7 +50,6 @@ interface TacticalPlayerCardProps {
   onRoleChange?: (role: string) => void;
   autoOpenRoleMenu?: boolean;
   onRoleMenuClose?: () => void;
-  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 // Helper to get position average
@@ -100,16 +99,10 @@ export function TacticalPlayerCard({
   onRoleChange,
   autoOpenRoleMenu = false,
   onRoleMenuClose,
-  onClick,
 }: TacticalPlayerCardProps) {
   const [showArrowEditor, setShowArrowEditor] = useState(false);
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
 
-  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (onClick) {
-      onClick(e);
-    }
-  };
   const [animatedPosition, setAnimatedPosition] = useState({ x: 0, y: 0 });
   const [currentArrowIndex, setCurrentArrowIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -219,7 +212,6 @@ export function TacticalPlayerCard({
     <div
       className={`tactical-player-wrapper ${isCandidate ? 'candidate-in' : ''} ${isMarkedOut ? 'candidate-out' : ''}`}
       style={{ ...transform }}
-      onClick={handleCardClick}
     >
       {showAttitudeColors && movementArrows.length > 0 && (
         <div className="movement-arrows-container">
