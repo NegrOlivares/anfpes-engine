@@ -8109,3 +8109,81 @@ fill-opacity: 0.16!important
   transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
 }
 
+/* ==========================================
+   SISTEMA DE SELECCIÓN POR CLICKS
+   ========================================== */
+
+/* Clase para nombres clicables con underline en hover */
+.clickable-name {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.clickable-name:hover {
+  color: #60a5fa;
+  text-decoration: underline;
+  text-decoration-color: #60a5fa;
+  text-underline-offset: 2px;
+}
+
+/* Estado de selección en roster panel */
+.roster-player-item.selected {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  cursor: pointer;
+}
+
+.roster-player-item.selected:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+/* Estado de selección en depth chart */
+.depth-slot-line.selected {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.depth-slot-line.selected:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+/* Slots tácticos con target disponible */
+.tactical-slot.target-available {
+  animation: pulse-target 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-target {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(76, 175, 80, 0);
+  }
+}
+
+/* Mejorar cursor en roster items */
+.roster-player-item {
+  cursor: pointer;
+}
+
+.roster-player-item:active {
+  cursor: pointer;
+  transform: scale(0.98);
+}
+
+/* Depth player name clickable */
+.depth-player-name.clickable-name {
+  font-weight: 500;
+}
+
+/* Tactical player name clickable */
+.tactical-player-name.clickable-name {
+  font-weight: 600;
+}
+

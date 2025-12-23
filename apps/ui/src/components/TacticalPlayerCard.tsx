@@ -7,6 +7,7 @@ import { getStatColor } from '../types/table';
 import { MovementArrows } from './MovementArrows';
 import { MovementArrowEditor } from './MovementArrowEditor';
 import { EnhancedTooltip } from './EnhancedTooltip';
+import { openPlayerActionsMenu } from './PlayerActionsOverlay';
 
 // Map role to position line for badge color
 function getRolePositionLine(role: string): string {
@@ -270,7 +271,15 @@ export function TacticalPlayerCard({
 
       {/* Player info below */}
       <div className="tactical-player-info">
-        <div className="tactical-player-name">{player.NOMBRE as string}</div>
+        <div
+          className="tactical-player-name clickable-name"
+          onClick={(e) => {
+            e.stopPropagation();
+            openPlayerActionsMenu(e, player);
+          }}
+        >
+          {player.NOMBRE as string}
+        </div>
         <div className="tactical-player-meta">
           {showAttitudeColors && (
             <EnhancedTooltip content="Actitud defensiva">

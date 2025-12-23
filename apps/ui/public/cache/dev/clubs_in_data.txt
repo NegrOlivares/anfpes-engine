@@ -1,0 +1,192 @@
+﻿A.C. Milan
+A.S. Roma
+AC Sparta Praha
+ADO Den Haag
+AJ Auxerre
+Ajax
+Arsenal
+AS Monaco
+AS Nancy-Lorraine
+AS Saint-Ã‰tienne
+Ascoli
+Aston Villa FC
+Atalanta
+Athletic Club
+AZ
+Bayern MÃ¼nchen
+Benfica
+Besiktas JK
+Blackburn Rovers FC
+Boca Juniors
+Bolton Wanderers FC
+C. AtlÃ©tico Madrid
+C. Gimnastic
+C.A. Osasuna
+Cagliari
+Catania
+Celtic
+Charlton Athletic FC
+Chelsea FC
+Chievo Verona
+Classic Argentina
+Classic Brazil
+Classic England
+Classic France
+Classic Germany
+Classic Italy
+Classic Netherlands
+Club Brugge KV
+CS Sedan
+Djurgardens IF
+Dynamo Kiev
+Empoli
+Equipo ML
+ES Troyes AC
+Everton FC
+F.C. Barcelona
+F.C. Copenhagen
+FC Groningen
+FC Lorient
+FC Nantes-Atlantique
+FC Porto
+FC Sochaux
+FC Twente
+FC Utrecht
+Fenerbahce SK
+Feyenoord
+Fiorentina
+Fulham FC
+Galatasaray
+Getafe C.F.
+Girondins de Bordeaux
+Heracles Almelo
+Inter
+Juventus
+Lazio
+Le Mans UC 72
+Levante U.D.
+Libre
+Lille OSC
+Liverpool FC
+Livorno
+Manchester City
+Manchester United
+Messina
+Middlesbrough FC
+ML Old
+ML Young
+N.E.C. Nijmegen
+NAC Breda
+Newcastle United FC
+OGC Nice
+Olympiacos Piraeus
+Olympique de Marseille
+Olympique Lyonnais
+Palermo
+Panathinaikos FC
+Paris Saint-Germain
+Parma
+Portsmouth FC
+PSV Eindhoven
+R. Betis
+R. Madrid
+R. Racing C.
+R. Sociedad
+R. Zaragoza
+R.C. Celta
+R.C. Deportivo la CoruÃ±a
+R.C. Recreativo de Huelva
+R.C.D. Espanyol
+R.C.D. Mallorca
+Rangers
+RC Lens
+Reading FC
+Reggina
+RKC Waalwijk
+Roda JC
+Rosenborg BK
+RSC Anderlecht
+Sampdoria
+Sao Paulo FC
+SBV Excelsior
+SC Heerenveen
+SelecciÃ³n Angola
+SelecciÃ³n Argentina
+SelecciÃ³n Australia
+SelecciÃ³n Austria
+SelecciÃ³n Belgium
+SelecciÃ³n Brazil
+SelecciÃ³n Bulgaria
+SelecciÃ³n Cameroon
+SelecciÃ³n Chile
+SelecciÃ³n Colombia
+SelecciÃ³n Costa Rica
+SelecciÃ³n Cote d'Ivoire
+SelecciÃ³n Croatia
+SelecciÃ³n Czech Republic
+SelecciÃ³n Denmark
+SelecciÃ³n Ecuador
+SelecciÃ³n England
+SelecciÃ³n Finland
+SelecciÃ³n France
+SelecciÃ³n Germany
+SelecciÃ³n Ghana
+SelecciÃ³n Greece
+SelecciÃ³n Hungary
+SelecciÃ³n Iran
+SelecciÃ³n Ireland
+SelecciÃ³n Italy
+SelecciÃ³n Japan
+SelecciÃ³n Latvia
+SelecciÃ³n Mexico
+SelecciÃ³n Netherlands
+SelecciÃ³n Nigeria
+SelecciÃ³n Northern Ireland
+SelecciÃ³n Norway
+SelecciÃ³n Paraguay
+SelecciÃ³n Peru
+SelecciÃ³n Poland
+SelecciÃ³n Portugal
+SelecciÃ³n Romania
+SelecciÃ³n Russia
+SelecciÃ³n Saudi Arabia
+SelecciÃ³n Scotland
+SelecciÃ³n Serbia and Montenegro
+SelecciÃ³n Slovakia
+SelecciÃ³n Slovenia
+SelecciÃ³n South Africa
+SelecciÃ³n South Korea
+SelecciÃ³n Spain
+SelecciÃ³n Sweden
+SelecciÃ³n Switzerland
+SelecciÃ³n Togo
+SelecciÃ³n Trinidad and Tobago
+SelecciÃ³n Tunisia
+SelecciÃ³n Turkey
+SelecciÃ³n Ukraine
+SelecciÃ³n United States
+SelecciÃ³n Uruguay
+SelecciÃ³n Wales
+Sevilla F.C.
+Sheffield United FC
+Shop 1
+Shop 2
+Shop 3
+Shop 4
+Shop 5
+Siena
+Sparta Rotterdam
+Sporting Lisbon
+Stade Rennais FC
+Torino
+Tottenham Hotspur FC
+Toulouse FC
+Udinese
+Valencia C.F.
+Valenciennes FC
+Villarreal C.F.
+Vitesse
+Watford FC
+West Ham United FC
+Wigan Athletic FC
+Willem II

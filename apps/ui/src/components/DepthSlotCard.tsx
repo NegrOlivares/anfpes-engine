@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { DerivedPlayer } from '@anfpes/engine';
 import { getStatColor } from '../types/table';
 import { EnhancedTooltip } from './EnhancedTooltip';
+import { openPlayerActionsMenu } from './PlayerActionsOverlay';
+import { useSelectionStore } from '../store/selectionStore';
 import './DepthSlotCard.css';
 
 // Map role to position line for badge color
@@ -63,6 +65,7 @@ function getPositionAverage(player: DerivedPlayer, role: string): string | null 
 
 interface DepthSlotCardProps {
   role: string;
+  slotId: string; // ← AGREGAR
   depth1?: DerivedPlayer;
   depth2?: DerivedPlayer;
   depth3?: DerivedPlayer;
@@ -75,6 +78,7 @@ interface DepthSlotCardProps {
 
 export function DepthSlotCard({
   role,
+  slotId,
   depth1,
   depth2,
   depth3,
@@ -84,7 +88,13 @@ export function DepthSlotCard({
   onPlayerRemove,
   onPlayerClick,
 }: DepthSlotCardProps) {
-  const [dragOverDepth, setDragOverDepth] = useState<number | null>(null);
+  const {
+    selectedPlayerId,
+    selectedFromRoster,
+    selectedDepthSlot,
+    selectDepthSlot,
+    clearSelection,
+  } = useSelectionStore();
 
   const depths = [
     { num: 1 as const, player: depth1 },
@@ -118,77 +128,112 @@ export function DepthSlotCard({
         </span>
       </div>
       <div className="depth-slot-list">
-        {depths.map(({ num, player }) => (
-          <div
-            key={num}
-            className={`depth-slot-line depth-${num} ${dragOverDepth === num ? 'drag-over' : ''} ${!player ? 'empty' : ''}`}
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.dataTransfer.dropEffect = 'move';
-              setDragOverDepth(num);
-            }}
-            onDragLeave={() => {
-              setDragOverDepth(null);
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              e.stopPropagation(); // Evitar que el evento llegue al contenedor padre
-              setDragOverDepth(null);
-              const playerId = e.dataTransfer.getData('playerId');
-              if (playerId) {
-                // Validar que el jugador no esté ya en esta card
-                const allPlayers = [depth1, depth2, depth3, depth4, depth5];
-                const isDuplicate = allPlayers.some((p) => p?.ID === playerId);
-                if (!isDuplicate) {
-                  onPlayerDrop(num, playerId);
+        {depths.map(({ num, player }) => {
+          const isSelected =
+            selectedDepthSlot?.slotId === slotId && selectedDepthSlot?.depth === num;
+
+          return (
+            <div
+              key={num}
+              className={`depth-slot-line depth-${num} ${!player ? 'empty' : ''} ${isSelected ? 'selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+
+                // Si hay un jugador seleccionado del roster, asignarlo aquí
+                if (selectedPlayerId && selectedFromRoster) {
+                  // Validar que el jugador no esté ya en esta card
+                  const allPlayers = [depth1, depth2, depth3, depth4, depth5];
+                  const isDuplicate = allPlayers.some((p) => p?.ID === selectedPlayerId);
+                  if (!isDuplicate) {
+                    onPlayerDrop(num, selectedPlayerId);
+                    clearSelection();
+                  }
+                  return;
                 }
-              }
-            }}
-          >
-            {player ? (
-              <>
-                <EnhancedTooltip content={player.NOMBRE as string}>
+
+                // Si hay un slot de depth seleccionado, intercambiar
+                if (
+                  selectedDepthSlot &&
+                  selectedDepthSlot.slotId === slotId &&
+                  selectedDepthSlot.depth !== num
+                ) {
+                  // Intercambiar dentro de la misma card
+                  const sourcePlayer = depths.find(
+                    (d) => d.num === selectedDepthSlot.depth,
+                  )?.player;
+                  const targetPlayer = player;
+
+                  if (sourcePlayer) {
+                    onPlayerDrop(num, sourcePlayer.ID);
+                  } else {
+                    onPlayerRemove(num);
+                  }
+
+                  if (targetPlayer) {
+                    onPlayerDrop(selectedDepthSlot.depth, targetPlayer.ID);
+                  } else {
+                    onPlayerRemove(selectedDepthSlot.depth);
+                  }
+
+                  clearSelection();
+                  return;
+                }
+
+                // Si este slot tiene jugador, seleccionarlo para mover
+                if (player) {
+                  if (isSelected) {
+                    clearSelection();
+                  } else {
+                    selectDepthSlot(slotId, num);
+                  }
+                } else if (isSelected) {
+                  clearSelection();
+                } else {
+                  // Slot vacío, seleccionarlo como destino
+                  selectDepthSlot(slotId, num);
+                }
+              }}
+            >
+              {player ? (
+                <>
                   <span
-                    className="depth-player-name"
+                    className="depth-player-name clickable-name"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (onPlayerClick) {
-                        onPlayerClick(player, e);
-                      }
+                      openPlayerActionsMenu(e, player);
                     }}
-                    style={{ cursor: onPlayerClick ? 'pointer' : 'default' }}
                   >
                     {player.NOMBRE as string}
                   </span>
-                </EnhancedTooltip>
-                <span
-                  className="depth-player-avg"
-                  style={{
-                    color:
-                      getStatColor(
-                        Number(getPositionAverage(player, role) || player.PROMEDIO),
-                      ) || '#fff',
-                  }}
-                >
-                  {getPositionAverage(player, role) || player.PROMEDIO}
-                </span>
-                <EnhancedTooltip content="Eliminar">
-                  <button
-                    className="depth-remove-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onPlayerRemove(num);
+                  <span
+                    className="depth-player-avg"
+                    style={{
+                      color:
+                        getStatColor(
+                          Number(getPositionAverage(player, role) || player.PROMEDIO),
+                        ) || '#fff',
                     }}
                   >
-                    ×
-                  </button>
-                </EnhancedTooltip>
-              </>
-            ) : (
-              <span className="depth-empty-text">+ Agregar</span>
-            )}
-          </div>
-        ))}
+                    {getPositionAverage(player, role) || player.PROMEDIO}
+                  </span>
+                  <EnhancedTooltip content="Eliminar">
+                    <button
+                      className="depth-remove-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onPlayerRemove(num);
+                      }}
+                    >
+                      ×
+                    </button>
+                  </EnhancedTooltip>
+                </>
+              ) : (
+                <span className="depth-empty-text">+ Agregar</span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { PositionBadges } from './PositionBadges';
 import { getStatColor } from '../types/table';
 import { EnhancedTooltip } from './EnhancedTooltip';
 import { openPlayerActionsMenu } from './PlayerActionsOverlay';
+import { useSelectionStore } from '../store/selectionStore';
 
 interface RosterPanelProps {
   players: DerivedPlayer[];
@@ -32,6 +33,9 @@ export function RosterPanel({
   const [panelMode, setPanelMode] = useState<'club' | 'search'>('club');
   const [search, setSearch] = useState('');
   const [positionFilter, setPositionFilter] = useState('');
+
+  const { selectedPlayerId, selectedFromRoster, selectPlayer, clearSelection } =
+    useSelectionStore();
 
   // Solo renderizar jugadores del club + candidatos
   const displayedPlayers = useMemo(() => {
@@ -174,15 +178,20 @@ export function RosterPanel({
             String(player.CLUB || '').toLowerCase() === clubFilter.toLowerCase();
           const showFichaje = !isClubPlayer || isCandidate;
 
+          const isSelected = selectedPlayerId === player.ID && selectedFromRoster;
+
           return (
             <div
               key={player.ID}
-              className={`roster-player-item ${isCandidate ? 'candidate-in' : ''} ${isMarkedOut ? 'candidate-out' : ''} ${panelMode === 'search' ? 'search-result' : ''}`}
-              onClick={(e) => openPlayerActionsMenu(e, player)}
-              draggable={panelMode !== 'search'}
-              onDragStart={(e) => {
+              className={`roster-player-item ${isCandidate ? 'candidate-in' : ''} ${isMarkedOut ? 'candidate-out' : ''} ${panelMode === 'search' ? 'search-result' : ''} ${isSelected ? 'selected' : ''}`}
+              onClick={(e) => {
+                // Solo seleccionar si no es modo búsqueda
                 if (panelMode !== 'search') {
-                  e.dataTransfer.setData('playerId', player.ID);
+                  if (isSelected) {
+                    clearSelection();
+                  } else {
+                    selectPlayer(player.ID, true);
+                  }
                 }
               }}
             >
@@ -198,7 +207,15 @@ export function RosterPanel({
               )}
 
               <div className="roster-player-info">
-                <div className="roster-player-name">{player.NOMBRE as string}</div>
+                <div
+                  className="roster-player-name clickable-name"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openPlayerActionsMenu(e, player);
+                  }}
+                >
+                  {player.NOMBRE as string}
+                </div>
                 <div className="roster-player-meta">
                   <PositionBadges player={player} maxVisible={3} />
                   {typeof player.PROMEDIO === 'number' && (

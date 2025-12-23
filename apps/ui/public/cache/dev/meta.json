@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2025-11-12T17:51:09.165Z",
+  "dataVersion": "dev",
+  "sources": {
+    "table": "C:\\Users\\usuario\\Desktop\\anfpes-engine\\data\\processed\\table0.json",
+    "shop": "C:\\Users\\usuario\\Desktop\\anfpes-engine\\ML.txt"
+  },
+  "counts": {
+    "players": 4333,
+    "clubs": 192
+  },
+  "hashes": {
+    "players": "86f6beb13cc46a0715976e0fe3af151de9374d565e807a9779f60aa697415b81",
+    "clubs": "8c8a06b88c996391e15dfc2f05bc7bb6892c4ff1785dca8514ff0742c8ded068",
+    "byId": "deca38977dc99399f18f69f6eaa2f4a9823ff9a1ee4239656a792ba270ece5da",
+    "byClub": "a315e72519efe34de3503592ce58573ad44188f3a0efe01cd82b28bf0ee7f833",
+    "byNationality": "4b2ffdb43abe99cd4865942c0ddc85faae7e6e45f0dfe00055b777f448f1071f",
+    "byPosition": "9b0fce7274df1309ef0dd8e41fe5069b2f1283f5ff605596986e500c7782f391"
+  }
+}

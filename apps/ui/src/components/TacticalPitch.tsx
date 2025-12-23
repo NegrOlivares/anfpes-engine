@@ -10,6 +10,7 @@ import type {
 import { TacticalPlayerCard } from './TacticalPlayerCard';
 import { TacticalAnalysisOverlay } from './TacticalAnalysisOverlay';
 import { DepthSlotCard } from './DepthSlotCard';
+import { useSelectionStore } from '../store/selectionStore';
 
 interface TacticalPitchProps {
   slots: FormationSlot[];
@@ -101,6 +102,8 @@ export function TacticalPitch({
     string | null
   >(null);
   const [strategyAnimationActive, setStrategyAnimationActive] = useState(true);
+
+  const { selectedPlayerId, selectedFromRoster, clearSelection } = useSelectionStore();
 
   // Alternate strategy animations every 2 seconds for PRESSURE, COUNTER_ATTACK, OFFSIDE_TRAP
   useEffect(() => {
@@ -733,18 +736,33 @@ export function TacticalPitch({
           return (
             <div
               key={slot.slotId}
-              className="tactical-slot"
+              className={`tactical-slot ${selectedPlayerId && selectedFromRoster && !player ? 'target-available' : ''}`}
               style={{
                 left: `${displayX}%`,
                 top: `${displayY}%`,
-                transition: 'left 0.6s ease-out, top 0.6s ease-out',
+                transition: editingPosition
+                  ? 'none'
+                  : 'left 0.6s ease-out, top 0.6s ease-out',
               }}
-              draggable={!!player && !editingPosition}
               onClick={() => {
                 if (showConnections && slot.playerId) {
                   setSelectedPlayerForConnections(slot.playerId);
                 } else if (!editingPosition) {
-                  onSlotClick?.(slot.slotId);
+                  // Si hay un jugador seleccionado del roster, asignarlo a este slot
+                  if (selectedPlayerId && selectedFromRoster && onPlayerDrop) {
+                    if (!player) {
+                      // Slot vacío, asignar jugador
+                      onPlayerDrop(slot.slotId, selectedPlayerId);
+                      clearSelection();
+                    } else if (player.ID !== selectedPlayerId) {
+                      // Slot ocupado, reemplazar jugador
+                      onPlayerDrop(slot.slotId, selectedPlayerId);
+                      clearSelection();
+                    }
+                  } else {
+                    // Click normal en slot
+                    onSlotClick?.(slot.slotId);
+                  }
                 }
               }}
               onMouseDown={(e) => {
@@ -753,42 +771,6 @@ export function TacticalPitch({
                 e.preventDefault();
                 setDraggingSlotId(slot.slotId);
                 setDragPreview({ slotId: slot.slotId, x: slot.x, y: slot.y });
-              }}
-              onDragStart={(e) => {
-                if (editingPosition) {
-                  e.preventDefault();
-                  return;
-                }
-                if (player) {
-                  e.dataTransfer.setData('slotId', slot.slotId);
-                  e.dataTransfer.effectAllowed = 'move';
-                }
-              }}
-              onDragOver={(e) => {
-                if (editingPosition) return;
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                e.currentTarget.classList.add('drag-over');
-              }}
-              onDragLeave={(e) => {
-                if (editingPosition) return;
-                e.currentTarget.classList.remove('drag-over');
-              }}
-              onDrop={(e) => {
-                if (editingPosition) return;
-                e.preventDefault();
-                e.currentTarget.classList.remove('drag-over');
-
-                const playerId = e.dataTransfer.getData('playerId');
-                const fromSlotId = e.dataTransfer.getData('slotId');
-
-                if (fromSlotId && onSlotDrag) {
-                  // Internal drag (moving between slots)
-                  onSlotDrag(fromSlotId, slot.slotId);
-                } else if (playerId && onPlayerDrop) {
-                  // External drag (from roster panel)
-                  onPlayerDrop(slot.slotId, playerId);
-                }
               }}
             >
               {showDepthChart ? (
@@ -800,6 +782,7 @@ export function TacticalPitch({
                   return (
                     <DepthSlotCard
                       role={slot.role}
+                      slotId={slot.slotId}
                       depth1={getDepthPlayer?.(depthSlot?.depth1)}
                       depth2={getDepthPlayer?.(depthSlot?.depth2)}
                       depth3={getDepthPlayer?.(depthSlot?.depth3)}
