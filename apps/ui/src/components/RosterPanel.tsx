@@ -151,17 +151,22 @@ export function RosterPanel({
             className="roster-position-filter"
           >
             <option value="">Todas las posiciones</option>
-            <option value="GK">GK</option>
-            <option value="CB">CB</option>
-            <option value="LB">LB</option>
-            <option value="RB">RB</option>
-            <option value="DMF">DMF</option>
-            <option value="CMF">CMF</option>
-            <option value="AMF">AMF</option>
-            <option value="LWF">LWF</option>
-            <option value="RWF">RWF</option>
-            <option value="CF">CF</option>
-            <option value="SS">SS</option>
+            <option value="GK">PT</option>
+            <option value="SWP">LIB</option>
+            <option value="CB">CT</option>
+            <option value="LB">DI</option>
+            <option value="RB">DD</option>
+            <option value="DMF">CCD</option>
+            <option value="LWB">DLI</option>
+            <option value="RWB">DLD</option>
+            <option value="CMF">CC</option>
+            <option value="LMF">CIZ</option>
+            <option value="RMF">CDR</option>
+            <option value="AMF">MP</option>
+            <option value="LWF">EI</option>
+            <option value="RWF">ED</option>
+            <option value="SS">SD</option>
+            <option value="CF">DC</option>
           </select>
         ) : null}
       </div>

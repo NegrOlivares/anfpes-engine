@@ -106,18 +106,18 @@ export function DepthSlotCard({
 
   const roleLabels: Record<string, string> = {
     PT: 'PT',
-    DI: 'LI',
+    DI: 'DI',
     CT: 'CT',
-    DD: 'LD',
-    CIZ: 'MI',
-    CC: 'MC',
-    CCD: 'MCD',
-    CDR: 'MD',
+    DD: 'DD',
+    CIZ: 'CIZ',
+    CC: 'CC',
+    CCD: 'CCD',
+    CDR: 'CDR',
     EI: 'EI',
     ED: 'ED',
     DC: 'DC',
     SD: 'SD',
-    MCO: 'MCO',
+    MCO: 'MP',
   };
 
   return (

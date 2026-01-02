@@ -148,6 +148,7 @@ export const CLUB_SHIELDS_MAPPING: Record<string, string> = {
   'Selección Slovenia': 'image160.png',
   'Selección South Korea': 'image161.png',
   'Selección Spain': 'image162.png',
+  'Selección Sweden': 'image163.png',
   'Selección Switzerland': 'image164.png',
   'Selección Togo': 'image165.png',
   'Selección Trinidad and Tobago': 'image166.png',
@@ -175,7 +176,7 @@ export const CLUB_SHIELDS_MAPPING: Record<string, string> = {
   'West Ham United FC': 'image193.png',
   'Wigan Athletic FC': 'image194.png',
   'Selección Brazil': 'image196.png',
-  'Willem II': 'image298.png',
+  'Willem II': 'image195.png',
   'C. Atlético Madrid': 'image297.png',
   'Heracles Almelo': 'image306.png',
 };

@@ -18997,8 +18997,8 @@ export const profileAddons: Record<number, ProfileAddon> = {
   },
   '3833': {
     image: '/images/faces/A-19022095.png',
-    fullName: 'Alexandro Quaresma De Souza',
-    birthDate: '22 de junio de 1976',
+    fullName: 'Alexsandro de Souza',
+    birthDate: '14 de septiembre de 1977',
   },
   '3834': {
     image: '/images/faces/A-451632.png',
