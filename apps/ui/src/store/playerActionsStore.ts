@@ -12,10 +12,11 @@ interface PlayerActionsState {
   anchor?: AnchorPosition;
   hideCompare?: boolean;
   hideProfile?: boolean;
+  forceDown?: boolean;
   open: (
     player: DerivedPlayer,
     anchor: AnchorPosition,
-    opts?: { hideCompare?: boolean; hideProfile?: boolean },
+    opts?: { hideCompare?: boolean; hideProfile?: boolean; forceDown?: boolean },
   ) => void;
   close: () => void;
 }
@@ -29,6 +30,7 @@ export const usePlayerActionsStore = create<PlayerActionsState>((set) => ({
       anchor,
       hideCompare: opts?.hideCompare ?? false,
       hideProfile: opts?.hideProfile ?? false,
+      forceDown: opts?.forceDown ?? false,
     }),
   close: () =>
     set({
@@ -37,5 +39,6 @@ export const usePlayerActionsStore = create<PlayerActionsState>((set) => ({
       anchor: undefined,
       hideCompare: false,
       hideProfile: false,
+      forceDown: false,
     }),
 }));

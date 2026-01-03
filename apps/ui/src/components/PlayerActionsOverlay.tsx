@@ -2,6 +2,7 @@ import type { DerivedPlayer } from '@anfpes/engine';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import { AddToPreselectionModal } from './AddToPreselectionModal';
+import { AddToTacticModal } from './AddToTacticModal';
 import { usePlayerActionsStore } from '../store/playerActionsStore';
 import { useModuleStore, MODULE_IDS } from '../store/moduleStore';
 import { useSimilarPlayersStore } from '../store/similarPlayersStore';
@@ -10,6 +11,7 @@ import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 import { useCacheStore } from '../store/cacheStore';
 import { usePlayerProfileStore } from '../store/playerProfileStore';
 import { useActivityHistoryStore } from '../store/activityHistoryStore';
+import { useTacticsStore } from '../store/tacticsStore';
 
 function usePlayerActions() {
   const isOpen = usePlayerActionsStore((state) => state.isOpen);
@@ -28,10 +30,13 @@ export function PlayerActionsOverlay() {
   const setSelectedPlayer = usePlayerProfileStore((state) => state.setSelectedPlayerId);
   const hideCompare = usePlayerActionsStore((state) => state.hideCompare);
   const hideProfile = usePlayerActionsStore((state) => state.hideProfile);
+  const forceDown = usePlayerActionsStore((state) => state.forceDown);
   const [showPreselectionModal, setShowPreselectionModal] = useState(false);
+  const [showTacticModal, setShowTacticModal] = useState(false);
   const selectedPlayerIds = usePreselectionStore((state) => state.selectedPlayerIds);
   const clearSelection = usePreselectionStore((state) => state.clearSelection);
   const addActivity = useActivityHistoryStore((state) => state.addActivity);
+  const savedTactics = useTacticsStore((state) => state.savedTactics);
 
   const effectiveSelection = useMemo(() => {
     if (selectedPlayerIds.size > 0) {
@@ -85,22 +90,36 @@ export function PlayerActionsOverlay() {
     let x = anchor.x;
     let y = anchor.y;
 
-    // Check right overflow
+    console.log('[PlayerActionsOverlay] Calculando posición:', {
+      forceDown,
+      anchorX: anchor.x,
+      anchorY: anchor.y,
+      windowHeight: window.innerHeight,
+      menuHeight: MENU_HEIGHT,
+    });
+
+    if (forceDown) {
+      // Modo forceDown: menú SIEMPRE hacia abajo desde anchor.y
+      // NO ajustar aunque se salga - dejarlo en anchor.y
+      console.log('[PlayerActionsOverlay] forceDown: Usando anchor.y sin ajustes:', y);
+      // No aplicar ningún ajuste a Y
+    } else {
+      // Modo normal: intentar hacia abajo, pero ajustar si no cabe
+      if (y + MENU_HEIGHT + PADDING > window.innerHeight) {
+        // No cabe abajo, intentar moverlo arriba
+        y = Math.max(PADDING, window.innerHeight - MENU_HEIGHT - PADDING);
+      }
+      y = Math.max(PADDING, y);
+    }
+
+    // Check right overflow (aplicar siempre)
     if (x + MENU_WIDTH + PADDING > window.innerWidth) {
       x = anchor.x - MENU_WIDTH;
     }
-
-    // Check bottom overflow
-    if (y + MENU_HEIGHT + PADDING > window.innerHeight) {
-      y = window.innerHeight - MENU_HEIGHT - PADDING;
-    }
-
-    // Ensure not negative
     x = Math.max(PADDING, x);
-    y = Math.max(PADDING, y);
 
     return { top: y, left: x };
-  }, [anchor]);
+  }, [anchor, forceDown]);
 
   if (!isOpen || !player || !anchor) {
     return null;
@@ -109,6 +128,11 @@ export function PlayerActionsOverlay() {
   const handlePreselection = () => {
     if (selectionCount === 0) return;
     setShowPreselectionModal(true);
+  };
+
+  const handleTactic = () => {
+    if (selectionCount === 0) return;
+    setShowTacticModal(true);
   };
 
   const handleSimilarPlayers = () => {
@@ -154,7 +178,10 @@ export function PlayerActionsOverlay() {
   return (
     <>
       <div className="player-actions-backdrop" onClick={handleBackdropClick} />
-      <div className="player-actions-menu" style={menuStyle}>
+      <div
+        className={`player-actions-menu ${forceDown ? 'force-down' : ''}`}
+        style={menuStyle}
+      >
         <div className="player-actions-options">
           {canSearchSimilar && !hideProfile && (
             <button type="button" onClick={handleOpenProfile}>
@@ -162,8 +189,13 @@ export function PlayerActionsOverlay() {
             </button>
           )}
           <button type="button" onClick={handlePreselection}>
-            Agregar a preseleccion
+            Agregar a preselección
           </button>
+          {savedTactics.length > 0 && (
+            <button type="button" onClick={handleTactic}>
+              Fichar en planificador
+            </button>
+          )}
           {canSearchSimilar && (
             <button type="button" onClick={handleSimilarPlayers}>
               Buscar jugadores similares
@@ -191,6 +223,21 @@ export function PlayerActionsOverlay() {
           }}
         />
       )}
+
+      {showTacticModal && (
+        <AddToTacticModal
+          selectedPlayerIds={effectiveSelection}
+          onClose={() => {
+            setShowTacticModal(false);
+            close();
+          }}
+          onSuccess={() => {
+            clearSelection();
+            setShowTacticModal(false);
+            close();
+          }}
+        />
+      )}
     </>
   );
 }
@@ -198,7 +245,7 @@ export function PlayerActionsOverlay() {
 export function openPlayerActionsMenu(
   event: React.SyntheticEvent,
   player: DerivedPlayer,
-  opts?: { hideCompare?: boolean; hideProfile?: boolean },
+  opts?: { hideCompare?: boolean; hideProfile?: boolean; forceDown?: boolean },
 ) {
   event.stopPropagation();
   const target = event.currentTarget as HTMLElement;

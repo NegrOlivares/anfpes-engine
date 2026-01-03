@@ -131,6 +131,11 @@ export function GlossaryModal({ isOpen, onClose }: GlossaryModalProps) {
                       {term.term}
                     </h3>
                     <div className="glossary-term-badges">
+                      {term.range && (
+                        <span className="glossary-badge glossary-badge-range">
+                          {term.range}
+                        </span>
+                      )}
                       {term.isCalculated && (
                         <span className="glossary-badge glossary-badge-calculated">
                           Calculado

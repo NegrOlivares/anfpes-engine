@@ -26,6 +26,7 @@ export interface GlossaryTerm {
   };
   category: GlossaryCategory;
   definition: string; // Definición del Excel original
+  range?: string; // Rango numérico posible (ej: '1-99', 'A/B/C', '1-8')
   isCalculated?: boolean; // Si se calcula en derived.ts
   calculationFile?: string; // Referencia al archivo de cálculo
   relatedStats?: string[]; // Stats que lo componen
@@ -42,6 +43,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'ataque',
     term: 'Ataque',
     category: 'stats',
+    range: '1-99',
     definition:
       'Capacidad del jugador para crear peligro en una jugada ofensiva. Puede ser interpretado también como inteligencia ofensiva (capacidad del jugador para tomar la mejor decisión cuando tiene la pelota y que la jugada termine en una ocasión de gol) o qué tan incisivo es un jugador cuando ataca. Los jugadores con mucho ataque son propensos a estar en "situaciones" de gol y perder la marca rápidamente.',
     tags: ['mental', 'ofensivo'],
@@ -50,6 +52,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'defensa',
     term: 'Defensa',
     category: 'stats',
+    range: '1-99',
     definition:
       'Capacidad del jugador para defender cuando no tiene el balón. Se puede interpretar como inteligencia defensiva. Cuanta más alta sea la Defensa del jugador, mejor será su lectura del juego y podrá tomar mejores decisiones a la hora de marcar. Este stat se utiliza principalmente para medir qué tan bueno es el jugador recuperando el balón, quitándole la pelota al rival de forma limpia. Cuanto mejor sea el jugador en los tackles, mejor será su valor en Defensa.',
     tags: ['mental', 'defensivo'],
@@ -58,6 +61,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'estabilidad',
     term: 'Estabilidad',
     category: 'stats',
+    range: '1-99',
     definition:
       'La fuerza del jugador. Jugadores con niveles altos en Estabilidad podrán aguantar embestidas rivales y salir airosos de duelos físicos sin caer al suelo. La altura y el peso de los jugadores no influyen en la fuerza del jugador.',
     tags: ['físico'],
@@ -66,6 +70,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'resistencia',
     term: 'Resistencia',
     category: 'stats',
+    range: '1-99',
     definition:
       'El nivel de energía del jugador. Con valores altos el jugador será propenso a correr durante mucho tiempo en el partido. El valor estándar es de 80, ya que con ese valor en el PES un jugador llega a correr los 90 minutos con lo justo para llegar a terminar un partido.',
     tags: ['físico'],
@@ -75,6 +80,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Velocidad Máxima',
     legacyTerm: 'VELOCIDAD MÁXIMA',
     category: 'stats',
+    range: '1-99',
     definition: 'El tope de velocidad que alcanza un jugador al correr sin el balón.',
     tags: ['físico'],
   },
@@ -83,6 +89,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Aceleración',
     legacyTerm: 'ACELERACIÓN',
     category: 'stats',
+    range: '1-99',
     definition:
       'La capacidad del jugador de alcanzar con mayor rapidez su velocidad máxima. Mientras más alto sea el valor, más rápido alcanzará su velocidad tope.',
     tags: ['físico'],
@@ -92,6 +99,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Respuesta',
     legacyTerm: 'REPUESTA',
     category: 'stats',
+    range: '1-99',
     definition:
       'La respuesta puede asumirse como la manera en la que un jugador "lee el juego", los reflejos del jugador. Cuanto más alto sea este stat, más rápido reaccionará el jugador en cualquier situación del juego.',
     tags: ['mental'],
@@ -100,6 +108,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'agilidad',
     term: 'Agilidad',
     category: 'stats',
+    range: '1-99',
     definition:
       'Determina qué tan rápido un jugador es capaz de cambiar de dirección con el balón en los pies.',
     tags: ['físico', 'técnico'],
@@ -109,6 +118,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Precisión de Conducción',
     legacyTerm: 'PRECISIÓN DRIBBLE',
     category: 'stats',
+    range: '1-99',
     definition:
       'Capacidad del jugador de llevar el balón pegado al pie mientras conduce. Cuanto más alto sea este stat, más difícil será que se le vaya largo el balón y al regatear será más difícil para el rival quitarle el balón.',
     tags: ['técnico', 'ofensivo'],
@@ -118,6 +128,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Velocidad de Conducción',
     legacyTerm: 'VELOCIDAD DRIBBLE',
     category: 'stats',
+    range: '1-99',
     definition: 'Qué tan rápido puede correr un jugador con el balón controlado.',
     tags: ['físico', 'técnico'],
   },
@@ -126,6 +137,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Precisión de Pase Corto',
     legacyTerm: 'PRECISIÓN   P CORTO',
     category: 'stats',
+    range: '1-99',
     definition:
       'La precisión de los pases al ras del piso. Este stat determina la calidad y qué tipo de pases es capaz de dar el jugador teniendo en cuenta la dificultad de estos.',
     tags: ['técnico'],
@@ -135,6 +147,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Velocidad de Pase Corto',
     legacyTerm: 'VELOCIDAD  P CORTO',
     category: 'stats',
+    range: '1-99',
     definition:
       'La fuerza que el jugador puede darle a los pases. Con un valor alto, los pases no serán interceptados por los jugadores rivales y se desplazarán con mayor velocidad. Además, añade más rango a los pases.',
     tags: ['físico', 'técnico'],
@@ -144,6 +157,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Precisión de Pase Largo',
     legacyTerm: 'PRECISIÓN       P LARGO',
     category: 'stats',
+    range: '1-99',
     definition:
       'Determina la precisión de los pases por el aire, pases largos, los cambios de frente y centros aéreos.',
     tags: ['técnico'],
@@ -153,6 +167,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Velocidad de Pase Largo',
     legacyTerm: 'VELOCIDAD     P LARGO',
     category: 'stats',
+    range: '1-99',
     definition:
       'La velocidad con lo que los pases largos van hacia su destino y el rango que pueden alcanzar estos. Cabe destacar que este estat actúa junto a "Potencia de disparo" para determinar ese valor.',
     tags: ['físico', 'técnico'],
@@ -162,6 +177,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Precisión de Disparo',
     legacyTerm: 'PRECISIÓN DISPARO',
     category: 'stats',
+    range: '1-99',
     definition:
       'Determina la puntería en los disparos. Con valores altos, el jugador será capaz de apuntar a áreas más difícil del arco, lejos del arquero y en los ángulos.',
     tags: ['técnico', 'ofensivo'],
@@ -171,6 +187,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Potencia de Disparo',
     legacyTerm: 'POTENCIA DISPARO',
     category: 'stats',
+    range: '1-99',
     definition:
       'El poder con que se dispara. Determina qué tan rápido y qué tan fuerte el jugador puede patear el balón.',
     tags: ['físico', 'ofensivo'],
@@ -180,6 +197,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Técnica de Disparo',
     legacyTerm: 'TÉCNICA DISPARO',
     category: 'stats',
+    range: '1-99',
     definition:
       'Con esta habilidad los jugadores serán capaces de disparar al arco bajo presión de algún jugador rival, también permite a los jugadores disparar de ángulos difíciles y ayuda a los jugadores que disparan de lejos a pegarle bien al balón.',
     tags: ['técnico', 'ofensivo'],
@@ -189,6 +207,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Precisión Tiro Libre',
     legacyTerm: 'PRECISIÓN TIRO LIBRE',
     category: 'stats',
+    range: '1-99',
     definition:
       'Nivel de precisión que tiene el jugador al realizar pelotas paradas: Tiros libres y saques de esquina.',
     tags: ['técnico', 'ofensivo'],
@@ -197,6 +216,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'efecto',
     term: 'Efecto',
     category: 'stats',
+    range: '1-99',
     definition:
       'Capacidad de patear con comba de un jugador. Qué tan efectiva es la curva que le dan los jugadores a tiros libres, pases largos y cortos, cambios de juego y disparos.',
     tags: ['técnico'],
@@ -205,6 +225,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'cabezazo',
     term: 'Cabezazo',
     category: 'stats',
+    range: '1-99',
     definition:
       'Precisión del jugador golpeando la pelota con la cabeza y nivel de potencia que es capaz de darle al cabezazo.',
     tags: ['técnico', 'físico'],
@@ -213,6 +234,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'salto',
     term: 'Salto',
     category: 'stats',
+    range: '1-99',
     definition:
       'Capacidad del jugador de despegarse del suelo. Qué tanta altura puede alcanzar y que tan rápido puede hacerlo.',
     tags: ['físico'],
@@ -265,6 +287,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Tolerancia a las Lesiones',
     legacyTerm: 'TOLERANCIA LESIONES',
     category: 'stats',
+    range: 'A / B / C',
     definition:
       'Qué tan frecuentemente se lesiona el jugador, en un rango de A - B - C, donde A es poco frecuente, B es medianamente frecuente y C es muy frecuente.',
     tags: ['físico'],
@@ -273,6 +296,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     id: 'consistencia',
     term: 'Consistencia',
     category: 'stats',
+    range: '1-8',
     definition:
       'La fiabilidad con la que un jugador puede desempeñar sus funciones. Con un valor alto, el jugador responderá a las expectativas de sus habilidades. Por el contrario, con un valor bajo, el jugador tenderá a cometer más errores, aunque su habilidad diga lo contrario.',
     tags: ['mental'],
@@ -282,6 +306,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Condición Física',
     legacyTerm: 'CONDICIÓN FITNESS',
     category: 'stats',
+    range: '1-8',
     definition:
       'Capacidad del jugador para jugar bien muchos partidos. Cuanto más alto sea el stat, más probabilidad habrá de que el jugador tenga flechas amarillas o rojas, de modo que su nivel en los partidos será mejor.',
     tags: ['físico'],
@@ -291,6 +316,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Precisión de Pie Torpe',
     legacyTerm: 'PRECICIÓN PIE MALO',
     category: 'stats',
+    range: '1-8',
     definition:
       'Es la capacidad proporcional del jugador de poder ocupar su pie menos hábil igual que su pie principal.',
     tags: ['técnico'],
@@ -300,6 +326,7 @@ const STATS_BASICOS: GlossaryTerm[] = [
     term: 'Frecuencia de Pie Torpe',
     legacyTerm: 'FRECUENCIA PIE MALO',
     category: 'stats',
+    range: '1-8',
     definition:
       'Qué tan frecuentemente usa su pierna menos hábil. Con un valor alto el jugador no intentará acomodarse para patear con su pierna hábil y lo hará directamente con la pierna opuesta sin perder tiempo ni espacio.',
     tags: ['técnico'],
@@ -526,6 +553,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     id: 'destreza-ataque',
     term: 'Destreza Ataque',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Inteligencia ofensiva. Mide la capacidad del jugador para tomar decisiones efectivas en ataque.',
     isCalculated: true,
@@ -538,6 +566,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     id: 'finiquito',
     term: 'Finiquito',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Capacidad global de definición. Combina precisión y técnica de disparo para medir la efectividad goleadora.',
     isCalculated: true,
@@ -551,6 +580,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     term: 'Rapidez',
     legacyTerm: 'VELOCIDAD',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Velocidad efectiva del jugador combinando velocidad con balón y sin balón.',
     isCalculated: true,
@@ -563,6 +593,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     id: 'explosividad',
     term: 'Explosividad',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Capacidad de arranque y cambio de ritmo. Combina agilidad y aceleración.',
     isCalculated: true,
@@ -575,6 +606,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     id: 'potencia-patada',
     term: 'Potencia de Patada',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Fuerza máxima en disparos y pases. Toma el mejor entre disparo y velocidades de pase.',
     isCalculated: true,
@@ -591,6 +623,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     id: 'destreza-defensa',
     term: 'Destreza Defensa',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Inteligencia defensiva. Combina defensa con respuesta o trabajo en equipo según lo que sea mayor.',
     isCalculated: true,
@@ -604,6 +637,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     term: 'Recuperación de Balón',
     legacyTerm: 'RECUPERACION DE BALÓN',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Capacidad para recuperar el balón. Combina defensa con estabilidad o mentalidad.',
     isCalculated: true,
@@ -617,6 +651,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     term: 'Juego Aéreo',
     legacyTerm: 'JUEGO AEREO',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Efectividad en jugadas aéreas. Combina altura, salto, cabezazo y otros factores físicos y técnicos.',
     isCalculated: true,
@@ -630,6 +665,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     term: 'Atletismo',
     legacyTerm: 'ALETISMO',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition: 'Capacidad atlética global. Combina múltiples atributos físicos.',
     isCalculated: true,
     calculationFile: 'packages/engine/src/derived.ts#L264-L272',
@@ -650,6 +686,7 @@ const METRICAS_CALCULADAS: GlossaryTerm[] = [
     id: 'creatividad',
     term: 'Creatividad',
     category: 'metricas-calculadas',
+    range: '1-99',
     definition:
       'Capacidad creativa y técnica. Combina precisión, técnica, regate y habilidades especiales.',
     isCalculated: true,
@@ -682,6 +719,7 @@ const MACRO_STATS: GlossaryTerm[] = [
     id: 'atk',
     term: 'ATK',
     category: 'macro-stats',
+    range: '1-99',
     definition:
       'Macro stat de ataque ponderado. Combina el ataque base con la precisión de disparo.',
     isCalculated: true,
@@ -694,6 +732,7 @@ const MACRO_STATS: GlossaryTerm[] = [
     id: 'tec',
     term: 'TEC',
     category: 'macro-stats',
+    range: '1-99',
     definition:
       'Macro stat de técnica global. Promedio ponderado de múltiples stats técnicos.',
     isCalculated: true,
@@ -713,6 +752,7 @@ const MACRO_STATS: GlossaryTerm[] = [
     id: 'res',
     term: 'RES',
     category: 'macro-stats',
+    range: '1-99',
     definition: 'Macro stat de resistencia. Refleja directamente el stat de resistencia.',
     isCalculated: true,
     calculationFile: 'packages/engine/src/derived.ts#L498',
@@ -724,6 +764,7 @@ const MACRO_STATS: GlossaryTerm[] = [
     id: 'def',
     term: 'DEF',
     category: 'macro-stats',
+    range: '1-99',
     definition: 'Macro stat de defensa. Refleja directamente el stat de defensa.',
     isCalculated: true,
     calculationFile: 'packages/engine/src/derived.ts#L499',
@@ -735,6 +776,7 @@ const MACRO_STATS: GlossaryTerm[] = [
     id: 'fue',
     term: 'FUE',
     category: 'macro-stats',
+    range: '1-99',
     definition:
       'Macro stat de fuerza física. Combina estabilidad, salto y potencia de disparo.',
     isCalculated: true,
@@ -747,6 +789,7 @@ const MACRO_STATS: GlossaryTerm[] = [
     id: 'vel',
     term: 'VEL',
     category: 'macro-stats',
+    range: '1-99',
     definition:
       'Macro stat de velocidad. Combina velocidad máxima, aceleración, respuesta y velocidad con balón.',
     isCalculated: true,
@@ -1089,11 +1132,25 @@ export function findGlossaryTerm(fieldName: string): GlossaryTerm | undefined {
 
   // Si no se encuentra, buscar por nombres de display conocidos
   // Esto maneja casos donde se pasa el label de UI en lugar del nombre técnico
-  return GLOSSARY_DATA.find((term) => {
+  const directMatch = GLOSSARY_DATA.find((term) => {
     const termMatch = normalizeSpaces(term.term) === normalized;
     const legacyMatch =
       term.legacyTerm && normalizeSpaces(term.legacyTerm) === normalized;
     return termMatch || legacyMatch;
+  });
+
+  if (directMatch) return directMatch;
+
+  // Búsqueda especial para posiciones: si se pasa "PT", buscar "PT / GK"
+  // Esto permite encontrar posiciones por su abreviatura española
+  return GLOSSARY_DATA.find((term) => {
+    const termNorm = normalizeSpaces(term.term);
+    const legacyNorm = term.legacyTerm ? normalizeSpaces(term.legacyTerm) : '';
+
+    // Si el término comienza con el campo buscado seguido de " /" (posiciones)
+    return (
+      termNorm.startsWith(normalized + ' /') || legacyNorm.startsWith(normalized + ' /')
+    );
   });
 }
 

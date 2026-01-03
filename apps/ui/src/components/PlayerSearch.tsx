@@ -662,7 +662,7 @@ export function PlayerSearch() {
       return 'stat';
     }
 
-    // Atributos físicos numéricos (con color pero sin barras)
+    // Atributos físicos numéricos (con color y barras - rango 1-8)
     if (
       [
         'CONSISTENCIA',
@@ -671,7 +671,7 @@ export function PlayerSearch() {
         'FRECUENCIA PIE MALO',
       ].includes(field)
     ) {
-      return 'number';
+      return 'stat';
     }
 
     // Campos numéricos básicos
@@ -1096,9 +1096,31 @@ export function PlayerSearch() {
                             }
                           >
                             <div className="th-content">
-                              <GlossaryTooltip fieldName={column}>
-                                <span>{headerLabel}</span>
-                              </GlossaryTooltip>
+                              {/* Usar EnhancedTooltip simple para promedios de posición y promedios generales */}
+                              {[
+                                'PT',
+                                'LIB',
+                                'CT',
+                                'SA',
+                                'LA',
+                                'CCD',
+                                'CC',
+                                'VOL',
+                                'MP',
+                                'EX',
+                                'SD',
+                                'DC',
+                                'PROMEDIO',
+                                'MEJOR PROMEDIO',
+                              ].includes(column) ? (
+                                <EnhancedTooltip content={headerLabel}>
+                                  <span>{headerLabel}</span>
+                                </EnhancedTooltip>
+                              ) : (
+                                <GlossaryTooltip fieldName={column}>
+                                  <span>{headerLabel}</span>
+                                </GlossaryTooltip>
+                              )}
                               {sortDir && (
                                 <span className="sort-indicator">
                                   {sortDir === 'asc' ? '▲' : '▼'}

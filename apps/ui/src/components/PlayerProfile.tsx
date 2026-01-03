@@ -2070,21 +2070,38 @@ export function PlayerProfile() {
     if (!normalized) {
       return [];
     }
-    return players
-      .filter((player) => {
-        const name = normalize(String(player.NOMBRE ?? ''));
-        const id = normalize(String(player.ID ?? ''));
-        const club = normalize(String(player.CLUB ?? ''));
-        const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
-        const fullName = addon?.fullName ? normalize(addon.fullName) : '';
-        return (
-          name.includes(normalized) ||
-          id.includes(normalized) ||
-          club.includes(normalized) ||
-          fullName.includes(normalized)
-        );
-      })
-      .slice(0, 8);
+
+    const exactNameMatches: DerivedPlayer[] = [];
+    const exactIdMatches: DerivedPlayer[] = [];
+    const partialMatches: DerivedPlayer[] = [];
+
+    players.forEach((player) => {
+      const name = normalize(String(player.NOMBRE ?? ''));
+      const id = normalize(String(player.ID ?? ''));
+      const club = normalize(String(player.CLUB ?? ''));
+      const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+      const fullName = addon?.fullName ? normalize(addon.fullName) : '';
+
+      // Prioridad 1: Coincidencia exacta de nombre
+      if (name === normalized || fullName === normalized) {
+        exactNameMatches.push(player);
+      }
+      // Prioridad 2: Coincidencia exacta de ID
+      else if (id === normalized) {
+        exactIdMatches.push(player);
+      }
+      // Prioridad 3: Coincidencias parciales
+      else if (
+        name.includes(normalized) ||
+        id.includes(normalized) ||
+        club.includes(normalized) ||
+        fullName.includes(normalized)
+      ) {
+        partialMatches.push(player);
+      }
+    });
+
+    return [...exactNameMatches, ...exactIdMatches, ...partialMatches].slice(0, 8);
   }, [players, query]);
 
   useEffect(() => {
@@ -2335,7 +2352,9 @@ export function PlayerProfile() {
             <header
               className="clickable-name"
               style={{ cursor: 'pointer' }}
-              onClick={(e) => openPlayerActionsMenu(e, player, { hideProfile: true })}
+              onClick={(e) =>
+                openPlayerActionsMenu(e, player, { hideProfile: true, forceDown: true })
+              }
             >
               {player.NOMBRE}
             </header>

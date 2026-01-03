@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
+import { usePreselectionViewStore } from '../store/preselectionViewStore';
 import { useSearchPresetStore } from '../store/searchPresetStore';
 import { useTacticsStore } from '../store/tacticsStore';
 import { MODULE_IDS, useModuleStore } from '../store/moduleStore';
@@ -121,6 +122,7 @@ export function HomeModule() {
   };
 
   const handleOpenPreselection = (preselectionId: string) => {
+    usePreselectionViewStore.getState().setActivePreselectionId(preselectionId);
     setActiveModule(MODULE_IDS.preselections);
   };
 

@@ -829,9 +829,31 @@ export function SimilarPlayersModule() {
                         }
                       >
                         <div className="th-content">
-                          <GlossaryTooltip fieldName={column}>
-                            <span>{headerLabel}</span>
-                          </GlossaryTooltip>
+                          {/* Usar EnhancedTooltip simple para promedios de posición y promedios generales */}
+                          {[
+                            'PT',
+                            'LIB',
+                            'CT',
+                            'SA',
+                            'LA',
+                            'CCD',
+                            'CC',
+                            'VOL',
+                            'MP',
+                            'EX',
+                            'SD',
+                            'DC',
+                            'PROMEDIO',
+                            'MEJOR PROMEDIO',
+                          ].includes(column) ? (
+                            <EnhancedTooltip content={headerLabel}>
+                              <span>{headerLabel}</span>
+                            </EnhancedTooltip>
+                          ) : (
+                            <GlossaryTooltip fieldName={column}>
+                              <span>{headerLabel}</span>
+                            </GlossaryTooltip>
+                          )}
                           {sortDir && (
                             <span className="sort-indicator">
                               {sortDir === 'asc' ? '↑' : '↓'}
@@ -1080,10 +1102,26 @@ function getColumnType(column: string) {
     'DEF',
     'FUE',
     'VEL',
+    'DESTREZA ATAQUE',
+    'DESTREZA DEFENSA',
+    'FINIQUITO',
+    'VELOCIDAD',
+    'EXPLOSIVIDAD',
+    'POTENCIA DE PATADA',
+    'RECUPERACION DE BALÓN',
+    'ALETISMO',
+    'JUEGO AEREO',
+    'CREATIVIDAD',
+  ]);
+  const stat8Columns = new Set([
+    'CONSISTENCIA',
+    'CONDICIÓN FITNESS',
+    'PRECICIÓN PIE MALO',
+    'FRECUENCIA PIE MALO',
   ]);
 
   if (ratingColumns.has(column)) return 'rating';
-  if (statColumns.has(column)) return 'stat';
+  if (statColumns.has(column) || stat8Columns.has(column)) return 'stat';
   if (column === 'TOLERANCIA LESIONES') return 'injury';
   return 'text';
 }

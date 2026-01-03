@@ -1156,6 +1156,11 @@ tbody tr:hover {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
+/* Cuando forceDown es true, el menú NO se mueve hacia arriba */
+.player-actions-menu.force-down {
+  transform: translate(0, 0);
+}
+
 .player-actions-options {
   display: flex;
   flex-direction: column;
@@ -5662,6 +5667,10 @@ fill-opacity: 0.16!important
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.75rem;
+  max-height: 20vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.25rem;
 }
 
 .home-preselection-card {

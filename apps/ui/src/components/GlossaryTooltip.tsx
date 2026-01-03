@@ -187,6 +187,9 @@ export function GlossaryTooltip({
     >
       <div className="glossary-tooltip-header">
         <strong>{displayLabel || term.term}</strong>
+        {term.range && (
+          <span className="glossary-tooltip-badge range-badge">{term.range}</span>
+        )}
         {term.isCalculated && <span className="glossary-tooltip-badge">Calculado</span>}
       </div>
 

@@ -302,16 +302,41 @@ function findPlayerByQuery(players: DerivedPlayer[] | undefined, query: string) 
   const normalized = normalize(query.trim());
   if (!normalized) return undefined;
 
-  return (
-    players.find((player) => normalize(String(player.ID)) === normalized) ??
-    players.find((player) =>
-      normalize(String(player.NOMBRE ?? '')).includes(normalized),
-    ) ??
-    players.find((player) => {
-      const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
-      return addon?.fullName ? normalize(addon.fullName).includes(normalized) : false;
-    }) ??
-    players.find((player) => normalize(String(player.CLUB ?? '')).includes(normalized))
+  // Prioridad 1: Coincidencia exacta en nombre
+  const exactNameMatch = players.find(
+    (player) => normalize(String(player.NOMBRE ?? '')) === normalized,
+  );
+  if (exactNameMatch) return exactNameMatch;
+
+  // Prioridad 2: Coincidencia exacta en nombre completo (addon)
+  const exactFullNameMatch = players.find((player) => {
+    const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+    return addon?.fullName ? normalize(addon.fullName) === normalized : false;
+  });
+  if (exactFullNameMatch) return exactFullNameMatch;
+
+  // Prioridad 3: Coincidencia exacta en ID
+  const exactIdMatch = players.find(
+    (player) => normalize(String(player.ID)) === normalized,
+  );
+  if (exactIdMatch) return exactIdMatch;
+
+  // Prioridad 4: Coincidencia parcial en nombre
+  const partialNameMatch = players.find((player) =>
+    normalize(String(player.NOMBRE ?? '')).includes(normalized),
+  );
+  if (partialNameMatch) return partialNameMatch;
+
+  // Prioridad 5: Coincidencia parcial en nombre completo
+  const partialFullNameMatch = players.find((player) => {
+    const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+    return addon?.fullName ? normalize(addon.fullName).includes(normalized) : false;
+  });
+  if (partialFullNameMatch) return partialFullNameMatch;
+
+  // Prioridad 6: Coincidencia parcial en club
+  return players.find((player) =>
+    normalize(String(player.CLUB ?? '')).includes(normalized),
   );
 }
 
@@ -351,21 +376,40 @@ export function ComparatorModule() {
     if (!normalized) {
       return [];
     }
-    return players
-      .filter((player) => {
-        const name = normalize(String(player.NOMBRE ?? ''));
-        const id = normalize(String(player.ID ?? ''));
-        const club = normalize(String(player.CLUB ?? ''));
-        const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
-        const fullName = addon?.fullName ? normalize(addon.fullName) : '';
-        return (
-          name.includes(normalized) ||
-          id.includes(normalized) ||
-          club.includes(normalized) ||
-          fullName.includes(normalized)
-        );
-      })
-      .slice(0, 8);
+
+    // Separar por tipo de coincidencia
+    const exactNameMatches: DerivedPlayer[] = [];
+    const exactIdMatches: DerivedPlayer[] = [];
+    const partialMatches: DerivedPlayer[] = [];
+
+    for (const player of players) {
+      const name = normalize(String(player.NOMBRE ?? ''));
+      const id = normalize(String(player.ID ?? ''));
+      const club = normalize(String(player.CLUB ?? ''));
+      const addon = (profileAddons as Record<string, ProfileAddon>)[String(player.ID)];
+      const fullName = addon?.fullName ? normalize(addon.fullName) : '';
+
+      // Coincidencia exacta en nombre tiene prioridad máxima
+      if (name === normalized || fullName === normalized) {
+        exactNameMatches.push(player);
+      }
+      // Coincidencia exacta en ID tiene segunda prioridad
+      else if (id === normalized) {
+        exactIdMatches.push(player);
+      }
+      // Coincidencias parciales tienen tercera prioridad
+      else if (
+        name.includes(normalized) ||
+        id.includes(normalized) ||
+        club.includes(normalized) ||
+        fullName.includes(normalized)
+      ) {
+        partialMatches.push(player);
+      }
+    }
+
+    // Retornar en orden: exactas en nombre, exactas en ID, parciales
+    return [...exactNameMatches, ...exactIdMatches, ...partialMatches].slice(0, 8);
   }, [players, query]);
 
   useEffect(() => {
@@ -1076,7 +1120,9 @@ function ComparatorPlayerCard({
           <span
             className="clickable-name"
             style={{ cursor: 'pointer' }}
-            onClick={(e) => openPlayerActionsMenu(e, player, { hideCompare: true })}
+            onClick={(e) =>
+              openPlayerActionsMenu(e, player, { hideCompare: true, forceDown: true })
+            }
           >
             {player.NOMBRE}
           </span>

@@ -176,6 +176,33 @@ export function PreselectionModule() {
 
     return [...filteredPlayers].sort((a, b) => {
       for (const sort of sortConfig) {
+        // Special sorting for ACCIONES tag priority
+        if (sort.key === 'ACCIONES') {
+          const getTagPriority = (tagId: string | null | undefined): number => {
+            if (!tagId) return 5; // No tag = lowest priority
+            // Los IDs de los tags son: 'priority', 'backup', 'observe', 'discard'
+            if (tagId === 'priority') return 1; // Prioridad
+            if (tagId === 'backup') return 2; // Backup
+            if (tagId === 'observe') return 3; // Observar
+            if (tagId === 'discard') return 4; // Descartado
+            return 5; // Unknown tag
+          };
+
+          // tags es un Record<string, string[]>, acceder correctamente
+          const aTags = activePreselection?.tags[a.ID];
+          const bTags = activePreselection?.tags[b.ID];
+          const aTag = aTags && aTags.length > 0 ? aTags[0] : null;
+          const bTag = bTags && bTags.length > 0 ? bTags[0] : null;
+
+          const comparison = getTagPriority(aTag) - getTagPriority(bTag);
+
+          if (comparison !== 0) {
+            // Invertir la dirección: asc muestra Priority primero (arriba)
+            return sort.direction === 'asc' ? comparison : -comparison;
+          }
+          continue;
+        }
+
         if (sort.key === 'POSICIONES') {
           const comparison = comparePositions(a, b);
           if (comparison !== 0) {
@@ -202,7 +229,7 @@ export function PreselectionModule() {
       }
       return 0;
     });
-  }, [filteredPlayers, sortConfig]);
+  }, [filteredPlayers, sortConfig, activePreselection]);
 
   const totalPages = Math.ceil(sortedPlayers.length / itemsPerPage);
   const paginatedResults = useMemo(() => {
@@ -243,7 +270,8 @@ export function PreselectionModule() {
       if (existing && existing.direction === 'asc') {
         return [];
       }
-      const initialDir = key === 'POSICIONES' ? 'asc' : 'desc';
+      // ACCIONES empieza con 'asc' para mostrar Priority primero
+      const initialDir = key === 'POSICIONES' || key === 'ACCIONES' ? 'asc' : 'desc';
       return [{ key, direction: initialDir }];
     });
   };
@@ -627,9 +655,31 @@ export function PreselectionModule() {
                           }
                         >
                           <div className="th-content">
-                            <GlossaryTooltip fieldName={column}>
-                              <span>{headerLabel}</span>
-                            </GlossaryTooltip>
+                            {/* Usar EnhancedTooltip simple para promedios de posici\u00f3n y promedios generales */}
+                            {[
+                              'PT',
+                              'LIB',
+                              'CT',
+                              'SA',
+                              'LA',
+                              'CCD',
+                              'CC',
+                              'VOL',
+                              'MP',
+                              'EX',
+                              'SD',
+                              'DC',
+                              'PROMEDIO',
+                              'MEJOR PROMEDIO',
+                            ].includes(column) ? (
+                              <EnhancedTooltip content={headerLabel}>
+                                <span>{headerLabel}</span>
+                              </EnhancedTooltip>
+                            ) : (
+                              <GlossaryTooltip fieldName={column}>
+                                <span>{headerLabel}</span>
+                              </GlossaryTooltip>
+                            )}
                             {sortDir && (
                               <span className="sort-indicator">
                                 {sortDir === 'asc' ? '▲' : '▼'}
@@ -642,7 +692,30 @@ export function PreselectionModule() {
                         </th>
                       );
                     })}
-                    <th className="actions-column">Acciones</th>
+                    <th
+                      className="actions-column sortable"
+                      onClick={(e) =>
+                        handleSort('ACCIONES' as keyof DerivedPlayer, e.shiftKey)
+                      }
+                    >
+                      <div className="th-content">
+                        <span>Acciones</span>
+                        {sortConfig.findIndex((s) => s.key === 'ACCIONES') >= 0 && (
+                          <span className="sort-indicator">
+                            {sortConfig.find((s) => s.key === 'ACCIONES')?.direction ===
+                            'asc'
+                              ? '▲'
+                              : '▼'}
+                            {sortConfig.length > 1 &&
+                              sortConfig.findIndex((s) => s.key === 'ACCIONES') >= 0 && (
+                                <sup>
+                                  {sortConfig.findIndex((s) => s.key === 'ACCIONES') + 1}
+                                </sup>
+                              )}
+                          </span>
+                        )}
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

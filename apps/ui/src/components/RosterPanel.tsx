@@ -40,16 +40,28 @@ export function RosterPanel({
   // Solo renderizar jugadores del club + candidatos
   const displayedPlayers = useMemo(() => {
     if (panelMode === 'search') {
-      // Modo búsqueda: mostrar resultados sin thumbnail
+      // Modo búsqueda: mostrar resultados sin thumbnail con prioridad de coincidencia exacta
       if (!search) return [];
 
-      const searchLower = search.toLowerCase();
-      return players
-        .filter((p) => {
-          const name = String(p.NOMBRE || '').toLowerCase();
-          return name.includes(searchLower);
-        })
-        .slice(0, 50); // Limitar a 50 resultados
+      const searchLower = search.toLowerCase().trim();
+      const exactMatches: DerivedPlayer[] = [];
+      const partialMatches: DerivedPlayer[] = [];
+
+      players.forEach((p) => {
+        const name = String(p.NOMBRE || '').toLowerCase();
+        const id = String(p.ID || '').toLowerCase();
+
+        // Prioridad 1: Coincidencia exacta
+        if (name === searchLower || id === searchLower) {
+          exactMatches.push(p);
+        }
+        // Prioridad 2: Coincidencias parciales
+        else if (name.includes(searchLower) || id.includes(searchLower)) {
+          partialMatches.push(p);
+        }
+      });
+
+      return [...exactMatches, ...partialMatches].slice(0, 50); // Limitar a 50 resultados
     }
 
     // Modo normal: solo club + candidatos
