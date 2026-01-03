@@ -5566,15 +5566,15 @@ fill-opacity: 0.16!important
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.75rem;
-  padding: 1.25rem;
+  padding: 1rem;
 }
 
 .home-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -5664,10 +5664,7 @@ fill-opacity: 0.16!important
 }
 
 .home-preselection-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.75rem;
-  max-height: 20vh;
+  max-height: 25vh;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 0.25rem;
@@ -5680,21 +5677,27 @@ fill-opacity: 0.16!important
   border-radius: 0.6rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  max-height: 10vh;
 }
 
 .home-preselection-card:hover {
   background: linear-gradient(135deg, rgba(122, 201, 255, 0.12), rgba(122, 201, 255, 0.06));
   border-color: rgba(122, 201, 255, 0.35);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .preselection-card-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
-  gap: 0.5rem;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+  min-width: 180px;
 }
 
 .preselection-card-name {
@@ -5702,13 +5705,12 @@ fill-opacity: 0.16!important
   font-size: 0.95rem;
   font-weight: 600;
   color: #f4f6fb;
-  flex: 1;
 }
 
 .preselection-card-count {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.6);
-  padding: 0.25rem 0.6rem;
+  padding: 0.2rem 0.5rem;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   white-space: nowrap;
@@ -5716,23 +5718,26 @@ fill-opacity: 0.16!important
 
 .preselection-card-stats {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
 }
 
 .preselection-card-avg {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
 }
 
 .preselection-card-avg .stat-label {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.6);
 }
 
 .preselection-card-avg .stat-value {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #7ac9ff;
 }
@@ -5740,7 +5745,8 @@ fill-opacity: 0.16!important
 .preselection-card-lines {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  flex: 1;
 }
 
 .preselection-card-lines .line-badge {
@@ -5756,7 +5762,7 @@ fill-opacity: 0.16!important
 /* Actividades recientes */
 .recent-section {
   min-height: auto;
-  max-height: 420px;
+  max-height: 58vh;
   display: flex;
   flex-direction: column;
 }
