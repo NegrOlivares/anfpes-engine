@@ -17,8 +17,8 @@ function getRolePositionLine(role: string): string {
     DD: 'DEF',
     CT: 'DEF',
     LIB: 'DEF',
-    DLI: 'DEF',
-    DLD: 'DEF',
+    DLI: 'MED',
+    DLD: 'MED',
     CCD: 'MED',
     CC: 'MED',
     CIZ: 'MED',
@@ -36,6 +36,7 @@ interface TacticalPlayerCardProps {
   player: DerivedPlayer;
   clubId?: string;
   slotRole: string;
+  customDorsal?: string;
   isCandidate?: boolean;
   isMarkedOut?: boolean;
   movementArrows?: RunDirection[];
@@ -88,6 +89,7 @@ export function TacticalPlayerCard({
   player,
   clubId,
   slotRole,
+  customDorsal,
   isCandidate = false,
   isMarkedOut = false,
   movementArrows = [],
@@ -108,8 +110,10 @@ export function TacticalPlayerCard({
   const [isAnimating, setIsAnimating] = useState(false);
 
   const thumbPath = getPlayerThumbPath(player.ID);
-  const dorsal = player.DORSAL || '0';
-  const hasDorsal = player.DORSAL && player.DORSAL !== '0' && player.DORSAL !== 0;
+  // Usar dorsal customizado si existe, sino el original
+  const originalDorsal = typeof player.DORSAL === 'number' ? String(player.DORSAL) : '0';
+  const dorsal = customDorsal || originalDorsal;
+  const hasDorsal = dorsal && dorsal !== '0';
 
   // Get shirt style based on club (same system as ProfileModule)
   const shirtStyle = getShirtStyle(

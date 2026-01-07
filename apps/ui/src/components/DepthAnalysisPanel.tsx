@@ -3,6 +3,7 @@ import type { DerivedPlayer } from '@anfpes/engine';
 import type { DepthSlot, FormationSlot } from '../types/tactics';
 import { getStatColor } from '../types/table';
 import { EnhancedTooltip } from './EnhancedTooltip';
+import { getPositionLine } from './PositionBadges';
 import './DepthAnalysisPanel.css';
 
 interface DepthAnalysisPanelProps {
@@ -75,6 +76,10 @@ export function DepthAnalysisPanel({
     });
 
     return depthChartSlots.map((depthSlot) => {
+      // Usar el rol actualizado de slots en vez del rol original de depthChartSlots
+      const currentSlot = slots.find((s) => s.slotId === depthSlot.slotId);
+      const currentRole = currentSlot?.role || depthSlot.role;
+
       const depths = [
         { playerId: depthSlot.depth1, depth: 1 },
         { playerId: depthSlot.depth2, depth: 2 },
@@ -97,8 +102,8 @@ export function DepthAnalysisPanel({
         const starter = playerMap.get(depths[0].playerId!);
         const backup = playerMap.get(depths[1].playerId!);
         if (starter && backup) {
-          const starterAvg = getPositionAverage(starter, depthSlot.role);
-          const backupAvg = getPositionAverage(backup, depthSlot.role);
+          const starterAvg = getPositionAverage(starter, currentRole);
+          const backupAvg = getPositionAverage(backup, currentRole);
           if (starterAvg !== null && backupAvg !== null) {
             dropOff = starterAvg - backupAvg;
           }
@@ -123,7 +128,7 @@ export function DepthAnalysisPanel({
       const playerDetails = depths.map((d) => {
         const player = playerMap.get(d.playerId!);
         const avg = player
-          ? getPositionAverage(player, depthSlot.role) || Number(player.PROMEDIO)
+          ? getPositionAverage(player, currentRole) || Number(player.PROMEDIO)
           : 0;
         return {
           playerId: d.playerId!,
@@ -134,7 +139,7 @@ export function DepthAnalysisPanel({
 
       return {
         slotId: depthSlot.slotId,
-        role: depthSlot.role,
+        role: currentRole,
         status,
         depthCount,
         exclusiveCount,
@@ -142,7 +147,33 @@ export function DepthAnalysisPanel({
         players: playerDetails,
       };
     });
-  }, [depthChartSlots, playerMap]);
+
+    // Ordenar análisis por prioridad de roles (PT -> DC)
+    const ROLE_PRIORITY: Record<string, number> = {
+      PT: 0,
+      LIB: 1,
+      CT: 2,
+      DD: 3,
+      DI: 3,
+      CCD: 4,
+      DLD: 5,
+      DLI: 5,
+      CC: 6,
+      CDR: 7,
+      CIZ: 7,
+      MP: 8,
+      SD: 9,
+      ED: 10,
+      EI: 10,
+      DC: 11,
+    };
+
+    return analysis.sort((a, b) => {
+      const priorityA = ROLE_PRIORITY[a.role] ?? 999;
+      const priorityB = ROLE_PRIORITY[b.role] ?? 999;
+      return priorityA - priorityB;
+    });
+  }, [depthChartSlots, slots, playerMap]);
 
   const summary = useMemo(() => {
     const excellent = analysis.filter((a) => a.status === 'excellent').length;
@@ -156,22 +187,6 @@ export function DepthAnalysisPanel({
 
     return { excellent, good, warning, critical, avgDropOff };
   }, [analysis]);
-
-  const roleLabels: Record<string, string> = {
-    PT: 'PT',
-    DI: 'DI',
-    CT: 'CT',
-    DD: 'DD',
-    CIZ: 'CIZ',
-    CC: 'CC',
-    CCD: 'CCD',
-    CDR: 'CDR',
-    EI: 'EI',
-    ED: 'ED',
-    DC: 'DC',
-    SD: 'SD',
-    MCO: 'MCO',
-  };
 
   return (
     <div className="depth-analysis-panel">
@@ -213,7 +228,11 @@ export function DepthAnalysisPanel({
               style={{ borderLeftColor: statusColors[pos.status] }}
             >
               <div className="position-header">
-                <span className="position-name">{roleLabels[pos.role] || pos.role}</span>
+                <span
+                  className={`position-badge primary position-${getPositionLine(pos.role)}`}
+                >
+                  {pos.role}
+                </span>
                 <span className="position-status">{statusIcons[pos.status]}</span>
               </div>
 

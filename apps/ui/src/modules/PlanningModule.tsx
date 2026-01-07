@@ -2,8 +2,9 @@ import { useState, useMemo } from 'react';
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useCacheStore } from '../store/cacheStore';
 import { useTacticsStore, FORMATIONS } from '../store/tacticsStore';
-import type { FormationSlot } from '../types/tactics';
+import type { FormationSlot, FormationPlan } from '../types/tactics';
 import { TacticalPitch } from '../components/TacticalPitch';
+import { TacticalPlayerCard } from '../components/TacticalPlayerCard';
 import { RosterPanel } from '../components/RosterPanel';
 import { SavedTacticsLibrary } from '../components/SavedTacticsLibrary';
 import { RecommendedSignings } from '../components/RecommendedSignings';
@@ -19,14 +20,19 @@ function calculateCombinedSlots(
   baseSlots: FormationSlot[],
   planASlots?: FormationSlot[],
   planBSlots?: FormationSlot[],
+  showPlanA?: boolean,
+  showPlanB?: boolean,
 ): FormationSlot[] {
   return baseSlots.map((baseSlot) => {
-    const planASlot = planASlots?.find((s) => s.slotId === baseSlot.slotId);
-    const planBSlot = planBSlots?.find((s) => s.slotId === baseSlot.slotId);
+    // Buscar este jugador por playerId en Plan A y Plan B
+    const planASlot = planASlots?.find((s) => s.playerId === baseSlot.playerId);
+    const planBSlot = planBSlots?.find((s) => s.playerId === baseSlot.playerId);
 
     const positions = [{ x: baseSlot.x, y: baseSlot.y }];
-    if (planASlot) positions.push({ x: planASlot.x, y: planASlot.y });
-    if (planBSlot) positions.push({ x: planBSlot.x, y: planBSlot.y });
+    // Solo incluir Plan A si está visible/activo
+    if (planASlot && showPlanA) positions.push({ x: planASlot.x, y: planASlot.y });
+    // Solo incluir Plan B si está visible/activo
+    if (planBSlot && showPlanB) positions.push({ x: planBSlot.x, y: planBSlot.y });
 
     const avgX = positions.reduce((sum, p) => sum + p.x, 0) / positions.length;
     const avgY = positions.reduce((sum, p) => sum + p.y, 0) / positions.length;
@@ -37,6 +43,51 @@ function calculateCombinedSlots(
       y: Math.round(avgY * 10) / 10,
     };
   });
+}
+
+// Helper to get effective slots based on active strategies
+function getEffectiveSlots(
+  baseSlots: FormationSlot[],
+  planASlots: FormationSlot[] | undefined,
+  planBSlots: FormationSlot[] | undefined,
+  activeStrategies: string[],
+): FormationSlot[] {
+  // Si Plan A está activo, buscar cada jugador por playerId en Plan A
+  if (activeStrategies.includes('STRATEGY_PLAN_A') && planASlots) {
+    return baseSlots.map((baseSlot) => {
+      // Buscar dónde está este jugador en Plan A (por playerId, no por slotId)
+      const planASlot = planASlots.find((s) => s.playerId === baseSlot.playerId);
+      if (planASlot) {
+        return {
+          ...baseSlot,
+          x: planASlot.x,
+          y: planASlot.y,
+          role: planASlot.role,
+        };
+      }
+      return baseSlot;
+    });
+  }
+
+  // Si Plan B está activo, buscar cada jugador por playerId en Plan B
+  if (activeStrategies.includes('STRATEGY_PLAN_B') && planBSlots) {
+    return baseSlots.map((baseSlot) => {
+      // Buscar dónde está este jugador en Plan B (por playerId, no por slotId)
+      const planBSlot = planBSlots.find((s) => s.playerId === baseSlot.playerId);
+      if (planBSlot) {
+        return {
+          ...baseSlot,
+          x: planBSlot.x,
+          y: planBSlot.y,
+          role: planBSlot.role,
+        };
+      }
+      return baseSlot;
+    });
+  }
+
+  // Sin estrategias de plan, usar base
+  return baseSlots;
 }
 
 export function PlanningModule() {
@@ -82,6 +133,7 @@ export function PlanningModule() {
     (state) => state.updatePlayerInstruction,
   );
   const setDepthSlot = useTacticsStore((state) => state.setDepthSlot);
+  const setCustomDorsal = useTacticsStore((state) => state.setCustomDorsal);
 
   const [showSavedTactics, setShowSavedTactics] = useState(false);
   const [showRosterPanel, setShowRosterPanel] = useState(true);
@@ -103,8 +155,24 @@ export function PlanningModule() {
       currentTactic.basePlan.slots,
       currentTactic.planA?.slots,
       currentTactic.planB?.slots,
+      showPlanA,
+      showPlanB,
     );
-  }, [currentTactic, combinedView]);
+  }, [currentTactic, combinedView, showPlanA, showPlanB]);
+
+  // Calculate effective slots for base plan based on active strategies
+  const effectiveBaseSlots = useMemo(() => {
+    if (!currentTactic) return [];
+    const activeStrategies = currentTactic.strategySlots
+      .filter((slot) => slot.isActive && slot.strategy !== 'NO_STRATEGY')
+      .map((slot) => slot.strategy);
+    return getEffectiveSlots(
+      currentTactic.basePlan.slots,
+      currentTactic.planA?.slots,
+      currentTactic.planB?.slots,
+      activeStrategies,
+    );
+  }, [currentTactic]);
 
   // Create player map for efficient lookup
   const playerMap = useMemo(() => {
@@ -131,7 +199,55 @@ export function PlanningModule() {
   };
 
   // Get depth chart data and map to players
-  const depthChartSlots = currentTactic?.depthChartSlots || [];
+  // Construir depthChartSlots SEPARADOS para cada plan desde playerDepthCharts GLOBALES
+  const buildDepthChartSlots = (plan: FormationPlan | null | undefined) => {
+    if (!currentTactic || !plan) return [];
+
+    return plan.slots.map((slot) => {
+      if (!slot.playerId) {
+        return {
+          slotId: slot.slotId,
+          role: slot.role,
+          depth1: undefined,
+          depth2: undefined,
+          depth3: undefined,
+          depth4: undefined,
+          depth5: undefined,
+        };
+      }
+
+      // Buscar el playerDepthChart para este jugador en los charts globales
+      const playerChart = currentTactic.playerDepthCharts.find(
+        (c) => c.playerId === slot.playerId,
+      );
+
+      return {
+        slotId: slot.slotId,
+        role: slot.role,
+        depth1: slot.playerId,
+        depth2: playerChart?.depth2,
+        depth3: playerChart?.depth3,
+        depth4: playerChart?.depth4,
+        depth5: playerChart?.depth5,
+      };
+    });
+  };
+
+  const baseDepthChartSlots = useMemo(
+    () => (currentTactic ? buildDepthChartSlots(currentTactic.basePlan) : []),
+    [currentTactic],
+  );
+
+  const planADepthChartSlots = useMemo(
+    () => (currentTactic?.planA ? buildDepthChartSlots(currentTactic.planA) : []),
+    [currentTactic],
+  );
+
+  const planBDepthChartSlots = useMemo(
+    () => (currentTactic?.planB ? buildDepthChartSlots(currentTactic.planB) : []),
+    [currentTactic],
+  );
+
   const getDepthPlayer = (playerId: string | undefined): DerivedPlayer | undefined => {
     if (!playerId) return undefined;
     return playerMap.get(playerId);
@@ -168,12 +284,33 @@ export function PlanningModule() {
 
   const handleCreatePlanA = () => {
     if (!currentTactic) return;
-    // Copy from base plan
+
+    // Detectar formación actual del base plan
+    let baseFormation = '3-2-5'; // default
+    for (const [formationName, template] of Object.entries(FORMATIONS)) {
+      const rolesMatch = template.every((templateSlot, index) => {
+        const planSlot = currentTactic.basePlan.slots[index];
+        return planSlot && planSlot.role === templateSlot.role;
+      });
+      if (rolesMatch) {
+        baseFormation = formationName;
+        break;
+      }
+    }
+
+    // Copy from base plan (solo slots y configuración, NO playerDepthCharts)
     useTacticsStore.setState((state) => ({
       currentTactic: state.currentTactic
         ? {
             ...state.currentTactic,
-            planA: JSON.parse(JSON.stringify(state.currentTactic.basePlan)),
+            planA: {
+              slots: JSON.parse(JSON.stringify(state.currentTactic.basePlan.slots)),
+              playerInstructions: {},
+              attackDefenceLevel: state.currentTactic.basePlan.attackDefenceLevel,
+              backLine: state.currentTactic.basePlan.backLine,
+              offsideTrap: state.currentTactic.basePlan.offsideTrap,
+              lastUsedFormation: baseFormation,
+            },
           }
         : state.currentTactic,
       hasUnsavedChanges: true,
@@ -183,12 +320,33 @@ export function PlanningModule() {
 
   const handleCreatePlanB = () => {
     if (!currentTactic) return;
-    // Copy from base plan
+
+    // Detectar formación actual del base plan
+    let baseFormation = '3-2-5'; // default
+    for (const [formationName, template] of Object.entries(FORMATIONS)) {
+      const rolesMatch = template.every((templateSlot, index) => {
+        const planSlot = currentTactic.basePlan.slots[index];
+        return planSlot && planSlot.role === templateSlot.role;
+      });
+      if (rolesMatch) {
+        baseFormation = formationName;
+        break;
+      }
+    }
+
+    // Copy from base plan (solo slots y configuración, NO playerDepthCharts)
     useTacticsStore.setState((state) => ({
       currentTactic: state.currentTactic
         ? {
             ...state.currentTactic,
-            planB: JSON.parse(JSON.stringify(state.currentTactic.basePlan)),
+            planB: {
+              slots: JSON.parse(JSON.stringify(state.currentTactic.basePlan.slots)),
+              playerInstructions: {},
+              attackDefenceLevel: state.currentTactic.basePlan.attackDefenceLevel,
+              backLine: state.currentTactic.basePlan.backLine,
+              offsideTrap: state.currentTactic.basePlan.offsideTrap,
+              lastUsedFormation: baseFormation,
+            },
           }
         : state.currentTactic,
       hasUnsavedChanges: true,
@@ -244,10 +402,8 @@ export function PlanningModule() {
 
     if (!fromSlot || !toSlot) return;
 
-    // Swap players
-    const tempPlayerId = fromSlot.playerId;
-    updateSlot(plan, fromSlotId, { playerId: toSlot.playerId });
-    updateSlot(plan, toSlotId, { playerId: tempPlayerId });
+    // UNA SOLA llamada: updateSlot detecta el intercambio y actualiza ambos slots
+    updateSlot(plan, toSlotId, { playerId: fromSlot.playerId });
   };
 
   const handleRoleChange = (
@@ -282,19 +438,83 @@ export function PlanningModule() {
     }
   };
 
-  const renderFormationSelect = (plan: 'base' | 'planA' | 'planB') => (
-    <select
-      onChange={(e) => changeFormation(plan, e.target.value)}
-      className="formation-select"
-      defaultValue="4-4-2"
-    >
-      {Object.keys(FORMATIONS).map((formation) => (
-        <option key={formation} value={formation}>
-          {formation}
-        </option>
-      ))}
-    </select>
-  );
+  const renderFormationSelect = (plan: 'base' | 'planA' | 'planB') => {
+    const currentPlan =
+      plan === 'base'
+        ? currentTactic?.basePlan
+        : plan === 'planA'
+          ? currentTactic?.planA
+          : currentTactic?.planB;
+
+    // Detectar formación actual comparando roles de los slots (slotIds son fijos slot1-slot11)
+    let currentFormation = currentPlan?.lastUsedFormation || '4-4-2'; // default a lastUsedFormation
+    let isEdited = false;
+    let foundExactMatch = false;
+
+    if (currentPlan && currentPlan.slots.length === 11) {
+      // Buscar la formación que tiene la misma secuencia de roles en slot1-slot11
+      for (const [formationName, template] of Object.entries(FORMATIONS)) {
+        const rolesMatch = template.every((templateSlot, index) => {
+          const planSlot = currentPlan.slots[index];
+          return planSlot && planSlot.role === templateSlot.role;
+        });
+
+        if (rolesMatch) {
+          // Verificar si las posiciones (x, y) también coinciden
+          const positionsMatch = template.every((templateSlot, index) => {
+            const planSlot = currentPlan.slots[index];
+            return (
+              planSlot && planSlot.x === templateSlot.x && planSlot.y === templateSlot.y
+            );
+          });
+
+          if (positionsMatch) {
+            // Coincidencia exacta (roles Y posiciones)
+            currentFormation = formationName;
+            isEdited = false;
+            foundExactMatch = true;
+            break;
+          } else {
+            // Roles coinciden pero posiciones editadas
+            currentFormation = formationName;
+            isEdited = true;
+            foundExactMatch = true;
+            break;
+          }
+        }
+      }
+
+      // Si no encontramos coincidencia exacta, usar lastUsedFormation con *
+      if (!foundExactMatch && currentPlan.lastUsedFormation) {
+        currentFormation = currentPlan.lastUsedFormation;
+        isEdited = true;
+      } else if (!foundExactMatch) {
+        // Fallback si no hay lastUsedFormation
+        isEdited = true;
+      }
+    }
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <select
+          onChange={(e) => changeFormation(plan, e.target.value)}
+          className="formation-select"
+          value={currentFormation}
+        >
+          {Object.keys(FORMATIONS).map((formation) => (
+            <option key={formation} value={formation}>
+              {formation}
+            </option>
+          ))}
+        </select>
+        {isEdited && (
+          <span style={{ color: '#ffa726', fontWeight: 'bold', fontSize: '18px' }}>
+            *
+          </span>
+        )}
+      </div>
+    );
+  };
 
   if (status === 'loading' || status === 'idle') {
     return (
@@ -430,9 +650,11 @@ export function PlanningModule() {
                     clubFilter={selectedClubId ?? undefined}
                     candidateInIds={currentTactic.rosterContext.candidateInPlayerIds}
                     candidateOutIds={currentTactic.rosterContext.candidateOutPlayerIds}
+                    customDorsals={currentTactic.customDorsals}
                     onPlayerSelect={(playerId) => console.log('Selected:', playerId)}
                     onToggleCandidateIn={handleToggleCandidateIn}
                     onToggleCandidateOut={handleToggleCandidateOut}
+                    onSetCustomDorsal={setCustomDorsal}
                     showRecommendations={showRecommendedSignings}
                     onToggleRecommendations={() =>
                       setShowRecommendedSignings(!showRecommendedSignings)
@@ -780,243 +1002,388 @@ export function PlanningModule() {
                 </button>
               </div>
 
-              {/* Pitches */}
-              <div className="planning-pitches" style={{ position: 'relative' }}>
-                {/* Overlay de recomendaciones */}
-                {showRecommendedSignings && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      background: 'rgba(18, 18, 18, 0.98)',
-                      backdropFilter: 'blur(4px)',
-                      zIndex: 1000,
-                      padding: '24px',
-                      overflowY: 'auto',
-                      borderRadius: '8px',
-                    }}
-                  >
+              {/* Pitches container with sidebar */}
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                {/* Pitches */}
+                <div
+                  className="planning-pitches"
+                  style={{ position: 'relative', flex: 1 }}
+                >
+                  {/* Overlay de recomendaciones */}
+                  {showRecommendedSignings && (
                     <div
                       style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        marginBottom: '-40px',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(18, 18, 18, 0.98)',
+                        backdropFilter: 'blur(4px)',
+                        zIndex: 1000,
+                        padding: '24px',
+                        overflowY: 'auto',
+                        borderRadius: '8px',
                       }}
                     >
-                      <button
-                        type="button"
-                        onClick={() => setShowRecommendedSignings(false)}
+                      <div
                         style={{
-                          background: 'rgba(244, 67, 54, 0.2)',
-                          border: '1px solid rgba(244, 67, 54, 0.5)',
-                          borderRadius: '4px',
-                          padding: '8px 16px',
-                          color: '#fff',
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          fontWeight: 500,
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          marginBottom: '-40px',
                         }}
                       >
-                        ✕ Cerrar
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowRecommendedSignings(false)}
+                          style={{
+                            background: 'rgba(244, 67, 54, 0.2)',
+                            border: '1px solid rgba(244, 67, 54, 0.5)',
+                            borderRadius: '4px',
+                            padding: '8px 16px',
+                            color: '#fff',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                          }}
+                        >
+                          ✕ Cerrar
+                        </button>
+                      </div>
+                      <RecommendedSignings
+                        slots={currentTactic.basePlan.slots}
+                        players={players}
+                        recommendedSignings={currentTactic.recommendedSignings}
+                        clubId={currentTactic.clubId}
+                        onAddPossibleSigning={addPossibleSigning}
+                      />
                     </div>
-                    <RecommendedSignings
-                      slots={currentTactic.basePlan.slots}
-                      players={players}
-                      recommendedSignings={currentTactic.recommendedSignings}
-                      clubId={currentTactic.clubId}
-                      onAddPossibleSigning={addPossibleSigning}
-                    />
-                  </div>
-                )}
+                  )}
 
-                {combinedView && combinedSlots ? (
-                  <TacticalPitch
-                    slots={combinedSlots}
-                    players={players}
-                    clubId={currentTactic.clubId}
-                    candidateInIds={currentTactic.rosterContext.candidateInPlayerIds}
-                    candidateOutIds={currentTactic.rosterContext.candidateOutPlayerIds}
-                    planLabel="Vista Combinada (Promedio de Planes)"
-                    playerInstructions={currentTactic.basePlan.playerInstructions}
-                    showAnalysis={showAnalysis}
-                    showAttitudeColors={showAttitudeColors}
-                    showConnections={showConnections}
-                    showDepthChart={showDepthChart}
-                    depthChartSlots={depthChartSlots}
-                    getDepthPlayer={getDepthPlayer}
-                    onDepthSlotDrop={handleDepthSlotDrop}
-                    onDepthSlotRemove={handleDepthSlotRemove}
-                    activeStrategies={[]} // No strategies in combined view
-                    attackDefenceLevel={currentTactic.basePlan.attackDefenceLevel}
-                    backLine={currentTactic.basePlan.backLine}
-                    offsideTrap={currentTactic.basePlan.offsideTrap}
-                    selectedCBForOverlap={currentTactic.selectedCBForOverlap}
-                    planASlots={undefined}
-                    planBSlots={undefined}
-                    editingPosition={false} // Read-only in combined view
-                  />
-                ) : (
-                  <>
+                  {combinedView && combinedSlots ? (
                     <TacticalPitch
-                      slots={currentTactic.basePlan.slots}
+                      slots={combinedSlots}
                       players={players}
                       clubId={currentTactic.clubId}
                       candidateInIds={currentTactic.rosterContext.candidateInPlayerIds}
                       candidateOutIds={currentTactic.rosterContext.candidateOutPlayerIds}
-                      planLabel="Base"
+                      customDorsals={currentTactic.customDorsals}
+                      planLabel="Vista Combinada (Promedio de Planes)"
                       playerInstructions={currentTactic.basePlan.playerInstructions}
                       showAnalysis={showAnalysis}
                       showAttitudeColors={showAttitudeColors}
                       showConnections={showConnections}
                       showDepthChart={showDepthChart}
-                      depthChartSlots={depthChartSlots}
+                      depthChartSlots={baseDepthChartSlots}
                       getDepthPlayer={getDepthPlayer}
                       onDepthSlotDrop={handleDepthSlotDrop}
                       onDepthSlotRemove={handleDepthSlotRemove}
-                      activeStrategies={(() => {
-                        const active = currentTactic.strategySlots
-                          .filter(
-                            (slot) => slot.isActive && slot.strategy !== 'NO_STRATEGY',
-                          )
-                          .map((slot) => slot.strategy);
-                        // Si Plan A y Plan B están activos, solo usar Plan A (prioridad)
-                        const hasPlanA = active.includes('STRATEGY_PLAN_A');
-                        const hasPlanB = active.includes('STRATEGY_PLAN_B');
-                        if (hasPlanA && hasPlanB) {
-                          return active.filter((s) => s !== 'STRATEGY_PLAN_B');
-                        }
-                        return active;
-                      })()}
+                      activeStrategies={[]} // No strategies in combined view
                       attackDefenceLevel={currentTactic.basePlan.attackDefenceLevel}
                       backLine={currentTactic.basePlan.backLine}
                       offsideTrap={currentTactic.basePlan.offsideTrap}
                       selectedCBForOverlap={currentTactic.selectedCBForOverlap}
-                      planASlots={currentTactic.planA?.slots}
-                      planBSlots={currentTactic.planB?.slots}
-                      onPlayerDrop={(slotId, playerId) =>
-                        handlePlayerDrop('base', slotId, playerId)
-                      }
-                      onSlotDrag={(fromSlotId, toSlotId) =>
-                        handleSlotDrag('base', fromSlotId, toSlotId)
-                      }
-                      onUpdateInstruction={(playerId, instruction) =>
-                        updatePlayerInstruction('base', playerId, instruction)
-                      }
-                      onRoleChange={(slotId, role) =>
-                        handleRoleChange('base', slotId, role)
-                      }
-                      editingPosition={editingPositions}
-                      onPositionChange={(slotId, coords) =>
-                        handlePositionChange('base', slotId, coords)
-                      }
-                      labelAddon={renderFormationSelect('base')}
+                      planASlots={undefined}
+                      planBSlots={undefined}
+                      editingPosition={false} // Read-only in combined view
                     />
-
-                    {showPlanA && currentTactic.planA && (
+                  ) : (
+                    <>
                       <TacticalPitch
-                        slots={currentTactic.planA.slots}
+                        slots={effectiveBaseSlots}
                         players={players}
                         clubId={currentTactic.clubId}
                         candidateInIds={currentTactic.rosterContext.candidateInPlayerIds}
                         candidateOutIds={
                           currentTactic.rosterContext.candidateOutPlayerIds
                         }
-                        planLabel="Plan A"
-                        playerInstructions={currentTactic.planA.playerInstructions}
+                        customDorsals={currentTactic.customDorsals}
+                        planLabel="Base"
+                        playerInstructions={currentTactic.basePlan.playerInstructions}
                         showAnalysis={showAnalysis}
                         showAttitudeColors={showAttitudeColors}
                         showConnections={showConnections}
                         showDepthChart={showDepthChart}
-                        depthChartSlots={depthChartSlots}
+                        depthChartSlots={baseDepthChartSlots}
                         getDepthPlayer={getDepthPlayer}
                         onDepthSlotDrop={handleDepthSlotDrop}
                         onDepthSlotRemove={handleDepthSlotRemove}
-                        activeStrategies={currentTactic.strategySlots
-                          .filter(
-                            (slot) => slot.isActive && slot.strategy !== 'NO_STRATEGY',
-                          )
-                          .map((slot) => slot.strategy)}
-                        attackDefenceLevel={currentTactic.planA.attackDefenceLevel}
-                        backLine={currentTactic.planA.backLine}
-                        offsideTrap={currentTactic.planA.offsideTrap}
+                        activeStrategies={(() => {
+                          const active = currentTactic.strategySlots
+                            .filter(
+                              (slot) => slot.isActive && slot.strategy !== 'NO_STRATEGY',
+                            )
+                            .map((slot) => slot.strategy);
+                          // Filtrar STRATEGY_PLAN_A y STRATEGY_PLAN_B ya que effectiveBaseSlots ya tiene las posiciones correctas
+                          return active.filter(
+                            (s) => s !== 'STRATEGY_PLAN_A' && s !== 'STRATEGY_PLAN_B',
+                          );
+                        })()}
+                        attackDefenceLevel={currentTactic.basePlan.attackDefenceLevel}
+                        backLine={currentTactic.basePlan.backLine}
+                        offsideTrap={currentTactic.basePlan.offsideTrap}
                         selectedCBForOverlap={currentTactic.selectedCBForOverlap}
-                        planASlots={currentTactic.planA?.slots}
-                        planBSlots={currentTactic.planB?.slots}
+                        planASlots={undefined}
+                        planBSlots={undefined}
                         onPlayerDrop={(slotId, playerId) =>
-                          handlePlayerDrop('planA', slotId, playerId)
+                          handlePlayerDrop('base', slotId, playerId)
                         }
                         onSlotDrag={(fromSlotId, toSlotId) =>
-                          handleSlotDrag('planA', fromSlotId, toSlotId)
+                          handleSlotDrag('base', fromSlotId, toSlotId)
                         }
                         onUpdateInstruction={(playerId, instruction) =>
-                          updatePlayerInstruction('planA', playerId, instruction)
+                          updatePlayerInstruction('base', playerId, instruction)
                         }
                         onRoleChange={(slotId, role) =>
-                          handleRoleChange('planA', slotId, role)
+                          handleRoleChange('base', slotId, role)
                         }
                         editingPosition={editingPositions}
                         onPositionChange={(slotId, coords) =>
-                          handlePositionChange('planA', slotId, coords)
+                          handlePositionChange('base', slotId, coords)
                         }
-                        labelAddon={renderFormationSelect('planA')}
+                        labelAddon={renderFormationSelect('base')}
                       />
-                    )}
 
-                    {showPlanB && currentTactic.planB && (
-                      <TacticalPitch
-                        slots={currentTactic.planB.slots}
-                        players={players}
-                        clubId={currentTactic.clubId}
-                        candidateInIds={currentTactic.rosterContext.candidateInPlayerIds}
-                        candidateOutIds={
-                          currentTactic.rosterContext.candidateOutPlayerIds
-                        }
-                        planLabel="Plan B"
-                        playerInstructions={currentTactic.planB.playerInstructions}
-                        showAnalysis={showAnalysis}
-                        showAttitudeColors={showAttitudeColors}
-                        showConnections={showConnections}
-                        showDepthChart={showDepthChart}
-                        depthChartSlots={depthChartSlots}
-                        getDepthPlayer={getDepthPlayer}
-                        onDepthSlotDrop={handleDepthSlotDrop}
-                        onDepthSlotRemove={handleDepthSlotRemove}
-                        activeStrategies={currentTactic.strategySlots
-                          .filter(
-                            (slot) => slot.isActive && slot.strategy !== 'NO_STRATEGY',
-                          )
-                          .map((slot) => slot.strategy)}
-                        attackDefenceLevel={currentTactic.planB.attackDefenceLevel}
-                        backLine={currentTactic.planB.backLine}
-                        offsideTrap={currentTactic.planB.offsideTrap}
-                        selectedCBForOverlap={currentTactic.selectedCBForOverlap}
-                        planASlots={currentTactic.planA?.slots}
-                        planBSlots={currentTactic.planB?.slots}
-                        onPlayerDrop={(slotId, playerId) =>
-                          handlePlayerDrop('planB', slotId, playerId)
-                        }
-                        onSlotDrag={(fromSlotId, toSlotId) =>
-                          handleSlotDrag('planB', fromSlotId, toSlotId)
-                        }
-                        onUpdateInstruction={(playerId, instruction) =>
-                          updatePlayerInstruction('planB', playerId, instruction)
-                        }
-                        onRoleChange={(slotId, role) =>
-                          handleRoleChange('planB', slotId, role)
-                        }
-                        editingPosition={editingPositions}
-                        onPositionChange={(slotId, coords) =>
-                          handlePositionChange('planB', slotId, coords)
-                        }
-                        labelAddon={renderFormationSelect('planB')}
-                      />
-                    )}
-                  </>
-                )}
+                      {showPlanA && currentTactic.planA && (
+                        <TacticalPitch
+                          slots={currentTactic.planA.slots}
+                          players={players}
+                          clubId={currentTactic.clubId}
+                          candidateInIds={
+                            currentTactic.rosterContext.candidateInPlayerIds
+                          }
+                          candidateOutIds={
+                            currentTactic.rosterContext.candidateOutPlayerIds
+                          }
+                          customDorsals={currentTactic.customDorsals}
+                          planLabel="Plan A"
+                          playerInstructions={currentTactic.planA.playerInstructions}
+                          showAnalysis={showAnalysis}
+                          showAttitudeColors={showAttitudeColors}
+                          showConnections={showConnections}
+                          showDepthChart={showDepthChart}
+                          depthChartSlots={planADepthChartSlots}
+                          getDepthPlayer={getDepthPlayer}
+                          onDepthSlotDrop={undefined} // READ-ONLY: No permitir edición de depth charts en Plan A
+                          onDepthSlotRemove={undefined} // READ-ONLY: No permitir eliminación de depth charts en Plan A
+                          activeStrategies={currentTactic.strategySlots
+                            .filter(
+                              (slot) => slot.isActive && slot.strategy !== 'NO_STRATEGY',
+                            )
+                            .map((slot) => slot.strategy)}
+                          attackDefenceLevel={currentTactic.planA.attackDefenceLevel}
+                          backLine={currentTactic.planA.backLine}
+                          offsideTrap={currentTactic.planA.offsideTrap}
+                          selectedCBForOverlap={currentTactic.selectedCBForOverlap}
+                          planASlots={currentTactic.planA?.slots}
+                          planBSlots={currentTactic.planB?.slots}
+                          onPlayerDrop={undefined} // BLOQUEADO: No permitir drag desde roster en Plan A
+                          onSlotDrag={(fromSlotId, toSlotId) =>
+                            handleSlotDrag('planA', fromSlotId, toSlotId)
+                          }
+                          onUpdateInstruction={(playerId, instruction) =>
+                            updatePlayerInstruction('planA', playerId, instruction)
+                          }
+                          onRoleChange={(slotId, role) =>
+                            handleRoleChange('planA', slotId, role)
+                          }
+                          editingPosition={editingPositions}
+                          onPositionChange={(slotId, coords) =>
+                            handlePositionChange('planA', slotId, coords)
+                          }
+                          labelAddon={renderFormationSelect('planA')}
+                        />
+                      )}
+
+                      {showPlanB && currentTactic.planB && (
+                        <TacticalPitch
+                          slots={currentTactic.planB.slots}
+                          players={players}
+                          clubId={currentTactic.clubId}
+                          candidateInIds={
+                            currentTactic.rosterContext.candidateInPlayerIds
+                          }
+                          candidateOutIds={
+                            currentTactic.rosterContext.candidateOutPlayerIds
+                          }
+                          customDorsals={currentTactic.customDorsals}
+                          planLabel="Plan B"
+                          playerInstructions={currentTactic.planB.playerInstructions}
+                          showAnalysis={showAnalysis}
+                          showAttitudeColors={showAttitudeColors}
+                          showConnections={showConnections}
+                          showDepthChart={showDepthChart}
+                          depthChartSlots={planBDepthChartSlots}
+                          getDepthPlayer={getDepthPlayer}
+                          onDepthSlotDrop={undefined} // READ-ONLY: No permitir edición de depth charts en Plan B
+                          onDepthSlotRemove={undefined} // READ-ONLY: No permitir eliminación de depth charts en Plan B
+                          activeStrategies={currentTactic.strategySlots
+                            .filter(
+                              (slot) => slot.isActive && slot.strategy !== 'NO_STRATEGY',
+                            )
+                            .map((slot) => slot.strategy)}
+                          attackDefenceLevel={currentTactic.planB.attackDefenceLevel}
+                          backLine={currentTactic.planB.backLine}
+                          offsideTrap={currentTactic.planB.offsideTrap}
+                          selectedCBForOverlap={currentTactic.selectedCBForOverlap}
+                          planASlots={currentTactic.planA?.slots}
+                          planBSlots={currentTactic.planB?.slots}
+                          onPlayerDrop={undefined} // BLOQUEADO: No permitir drag desde roster en Plan B
+                          onSlotDrag={(fromSlotId, toSlotId) =>
+                            handleSlotDrag('planB', fromSlotId, toSlotId)
+                          }
+                          onUpdateInstruction={(playerId, instruction) =>
+                            updatePlayerInstruction('planB', playerId, instruction)
+                          }
+                          onRoleChange={(slotId, role) =>
+                            handleRoleChange('planB', slotId, role)
+                          }
+                          editingPosition={editingPositions}
+                          onPositionChange={(slotId, coords) =>
+                            handlePositionChange('planB', slotId, coords)
+                          }
+                          labelAddon={renderFormationSelect('planB')}
+                        />
+                      )}
+                    </>
+                  )}
+                  {/* Substitutes sidebar - only show in base or combined view */}
+                  {((!showPlanA && !showPlanB) || combinedView) && (
+                    <div
+                      style={{
+                        width: '15vw',
+                        flexShrink: 0,
+                        background: '#062b12cc',
+                        marginTop: '20px',
+                        marginLeft: '-200px',
+                        marginRight: '100px',
+                        borderRadius: '8px',
+                        padding: '12px',
+                        border: '2px solid rgba(255, 255, 255, 0.1)',
+                        height: '73vh',
+                        overflowY: 'auto',
+                      }}
+                    >
+                      <h3
+                        style={{
+                          margin: '0 0 3px 0',
+                          marginTop: '-10px',
+                          borderBottom: '2px solid #6b686844',
+                          fontSize: '17px',
+                          fontWeight: 600,
+                          color: '#fff',
+                          textAlign: 'center',
+                        }}
+                      >
+                        SUPLENTES
+                      </h3>
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr',
+                          gap: '2px',
+                        }}
+                      >
+                        {(() => {
+                          // Orden de roles para suplentes
+                          const roleOrder = [
+                            'PT',
+                            'LIB',
+                            'CT',
+                            'DD',
+                            'DI',
+                            'DLD',
+                            'DLI',
+                            'CCD',
+                            'CC',
+                            'CDR',
+                            'CIZ',
+                            'MP',
+                            'ED',
+                            'EI',
+                            'SD',
+                            'DC',
+                          ];
+
+                          // Recopilar suplentes (depth2-5) de todos los slots
+                          const seenPlayers = new Set<string>();
+                          const substitutes: Array<{
+                            playerId: string;
+                            role: string;
+                            depthLevel: number;
+                            slotId: string;
+                          }> = [];
+
+                          baseDepthChartSlots.forEach((depthSlot) => {
+                            const baseSlot = currentTactic.basePlan.slots.find(
+                              (s) => s.slotId === depthSlot.slotId,
+                            );
+                            if (!baseSlot) return;
+
+                            [2, 3, 4, 5].forEach((depth) => {
+                              const playerId =
+                                depthSlot[`depth${depth}` as keyof typeof depthSlot];
+                              if (
+                                typeof playerId === 'string' &&
+                                playerId &&
+                                !seenPlayers.has(playerId)
+                              ) {
+                                seenPlayers.add(playerId);
+                                substitutes.push({
+                                  playerId,
+                                  role: baseSlot.role,
+                                  depthLevel: depth,
+                                  slotId: depthSlot.slotId,
+                                });
+                              }
+                            });
+                          });
+
+                          // Ordenar por rol según roleOrder
+                          substitutes.sort((a, b) => {
+                            const aIndex = roleOrder.indexOf(a.role);
+                            const bIndex = roleOrder.indexOf(b.role);
+                            if (aIndex !== bIndex) return aIndex - bIndex;
+                            return a.depthLevel - b.depthLevel;
+                          });
+
+                          // Limitar a 12 jugadores máximo (2 columnas de 6)
+                          const limitedSubstitutes = substitutes.slice(0, 12);
+
+                          // Renderizar cartas de suplentes con TacticalPlayerCard
+                          return limitedSubstitutes.map((sub, idx) => {
+                            const player = playerMap.get(sub.playerId);
+                            if (!player) return null;
+
+                            return (
+                              <div
+                                key={`${sub.slotId}-${sub.depthLevel}-${idx}`}
+                                style={{
+                                  transform: 'scale(0.9)',
+                                  transformOrigin: 'center',
+                                }}
+                              >
+                                <TacticalPlayerCard
+                                  player={player}
+                                  clubId={currentTactic.clubId}
+                                  slotRole={sub.role}
+                                  customDorsal={currentTactic.customDorsals[player.ID]}
+                                  isCandidate={false}
+                                  isMarkedOut={false}
+                                  movementArrows={[]}
+                                  onUpdateInstruction={undefined}
+                                  showAttitudeColors={false}
+                                  roleOptions={undefined}
+                                  onRoleChange={undefined}
+                                />
+                              </div>
+                            );
+                          });
+                        })()}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Tactical Analysis Panel */}
@@ -1033,7 +1400,7 @@ export function PlanningModule() {
               {/* Depth Analysis Panel */}
               {showDepthChart && (
                 <DepthAnalysisPanel
-                  depthChartSlots={depthChartSlots}
+                  depthChartSlots={baseDepthChartSlots}
                   slots={currentTactic.basePlan.slots}
                   players={players}
                 />

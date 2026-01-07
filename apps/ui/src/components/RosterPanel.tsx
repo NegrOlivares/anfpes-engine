@@ -12,9 +12,11 @@ interface RosterPanelProps {
   clubFilter?: string;
   candidateInIds: string[];
   candidateOutIds: string[];
+  customDorsals?: Record<string, string>;
   onPlayerSelect: (playerId: string) => void;
   onToggleCandidateIn: (playerId: string) => void;
   onToggleCandidateOut: (playerId: string) => void;
+  onSetCustomDorsal?: (playerId: string, dorsal: string) => void;
   showRecommendations?: boolean;
   onToggleRecommendations?: () => void;
 }
@@ -24,9 +26,11 @@ export function RosterPanel({
   clubFilter,
   candidateInIds,
   candidateOutIds,
+  customDorsals = {},
   onPlayerSelect,
   onToggleCandidateIn,
   onToggleCandidateOut,
+  onSetCustomDorsal,
   showRecommendations = false,
   onToggleRecommendations,
 }: RosterPanelProps) {
@@ -65,19 +69,23 @@ export function RosterPanel({
     }
 
     // Modo normal: solo club + candidatos
-    // Separar jugadores del club y candidatos
+    // Separar jugadores del club, candidatos IN y candidatos OUT
     const clubPlayers: DerivedPlayer[] = [];
-    const candidatePlayers: DerivedPlayer[] = [];
+    const candidateInPlayers: DerivedPlayer[] = [];
+    const candidateOutPlayers: DerivedPlayer[] = [];
 
     players.forEach((p) => {
       const isClubPlayer =
         clubFilter && String(p.CLUB || '').toLowerCase() === clubFilter.toLowerCase();
-      const isCandidate = candidateInIds.includes(p.ID) || candidateOutIds.includes(p.ID);
+      const isCandidateIn = candidateInIds.includes(p.ID);
+      const isCandidateOut = candidateOutIds.includes(p.ID);
 
-      if (isClubPlayer && !isCandidate) {
+      if (isCandidateOut) {
+        candidateOutPlayers.push(p);
+      } else if (isCandidateIn) {
+        candidateInPlayers.push(p);
+      } else if (isClubPlayer) {
         clubPlayers.push(p);
-      } else if (isCandidate) {
-        candidatePlayers.push(p);
       }
     });
 
@@ -88,8 +96,17 @@ export function RosterPanel({
       return dorsalA - dorsalB;
     });
 
-    // Combinar: primero club (hasta 23), luego candidatos
-    let result = [...clubPlayers.slice(0, 23), ...candidatePlayers];
+    // Ordenar candidateOut por nombre
+    candidateOutPlayers.sort((a, b) =>
+      String(a.NOMBRE || '').localeCompare(String(b.NOMBRE || '')),
+    );
+
+    // Combinar: primero club (hasta 23), luego candidatos IN, finalmente candidatos OUT al final
+    let result = [
+      ...clubPlayers.slice(0, 23),
+      ...candidateInPlayers,
+      ...candidateOutPlayers,
+    ];
 
     // Position filter
     if (positionFilter) {
@@ -197,11 +214,22 @@ export function RosterPanel({
 
           const isSelected = selectedPlayerId === player.ID && selectedFromRoster;
 
+          // Obtener dorsal (custom o original)
+          const originalDorsal =
+            typeof player.DORSAL === 'number' ? String(player.DORSAL) : '0';
+          const displayDorsal = customDorsals[player.ID] || originalDorsal;
+
           return (
             <div
               key={player.ID}
               className={`roster-player-item ${isCandidate ? 'candidate-in' : ''} ${isMarkedOut ? 'candidate-out' : ''} ${panelMode === 'search' ? 'search-result' : ''} ${isSelected ? 'selected' : ''}`}
               onClick={(e) => {
+                // Bloquear selección de candidatos OUT
+                if (isMarkedOut) {
+                  e.stopPropagation();
+                  return;
+                }
+
                 // Solo seleccionar si no es modo búsqueda
                 if (panelMode !== 'search') {
                   if (isSelected) {
@@ -210,6 +238,10 @@ export function RosterPanel({
                     selectPlayer(player.ID, true);
                   }
                 }
+              }}
+              style={{
+                cursor: isMarkedOut ? 'not-allowed' : undefined,
+                opacity: isMarkedOut ? 0.5 : undefined,
               }}
             >
               {panelMode !== 'search' && (
@@ -265,6 +297,28 @@ export function RosterPanel({
                   </EnhancedTooltip>
                 ) : (
                   <>
+                    {/* Dorsal editable */}
+                    {onSetCustomDorsal && !isMarkedOut && (
+                      <EnhancedTooltip content="Editar dorsal">
+                        <input
+                          type="text"
+                          value={displayDorsal}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            const value = e.target.value;
+                            // Solo permitir números de 1-99
+                            if (value === '' || /^[1-9][0-9]?$/.test(value)) {
+                              onSetCustomDorsal(player.ID, value);
+                            }
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="roster-dorsal-input"
+                          maxLength={2}
+                          placeholder="#"
+                        />
+                      </EnhancedTooltip>
+                    )}
+
                     {showFichaje && (
                       <EnhancedTooltip content="Marcar como fichaje">
                         <button

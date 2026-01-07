@@ -12,215 +12,390 @@ import type {
   ManualStrategy,
 } from '../types/tactics';
 
-// Formation templates (PT at bottom, forwards at top)
 export const FORMATIONS: Record<string, FormationSlot[]> = {
-  '4-4-2': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'lm', x: 10, y: 30, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 45, role: 'CC' },
-    { slotId: 'cm2', x: 65, y: 45, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 30, role: 'CDR' },
-    { slotId: 'DC1', x: 35, y: 10, role: 'DC' },
-    { slotId: 'DC2', x: 65, y: 10, role: 'DC' },
-  ],
-  '4-3-3': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cm1', x: 35, y: 40, role: 'CC' },
-    { slotId: 'cm2', x: 50, y: 55, role: 'CCD' },
-    { slotId: 'cm3', x: 65, y: 40, role: 'CC' },
-    { slotId: 'lw', x: 10, y: 20, role: 'EI' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-    { slotId: 'rw', x: 90, y: 20, role: 'ED' },
-  ],
-  '4-5-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'lm', x: 10, y: 35, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 45, role: 'CC' },
-    { slotId: 'cm2', x: 50, y: 55, role: 'CCD' },
-    { slotId: 'cm3', x: 65, y: 45, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 35, role: 'CDR' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '3-5-2': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'CT1', x: 20, y: 65, role: 'CT' },
-    { slotId: 'CT2', x: 50, y: 70, role: 'LIB' },
-    { slotId: 'CT3', x: 80, y: 65, role: 'CT' },
-    { slotId: 'lm', x: 10, y: 40, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 50, y: 30, role: 'MP' },
-    { slotId: 'cm3', x: 65, y: 50, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 40, role: 'CDR' },
-    { slotId: 'DC1', x: 35, y: 10, role: 'DC' },
-    { slotId: 'DC2', x: 65, y: 10, role: 'DC' },
+  // ===== 5 DEFENDERS =====
+  '5-4-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 30, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 70, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot6', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot7', x: 33, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 67, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot10', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
   ],
   '5-3-2': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 30, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 50, y: 77, role: 'LIB' },
-    { slotId: 'CT3', x: 70, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cm1', x: 35, y: 40, role: 'CC' },
-    { slotId: 'cm2', x: 50, y: 55, role: 'CCD' },
-    { slotId: 'cm3', x: 65, y: 40, role: 'CC' },
-    { slotId: 'DC1', x: 35, y: 10, role: 'DC' },
-    { slotId: 'DC2', x: 65, y: 10, role: 'DC' },
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 30, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 70, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot6', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot7', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 30, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 70, y: 45, role: 'CC' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
   ],
-  '4-2-3-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cm1', x: 35, y: 55, role: 'CCD' },
-    { slotId: 'cm2', x: 65, y: 55, role: 'CCD' },
-    { slotId: 'lw', x: 10, y: 25, role: 'EI' },
-    { slotId: 'cam', x: 50, y: 30, role: 'MP' },
-    { slotId: 'rw', x: 90, y: 25, role: 'ED' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '4-1-4-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cdm', x: 50, y: 60, role: 'CCD' },
-    { slotId: 'lm', x: 10, y: 35, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 40, role: 'CC' },
-    { slotId: 'cm2', x: 65, y: 40, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 35, role: 'CDR' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '3-4-3': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'CT1', x: 20, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 50, y: 77, role: 'LIB' },
-    { slotId: 'CT3', x: 80, y: 75, role: 'CT' },
-    { slotId: 'lm', x: 10, y: 40, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 65, y: 50, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 40, role: 'CDR' },
-    { slotId: 'lw', x: 10, y: 15, role: 'EI' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-    { slotId: 'rw', x: 90, y: 15, role: 'ED' },
-  ],
-  '4-4-1-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'lm', x: 10, y: 35, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 65, y: 50, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 35, role: 'CDR' },
-    { slotId: 'cam', x: 50, y: 25, role: 'MP' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '4-3-2-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cm1', x: 30, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 50, y: 55, role: 'CCD' },
-    { slotId: 'cm3', x: 70, y: 50, role: 'CC' },
-    { slotId: 'ss1', x: 30, y: 25, role: 'SD' },
-    { slotId: 'ss2', x: 70, y: 25, role: 'SD' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '3-5-1-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'CT1', x: 20, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 50, y: 77, role: 'LIB' },
-    { slotId: 'CT3', x: 80, y: 75, role: 'CT' },
-    { slotId: 'lm', x: 10, y: 40, role: 'CIZ' },
-    { slotId: 'cm1', x: 30, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 50, y: 55, role: 'CCD' },
-    { slotId: 'cm3', x: 70, y: 50, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 40, role: 'CDR' },
-    { slotId: 'cam', x: 50, y: 25, role: 'MP' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '5-4-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 30, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 50, y: 77, role: 'LIB' },
-    { slotId: 'CT3', x: 70, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'lm', x: 10, y: 40, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 45, role: 'CC' },
-    { slotId: 'cm2', x: 65, y: 45, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 40, role: 'CDR' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '3-4-2-1': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'CT1', x: 20, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 50, y: 77, role: 'LIB' },
-    { slotId: 'CT3', x: 80, y: 75, role: 'CT' },
-    { slotId: 'lm', x: 10, y: 45, role: 'CIZ' },
-    { slotId: 'cm1', x: 35, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 65, y: 50, role: 'CC' },
-    { slotId: 'rm', x: 90, y: 45, role: 'CDR' },
-    { slotId: 'ss1', x: 30, y: 20, role: 'SD' },
-    { slotId: 'ss2', x: 70, y: 20, role: 'SD' },
-    { slotId: 'DC', x: 50, y: 10, role: 'DC' },
-  ],
-  '4-1-2-1-2': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cdm', x: 50, y: 58, role: 'CCD' },
-    { slotId: 'cm1', x: 30, y: 42, role: 'CC' },
-    { slotId: 'cm2', x: 70, y: 42, role: 'CC' },
-    { slotId: 'cam', x: 50, y: 25, role: 'MP' },
-    { slotId: 'DC1', x: 35, y: 10, role: 'DC' },
-    { slotId: 'DC2', x: 65, y: 10, role: 'DC' },
-  ],
-  '4-3-1-2': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 35, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 65, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cm1', x: 30, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 50, y: 55, role: 'CCD' },
-    { slotId: 'cm3', x: 70, y: 50, role: 'CC' },
-    { slotId: 'cam', x: 50, y: 28, role: 'MP' },
-    { slotId: 'DC1', x: 35, y: 10, role: 'DC' },
-    { slotId: 'DC2', x: 65, y: 10, role: 'DC' },
+  '5-3-1-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 30, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 70, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot6', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot7', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 30, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 70, y: 45, role: 'CC' },
+    { slotId: 'slot10', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
   ],
   '5-2-1-2': [
-    { slotId: 'PT', x: 50, y: 90, role: 'PT' },
-    { slotId: 'DI', x: 10, y: 70, role: 'DI' },
-    { slotId: 'CT1', x: 30, y: 75, role: 'CT' },
-    { slotId: 'CT2', x: 50, y: 77, role: 'LIB' },
-    { slotId: 'CT3', x: 70, y: 75, role: 'CT' },
-    { slotId: 'DD', x: 90, y: 70, role: 'DD' },
-    { slotId: 'cm1', x: 35, y: 50, role: 'CC' },
-    { slotId: 'cm2', x: 65, y: 50, role: 'CC' },
-    { slotId: 'cam', x: 50, y: 28, role: 'MP' },
-    { slotId: 'DC1', x: 35, y: 10, role: 'DC' },
-    { slotId: 'DC2', x: 65, y: 10, role: 'DC' },
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 30, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 70, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot6', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot7', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot9', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '5-2-3': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 30, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 70, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot6', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot7', x: 35, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 65, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot10', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+
+  // ===== 4 DEFENDERS =====
+  '4-1-4-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 30, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 70, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot10', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '4-4-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 35, y: 45, role: 'CC' },
+    { slotId: 'slot7', x: 65, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot9', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '4-4-1-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 35, y: 45, role: 'CC' },
+    { slotId: 'slot7', x: 65, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot9', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot10', x: 50, y: 26, role: 'SD' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '4-1-3-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot8', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot9', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '4-3-3': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 28, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 72, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot10', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '4-2-3-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot9', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot10', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '4-2-1-3': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot9', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot10', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '4-3-1-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 28, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 72, y: 53, role: 'CCD' },
+    { slotId: 'slot9', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '4-3-2-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 28, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 72, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 32, y: 26, role: 'SD' },
+    { slotId: 'slot10', x: 68, y: 26, role: 'SD' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '4-1-2-1-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 30, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 70, y: 45, role: 'CC' },
+    { slotId: 'slot9', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '4-2-2-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 30, y: 34, role: 'MP' },
+    { slotId: 'slot9', x: 70, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '4-2-4': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 90, y: 69, role: 'DD' },
+    { slotId: 'slot5', x: 10, y: 69, role: 'DI' },
+    { slotId: 'slot6', x: 35, y: 45, role: 'CC' },
+    { slotId: 'slot7', x: 65, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot9', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot10', x: 33, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 67, y: 10, role: 'DC' },
+  ],
+
+  // ===== 3 DEFENDERS =====
+  '3-5-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot6', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot8', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot9', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '3-5-1-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot6', x: 30, y: 45, role: 'CC' },
+    { slotId: 'slot7', x: 70, y: 45, role: 'CC' },
+    { slotId: 'slot8', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot9', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot10', x: 50, y: 26, role: 'SD' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '3-4-3': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 90, y: 50, role: 'DLD' },
+    { slotId: 'slot6', x: 10, y: 50, role: 'DLI' },
+    { slotId: 'slot7', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot9', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot10', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '3-4-1-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 90, y: 50, role: 'DLD' },
+    { slotId: 'slot6', x: 10, y: 50, role: 'DLI' },
+    { slotId: 'slot7', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot8', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot9', x: 50, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+  '3-4-2-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 35, y: 45, role: 'CC' },
+    { slotId: 'slot6', x: 65, y: 45, role: 'CC' },
+    { slotId: 'slot7', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot8', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot9', x: 30, y: 26, role: 'SD' },
+    { slotId: 'slot10', x: 70, y: 26, role: 'SD' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '3-2-4-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot6', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot8', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot9', x: 35, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 65, y: 34, role: 'MP' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '3-2-2-3': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 35, y: 53, role: 'CCD' },
+    { slotId: 'slot6', x: 65, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 35, y: 34, role: 'MP' },
+    { slotId: 'slot8', x: 65, y: 34, role: 'MP' },
+    { slotId: 'slot9', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot10', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '3-2-5': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 35, y: 45, role: 'CC' },
+    { slotId: 'slot6', x: 65, y: 45, role: 'CC' },
+    { slotId: 'slot7', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot8', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot9', x: 35, y: 26, role: 'SD' },
+    { slotId: 'slot10', x: 65, y: 26, role: 'SD' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '3-1-4-2': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 50, y: 73, role: 'LIB' },
+    { slotId: 'slot3', x: 20, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 80, y: 71, role: 'CT' },
+    { slotId: 'slot5', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot6', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot7', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot8', x: 35, y: 34, role: 'MP' },
+    { slotId: 'slot9', x: 65, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 35, y: 10, role: 'DC' },
+    { slotId: 'slot11', x: 65, y: 10, role: 'DC' },
+  ],
+
+  // ===== 2 DEFENDERS =====
+  '2-3-4-1': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 30, y: 53, role: 'CCD' },
+    { slotId: 'slot5', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot6', x: 70, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 90, y: 34, role: 'CDR' },
+    { slotId: 'slot8', x: 10, y: 34, role: 'CIZ' },
+    { slotId: 'slot9', x: 35, y: 34, role: 'MP' },
+    { slotId: 'slot10', x: 65, y: 34, role: 'MP' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '2-3-2-3': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 30, y: 53, role: 'CCD' },
+    { slotId: 'slot5', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot6', x: 70, y: 53, role: 'CCD' },
+    { slotId: 'slot7', x: 35, y: 34, role: 'MP' },
+    { slotId: 'slot8', x: 65, y: 34, role: 'MP' },
+    { slotId: 'slot9', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot10', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
+  ],
+  '2-3-5': [
+    { slotId: 'slot1', x: 50, y: 91, role: 'PT' },
+    { slotId: 'slot2', x: 35, y: 71, role: 'CT' },
+    { slotId: 'slot3', x: 65, y: 71, role: 'CT' },
+    { slotId: 'slot4', x: 50, y: 53, role: 'CCD' },
+    { slotId: 'slot5', x: 30, y: 45, role: 'CC' },
+    { slotId: 'slot6', x: 70, y: 45, role: 'CC' },
+    { slotId: 'slot7', x: 90, y: 26, role: 'ED' },
+    { slotId: 'slot8', x: 10, y: 26, role: 'EI' },
+    { slotId: 'slot9', x: 35, y: 26, role: 'SD' },
+    { slotId: 'slot10', x: 65, y: 26, role: 'SD' },
+    { slotId: 'slot11', x: 50, y: 10, role: 'DC' },
   ],
 };
 
@@ -233,6 +408,7 @@ const createEmptyTactic = (name: string, clubId?: string): Tactic => {
     tacticId: `tactic-${now}`,
     name,
     clubId,
+    customDorsals: {},
     rosterContext: {
       candidateInPlayerIds: [],
       candidateOutPlayerIds: [],
@@ -243,7 +419,9 @@ const createEmptyTactic = (name: string, clubId?: string): Tactic => {
       attackDefenceLevel: 'BALANCED',
       backLine: 'B',
       offsideTrap: 'B',
+      lastUsedFormation: '4-4-2', // Formación por defecto
     },
+    playerDepthCharts: [], // GLOBAL: Ahora est\u00e1 en Tactic, no en FormationPlan
     strategySlots: [
       { strategy: 'NO_STRATEGY', isActive: false },
       { strategy: 'NO_STRATEGY', isActive: false },
@@ -252,11 +430,6 @@ const createEmptyTactic = (name: string, clubId?: string): Tactic => {
     ],
     selectedCBForOverlap: undefined,
     depthChart: [],
-    depthChartSlots: slots.map((slot) => ({
-      slotId: slot.slotId,
-      role: slot.role,
-      depth1: slot.playerId,
-    })),
     recommendedSignings: [],
     createdAt: now,
     updatedAt: now,
@@ -286,17 +459,33 @@ export const useTacticsStore = create<TacticsState>()(
       loadTactic: (tacticId) => {
         const tactic = get().savedTactics.find((t) => t.tacticId === tacticId);
         if (tactic) {
-          // Migración: asegurar que recommendedSignings y depthChartSlots existen
+          // Migración: mover playerDepthCharts de basePlan/planA/planB a nivel global
+          let migratedPlayerDepthCharts: any[] = [];
+
+          // Prioridad: si ya existe playerDepthCharts global, usarlo
+          if (
+            (tactic as any).playerDepthCharts &&
+            Array.isArray((tactic as any).playerDepthCharts)
+          ) {
+            migratedPlayerDepthCharts = (tactic as any).playerDepthCharts;
+          }
+          // Si no, intentar desde basePlan (formato antiguo)
+          else if (
+            (tactic.basePlan as any).playerDepthCharts &&
+            Array.isArray((tactic.basePlan as any).playerDepthCharts)
+          ) {
+            migratedPlayerDepthCharts = (tactic.basePlan as any).playerDepthCharts;
+          }
+          // Si tampoco, array vacío (el usuario deberá reasignar suplentes)
+          else {
+            migratedPlayerDepthCharts = [];
+          }
+
           const migratedTactic = {
             ...tactic,
+            customDorsals: tactic.customDorsals || {},
             recommendedSignings: tactic.recommendedSignings || [],
-            depthChartSlots:
-              tactic.depthChartSlots ||
-              tactic.basePlan.slots.map((slot) => ({
-                slotId: slot.slotId,
-                role: slot.role,
-                depth1: slot.playerId,
-              })),
+            playerDepthCharts: migratedPlayerDepthCharts,
           };
           set({
             currentTactic: migratedTactic,
@@ -428,25 +617,221 @@ export const useTacticsStore = create<TacticsState>()(
         const currentPlan = currentTactic[planKey];
         if (!currentPlan) return;
 
-        const newSlots = currentPlan.slots.map((slot) =>
-          slot.slotId === slotId ? { ...slot, ...updates } : slot,
-        );
+        let updatedBasePlan = currentTactic.basePlan;
+        let updatedPlanA = currentTactic.planA;
+        let updatedPlanB = currentTactic.planB;
 
-        // Si es basePlan y se actualizó playerId, sincronizar con depthChartSlots
-        let updatedDepthChartSlots = currentTactic.depthChartSlots;
-        if (plan === 'base' && updates.playerId !== undefined) {
-          updatedDepthChartSlots = currentTactic.depthChartSlots.map((depthSlot) =>
-            depthSlot.slotId === slotId
-              ? { ...depthSlot, depth1: updates.playerId }
-              : depthSlot,
+        if (updates.playerId !== undefined) {
+          const oldSlot = currentPlan.slots.find((s) => s.slotId === slotId);
+          const newPlayerId = updates.playerId;
+          const oldPlayerId = oldSlot?.playerId;
+
+          // Intercambio de jugadores
+          if (newPlayerId && oldPlayerId && newPlayerId !== oldPlayerId) {
+            // Encontrar de dónde viene el nuevo jugador
+            const sourceSlotId = currentPlan.slots.find(
+              (s) => s.playerId === newPlayerId && s.slotId !== slotId,
+            )?.slotId;
+
+            if (sourceSlotId) {
+              // INTERCAMBIO DENTRO DEL MISMO PLAN
+              // Actualizar AMBOS slots (source y target) para el intercambio
+              const newSlots = currentPlan.slots.map((slot) => {
+                if (slot.slotId === slotId) {
+                  // Target: recibe el nuevo jugador
+                  return { ...slot, playerId: newPlayerId };
+                } else if (slot.slotId === sourceSlotId) {
+                  // Source: recibe el jugador viejo
+                  return { ...slot, playerId: oldPlayerId };
+                }
+                return slot;
+              });
+
+              if (plan === 'base') {
+                // En base plan, propagar el intercambio a planA y planB
+                updatedBasePlan = {
+                  ...currentPlan,
+                  slots: newSlots,
+                };
+
+                if (currentTactic.planA) {
+                  updatedPlanA = {
+                    ...currentTactic.planA,
+                    slots: currentTactic.planA.slots.map((slot) => {
+                      if (slot.playerId === oldPlayerId)
+                        return { ...slot, playerId: newPlayerId };
+                      if (slot.playerId === newPlayerId)
+                        return { ...slot, playerId: oldPlayerId };
+                      return slot;
+                    }),
+                  };
+                }
+                if (currentTactic.planB) {
+                  updatedPlanB = {
+                    ...currentTactic.planB,
+                    slots: currentTactic.planB.slots.map((slot) => {
+                      if (slot.playerId === oldPlayerId)
+                        return { ...slot, playerId: newPlayerId };
+                      if (slot.playerId === newPlayerId)
+                        return { ...slot, playerId: oldPlayerId };
+                      return slot;
+                    }),
+                  };
+                }
+              } else {
+                // En planA o planB, solo actualizar ese plan
+                const updatedCurrentPlan = {
+                  ...currentPlan,
+                  slots: newSlots,
+                };
+
+                if (plan === 'planA') {
+                  updatedPlanA = updatedCurrentPlan;
+                } else {
+                  updatedPlanB = updatedCurrentPlan;
+                }
+              }
+            } else {
+              // JUGADOR VIENE DEL ROSTER (no estaba en campo)
+              // Esto es un REEMPLAZO, no un intercambio
+
+              // En Plan A/B NO permitir reemplazo desde roster (solo intercambio)
+              if (plan !== 'base') {
+                return;
+              }
+
+              // Construir newSlots para el reemplazo (solo actualiza el target)
+              const newSlots = currentPlan.slots.map((slot) =>
+                slot.slotId === slotId ? { ...slot, playerId: newPlayerId } : slot,
+              );
+
+              // REGLA: Eliminar chart del jugador viejo, NO crear ni transferir al nuevo
+              // Los playerDepthCharts ahora son GLOBALES (en tactic, no en plan)
+              const updatedDepthCharts = currentTactic.playerDepthCharts.filter(
+                (chart) =>
+                  chart.playerId !== oldPlayerId && chart.playerId !== newPlayerId,
+              );
+
+              updatedBasePlan = {
+                ...currentPlan,
+                slots: newSlots,
+              };
+
+              // Propagar cambio de jugador a planA y planB
+              if (currentTactic.planA) {
+                updatedPlanA = {
+                  ...currentTactic.planA,
+                  slots: currentTactic.planA.slots.map((slot) =>
+                    slot.playerId === oldPlayerId
+                      ? { ...slot, playerId: newPlayerId }
+                      : slot,
+                  ),
+                };
+              }
+              if (currentTactic.planB) {
+                updatedPlanB = {
+                  ...currentTactic.planB,
+                  slots: currentTactic.planB.slots.map((slot) =>
+                    slot.playerId === oldPlayerId
+                      ? { ...slot, playerId: newPlayerId }
+                      : slot,
+                  ),
+                };
+              }
+
+              // Actualizar los depth charts globales
+              set({
+                currentTactic: {
+                  ...currentTactic,
+                  basePlan: updatedBasePlan,
+                  planA: updatedPlanA,
+                  planB: updatedPlanB,
+                  playerDepthCharts: updatedDepthCharts,
+                },
+                hasUnsavedChanges: true,
+              });
+              return; // Salir temprano porque ya hicimos set()
+            }
+          } else if (!newPlayerId && oldPlayerId) {
+            // REMOVER jugador
+            const newSlots = currentPlan.slots.map((slot) =>
+              slot.slotId === slotId ? { ...slot, playerId: undefined } : slot,
+            );
+
+            const updatedDepthCharts = currentTactic.playerDepthCharts.filter(
+              (chart) => chart.playerId !== oldPlayerId,
+            );
+
+            const updatedCurrentPlan = {
+              ...currentPlan,
+              slots: newSlots,
+            };
+
+            if (plan === 'base') {
+              updatedBasePlan = updatedCurrentPlan;
+            } else if (plan === 'planA') {
+              updatedPlanA = updatedCurrentPlan;
+            } else {
+              updatedPlanB = updatedCurrentPlan;
+            }
+
+            set({
+              currentTactic: {
+                ...currentTactic,
+                basePlan: updatedBasePlan,
+                planA: updatedPlanA,
+                planB: updatedPlanB,
+                playerDepthCharts: updatedDepthCharts,
+              },
+              hasUnsavedChanges: true,
+            });
+            return; // Salir temprano
+          } else if (newPlayerId && !oldPlayerId) {
+            // AGREGAR jugador nuevo (slot vacío)
+            const newSlots = currentPlan.slots.map((slot) =>
+              slot.slotId === slotId ? { ...slot, playerId: newPlayerId } : slot,
+            );
+
+            // No crear chart automáticamente, el usuario debe asignar suplentes manualmente
+            const updatedCurrentPlan = {
+              ...currentPlan,
+              slots: newSlots,
+            };
+
+            if (plan === 'base') {
+              updatedBasePlan = updatedCurrentPlan;
+            } else if (plan === 'planA') {
+              updatedPlanA = updatedCurrentPlan;
+            } else {
+              updatedPlanB = updatedCurrentPlan;
+            }
+          }
+        } else {
+          // Actualización que no involucra playerId (ej: posición, rol)
+          const newSlots = currentPlan.slots.map((slot) =>
+            slot.slotId === slotId ? { ...slot, ...updates } : slot,
           );
+
+          const updatedCurrentPlan = {
+            ...currentPlan,
+            slots: newSlots,
+          };
+
+          if (plan === 'base') {
+            updatedBasePlan = updatedCurrentPlan;
+          } else if (plan === 'planA') {
+            updatedPlanA = updatedCurrentPlan;
+          } else {
+            updatedPlanB = updatedCurrentPlan;
+          }
         }
 
         set({
           currentTactic: {
             ...currentTactic,
-            [planKey]: { ...currentPlan, slots: newSlots },
-            depthChartSlots: updatedDepthChartSlots,
+            basePlan: updatedBasePlan,
+            planA: updatedPlanA,
+            planB: updatedPlanB,
           },
           hasUnsavedChanges: true,
         });
@@ -464,82 +849,34 @@ export const useTacticsStore = create<TacticsState>()(
         const currentPlan = currentTactic[planKey];
         if (!currentPlan) return;
 
-        // Role mapping: equivalent roles across formations
-        const ROLE_EQUIVALENTS: Record<string, string[]> = {
-          PT: ['PT'],
-          DI: ['DI', 'DLI'],
-          DD: ['DD', 'DLD'],
-          CT: ['CT', 'LIB'],
-          LIB: ['LIB', 'CT'],
-          CCD: ['CCD', 'CC', 'MP'],
-          CC: ['CC', 'CCD', 'MP'],
-          CIZ: ['CIZ', 'EI'],
-          CDR: ['CDR', 'ED'],
-          EI: ['EI', 'CIZ'],
-          ED: ['ED', 'CDR'],
-          MP: ['MP', 'CC', 'CCD'],
-          DC: ['DC', 'SD'],
-          SD: ['SD', 'DC'],
-          DLI: ['DLI', 'DI', 'CIZ'],
-          DLD: ['DLD', 'DD', 'CDR'],
-        };
-
-        const usedPlayerIds = new Set<string>();
-
-        // Step 1: Map existing players to new formation template slots by role equivalency
-        const newSlots: FormationSlot[] = formationTemplate.map((templateSlot) => {
-          // First try exact slotId match (same position in formation)
-          const exactMatch = currentPlan.slots.find(
-            (s) =>
-              s.slotId === templateSlot.slotId &&
-              s.playerId &&
-              !usedPlayerIds.has(s.playerId),
-          );
-          if (exactMatch?.playerId) {
-            usedPlayerIds.add(exactMatch.playerId);
-            return { ...templateSlot, playerId: exactMatch.playerId };
-          }
-
-          // Then try role equivalency
-          const equivalentRoles = ROLE_EQUIVALENTS[templateSlot.role] || [
-            templateSlot.role,
-          ];
-          const roleMatch = currentPlan.slots.find(
-            (s) =>
-              s.playerId &&
-              equivalentRoles.includes(s.role) &&
-              !usedPlayerIds.has(s.playerId),
-          );
-          if (roleMatch?.playerId) {
-            usedPlayerIds.add(roleMatch.playerId);
-            return { ...templateSlot, playerId: roleMatch.playerId };
-          }
-
-          // No match, leave empty for now
-          return { ...templateSlot };
+        // Mantener jugadores en sus slots (slot1-slot11 son fijos)
+        // Solo actualizar coordenadas (x, y) y rol desde la plantilla
+        const newSlots: FormationSlot[] = formationTemplate.map((template, index) => {
+          const currentSlot = currentPlan.slots[index];
+          return {
+            slotId: template.slotId, // slot1-slot11, siempre el mismo
+            x: template.x,
+            y: template.y,
+            role: template.role,
+            playerId: currentSlot?.playerId, // Mantener el jugador asignado
+          };
         });
 
-        // Step 2: Fill remaining empty slots with unmatched players
-        const unmatchedPlayers = currentPlan.slots
-          .filter((s) => s.playerId && !usedPlayerIds.has(s.playerId))
-          .map((s) => s.playerId!);
+        // Limpiar instrucciones de jugador del plan (flechas de movimiento)
+        const cleanedInstructions: Record<string, PlayerInstruction> = {};
 
-        let playerIndex = 0;
-        for (
-          let i = 0;
-          i < newSlots.length && playerIndex < unmatchedPlayers.length;
-          i++
-        ) {
-          if (!newSlots[i].playerId) {
-            newSlots[i] = { ...newSlots[i], playerId: unmatchedPlayers[playerIndex] };
-            playerIndex++;
-          }
-        }
+        // playerDepthCharts se mantienen (siguen al jugador, no al slot)
+        const updatedPlan = {
+          ...currentPlan,
+          slots: newSlots,
+          playerInstructions: cleanedInstructions,
+          lastUsedFormation: formationName, // Trackear última formación usada
+        };
 
         set({
           currentTactic: {
             ...currentTactic,
-            [planKey]: { ...currentPlan, slots: newSlots },
+            [planKey]: updatedPlan,
           },
           hasUnsavedChanges: true,
         });
@@ -721,22 +1058,130 @@ export const useTacticsStore = create<TacticsState>()(
         const { currentTactic } = get();
         if (!currentTactic) return;
 
-        const depthKey = `depth${depth}` as
-          | 'depth1'
-          | 'depth2'
-          | 'depth3'
-          | 'depth4'
-          | 'depth5';
+        // Si es depth1, actualizar el titular en el slot (en base plan)
+        if (depth === 1) {
+          const oldPlayerId = currentTactic.basePlan.slots.find(
+            (s) => s.slotId === slotId,
+          )?.playerId;
 
-        set({
-          currentTactic: {
-            ...currentTactic,
-            depthChartSlots: currentTactic.depthChartSlots.map((slot) =>
-              slot.slotId === slotId ? { ...slot, [depthKey]: playerId } : slot,
-            ),
-          },
-          hasUnsavedChanges: true,
-        });
+          const updatedBasePlanSlots = currentTactic.basePlan.slots.map((slot) =>
+            slot.slotId === slotId ? { ...slot, playerId } : slot,
+          );
+
+          // Actualizar también en planA y planB
+          const updatedPlanASlots = currentTactic.planA
+            ? currentTactic.planA.slots.map((slot) =>
+                slot.playerId === oldPlayerId ? { ...slot, playerId } : slot,
+              )
+            : undefined;
+
+          const updatedPlanBSlots = currentTactic.planB
+            ? currentTactic.planB.slots.map((slot) =>
+                slot.playerId === oldPlayerId ? { ...slot, playerId } : slot,
+              )
+            : undefined;
+
+          // Actualizar playerDepthCharts GLOBALES
+          let updatedDepthCharts = currentTactic.playerDepthCharts;
+          if (oldPlayerId && playerId) {
+            // Renombrar el playerDepthChart
+            updatedDepthCharts = updatedDepthCharts.map((chart) =>
+              chart.playerId === oldPlayerId ? { ...chart, playerId } : chart,
+            );
+          } else if (!oldPlayerId && playerId) {
+            // Agregar nuevo
+            updatedDepthCharts = [...updatedDepthCharts, { playerId }];
+          } else if (oldPlayerId && !playerId) {
+            // Remover
+            updatedDepthCharts = updatedDepthCharts.filter(
+              (c) => c.playerId !== oldPlayerId,
+            );
+          }
+
+          set({
+            currentTactic: {
+              ...currentTactic,
+              basePlan: {
+                ...currentTactic.basePlan,
+                slots: updatedBasePlanSlots,
+              },
+              planA: updatedPlanASlots
+                ? {
+                    ...currentTactic.planA!,
+                    slots: updatedPlanASlots,
+                  }
+                : currentTactic.planA,
+              planB: updatedPlanBSlots
+                ? {
+                    ...currentTactic.planB!,
+                    slots: updatedPlanBSlots,
+                  }
+                : currentTactic.planB,
+              playerDepthCharts: updatedDepthCharts,
+            },
+            hasUnsavedChanges: true,
+          });
+        } else {
+          // Para depth2-5, actualizar el suplente del jugador titular en ese slot
+          const titularPlayerId = currentTactic.basePlan.slots.find(
+            (s) => s.slotId === slotId,
+          )?.playerId;
+
+          if (!titularPlayerId) return;
+
+          // VALIDACIÓN: No permitir que un jugador sea su propio suplente
+          if (playerId === titularPlayerId) return;
+
+          const depthKey = `depth${depth}` as 'depth2' | 'depth3' | 'depth4' | 'depth5';
+
+          // Buscar el chart del jugador titular en playerDepthCharts GLOBALES
+          const titularChart = currentTactic.playerDepthCharts.find(
+            (c) => c.playerId === titularPlayerId,
+          );
+
+          if (titularChart) {
+            // VALIDACIÓN: No permitir duplicados en el mismo chart
+            const existingDepths = [
+              titularChart.depth2,
+              titularChart.depth3,
+              titularChart.depth4,
+              titularChart.depth5,
+            ];
+            if (playerId && existingDepths.includes(playerId)) {
+              // El jugador ya está en otro depth, no permitir duplicado
+              return;
+            }
+
+            // Actualizar el chart existente
+            const updatedDepthCharts = currentTactic.playerDepthCharts.map((chart) =>
+              chart.playerId === titularPlayerId
+                ? { ...chart, [depthKey]: playerId }
+                : chart,
+            );
+
+            set({
+              currentTactic: {
+                ...currentTactic,
+                playerDepthCharts: updatedDepthCharts,
+              },
+              hasUnsavedChanges: true,
+            });
+          } else {
+            // No existe chart, crear uno nuevo
+            const updatedDepthCharts = [
+              ...currentTactic.playerDepthCharts,
+              { playerId: titularPlayerId, [depthKey]: playerId },
+            ];
+
+            set({
+              currentTactic: {
+                ...currentTactic,
+                playerDepthCharts: updatedDepthCharts,
+              },
+              hasUnsavedChanges: true,
+            });
+          }
+        }
       },
 
       addPossibleSigning: (playerId) => {
@@ -808,9 +1253,50 @@ export const useTacticsStore = create<TacticsState>()(
         const ids = currentTactic.rosterContext.candidateOutPlayerIds;
         if (ids.includes(playerId)) return;
 
+        // Limpiar jugador de todos los slots de formación
+        const cleanedBasePlan = {
+          ...currentTactic.basePlan,
+          slots: currentTactic.basePlan.slots.map((slot) =>
+            slot.playerId === playerId ? { ...slot, playerId: undefined } : slot,
+          ),
+        };
+
+        const cleanedPlanA = currentTactic.planA
+          ? {
+              ...currentTactic.planA,
+              slots: currentTactic.planA.slots.map((slot) =>
+                slot.playerId === playerId ? { ...slot, playerId: undefined } : slot,
+              ),
+            }
+          : undefined;
+
+        const cleanedPlanB = currentTactic.planB
+          ? {
+              ...currentTactic.planB,
+              slots: currentTactic.planB.slots.map((slot) =>
+                slot.playerId === playerId ? { ...slot, playerId: undefined } : slot,
+              ),
+            }
+          : undefined;
+
+        // Limpiar playerDepthCharts GLOBALES
+        const cleanedDepthCharts = currentTactic.playerDepthCharts
+          .filter((chart) => chart.playerId !== playerId)
+          .map((chart) => ({
+            ...chart,
+            depth2: chart.depth2 === playerId ? undefined : chart.depth2,
+            depth3: chart.depth3 === playerId ? undefined : chart.depth3,
+            depth4: chart.depth4 === playerId ? undefined : chart.depth4,
+            depth5: chart.depth5 === playerId ? undefined : chart.depth5,
+          }));
+
         set({
           currentTactic: {
             ...currentTactic,
+            basePlan: cleanedBasePlan,
+            planA: cleanedPlanA,
+            planB: cleanedPlanB,
+            playerDepthCharts: cleanedDepthCharts,
             rosterContext: {
               ...currentTactic.rosterContext,
               candidateOutPlayerIds: [...ids, playerId],
@@ -833,6 +1319,22 @@ export const useTacticsStore = create<TacticsState>()(
                 currentTactic.rosterContext.candidateOutPlayerIds.filter(
                   (id) => id !== playerId,
                 ),
+            },
+          },
+          hasUnsavedChanges: true,
+        });
+      },
+
+      setCustomDorsal: (playerId, dorsal) => {
+        const { currentTactic } = get();
+        if (!currentTactic) return;
+
+        set({
+          currentTactic: {
+            ...currentTactic,
+            customDorsals: {
+              ...currentTactic.customDorsals,
+              [playerId]: dorsal,
             },
           },
           hasUnsavedChanges: true,

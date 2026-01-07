@@ -18,6 +18,7 @@ interface TacticalPitchProps {
   clubId?: string;
   candidateInIds: string[];
   candidateOutIds: string[];
+  customDorsals?: Record<string, string>;
   planLabel: string;
   playerInstructions?: Record<string, PlayerInstruction>;
   showAnalysis?: boolean;
@@ -59,6 +60,7 @@ export function TacticalPitch({
   clubId,
   candidateInIds,
   candidateOutIds,
+  customDorsals = {},
   planLabel,
   playerInstructions = {},
   showAnalysis = false,
@@ -143,11 +145,11 @@ export function TacticalPitch({
   // Calculate attack/defence level adjustment (affects all players except goalkeeper)
   const getAttackDefenceLevelAdjustment = (): number => {
     const adjustments = {
-      ALL_OUT_DEFENCE: 15, // Players drop back
-      DEFENSIVE: 7, // Slightly back
-      BALANCED: 0, // No change
-      ATTACKING: -7, // Push forward
-      ALL_OUT_ATTACK: -15, // Everyone pushes up
+      ALL_OUT_DEFENCE: 2,
+      DEFENSIVE: 1,
+      BALANCED: 0,
+      ATTACKING: -1,
+      ALL_OUT_ATTACK: -2,
     };
     return adjustments[attackDefenceLevel];
   };
@@ -155,9 +157,9 @@ export function TacticalPitch({
   // Calculate defensive line adjustment (affects only defenders, excluding goalkeeper)
   const getBackLineAdjustment = (): number => {
     const adjustments = {
-      A: -10, // High line (push up)
-      B: 0, // Medium line (normal)
-      C: 10, // Deep line (drop back)
+      A: -1,
+      B: 0,
+      C: 1,
     };
     return adjustments[backLine];
   };
@@ -270,7 +272,10 @@ export function TacticalPitch({
     });
 
     if (defence < 2) return { ok: false as const, reason: 'defence_min' as const };
+    if (defence > 5) return { ok: false as const, reason: 'defence_max' as const };
+    if (midfield < 2) return { ok: false as const, reason: 'midfield_min' as const };
     if (midfield > 6) return { ok: false as const, reason: 'midfield_max' as const };
+    if (attack < 1) return { ok: false as const, reason: 'attack_min' as const };
     if (attack > 5) return { ok: false as const, reason: 'attack_max' as const };
     return { ok: true as const };
   };
@@ -291,10 +296,16 @@ export function TacticalPitch({
     if (!validation.ok) {
       if (validation.reason === 'defence_min') {
         window.alert('Debe haber al menos 2 defensas (sin contar al portero).');
+      } else if (validation.reason === 'defence_max') {
+        window.alert('No puedes tener más de 5 defensas.');
+      } else if (validation.reason === 'midfield_min') {
+        window.alert('Debe haber al menos 2 mediocampistas.');
       } else if (validation.reason === 'midfield_max') {
-        window.alert('No puedes tener mas de 6 en el mediocampo.');
+        window.alert('No puedes tener más de 6 mediocampistas.');
+      } else if (validation.reason === 'attack_min') {
+        window.alert('Debe haber al menos 1 delantero.');
       } else if (validation.reason === 'attack_max') {
-        window.alert('No puedes tener mas de 5 en la delantera.');
+        window.alert('No puedes tener más de 5 delanteros.');
       }
       return;
     }
@@ -648,6 +659,17 @@ export function TacticalPitch({
 
               const selectedTeamwork = Number(selectedPlayer['TRABAJO EN EQUIPO']) || 0;
 
+              // Calcular posición ajustada del jugador seleccionado
+              let selectedX = selectedSlot.x;
+              let selectedY = getAdjustedY(selectedSlot);
+              if (activeStrategies.length > 0) {
+                activeStrategies.forEach((strategy) => {
+                  const strategyDelta = getStrategyEffect(strategy, selectedSlot);
+                  selectedX += strategyDelta.x;
+                  selectedY += strategyDelta.y;
+                });
+              }
+
               return slots
                 .filter((s) => s.playerId && s.playerId !== selectedPlayerForConnections)
                 .map((targetSlot) => {
@@ -656,6 +678,17 @@ export function TacticalPitch({
 
                   const targetTeamwork = Number(targetPlayer['TRABAJO EN EQUIPO']) || 0;
                   const avgTeamwork = Math.floor((selectedTeamwork + targetTeamwork) / 2);
+
+                  // Calcular posición ajustada del target
+                  let targetX = targetSlot.x;
+                  let targetY = getAdjustedY(targetSlot);
+                  if (activeStrategies.length > 0) {
+                    activeStrategies.forEach((strategy) => {
+                      const strategyDelta = getStrategyEffect(strategy, targetSlot);
+                      targetX += strategyDelta.x;
+                      targetY += strategyDelta.y;
+                    });
+                  }
 
                   // Calculate line color based on teamwork level
                   const getConnectionColor = (teamwork: number) => {
@@ -671,17 +704,17 @@ export function TacticalPitch({
                   return (
                     <g key={targetSlot.slotId}>
                       <line
-                        x1={selectedSlot.x}
-                        y1={selectedSlot.y}
-                        x2={targetSlot.x}
-                        y2={targetSlot.y}
+                        x1={selectedX}
+                        y1={selectedY}
+                        x2={targetX}
+                        y2={targetY}
                         stroke={color}
                         strokeWidth="0.6"
                         opacity="0.9"
                       />
                       <text
-                        x={(selectedSlot.x + targetSlot.x) / 2}
-                        y={(selectedSlot.y + targetSlot.y) / 2}
+                        x={(selectedX + targetX) / 2}
+                        y={(selectedY + targetY) / 2}
                         fill={color}
                         fontSize="4"
                         fontWeight="bold"
@@ -744,9 +777,13 @@ export function TacticalPitch({
                   : 'left 0.6s ease-out, top 0.6s ease-out',
               }}
               onClick={() => {
+                if (editingPosition) {
+                  // Bloquear selección cuando se está editando posición
+                  return;
+                }
                 if (showConnections && slot.playerId) {
                   setSelectedPlayerForConnections(slot.playerId);
-                } else if (!editingPosition) {
+                } else {
                   // Si hay un jugador seleccionado del roster, asignarlo a este slot
                   if (selectedPlayerId && selectedFromRoster && onPlayerDrop) {
                     if (!player) {
@@ -799,6 +836,11 @@ export function TacticalPitch({
               ) : player ? (
                 <div
                   onClick={(e) => {
+                    // Bloquear swap de jugadores cuando se está editando posición
+                    if (editingPosition) {
+                      return;
+                    }
+
                     // Prevent if clicking inside role menu or arrow editor
                     const target = e.target as HTMLElement;
                     if (target.closest('.role-menu') || target.closest('.arrow-editor')) {
@@ -819,12 +861,13 @@ export function TacticalPitch({
                       setSelectedSlotForSwap(null);
                     }
                   }}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: editingPosition ? 'default' : 'pointer' }}
                 >
                   <TacticalPlayerCard
                     player={player}
                     clubId={clubId}
                     slotRole={slot.role}
+                    customDorsal={customDorsals[player.ID]}
                     isCandidate={isCandidate}
                     isMarkedOut={isMarkedOut}
                     movementArrows={playerInstructions[player.ID]?.runArrows || []}

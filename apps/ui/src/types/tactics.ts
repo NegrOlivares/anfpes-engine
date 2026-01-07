@@ -66,9 +66,19 @@ export interface FormationPlan {
   attackDefenceLevel: AttackDefenceLevel;
   backLine: BackLineDepth;
   offsideTrap: OffsideTrapLevel;
+  lastUsedFormation?: string; // Trackea la última formación usada (para mostrar con * cuando se edita)
 }
 
-// Squad depth management
+// Squad depth management - Asociado al JUGADOR, no al slot
+export interface PlayerDepthChart {
+  playerId: string; // Jugador titular
+  depth2?: string; // 1st substitute
+  depth3?: string; // 2nd substitute
+  depth4?: string; // 3rd substitute
+  depth5?: string; // 4th substitute
+}
+
+// DEPRECATED - solo para compatibilidad con datos antiguos
 export interface DepthSlot {
   slotId: string; // Same as FormationSlot.slotId
   role: string; // PT, CT, DI, etc.
@@ -105,6 +115,7 @@ export interface Tactic {
   tacticId: string;
   name: string;
   clubId?: string;
+  customDorsals: Record<string, string>; // playerId -> dorsal custom
   rosterContext: {
     candidateInPlayerIds: string[]; // Potential signings
     candidateOutPlayerIds: string[]; // Marked for sale
@@ -112,10 +123,10 @@ export interface Tactic {
   basePlan: FormationPlan;
   planA?: FormationPlan;
   planB?: FormationPlan;
+  playerDepthCharts: PlayerDepthChart[]; // GLOBAL: Suplentes por jugador (aplica a todos los planes)
   strategySlots: [StrategySlot, StrategySlot, StrategySlot, StrategySlot]; // 4 global strategy slots
   selectedCBForOverlap?: string; // slotId of CB selected for CB_OVERLAP strategy
   depthChart: DepthAssignment[];
-  depthChartSlots: DepthSlot[]; // New depth chart system
   recommendedSignings: RecommendedSigning[];
   createdAt: number;
   updatedAt: number;
@@ -180,6 +191,9 @@ export interface TacticsState {
   removeCandidateIn: (playerId: string) => void;
   addCandidateOut: (playerId: string) => void;
   removeCandidateOut: (playerId: string) => void;
+
+  // Custom dorsals
+  setCustomDorsal: (playerId: string, dorsal: string) => void;
 
   // Depth chart
   updateDepthChart: (position: string, backupPlayerIds: string[]) => void;
