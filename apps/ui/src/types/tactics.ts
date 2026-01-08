@@ -205,4 +205,8 @@ export interface TacticsState {
 
   // Recommended signings
   addPossibleSigning: (playerId: string) => void;
+
+  // Export/Import
+  exportTactics: () => Tactic[];
+  importTactics: (tactics: Tactic[], replace?: boolean) => void;
 }

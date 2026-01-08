@@ -260,6 +260,41 @@ export const usePreselectionStore = create<PreselectionState>()(
         const playerIdSet = new Set(preselection.playerIds);
         return allPlayers.filter((p) => playerIdSet.has(p.ID));
       },
+
+      // Export/Import
+      exportPreselections: () => {
+        const { preselections, availableTags } = get();
+        return { preselections, availableTags };
+      },
+
+      importPreselections: (
+        data: { preselections: Preselection[]; availableTags: PlayerTag[] },
+        replace = false,
+      ) => {
+        if (replace) {
+          set({
+            preselections: data.preselections,
+            availableTags: data.availableTags,
+          });
+        } else {
+          // Merge: regenerar IDs para evitar conflictos
+          const timestamp = Date.now();
+          const newPreselections = data.preselections.map((p, idx) => ({
+            ...p,
+            id: `${timestamp}-${idx}`,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }));
+
+          const existingTagIds = new Set(get().availableTags.map((t) => t.id));
+          const newTags = data.availableTags.filter((t) => !existingTagIds.has(t.id));
+
+          set((state) => ({
+            preselections: [...state.preselections, ...newPreselections],
+            availableTags: [...state.availableTags, ...newTags],
+          }));
+        }
+      },
     }),
     {
       name: 'anfpes-preselections',

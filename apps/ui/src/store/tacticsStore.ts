@@ -1340,6 +1340,30 @@ export const useTacticsStore = create<TacticsState>()(
           hasUnsavedChanges: true,
         });
       },
+
+      // Export/Import
+      exportTactics: () => {
+        return get().savedTactics;
+      },
+
+      importTactics: (tactics, replace = false) => {
+        if (replace) {
+          set({ savedTactics: tactics });
+        } else {
+          // Merge: regenerar IDs para evitar conflictos
+          const timestamp = Date.now();
+          const newTactics = tactics.map((tactic, idx) => ({
+            ...tactic,
+            tacticId: `${timestamp}-${idx}`,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          }));
+
+          set((state) => ({
+            savedTactics: [...state.savedTactics, ...newTactics],
+          }));
+        }
+      },
     }),
     {
       name: 'tactics-storage',

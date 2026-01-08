@@ -85,4 +85,14 @@ export interface PreselectionState {
   getPreselection: (id: string) => Preselection | undefined;
   getPlayerPreselections: (playerId: string) => Preselection[];
   getPlayersInPreselection: (id: string, allPlayers: DerivedPlayer[]) => DerivedPlayer[];
+
+  // Export/Import
+  exportPreselections: () => {
+    preselections: Preselection[];
+    availableTags: PlayerTag[];
+  };
+  importPreselections: (
+    data: { preselections: Preselection[]; availableTags: PlayerTag[] },
+    replace?: boolean,
+  ) => void;
 }

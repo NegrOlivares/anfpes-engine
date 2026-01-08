@@ -247,7 +247,10 @@ export function TacticalPlayerCard({
             <button
               type="button"
               className="tactical-arrow-edit-btn"
-              onClick={() => setShowArrowEditor(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowArrowEditor(true);
+              }}
             >
               ⚡
             </button>

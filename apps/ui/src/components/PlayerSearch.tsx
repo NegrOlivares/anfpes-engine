@@ -34,6 +34,7 @@ import {
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { openPlayerActionsMenu, closePlayerActionsMenu } from './PlayerActionsOverlay';
 import { useSearchPresetStore } from '../store/searchPresetStore';
+import { downloadJSON, importJSON, generateFilename } from '../utils/exportImport';
 
 type FilterOperator = 'eq' | 'contains' | 'gte' | 'lte' | 'between';
 
@@ -185,6 +186,8 @@ export function PlayerSearch() {
     loadView,
     saveLastViewState,
     loadLastViewState,
+    exportViews,
+    importViews,
   } = usePlayerViews();
 
   const [query, setQuery] = useState('');

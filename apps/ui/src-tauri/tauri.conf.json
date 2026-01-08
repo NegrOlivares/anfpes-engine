@@ -14,7 +14,13 @@
         "title": "Cesante Manager",
         "fullscreen": true,
         "resizable": false,
-        "decorations": false
+        "decorations": false,
+        "maximized": false,
+        "width": 1400,
+        "height": 900,
+        "minWidth": 1200,
+        "minHeight": 700,
+        "center": true
       }
     ],
     "security": {

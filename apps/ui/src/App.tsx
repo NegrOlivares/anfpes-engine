@@ -14,6 +14,11 @@ import { PlanningModule } from './modules/PlanningModule';
 import { useModuleStore, MODULE_IDS, type ModuleId } from './store/moduleStore';
 import { PlayerActionsOverlay } from './components/PlayerActionsOverlay';
 import { useNavigationHistoryStore } from './store/navigationHistoryStore';
+import { ToolsMenu } from './components/ToolsMenu';
+import { TitleBar } from './components/TitleBar';
+import { useWindowModeStore } from './store/windowModeStore';
+import { initializeTheme } from './store/themeStore';
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 const modules: ModuleDefinition[] = [
   { id: MODULE_IDS.dashboard, label: 'Home', component: HomeModule },
@@ -37,7 +42,30 @@ export default function App() {
   const navigateForward = useModuleStore((state) => state.navigateForward);
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
-  const [showExitModal, setShowExitModal] = useState(false);
+  const isFullscreen = useWindowModeStore((state) => state.isFullscreen);
+  const setIsFullscreen = useWindowModeStore((state) => state.setIsFullscreen);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize theme
+  useEffect(() => {
+    initializeTheme();
+  }, []);
+
+  // Sincronizar estado inicial con Tauri
+  useEffect(() => {
+    const syncInitialState = async () => {
+      try {
+        const appWindow = getCurrentWindow();
+        const currentFullscreen = await appWindow.isFullscreen();
+        setIsFullscreen(currentFullscreen);
+        setIsInitialized(true);
+      } catch (error) {
+        console.error('Error syncing initial fullscreen state:', error);
+        setIsInitialized(true); // Continuar incluso si hay error
+      }
+    };
+    syncInitialState();
+  }, [setIsFullscreen]);
 
   // Initialize history with dashboard on mount
   useEffect(() => {
@@ -46,15 +74,6 @@ export default function App() {
       push(MODULE_IDS.dashboard, {}); // Empty snapshot for dashboard
     }
   }, []);
-
-  // Handle exit modal
-  const handleExitClick = () => {
-    setShowExitModal(true);
-  };
-
-  const handleExitModalClose = () => {
-    setShowExitModal(false);
-  };
 
   // Keyboard shortcuts for navigation
   useEffect(() => {
@@ -76,7 +95,8 @@ export default function App() {
   }, [navigateBack, navigateForward]);
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isInitialized && !isFullscreen ? 'has-titlebar' : ''}`}>
+      <TitleBar visible={isInitialized && !isFullscreen} />
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
       <div className="app-header">
         <ModuleTabs
@@ -87,14 +107,9 @@ export default function App() {
           onNavigateForward={navigateForward}
           onOpenGlossary={() => setIsGlossaryOpen(true)}
         />
-        <button
-          type="button"
-          className="exit-button"
-          onClick={handleExitClick}
-          title="Salir de la aplicación"
-        >
-          Salir
-        </button>
+        <div className="header-actions">
+          <ToolsMenu />
+        </div>
       </div>
       <main className="app-main">
         {modules.map((module) => {
@@ -111,7 +126,6 @@ export default function App() {
       </main>
       <PlayerActionsOverlay />
       <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} />
-      {showExitModal && <ExitConfirmModal onClose={handleExitModalClose} />}
     </div>
   );
 }

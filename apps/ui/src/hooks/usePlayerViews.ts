@@ -138,6 +138,27 @@ export function usePlayerViews() {
     persistViews(updatedViews);
   };
 
+  // Exportar todas las vistas
+  const exportViews = () => {
+    return savedViews;
+  };
+
+  // Importar vistas (merge con las existentes)
+  const importViews = (views: PlayerView[], replace = false) => {
+    if (replace) {
+      persistViews(views);
+    } else {
+      // Merge: regenerar IDs para evitar conflictos
+      const newViews = views.map((v) => ({
+        ...v,
+        id: crypto.randomUUID(),
+        createdAt: Date.now(),
+      }));
+      const mergedViews = [...savedViews, ...newViews];
+      persistViews(mergedViews);
+    }
+  };
+
   return {
     savedViews,
     currentViewId,
@@ -147,5 +168,7 @@ export function usePlayerViews() {
     updateView,
     saveLastViewState,
     loadLastViewState,
+    exportViews,
+    importViews,
   };
 }
