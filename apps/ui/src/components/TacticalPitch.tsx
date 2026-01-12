@@ -148,8 +148,8 @@ export function TacticalPitch({
       ALL_OUT_DEFENCE: 2,
       DEFENSIVE: 1,
       BALANCED: 0,
-      ATTACKING: -1,
-      ALL_OUT_ATTACK: -2,
+      ATTACKING: -2,
+      ALL_OUT_ATTACK: -4,
     };
     return adjustments[attackDefenceLevel];
   };
@@ -157,7 +157,7 @@ export function TacticalPitch({
   // Calculate defensive line adjustment (affects only defenders, excluding goalkeeper)
   const getBackLineAdjustment = (): number => {
     const adjustments = {
-      A: -1,
+      A: -6,
       B: 0,
       C: 1,
     };

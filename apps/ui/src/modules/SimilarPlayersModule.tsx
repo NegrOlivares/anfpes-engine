@@ -295,6 +295,8 @@ export function SimilarPlayersModule() {
       field: firstValid.value,
       operator: 'eq',
       value: '',
+      // Para el segundo filtro en adelante, agregar logic: 'AND' por defecto
+      logic: filters.length > 0 ? 'AND' : undefined,
     };
     setFilters((current) => [...current, newFilter]);
     setFiltersOpen(true);
@@ -343,11 +345,27 @@ export function SimilarPlayersModule() {
       if (candidate.ID === basePlayer.ID) {
         return false;
       }
-      if (
-        filters.length &&
-        !filters.every((filter) => evaluateFilter(filter, candidate))
-      ) {
-        return false;
+      if (filters.length) {
+        // El primer filtro siempre se aplica
+        let passesFilters = evaluateFilter(filters[0], candidate);
+
+        // Los siguientes filtros se aplican según su operador lógico
+        for (let i = 1; i < filters.length; i++) {
+          const filter = filters[i];
+          const filterPasses = evaluateFilter(filter, candidate);
+
+          if (filter.logic === 'OR') {
+            // OR: si ya pasó, mantiene true; si no, intenta con este filtro
+            passesFilters = passesFilters || filterPasses;
+          } else {
+            // AND (o sin definir, por defecto AND): ambos deben cumplirse
+            passesFilters = passesFilters && filterPasses;
+          }
+        }
+
+        if (!passesFilters) {
+          return false;
+        }
       }
       if (!matchesPositions(candidate, positionsFilter)) {
         return false;

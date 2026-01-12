@@ -16592,7 +16592,7 @@ export const profileAddons: Record<number, ProfileAddon> = {
   },
   '3350': {
     image: '/images/faces/A-11964.png',
-    fullName: 'Jose Maria Gutierrez Hernandez',
+    fullName: 'Jose María Gutierrez Hernandez',
     birthDate: '31 de octubre de 1976',
   },
   '3351': {

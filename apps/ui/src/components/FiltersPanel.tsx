@@ -52,7 +52,7 @@ export function FiltersPanel({
 
       {filters.length > 0 && (
         <div className="filters-list">
-          {filters.map((filter) => {
+          {filters.map((filter, index) => {
             const canonical = normalizeFieldKey(filter.field);
             const baseOptions =
               STATIC_FIELD_OPTIONS[canonical] ?? fieldValueOptions[canonical];
@@ -62,6 +62,25 @@ export function FiltersPanel({
 
             return (
               <div key={filter.id} className="filter-row">
+                {/* Selector Y/O para filtros después del primero */}
+                {index > 0 && (
+                  <div className="filter-logic-prefix">
+                    <select
+                      value={filter.logic || 'AND'}
+                      onChange={(event) =>
+                        onUpdateFilter(filter.id, {
+                          logic: event.target.value as 'AND' | 'OR',
+                        })
+                      }
+                      className="logic-select"
+                      title="Operador lógico con el filtro anterior"
+                    >
+                      <option value="AND">Y</option>
+                      <option value="OR">O</option>
+                    </select>
+                  </div>
+                )}
+
                 <select
                   value={filter.field}
                   onChange={(event) =>

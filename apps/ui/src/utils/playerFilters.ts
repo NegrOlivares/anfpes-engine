@@ -5,7 +5,15 @@ import { POSITION_COLORS } from '../types/table';
 import { ANFPES_CLUBS } from '../data/playerStatus';
 import { getFieldFilterValue, SPECIAL_SKILL_FIELDS } from './playerDisplay';
 
-export type FilterOperator = 'eq' | 'contains' | 'gte' | 'lte' | 'between';
+export type FilterOperator =
+  | 'eq'
+  | 'neq'
+  | 'contains'
+  | 'not_contains'
+  | 'starts_with'
+  | 'gte'
+  | 'lte'
+  | 'between';
 
 export const POSITION_CODES = [
   { code: 'GK', label: 'PT', color: POSITION_COLORS.PT },
@@ -70,7 +78,10 @@ export const OPERATOR_OPTIONS: Array<{
   needsSecond?: boolean;
 }> = [
   { value: 'eq', label: 'Es exactamente' },
+  { value: 'neq', label: 'No es exactamente' },
   { value: 'contains', label: 'Contiene' },
+  { value: 'not_contains', label: 'No contiene' },
+  { value: 'starts_with', label: 'Comienza con' },
   { value: 'gte', label: 'Es mayor o igual que' },
   { value: 'lte', label: 'Es menor o igual que' },
   { value: 'between', label: 'Es entre', needsSecond: true },
@@ -121,11 +132,35 @@ export function evaluateFilter(filter: FilterCondition, player: DerivedPlayer): 
         return true;
       }
       return normalizedDisplay.includes(normalizedFilterValue);
+    case 'not_contains':
+      if (!normalizedFilterValue) {
+        return true;
+      }
+      return !normalizedDisplay.includes(normalizedFilterValue);
+    case 'starts_with':
+      if (!normalizedFilterValue) {
+        return true;
+      }
+      return normalizedDisplay.startsWith(normalizedFilterValue);
     case 'eq':
       if (!normalizedFilterValue) {
         return true;
       }
+      if (SPECIAL_SKILL_FIELDS.has(filter.field)) {
+        const hasSkill = rawValue === 1;
+        return normalizedFilterValue === 'si' ? hasSkill : !hasSkill;
+      }
       return normalizedDisplay === normalizedFilterValue;
+    case 'neq':
+      if (!normalizedFilterValue) {
+        return true;
+      }
+      if (SPECIAL_SKILL_FIELDS.has(filter.field)) {
+        const hasSkill = rawValue === 1;
+        const expectedHas = normalizedFilterValue === 'si';
+        return expectedHas !== hasSkill;
+      }
+      return normalizedDisplay !== normalizedFilterValue;
     case 'gte': {
       const playerNumber = toNumber(rawValue);
       const filterNumber = toNumber(filter.value);

@@ -47,6 +47,7 @@ export const FIELD_GROUPS = [
   {
     label: 'Datos Personales',
     fields: [
+      'NOMBRE',
       'NACIONALIDAD',
       'CLUB',
       'POSICIONES',

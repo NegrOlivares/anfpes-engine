@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
+import { save } from '@tauri-apps/plugin-dialog';
+import { writeTextFile } from '@tauri-apps/plugin-fs';
 import { usePlayerViews } from '../hooks/usePlayerViews';
 import { usePreselectionStore } from '../store/preselectionStore';
 import { useTacticsStore } from '../store/tacticsStore';
@@ -118,7 +120,7 @@ export function ToolsMenu() {
     });
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
     const data: {
       views?: PlayerView[];
       preselections?: { preselections: Preselection[]; availableTags: PlayerTag[] };
@@ -166,24 +168,42 @@ export function ToolsMenu() {
       data,
     };
 
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-      type: 'application/x-cm',
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `cm-export-${new Date().toISOString().split('T')[0]}.cmf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    // Usar el diálogo de guardado de Tauri
+    try {
+      const defaultFileName = `cm-export-${new Date().toISOString().split('T')[0]}.cmf`;
 
-    alert(
-      `Exportación exitosa!\n${exportData.metadata.summary.views} vistas\n${exportData.metadata.summary.preselections} preselecciones\n${exportData.metadata.summary.tactics} planificaciones`,
-    );
+      const filePath = await save({
+        defaultPath: defaultFileName,
+        filters: [
+          {
+            name: 'Cesante Manager File',
+            extensions: ['cmf'],
+          },
+          {
+            name: 'All Files',
+            extensions: ['*'],
+          },
+        ],
+      });
 
-    setShowExportDialog(false);
-    setIsOpen(false);
+      if (!filePath) {
+        // Usuario canceló el diálogo
+        return;
+      }
+
+      // Guardar el archivo
+      await writeTextFile(filePath, JSON.stringify(exportData, null, 2));
+
+      alert(
+        `Exportación exitosa!\n${exportData.metadata.summary.views} vistas\n${exportData.metadata.summary.preselections} preselecciones\n${exportData.metadata.summary.tactics} planificaciones`,
+      );
+
+      setShowExportDialog(false);
+      setIsOpen(false);
+    } catch (error) {
+      console.error('Error al exportar:', error);
+      alert('Error al exportar el archivo');
+    }
   };
 
   const handleImport = () => {
@@ -318,7 +338,7 @@ export function ToolsMenu() {
                 className="tools-menu-item"
                 onClick={handleToggleWindowMode}
               >
-                {isFullscreen ? '🪟 Modo ventana' : '🖥️ Pantalla completa'}
+                {isFullscreen ? '🔳 Modo ventana' : '🖥️ Pantalla completa'}
               </button>
               <button
                 type="button"

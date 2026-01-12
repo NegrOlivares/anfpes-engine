@@ -105,7 +105,6 @@ export const SPECIAL_SKILL_FIELDS = new Set<string>([
 
 const EXCLUDED_FIELDS = new Set<string>([
   'ID',
-  'NOMBRE',
   'CLUB TEAM',
   'PROMEDIO CENSANTE',
   'REGISTERED POSITION',

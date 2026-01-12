@@ -1,12 +1,23 @@
 import { useEffect, useState } from 'react';
 import type { SortConfig } from '../types/table';
 
+export type FilterLogicMode = 'AND' | 'OR';
+
 export interface FilterCondition {
   id: string;
   field: string;
-  operator: 'eq' | 'contains' | 'gte' | 'lte' | 'between';
+  operator:
+    | 'eq'
+    | 'neq'
+    | 'contains'
+    | 'not_contains'
+    | 'starts_with'
+    | 'gte'
+    | 'lte'
+    | 'between';
   value: string;
   secondaryValue?: string;
+  logic?: 'AND' | 'OR'; // Para el segundo filtro en adelante
 }
 
 export interface PlayerView {
