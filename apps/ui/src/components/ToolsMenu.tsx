@@ -219,7 +219,7 @@ export function ToolsMenu() {
       }
 
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         try {
           const content = e.target?.result as string;
           const parsed = JSON.parse(content);
@@ -230,17 +230,25 @@ export function ToolsMenu() {
           }
 
           let importedCount = 0;
+          const summary = {
+            views: 0,
+            preselections: 0,
+            tactics: 0,
+          };
 
           if (importSelection.views && parsed.data.views) {
             importViews(parsed.data.views, importSelection.replace);
+            summary.views = parsed.data.views.length;
             importedCount++;
           }
           if (importSelection.preselections && parsed.data.preselections) {
             importPreselections(parsed.data.preselections, importSelection.replace);
+            summary.preselections = parsed.data.preselections.preselections?.length || 0;
             importedCount++;
           }
           if (importSelection.tactics && parsed.data.tactics) {
             importTactics(parsed.data.tactics, importSelection.replace);
+            summary.tactics = parsed.data.tactics.length;
             importedCount++;
           }
 
@@ -249,12 +257,36 @@ export function ToolsMenu() {
             return;
           }
 
-          alert(
-            `Importación exitosa!\nElementos importados: ${importedCount}\nVersión: ${parsed.metadata.version}\nFecha: ${new Date(parsed.metadata.exportedAt).toLocaleString()}`,
-          );
-
+          // Cerrar diálogos primero
           setShowImportDialog(false);
           setIsOpen(false);
+
+          // Dar tiempo a que los stores persistan y sincronicen
+          await new Promise((resolve) => setTimeout(resolve, 100));
+
+          // Mostrar mensaje de éxito con detalles
+          const details = [];
+          if (summary.views > 0)
+            details.push(`${summary.views} vista${summary.views > 1 ? 's' : ''}`);
+          if (summary.preselections > 0)
+            details.push(
+              `${summary.preselections} preselección${summary.preselections > 1 ? 'es' : ''}`,
+            );
+          if (summary.tactics > 0)
+            details.push(
+              `${summary.tactics} planificación${summary.tactics > 1 ? 'es' : ''}`,
+            );
+
+          alert(
+            `✅ Importación exitosa!\n\n` +
+              `Importados: ${details.join(', ')}\n` +
+              `Versión: ${parsed.metadata.version}\n` +
+              `Fecha: ${new Date(parsed.metadata.exportedAt).toLocaleString()}\n\n` +
+              `Los cambios ya están disponibles.`,
+          );
+
+          // Forzar actualización de la UI recargando la página
+          window.location.reload();
         } catch (error) {
           alert(
             `Error al leer el archivo: ${error instanceof Error ? error.message : 'Error desconocido'}`,
