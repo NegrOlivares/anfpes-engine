@@ -1,0 +1,3709 @@
+{
+  "summary": {
+    "PRESET FACE NUMBER": 281,
+    "FACE TYPE": 137,
+    "SKIN COLOR": 23,
+    "WRISTBAND": 7,
+    "WRISTBAND COLOR": 7,
+    "INTERNATIONAL NUMBER": 4,
+    "NAME": 3
+  },
+  "diffs": [
+    {
+      "id": "26",
+      "nameApp": "Van Buyten",
+      "nameCsv": "Van Buyten",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "26",
+      "nameApp": "Van Buyten",
+      "nameCsv": "Van Buyten",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "315"
+    },
+    {
+      "id": "93",
+      "nameApp": "Cech",
+      "nameCsv": "Cech",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "27",
+      "csvValue": "40"
+    },
+    {
+      "id": "101",
+      "nameApp": "Rosický",
+      "nameCsv": "Rosický",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "26",
+      "csvValue": "39"
+    },
+    {
+      "id": "104",
+      "nameApp": "Jaromír Blazek",
+      "nameCsv": "+",
+      "field": "NAME",
+      "appValue": "Jaromír Blazek",
+      "csvValue": "+"
+    },
+    {
+      "id": "104",
+      "nameApp": "Jaromír Blazek",
+      "nameCsv": "+",
+      "field": "INTERNATIONAL NUMBER",
+      "appValue": "16",
+      "csvValue": "0"
+    },
+    {
+      "id": "123",
+      "nameApp": "Rommedahl",
+      "nameCsv": "Rommedahl",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "51",
+      "csvValue": "103"
+    },
+    {
+      "id": "140",
+      "nameApp": "R. Ferdinand",
+      "nameCsv": "R. Ferdinand",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "22",
+      "csvValue": "33"
+    },
+    {
+      "id": "141",
+      "nameApp": "Terry",
+      "nameCsv": "Terry",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "62",
+      "csvValue": "124"
+    },
+    {
+      "id": "143",
+      "nameApp": "Ashley Cole",
+      "nameCsv": "Ashley Cole",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "24",
+      "csvValue": "36"
+    },
+    {
+      "id": "144",
+      "nameApp": "Lampard",
+      "nameCsv": "Lampard",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "63",
+      "csvValue": "125"
+    },
+    {
+      "id": "145",
+      "nameApp": "Gerrard",
+      "nameCsv": "Gerrard",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "57",
+      "csvValue": "112"
+    },
+    {
+      "id": "147",
+      "nameApp": "Joe Cole",
+      "nameCsv": "Joe Cole",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "61",
+      "csvValue": "123"
+    },
+    {
+      "id": "148",
+      "nameApp": "Owen",
+      "nameCsv": "Owen",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "52",
+      "csvValue": "104"
+    },
+    {
+      "id": "149",
+      "nameApp": "Crouch",
+      "nameCsv": "Crouch",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "149",
+      "nameApp": "Crouch",
+      "nameCsv": "Crouch",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "72",
+      "csvValue": "134"
+    },
+    {
+      "id": "152",
+      "nameApp": "Campbell",
+      "nameCsv": "Campbell",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "8",
+      "csvValue": "13"
+    },
+    {
+      "id": "159",
+      "nameApp": "Downing",
+      "nameCsv": "Downing",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "68",
+      "csvValue": "130"
+    },
+    {
+      "id": "160",
+      "nameApp": "Rooney",
+      "nameCsv": "Rooney",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "160",
+      "nameApp": "Rooney",
+      "nameCsv": "Rooney",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "60",
+      "csvValue": "119"
+    },
+    {
+      "id": "186",
+      "nameApp": "Thuram",
+      "nameCsv": "Thuram",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "14",
+      "csvValue": "21"
+    },
+    {
+      "id": "207",
+      "nameApp": "Trézéguet",
+      "nameCsv": "Trézéguet",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "27",
+      "csvValue": "42"
+    },
+    {
+      "id": "277",
+      "nameApp": "Given",
+      "nameCsv": "Given",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "277",
+      "nameApp": "Given",
+      "nameCsv": "Given",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "216"
+    },
+    {
+      "id": "281",
+      "nameApp": "Harte",
+      "nameCsv": "Harte",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "118",
+      "csvValue": "210"
+    },
+    {
+      "id": "287",
+      "nameApp": "Robbie Keane",
+      "nameCsv": "Robbie Keane",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "117",
+      "csvValue": "209"
+    },
+    {
+      "id": "293",
+      "nameApp": "Finnan",
+      "nameCsv": "Finnan",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "120",
+      "csvValue": "213"
+    },
+    {
+      "id": "301",
+      "nameApp": "Nesta",
+      "nameCsv": "Nesta",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "131",
+      "csvValue": "229"
+    },
+    {
+      "id": "305",
+      "nameApp": "Pirlo",
+      "nameCsv": "Pirlo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "140",
+      "csvValue": "243"
+    },
+    {
+      "id": "306",
+      "nameApp": "Camoranesi",
+      "nameCsv": "Camoranesi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "17",
+      "csvValue": "25"
+    },
+    {
+      "id": "310",
+      "nameApp": "Gilardino",
+      "nameCsv": "Gilardino",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "146",
+      "csvValue": "252"
+    },
+    {
+      "id": "315",
+      "nameApp": "Zaccardo",
+      "nameCsv": "Zaccardo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "158",
+      "csvValue": "264"
+    },
+    {
+      "id": "316",
+      "nameApp": "Oddo",
+      "nameCsv": "Oddo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "147",
+      "csvValue": "253"
+    },
+    {
+      "id": "346",
+      "nameApp": "Van der Sar",
+      "nameCsv": "Van der Sar",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "162",
+      "csvValue": "270"
+    },
+    {
+      "id": "355",
+      "nameApp": "Robben",
+      "nameCsv": "Robben",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "170",
+      "csvValue": "280"
+    },
+    {
+      "id": "356",
+      "nameApp": "Van Nistelrooy",
+      "nameCsv": "Van Nistelrooy",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "167",
+      "csvValue": "276"
+    },
+    {
+      "id": "357",
+      "nameApp": "Timmer",
+      "nameCsv": "Timmer",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "183",
+      "csvValue": "293"
+    },
+    {
+      "id": "361",
+      "nameApp": "Kromkamp",
+      "nameCsv": "Kromkamp",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "177",
+      "csvValue": "287"
+    },
+    {
+      "id": "364",
+      "nameApp": "Landzaat",
+      "nameCsv": "Landzaat",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "32",
+      "csvValue": "56"
+    },
+    {
+      "id": "365",
+      "nameApp": "Van der Vaart",
+      "nameCsv": "Van der Vaart",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "172",
+      "csvValue": "282"
+    },
+    {
+      "id": "396",
+      "nameApp": "Riise",
+      "nameCsv": "Riise",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "396",
+      "nameApp": "Riise",
+      "nameCsv": "Riise",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "346",
+      "csvValue": "43"
+    },
+    {
+      "id": "400",
+      "nameApp": "M. G. Pedersen",
+      "nameCsv": "M. G. Pedersen",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "440",
+      "nameApp": "R. Carvalho",
+      "nameCsv": "R. Carvalho",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "189",
+      "csvValue": "305"
+    },
+    {
+      "id": "442",
+      "nameApp": "Nuno Valente",
+      "nameCsv": "Nuno Valente",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "120",
+      "csvValue": "160"
+    },
+    {
+      "id": "444",
+      "nameApp": "Deco",
+      "nameCsv": "Deco",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "117",
+      "csvValue": "157"
+    },
+    {
+      "id": "455",
+      "nameApp": "Tiago",
+      "nameCsv": "Tiago",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "190",
+      "csvValue": "306"
+    },
+    {
+      "id": "457",
+      "nameApp": "Simão",
+      "nameCsv": "Simão",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "121",
+      "csvValue": "161"
+    },
+    {
+      "id": "459",
+      "nameApp": "Nuno Gomes",
+      "nameCsv": "Nuno Gomes",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "35",
+      "csvValue": "59"
+    },
+    {
+      "id": "552",
+      "nameApp": "Zigic",
+      "nameCsv": "Zigic",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "552",
+      "nameApp": "Zigic",
+      "nameCsv": "Zigic",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "73"
+    },
+    {
+      "id": "599",
+      "nameApp": "Casillas",
+      "nameCsv": "Casillas",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "78",
+      "csvValue": "145"
+    },
+    {
+      "id": "601",
+      "nameApp": "Puyol",
+      "nameCsv": "Puyol",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "86",
+      "csvValue": "158"
+    },
+    {
+      "id": "604",
+      "nameApp": "Xabi Alonso",
+      "nameCsv": "Xabi Alonso",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "604",
+      "nameApp": "Xabi Alonso",
+      "nameCsv": "Xabi Alonso",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "10",
+      "csvValue": "16"
+    },
+    {
+      "id": "606",
+      "nameApp": "Xavi",
+      "nameCsv": "Xavi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "76",
+      "csvValue": "143"
+    },
+    {
+      "id": "607",
+      "nameApp": "Raúl",
+      "nameCsv": "Raúl",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "73",
+      "csvValue": "137"
+    },
+    {
+      "id": "608",
+      "nameApp": "Fernando Torres",
+      "nameCsv": "Fernando Torres",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "608",
+      "nameApp": "Fernando Torres",
+      "nameCsv": "Fernando Torres",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "88",
+      "csvValue": "162"
+    },
+    {
+      "id": "610",
+      "nameApp": "Cañizares",
+      "nameCsv": "Cañizares",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "81",
+      "csvValue": "148"
+    },
+    {
+      "id": "611",
+      "nameApp": "Reina",
+      "nameCsv": "Reina",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "99",
+      "csvValue": "173"
+    },
+    {
+      "id": "613",
+      "nameApp": "Juanito G.",
+      "nameCsv": "Juanito G.",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "97",
+      "csvValue": "171"
+    },
+    {
+      "id": "615",
+      "nameApp": "Antonio López",
+      "nameCsv": "Antonio López",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "96",
+      "csvValue": "170"
+    },
+    {
+      "id": "618",
+      "nameApp": "Iniesta",
+      "nameCsv": "Iniesta",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "100",
+      "csvValue": "174"
+    },
+    {
+      "id": "621",
+      "nameApp": "Joaquin",
+      "nameCsv": "Joaquin",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "85",
+      "csvValue": "157"
+    },
+    {
+      "id": "631",
+      "nameApp": "Ibrahimovic",
+      "nameCsv": "Ibrahimovic",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "194",
+      "csvValue": "312"
+    },
+    {
+      "id": "632",
+      "nameApp": "Larsson",
+      "nameCsv": "Larsson",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "40",
+      "csvValue": "66"
+    },
+    {
+      "id": "639",
+      "nameApp": "Nilsson",
+      "nameCsv": "+",
+      "field": "NAME",
+      "appValue": "Nilsson",
+      "csvValue": "+"
+    },
+    {
+      "id": "639",
+      "nameApp": "Nilsson",
+      "nameCsv": "+",
+      "field": "INTERNATIONAL NUMBER",
+      "appValue": "2",
+      "csvValue": "0"
+    },
+    {
+      "id": "700",
+      "nameApp": "Shevchenko",
+      "nameCsv": "Shevchenko",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "700",
+      "nameApp": "Shevchenko",
+      "nameCsv": "Shevchenko",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "195",
+      "csvValue": "334"
+    },
+    {
+      "id": "769",
+      "nameApp": "Eto'o",
+      "nameCsv": "Eto'o",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "5",
+      "csvValue": "8"
+    },
+    {
+      "id": "792",
+      "nameApp": "B. Kalou",
+      "nameCsv": "B. Kalou",
+      "field": "SKIN COLOR",
+      "appValue": "3",
+      "csvValue": "4"
+    },
+    {
+      "id": "792",
+      "nameApp": "B. Kalou",
+      "nameCsv": "B. Kalou",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "792",
+      "nameApp": "B. Kalou",
+      "nameCsv": "B. Kalou",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "3"
+    },
+    {
+      "id": "836",
+      "nameApp": "Obodo",
+      "nameCsv": "Obodo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "42"
+    },
+    {
+      "id": "859",
+      "nameApp": "Buckley",
+      "nameCsv": "Buckley",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "859",
+      "nameApp": "Buckley",
+      "nameCsv": "Buckley",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "43"
+    },
+    {
+      "id": "1014",
+      "nameApp": "Ayala",
+      "nameCsv": "Ayala",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "11",
+      "csvValue": "14"
+    },
+    {
+      "id": "1018",
+      "nameApp": "Mascherano",
+      "nameCsv": "Mascherano",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1018",
+      "nameApp": "Mascherano",
+      "nameCsv": "Mascherano",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "130"
+    },
+    {
+      "id": "1019",
+      "nameApp": "Cambiasso",
+      "nameCsv": "Cambiasso",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "9",
+      "csvValue": "11"
+    },
+    {
+      "id": "1022",
+      "nameApp": "Saviola",
+      "nameCsv": "Saviola",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "7",
+      "csvValue": "8"
+    },
+    {
+      "id": "1036",
+      "nameApp": "Dida",
+      "nameCsv": "Dida",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1036",
+      "nameApp": "Dida",
+      "nameCsv": "Dida",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "13",
+      "csvValue": "20"
+    },
+    {
+      "id": "1040",
+      "nameApp": "Roberto Carlos",
+      "nameCsv": "Roberto Carlos",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1042",
+      "nameApp": "Zé Roberto",
+      "nameCsv": "Zé Roberto",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1043",
+      "nameApp": "Kaka'",
+      "nameCsv": "Kaka'",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1043",
+      "nameApp": "Kaka'",
+      "nameCsv": "Kaka'",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "7",
+      "csvValue": "12"
+    },
+    {
+      "id": "1057",
+      "nameApp": "Robinho",
+      "nameCsv": "Robinho",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "17",
+      "csvValue": "24"
+    },
+    {
+      "id": "1058",
+      "nameApp": "Fred",
+      "nameCsv": "Fred",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1058",
+      "nameApp": "Fred",
+      "nameCsv": "Fred",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1058",
+      "nameApp": "Fred",
+      "nameCsv": "Fred",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "155"
+    },
+    {
+      "id": "1072",
+      "nameApp": "Jorge Vargas",
+      "nameCsv": "Jorge Vargas",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "17",
+      "csvValue": "24"
+    },
+    {
+      "id": "1083",
+      "nameApp": "Perea",
+      "nameCsv": "Perea",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1083",
+      "nameApp": "Perea",
+      "nameCsv": "Perea",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "28",
+      "csvValue": "26"
+    },
+    {
+      "id": "1113",
+      "nameApp": "Edison Méndez",
+      "nameCsv": "Edison Méndez",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1114",
+      "nameApp": "Agustín Delgado",
+      "nameCsv": "Agustín Delgado",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1158",
+      "nameApp": "Farfán",
+      "nameCsv": "Farfán",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1175",
+      "nameApp": "Diego Lugano",
+      "nameCsv": "Diego Lugano",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1175",
+      "nameApp": "Diego Lugano",
+      "nameCsv": "Diego Lugano",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "50"
+    },
+    {
+      "id": "1180",
+      "nameApp": "P. García",
+      "nameCsv": "P. García",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1180",
+      "nameApp": "P. García",
+      "nameCsv": "P. García",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "13"
+    },
+    {
+      "id": "1193",
+      "nameApp": "Recoba",
+      "nameCsv": "Recoba",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "126",
+      "csvValue": "170"
+    },
+    {
+      "id": "1204",
+      "nameApp": "Mahdavikia",
+      "nameCsv": "Mahdavikia",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "13",
+      "csvValue": "21"
+    },
+    {
+      "id": "1220",
+      "nameApp": "Kawaguchi",
+      "nameCsv": "Kawaguchi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "26",
+      "csvValue": "40"
+    },
+    {
+      "id": "1221",
+      "nameApp": "Tsuboi",
+      "nameCsv": "Tsuboi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "42",
+      "csvValue": "67"
+    },
+    {
+      "id": "1222",
+      "nameApp": "Miyamoto",
+      "nameCsv": "Miyamoto",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "22",
+      "csvValue": "33"
+    },
+    {
+      "id": "1223",
+      "nameApp": "Nakazawa",
+      "nameCsv": "Nakazawa",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "34",
+      "csvValue": "53"
+    },
+    {
+      "id": "1224",
+      "nameApp": "Komano",
+      "nameCsv": "Komano",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "82",
+      "csvValue": "111"
+    },
+    {
+      "id": "1225",
+      "nameApp": "Santos",
+      "nameCsv": "Santos",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "29",
+      "csvValue": "51"
+    },
+    {
+      "id": "1227",
+      "nameApp": "Fukunishi",
+      "nameCsv": "Fukunishi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "29",
+      "csvValue": "46"
+    },
+    {
+      "id": "1229",
+      "nameApp": "Yanagisawa",
+      "nameCsv": "Yanagisawa",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "33",
+      "csvValue": "51"
+    },
+    {
+      "id": "1230",
+      "nameApp": "Takahara",
+      "nameCsv": "Takahara",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "39",
+      "csvValue": "60"
+    },
+    {
+      "id": "1231",
+      "nameApp": "Doi",
+      "nameCsv": "Doi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "48",
+      "csvValue": "76"
+    },
+    {
+      "id": "1232",
+      "nameApp": "Narazaki",
+      "nameCsv": "Narazaki",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "19",
+      "csvValue": "30"
+    },
+    {
+      "id": "1233",
+      "nameApp": "Moniwa",
+      "nameCsv": "Moniwa",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "51",
+      "csvValue": "79"
+    },
+    {
+      "id": "1234",
+      "nameApp": "Kaji",
+      "nameCsv": "Kaji",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "50",
+      "csvValue": "78"
+    },
+    {
+      "id": "1235",
+      "nameApp": "K. Nakata",
+      "nameCsv": "K. Nakata",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "21",
+      "csvValue": "32"
+    },
+    {
+      "id": "1236",
+      "nameApp": "Endo",
+      "nameCsv": "Endo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "43",
+      "csvValue": "68"
+    },
+    {
+      "id": "1237",
+      "nameApp": "Inamoto",
+      "nameCsv": "Inamoto",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "23",
+      "csvValue": "34"
+    },
+    {
+      "id": "1238",
+      "nameApp": "Ogasawara",
+      "nameCsv": "Ogasawara",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "30",
+      "csvValue": "47"
+    },
+    {
+      "id": "1239",
+      "nameApp": "Ono",
+      "nameCsv": "Ono",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "25",
+      "csvValue": "36"
+    },
+    {
+      "id": "1240",
+      "nameApp": "Tamada",
+      "nameCsv": "Tamada",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "59",
+      "csvValue": "88"
+    },
+    {
+      "id": "1241",
+      "nameApp": "Oguro",
+      "nameCsv": "Oguro",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "81",
+      "csvValue": "110"
+    },
+    {
+      "id": "1242",
+      "nameApp": "Maki",
+      "nameCsv": "Maki",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "83",
+      "csvValue": "112"
+    },
+    {
+      "id": "1267",
+      "nameApp": "Choi Jin Cheul",
+      "nameCsv": "Choi Jin Cheul",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "95",
+      "csvValue": "131"
+    },
+    {
+      "id": "1268",
+      "nameApp": "Kim Young Chul",
+      "nameCsv": "Kim Young Chul",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "105",
+      "csvValue": "141"
+    },
+    {
+      "id": "1270",
+      "nameApp": "Lee Young Pyo",
+      "nameCsv": "Lee Young Pyo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "92",
+      "csvValue": "125"
+    },
+    {
+      "id": "1271",
+      "nameApp": "Lee Ho",
+      "nameCsv": "Lee Ho",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "98",
+      "csvValue": "134"
+    },
+    {
+      "id": "1272",
+      "nameApp": "Lee Eul Yong",
+      "nameCsv": "Lee Eul Yong",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "100",
+      "csvValue": "136"
+    },
+    {
+      "id": "1273",
+      "nameApp": "Ahn Jung Hwan",
+      "nameCsv": "Ahn Jung Hwan",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "91",
+      "csvValue": "124"
+    },
+    {
+      "id": "1274",
+      "nameApp": "Lee Chun Soo",
+      "nameCsv": "Lee Chun Soo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "90",
+      "csvValue": "123"
+    },
+    {
+      "id": "1277",
+      "nameApp": "Kim Young Kwang",
+      "nameCsv": "Kim Young Kwang",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "103",
+      "csvValue": "139"
+    },
+    {
+      "id": "1279",
+      "nameApp": "Kim Jin Kyu",
+      "nameCsv": "Kim Jin Kyu",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "104",
+      "csvValue": "140"
+    },
+    {
+      "id": "1280",
+      "nameApp": "Kim Sang Sik",
+      "nameCsv": "Kim Sang Sik",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "96",
+      "csvValue": "132"
+    },
+    {
+      "id": "1281",
+      "nameApp": "Cho Won Hee",
+      "nameCsv": "Cho Won Hee",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "97",
+      "csvValue": "133"
+    },
+    {
+      "id": "1282",
+      "nameApp": "Kim Dong Jin",
+      "nameCsv": "Kim Dong Jin",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "107",
+      "csvValue": "143"
+    },
+    {
+      "id": "1283",
+      "nameApp": "Kim Nam Il",
+      "nameCsv": "Kim Nam Il",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "93",
+      "csvValue": "128"
+    },
+    {
+      "id": "1284",
+      "nameApp": "Baek Ji Hoon",
+      "nameCsv": "Baek Ji Hoon",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "109",
+      "csvValue": "145"
+    },
+    {
+      "id": "1285",
+      "nameApp": "Kim Do Heon",
+      "nameCsv": "Kim Do Heon",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "99",
+      "csvValue": "135"
+    },
+    {
+      "id": "1288",
+      "nameApp": "+",
+      "nameCsv": "+",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "111",
+      "csvValue": "147"
+    },
+    {
+      "id": "1297",
+      "nameApp": "Bresciano",
+      "nameCsv": "Bresciano",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1297",
+      "nameApp": "Bresciano",
+      "nameCsv": "Bresciano",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "267"
+    },
+    {
+      "id": "1299",
+      "nameApp": "Viduka",
+      "nameCsv": "Viduka",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "19",
+      "csvValue": "26"
+    },
+    {
+      "id": "1313",
+      "nameApp": "Jack Charlton",
+      "nameCsv": "Jack Charlton",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1313",
+      "nameApp": "Jack Charlton",
+      "nameCsv": "Jack Charlton",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "359"
+    },
+    {
+      "id": "1314",
+      "nameApp": "Bobby Moore",
+      "nameCsv": "Bobby Moore",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1314",
+      "nameApp": "Bobby Moore",
+      "nameCsv": "Bobby Moore",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "257"
+    },
+    {
+      "id": "1315",
+      "nameApp": "George Cohen",
+      "nameCsv": "George Cohen",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1315",
+      "nameApp": "George Cohen",
+      "nameCsv": "George Cohen",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "48"
+    },
+    {
+      "id": "1318",
+      "nameApp": "Alan Ball",
+      "nameCsv": "Alan Ball",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1318",
+      "nameApp": "Alan Ball",
+      "nameCsv": "Alan Ball",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "94"
+    },
+    {
+      "id": "1319",
+      "nameApp": "Martin Peters",
+      "nameCsv": "Martin Peters",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1319",
+      "nameApp": "Martin Peters",
+      "nameCsv": "Martin Peters",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "51"
+    },
+    {
+      "id": "1322",
+      "nameApp": "Geoff Hurst",
+      "nameCsv": "Geoff Hurst",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1322",
+      "nameApp": "Geoff Hurst",
+      "nameCsv": "Geoff Hurst",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "48"
+    },
+    {
+      "id": "1323",
+      "nameApp": "Peter Shilton",
+      "nameCsv": "Peter Shilton",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1323",
+      "nameApp": "Peter Shilton",
+      "nameCsv": "Peter Shilton",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "266"
+    },
+    {
+      "id": "1325",
+      "nameApp": "Tony Adams",
+      "nameCsv": "Tony Adams",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1325",
+      "nameApp": "Tony Adams",
+      "nameCsv": "Tony Adams",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "258"
+    },
+    {
+      "id": "1328",
+      "nameApp": "Glen Hoodle",
+      "nameCsv": "Glenn Hoddle",
+      "field": "NAME",
+      "appValue": "Glen Hoodle",
+      "csvValue": "Glenn Hoddle"
+    },
+    {
+      "id": "1328",
+      "nameApp": "Glen Hoodle",
+      "nameCsv": "Glenn Hoddle",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1328",
+      "nameApp": "Glen Hoodle",
+      "nameCsv": "Glenn Hoddle",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "90"
+    },
+    {
+      "id": "1331",
+      "nameApp": "John Barnes",
+      "nameCsv": "John Barnes",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1331",
+      "nameApp": "John Barnes",
+      "nameCsv": "John Barnes",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "17"
+    },
+    {
+      "id": "1332",
+      "nameApp": "Ian Wright",
+      "nameCsv": "Ian Wright",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1332",
+      "nameApp": "Ian Wright",
+      "nameCsv": "Ian Wright",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "19"
+    },
+    {
+      "id": "1337",
+      "nameApp": "Marius Trésor",
+      "nameCsv": "Marius Trésor",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1337",
+      "nameApp": "Marius Trésor",
+      "nameCsv": "Marius Trésor",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "26"
+    },
+    {
+      "id": "1338",
+      "nameApp": "Maxime Bossis",
+      "nameCsv": "Maxime Bossis",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1338",
+      "nameApp": "Maxime Bossis",
+      "nameCsv": "Maxime Bossis",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "31"
+    },
+    {
+      "id": "1341",
+      "nameApp": "Jean Tigana",
+      "nameCsv": "Jean Tigana",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1341",
+      "nameApp": "Jean Tigana",
+      "nameCsv": "Jean Tigana",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "36"
+    },
+    {
+      "id": "1342",
+      "nameApp": "Alain Giresse",
+      "nameCsv": "Alain Giresse",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1342",
+      "nameApp": "Alain Giresse",
+      "nameCsv": "Alain Giresse",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "24"
+    },
+    {
+      "id": "1344",
+      "nameApp": "D. Rocheteau",
+      "nameCsv": "D. Rocheteau",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1344",
+      "nameApp": "D. Rocheteau",
+      "nameCsv": "D. Rocheteau",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "322"
+    },
+    {
+      "id": "1359",
+      "nameApp": "Berti Vogts",
+      "nameCsv": "Berti Vogts",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1359",
+      "nameApp": "Berti Vogts",
+      "nameCsv": "Berti Vogts",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "177"
+    },
+    {
+      "id": "1360",
+      "nameApp": "Schwarzenbeck",
+      "nameCsv": "Schwarzenbeck",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1360",
+      "nameApp": "Schwarzenbeck",
+      "nameCsv": "Schwarzenbeck",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "52"
+    },
+    {
+      "id": "1361",
+      "nameApp": "F. Beckenbauer",
+      "nameCsv": "F. Beckenbauer",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1361",
+      "nameApp": "F. Beckenbauer",
+      "nameCsv": "F. Beckenbauer",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "236",
+      "csvValue": "136"
+    },
+    {
+      "id": "1364",
+      "nameApp": "Paul Breitner",
+      "nameCsv": "Paul Breitner",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "310"
+    },
+    {
+      "id": "1365",
+      "nameApp": "W. Overath",
+      "nameCsv": "W. Overath",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "72"
+    },
+    {
+      "id": "1366",
+      "nameApp": "J. Grabowski",
+      "nameCsv": "J. Grabowski",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1366",
+      "nameApp": "J. Grabowski",
+      "nameCsv": "J. Grabowski",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "70"
+    },
+    {
+      "id": "1367",
+      "nameApp": "B. Hölzenbein",
+      "nameCsv": "B. Hölzenbein",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1367",
+      "nameApp": "B. Hölzenbein",
+      "nameCsv": "B. Hölzenbein",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "248"
+    },
+    {
+      "id": "1368",
+      "nameApp": "Gerd Müller",
+      "nameCsv": "Gerd Müller",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1368",
+      "nameApp": "Gerd Müller",
+      "nameCsv": "Gerd Müller",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "22"
+    },
+    {
+      "id": "1369",
+      "nameApp": "Bodo Illgner",
+      "nameCsv": "Bodo Illgner",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1369",
+      "nameApp": "Bodo Illgner",
+      "nameCsv": "Bodo Illgner",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "267"
+    },
+    {
+      "id": "1371",
+      "nameApp": "Matthias Sammer",
+      "nameCsv": "Matthias Sammer",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1371",
+      "nameApp": "Matthias Sammer",
+      "nameCsv": "Matthias Sammer",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "76"
+    },
+    {
+      "id": "1373",
+      "nameApp": "Andreas Brehme",
+      "nameCsv": "Andreas Brehme",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1373",
+      "nameApp": "Andreas Brehme",
+      "nameCsv": "Andreas Brehme",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "54"
+    },
+    {
+      "id": "1375",
+      "nameApp": "Lothar Matthäus",
+      "nameCsv": "Lothar Matthäus",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1375",
+      "nameApp": "Lothar Matthäus",
+      "nameCsv": "Lothar Matthäus",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "241"
+    },
+    {
+      "id": "1376",
+      "nameApp": "K-H Rummenigge",
+      "nameCsv": "K-H Rummenigge",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1376",
+      "nameApp": "K-H Rummenigge",
+      "nameCsv": "K-H Rummenigge",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "89"
+    },
+    {
+      "id": "1379",
+      "nameApp": "Rudi Völler",
+      "nameCsv": "Rudi Völler",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1379",
+      "nameApp": "Rudi Völler",
+      "nameCsv": "Rudi Völler",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "252"
+    },
+    {
+      "id": "1380",
+      "nameApp": "J. Klinsmann",
+      "nameCsv": "J. Klinsmann",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1380",
+      "nameApp": "J. Klinsmann",
+      "nameCsv": "J. Klinsmann",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "57"
+    },
+    {
+      "id": "1381",
+      "nameApp": "Dino Zoff",
+      "nameCsv": "Dino Zoff",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1381",
+      "nameApp": "Dino Zoff",
+      "nameCsv": "Dino Zoff",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "269"
+    },
+    {
+      "id": "1382",
+      "nameApp": "Claudio Gentile",
+      "nameCsv": "Claudio Gentile",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1382",
+      "nameApp": "Claudio Gentile",
+      "nameCsv": "Claudio Gentile",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "274"
+    },
+    {
+      "id": "1387",
+      "nameApp": "Marco Tardelli",
+      "nameCsv": "Marco Tardelli",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1388",
+      "nameApp": "Antonio Cabrini",
+      "nameCsv": "Antonio Cabrini",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1388",
+      "nameApp": "Antonio Cabrini",
+      "nameCsv": "Antonio Cabrini",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1388",
+      "nameApp": "Antonio Cabrini",
+      "nameCsv": "Antonio Cabrini",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "24"
+    },
+    {
+      "id": "1392",
+      "nameApp": "Walter Zenga",
+      "nameCsv": "Walter Zenga",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1392",
+      "nameApp": "Walter Zenga",
+      "nameCsv": "Walter Zenga",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "37"
+    },
+    {
+      "id": "1393",
+      "nameApp": "Franco Baresi",
+      "nameCsv": "Franco Baresi",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1393",
+      "nameApp": "Franco Baresi",
+      "nameCsv": "Franco Baresi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "359"
+    },
+    {
+      "id": "1394",
+      "nameApp": "P. Vierchowod",
+      "nameCsv": "P. Vierchowod",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1394",
+      "nameApp": "P. Vierchowod",
+      "nameCsv": "P. Vierchowod",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "76"
+    },
+    {
+      "id": "1401",
+      "nameApp": "R. Donadoni",
+      "nameCsv": "R. Donadoni",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1401",
+      "nameApp": "R. Donadoni",
+      "nameCsv": "R. Donadoni",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "274"
+    },
+    {
+      "id": "1403",
+      "nameApp": "Gianluca Vialli",
+      "nameCsv": "Gianluca Vialli",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1403",
+      "nameApp": "Gianluca Vialli",
+      "nameCsv": "Gianluca Vialli",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "331"
+    },
+    {
+      "id": "1405",
+      "nameApp": "Wim Rijsbergen",
+      "nameCsv": "Wim Rijsbergen",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1405",
+      "nameApp": "Wim Rijsbergen",
+      "nameCsv": "Wim Rijsbergen",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "295"
+    },
+    {
+      "id": "1408",
+      "nameApp": "Ruud Krol",
+      "nameCsv": "Ruud Krol",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1408",
+      "nameApp": "Ruud Krol",
+      "nameCsv": "Ruud Krol",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "113"
+    },
+    {
+      "id": "1411",
+      "nameApp": "Johan Neeskens",
+      "nameCsv": "Johan Neeskens",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1411",
+      "nameApp": "Johan Neeskens",
+      "nameCsv": "Johan Neeskens",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "57"
+    },
+    {
+      "id": "1414",
+      "nameApp": "Rob Rensenbrink",
+      "nameCsv": "Rob Rensenbrink",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1414",
+      "nameApp": "Rob Rensenbrink",
+      "nameCsv": "Rob Rensenbrink",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "28"
+    },
+    {
+      "id": "1429",
+      "nameApp": "José Luis Brown",
+      "nameCsv": "José Luis Brown",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1429",
+      "nameApp": "José Luis Brown",
+      "nameCsv": "José Luis Brown",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1429",
+      "nameApp": "José Luis Brown",
+      "nameCsv": "José Luis Brown",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "153"
+    },
+    {
+      "id": "1431",
+      "nameApp": "Sergio Batista",
+      "nameCsv": "Sergio Batista",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1431",
+      "nameApp": "Sergio Batista",
+      "nameCsv": "Sergio Batista",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1431",
+      "nameApp": "Sergio Batista",
+      "nameCsv": "Sergio Batista",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "166"
+    },
+    {
+      "id": "1434",
+      "nameApp": "J. Burruchaga",
+      "nameCsv": "J. Burruchaga",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1434",
+      "nameApp": "J. Burruchaga",
+      "nameCsv": "J. Burruchaga",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1434",
+      "nameApp": "J. Burruchaga",
+      "nameCsv": "J. Burruchaga",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "10"
+    },
+    {
+      "id": "1440",
+      "nameApp": "Luis Galván",
+      "nameCsv": "Luis Galván",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1440",
+      "nameApp": "Luis Galván",
+      "nameCsv": "Luis Galván",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1440",
+      "nameApp": "Luis Galván",
+      "nameCsv": "Luis Galván",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "154"
+    },
+    {
+      "id": "1446",
+      "nameApp": "Daniel Bertoni",
+      "nameCsv": "Daniel Bertoni",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1446",
+      "nameApp": "Daniel Bertoni",
+      "nameCsv": "Daniel Bertoni",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1446",
+      "nameApp": "Daniel Bertoni",
+      "nameCsv": "Daniel Bertoni",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "18"
+    },
+    {
+      "id": "1447",
+      "nameApp": "Leopoldo Luque",
+      "nameCsv": "Leopoldo Luque",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1447",
+      "nameApp": "Leopoldo Luque",
+      "nameCsv": "Leopoldo Luque",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1447",
+      "nameApp": "Leopoldo Luque",
+      "nameCsv": "Leopoldo Luque",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "11"
+    },
+    {
+      "id": "1452",
+      "nameApp": "Brito",
+      "nameCsv": "Brito",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1452",
+      "nameApp": "Brito",
+      "nameCsv": "Brito",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "37"
+    },
+    {
+      "id": "1453",
+      "nameApp": "Carlos Alberto",
+      "nameCsv": "Carlos Alberto",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1453",
+      "nameApp": "Carlos Alberto",
+      "nameCsv": "Carlos Alberto",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "70"
+    },
+    {
+      "id": "1454",
+      "nameApp": "Everaldo",
+      "nameCsv": "Everaldo",
+      "field": "SKIN COLOR",
+      "appValue": "3",
+      "csvValue": "4"
+    },
+    {
+      "id": "1454",
+      "nameApp": "Everaldo",
+      "nameCsv": "Everaldo",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1454",
+      "nameApp": "Everaldo",
+      "nameCsv": "Everaldo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "12"
+    },
+    {
+      "id": "1455",
+      "nameApp": "Clodoaldo",
+      "nameCsv": "Clodoaldo",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1455",
+      "nameApp": "Clodoaldo",
+      "nameCsv": "Clodoaldo",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1455",
+      "nameApp": "Clodoaldo",
+      "nameCsv": "Clodoaldo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "172"
+    },
+    {
+      "id": "1456",
+      "nameApp": "Gerson",
+      "nameCsv": "Gerson",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1456",
+      "nameApp": "Gerson",
+      "nameCsv": "Gerson",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1456",
+      "nameApp": "Gerson",
+      "nameCsv": "Gerson",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "6"
+    },
+    {
+      "id": "1461",
+      "nameApp": "C. Taffarel",
+      "nameCsv": "C. Taffarel",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1461",
+      "nameApp": "C. Taffarel",
+      "nameCsv": "C. Taffarel",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "53"
+    },
+    {
+      "id": "1462",
+      "nameApp": "Luiz Pereira",
+      "nameCsv": "Luiz Pereira",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1462",
+      "nameApp": "Luiz Pereira",
+      "nameCsv": "Luiz Pereira",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "16"
+    },
+    {
+      "id": "1463",
+      "nameApp": "Júnior",
+      "nameCsv": "Júnior",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1463",
+      "nameApp": "Júnior",
+      "nameCsv": "Júnior",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "49"
+    },
+    {
+      "id": "1464",
+      "nameApp": "Dunga",
+      "nameCsv": "Dunga",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1464",
+      "nameApp": "Dunga",
+      "nameCsv": "Dunga",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "358"
+    },
+    {
+      "id": "1465",
+      "nameApp": "Toninho Cerezo",
+      "nameCsv": "Toninho Cerezo",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1465",
+      "nameApp": "Toninho Cerezo",
+      "nameCsv": "Toninho Cerezo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "16"
+    },
+    {
+      "id": "1466",
+      "nameApp": "Paulo Falcao",
+      "nameCsv": "Paulo Falcao",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1466",
+      "nameApp": "Paulo Falcao",
+      "nameCsv": "Paulo Falcao",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "254"
+    },
+    {
+      "id": "1467",
+      "nameApp": "Sócrates",
+      "nameCsv": "Sócrates",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1467",
+      "nameApp": "Sócrates",
+      "nameCsv": "Sócrates",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "51"
+    },
+    {
+      "id": "1469",
+      "nameApp": "Raí",
+      "nameCsv": "Raí",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1469",
+      "nameApp": "Raí",
+      "nameCsv": "Raí",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "12"
+    },
+    {
+      "id": "1472",
+      "nameApp": "Careca",
+      "nameCsv": "Careca",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1472",
+      "nameApp": "Careca",
+      "nameCsv": "Careca",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "28"
+    },
+    {
+      "id": "1475",
+      "nameApp": "Adebayor",
+      "nameCsv": "Adebayor",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1475",
+      "nameApp": "Adebayor",
+      "nameCsv": "Adebayor",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "39",
+      "csvValue": "2"
+    },
+    {
+      "id": "1483",
+      "nameApp": "A. Hleb",
+      "nameCsv": "A. Hleb",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1483",
+      "nameApp": "A. Hleb",
+      "nameCsv": "A. Hleb",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "28"
+    },
+    {
+      "id": "1496",
+      "nameApp": "Juan P. Ángel",
+      "nameCsv": "Juan P. Ángel",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "1496",
+      "nameApp": "Juan P. Ángel",
+      "nameCsv": "Juan P. Ángel",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "1496",
+      "nameApp": "Juan P. Ángel",
+      "nameCsv": "Juan P. Ángel",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "153"
+    },
+    {
+      "id": "1534",
+      "nameApp": "Diouf",
+      "nameCsv": "Diouf",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "39",
+      "csvValue": "65"
+    },
+    {
+      "id": "1570",
+      "nameApp": "Drogba",
+      "nameCsv": "Drogba",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "2",
+      "csvValue": "4"
+    },
+    {
+      "id": "1574",
+      "nameApp": "Wright-Phillips",
+      "nameCsv": "Wright-Phillips",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "11",
+      "csvValue": "16"
+    },
+    {
+      "id": "1575",
+      "nameApp": "Ballack",
+      "nameCsv": "Ballack",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "29",
+      "csvValue": "62"
+    },
+    {
+      "id": "1579",
+      "nameApp": "P. Neville",
+      "nameCsv": "P. Neville",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "59",
+      "csvValue": "118"
+    },
+    {
+      "id": "1590",
+      "nameApp": "Van der Meyde",
+      "nameCsv": "Van der Meyde",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "171",
+      "csvValue": "281"
+    },
+    {
+      "id": "1642",
+      "nameApp": "Sinclair",
+      "nameCsv": "Sinclair",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "25",
+      "csvValue": "37"
+    },
+    {
+      "id": "1643",
+      "nameApp": "Corradi",
+      "nameCsv": "Corradi",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "18",
+      "csvValue": "27"
+    },
+    {
+      "id": "1661",
+      "nameApp": "Brown",
+      "nameCsv": "Brown",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "23",
+      "csvValue": "34"
+    },
+    {
+      "id": "1664",
+      "nameApp": "Giggs",
+      "nameCsv": "Giggs",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "197",
+      "csvValue": "340"
+    },
+    {
+      "id": "1668",
+      "nameApp": "+",
+      "nameCsv": "+",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "89",
+      "csvValue": "122"
+    },
+    {
+      "id": "1673",
+      "nameApp": "Woodgate",
+      "nameCsv": "Woodgate",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "67",
+      "csvValue": "129"
+    },
+    {
+      "id": "1753",
+      "nameApp": "Seol Ki Hyeon",
+      "nameCsv": "Seol Ki Hyeon",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "111",
+      "csvValue": "147"
+    },
+    {
+      "id": "1790",
+      "nameApp": "+",
+      "nameCsv": "+",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "92",
+      "csvValue": "125"
+    },
+    {
+      "id": "1886",
+      "nameApp": "Pedretti",
+      "nameCsv": "Pedretti",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "108",
+      "csvValue": "194"
+    },
+    {
+      "id": "1914",
+      "nameApp": "S. Dalmat",
+      "nameCsv": "S. Dalmat",
+      "field": "WRISTBAND",
+      "appValue": "N",
+      "csvValue": "R"
+    },
+    {
+      "id": "1914",
+      "nameApp": "S. Dalmat",
+      "nameCsv": "S. Dalmat",
+      "field": "WRISTBAND COLOR",
+      "appValue": "None",
+      "csvValue": "White"
+    },
+    {
+      "id": "2135",
+      "nameApp": "Rothen",
+      "nameCsv": "Rothen",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "109",
+      "csvValue": "195"
+    },
+    {
+      "id": "2256",
+      "nameApp": "Mathieu",
+      "nameCsv": "Mathieu",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "2256",
+      "nameApp": "Mathieu",
+      "nameCsv": "Mathieu",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "82"
+    },
+    {
+      "id": "2318",
+      "nameApp": "Pagliuca",
+      "nameCsv": "Pagliuca",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "2318",
+      "nameApp": "Pagliuca",
+      "nameCsv": "Pagliuca",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "27"
+    },
+    {
+      "id": "2346",
+      "nameApp": "Zampagna",
+      "nameCsv": "Zampagna",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "2346",
+      "nameApp": "Zampagna",
+      "nameCsv": "Zampagna",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "301"
+    },
+    {
+      "id": "2357",
+      "nameApp": "Vieri",
+      "nameCsv": "Vieri",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "123",
+      "csvValue": "217"
+    },
+    {
+      "id": "2358",
+      "nameApp": "Chimenti",
+      "nameCsv": "Chimenti",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "151",
+      "csvValue": "257"
+    },
+    {
+      "id": "2365",
+      "nameApp": "Mauro Esposito",
+      "nameCsv": "Mauro Esposito",
+      "field": "WRISTBAND",
+      "appValue": "N",
+      "csvValue": "R"
+    },
+    {
+      "id": "2365",
+      "nameApp": "Mauro Esposito",
+      "nameCsv": "Mauro Esposito",
+      "field": "WRISTBAND COLOR",
+      "appValue": "None",
+      "csvValue": "White"
+    },
+    {
+      "id": "2448",
+      "nameApp": "Frey",
+      "nameCsv": "Frey",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "2448",
+      "nameApp": "Frey",
+      "nameCsv": "Frey",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "284"
+    },
+    {
+      "id": "2467",
+      "nameApp": "Iván Córdoba",
+      "nameCsv": "Iván Córdoba",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "18",
+      "csvValue": "28"
+    },
+    {
+      "id": "2470",
+      "nameApp": "Dejan Stankovic",
+      "nameCsv": "Dejan Stankovic",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "201",
+      "csvValue": "347"
+    },
+    {
+      "id": "2471",
+      "nameApp": "Toldo",
+      "nameCsv": "Toldo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "134",
+      "csvValue": "233"
+    },
+    {
+      "id": "2475",
+      "nameApp": "Maxwell",
+      "nameCsv": "Maxwell",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "2475",
+      "nameApp": "Maxwell",
+      "nameCsv": "Maxwell",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "56"
+    },
+    {
+      "id": "2487",
+      "nameApp": "Rocchi",
+      "nameCsv": "Rocchi",
+      "field": "WRISTBAND",
+      "appValue": "N",
+      "csvValue": "R"
+    },
+    {
+      "id": "2487",
+      "nameApp": "Rocchi",
+      "nameCsv": "Rocchi",
+      "field": "WRISTBAND COLOR",
+      "appValue": "None",
+      "csvValue": "White"
+    },
+    {
+      "id": "2508",
+      "nameApp": "C. Lucarelli",
+      "nameCsv": "C. Lucarelli",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "2508",
+      "nameApp": "C. Lucarelli",
+      "nameCsv": "C. Lucarelli",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "208"
+    },
+    {
+      "id": "2539",
+      "nameApp": "+",
+      "nameCsv": "+",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "30",
+      "csvValue": "47"
+    },
+    {
+      "id": "2543",
+      "nameApp": "C. Seedorf",
+      "nameCsv": "C. Seedorf",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "2543",
+      "nameApp": "C. Seedorf",
+      "nameCsv": "C. Seedorf",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "23",
+      "csvValue": "39"
+    },
+    {
+      "id": "2545",
+      "nameApp": "Maldini",
+      "nameCsv": "Maldini",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "126",
+      "csvValue": "220"
+    },
+    {
+      "id": "2548",
+      "nameApp": "Favalli",
+      "nameCsv": "Favalli",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "152",
+      "csvValue": "258"
+    },
+    {
+      "id": "2552",
+      "nameApp": "R. Oliveira",
+      "nameCsv": "R. Oliveira",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "16",
+      "csvValue": "23"
+    },
+    {
+      "id": "2611",
+      "nameApp": "Rolando Bianchi",
+      "nameCsv": "Rolando Bianchi",
+      "field": "WRISTBAND",
+      "appValue": "N",
+      "csvValue": "R"
+    },
+    {
+      "id": "2611",
+      "nameApp": "Rolando Bianchi",
+      "nameCsv": "Rolando Bianchi",
+      "field": "WRISTBAND COLOR",
+      "appValue": "None",
+      "csvValue": "White"
+    },
+    {
+      "id": "2626",
+      "nameApp": "Mancini",
+      "nameCsv": "Mancini",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "14",
+      "csvValue": "21"
+    },
+    {
+      "id": "2703",
+      "nameApp": "Fiore",
+      "nameCsv": "Fiore",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "135",
+      "csvValue": "234"
+    },
+    {
+      "id": "2710",
+      "nameApp": "+",
+      "nameCsv": "+",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "81",
+      "csvValue": "110"
+    },
+    {
+      "id": "2755",
+      "nameApp": "Jaap Stam",
+      "nameCsv": "Jaap Stam",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "163",
+      "csvValue": "271"
+    },
+    {
+      "id": "2759",
+      "nameApp": "Rosales",
+      "nameCsv": "Rosales",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "167"
+    },
+    {
+      "id": "2812",
+      "nameApp": "Vlaar",
+      "nameCsv": "Vlaar",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "180",
+      "csvValue": "290"
+    },
+    {
+      "id": "2819",
+      "nameApp": "Castelen",
+      "nameCsv": "Castelen",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "24",
+      "csvValue": "40"
+    },
+    {
+      "id": "2931",
+      "nameApp": "Denneboom",
+      "nameCsv": "Denneboom",
+      "field": "FACE TYPE",
+      "appValue": "Preset",
+      "csvValue": "Build"
+    },
+    {
+      "id": "2931",
+      "nameApp": "Denneboom",
+      "nameCsv": "Denneboom",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "20",
+      "csvValue": "36"
+    },
+    {
+      "id": "3133",
+      "nameApp": "Víctor Valdés",
+      "nameCsv": "Víctor Valdés",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "90",
+      "csvValue": "164"
+    },
+    {
+      "id": "3134",
+      "nameApp": "Edmilson",
+      "nameCsv": "Edmilson",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "21",
+      "csvValue": "32"
+    },
+    {
+      "id": "3137",
+      "nameApp": "Oleguer",
+      "nameCsv": "Oleguer",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3137",
+      "nameApp": "Oleguer",
+      "nameCsv": "Oleguer",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "339"
+    },
+    {
+      "id": "3141",
+      "nameApp": "Giuly",
+      "nameCsv": "Giuly",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "107",
+      "csvValue": "192"
+    },
+    {
+      "id": "3327",
+      "nameApp": "Mista",
+      "nameCsv": "Mista",
+      "field": "SKIN COLOR",
+      "appValue": "2",
+      "csvValue": "1"
+    },
+    {
+      "id": "3327",
+      "nameApp": "Mista",
+      "nameCsv": "Mista",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "333"
+    },
+    {
+      "id": "3340",
+      "nameApp": "Kezman",
+      "nameCsv": "Kezman",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "200",
+      "csvValue": "345"
+    },
+    {
+      "id": "3341",
+      "nameApp": "Raúl Bravo",
+      "nameCsv": "Raúl Bravo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "89",
+      "csvValue": "163"
+    },
+    {
+      "id": "3343",
+      "nameApp": "Cassano",
+      "nameCsv": "Cassano",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "124",
+      "csvValue": "218"
+    },
+    {
+      "id": "3455",
+      "nameApp": "Hinkel",
+      "nameCsv": "Hinkel",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "36",
+      "csvValue": "81"
+    },
+    {
+      "id": "3461",
+      "nameApp": "Kanoute",
+      "nameCsv": "Kanoute",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3461",
+      "nameApp": "Kanoute",
+      "nameCsv": "Kanoute",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "39"
+    },
+    {
+      "id": "3464",
+      "nameApp": "Del Horno",
+      "nameCsv": "Del Horno",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "92",
+      "csvValue": "166"
+    },
+    {
+      "id": "3465",
+      "nameApp": "Baraja",
+      "nameCsv": "Baraja",
+      "field": "FACE TYPE",
+      "appValue": "Special",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3465",
+      "nameApp": "Baraja",
+      "nameCsv": "Baraja",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "83",
+      "csvValue": "151"
+    },
+    {
+      "id": "3481",
+      "nameApp": "G. Rodríguez",
+      "nameCsv": "G. Rodríguez",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3481",
+      "nameApp": "G. Rodríguez",
+      "nameCsv": "G. Rodríguez",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "18"
+    },
+    {
+      "id": "3486",
+      "nameApp": "Pirès",
+      "nameCsv": "Pirès",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "104",
+      "csvValue": "185"
+    },
+    {
+      "id": "3502",
+      "nameApp": "Juanfran",
+      "nameCsv": "Juanfran",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3506",
+      "nameApp": "D'alessandro",
+      "nameCsv": "D'alessandro",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "2",
+      "csvValue": "5"
+    },
+    {
+      "id": "3556",
+      "nameApp": "Blazek",
+      "nameCsv": "Blazek",
+      "field": "INTERNATIONAL NUMBER",
+      "appValue": "0",
+      "csvValue": "16"
+    },
+    {
+      "id": "3592",
+      "nameApp": "Ismaël",
+      "nameCsv": "Ismaël",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3592",
+      "nameApp": "Ismaël",
+      "nameCsv": "Ismaël",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "32"
+    },
+    {
+      "id": "3595",
+      "nameApp": "Deisler",
+      "nameCsv": "Deisler",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "30",
+      "csvValue": "63"
+    },
+    {
+      "id": "3598",
+      "nameApp": "Makaay",
+      "nameCsv": "Makaay",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "168",
+      "csvValue": "277"
+    },
+    {
+      "id": "3604",
+      "nameApp": "Scholl",
+      "nameCsv": "Scholl",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "28",
+      "csvValue": "61"
+    },
+    {
+      "id": "3610",
+      "nameApp": "Rivaldo",
+      "nameCsv": "Rivaldo",
+      "field": "WRISTBAND",
+      "appValue": "N",
+      "csvValue": "B"
+    },
+    {
+      "id": "3610",
+      "nameApp": "Rivaldo",
+      "nameCsv": "Rivaldo",
+      "field": "WRISTBAND COLOR",
+      "appValue": "None",
+      "csvValue": "White"
+    },
+    {
+      "id": "3642",
+      "nameApp": "Mikael Nilsson",
+      "nameCsv": "Mikael Nilsson",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3642",
+      "nameApp": "Mikael Nilsson",
+      "nameCsv": "Mikael Nilsson",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "326"
+    },
+    {
+      "id": "3642",
+      "nameApp": "Mikael Nilsson",
+      "nameCsv": "Mikael Nilsson",
+      "field": "INTERNATIONAL NUMBER",
+      "appValue": "0",
+      "csvValue": "2"
+    },
+    {
+      "id": "3652",
+      "nameApp": "C. Zanetti",
+      "nameCsv": "C. Zanetti",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "142",
+      "csvValue": "245"
+    },
+    {
+      "id": "3690",
+      "nameApp": "Rui Costa",
+      "nameCsv": "Rui Costa",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "188",
+      "csvValue": "302"
+    },
+    {
+      "id": "3712",
+      "nameApp": "Quaresma",
+      "nameCsv": "Quaresma",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "37",
+      "csvValue": "61"
+    },
+    {
+      "id": "3752",
+      "nameApp": "+",
+      "nameCsv": "+",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "36",
+      "csvValue": "57"
+    },
+    {
+      "id": "3754",
+      "nameApp": "Balde",
+      "nameCsv": "Balde",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "23",
+      "csvValue": "7"
+    },
+    {
+      "id": "3783",
+      "nameApp": "Pierre Fanfan",
+      "nameCsv": "Pierre Fanfan",
+      "field": "WRISTBAND",
+      "appValue": "N",
+      "csvValue": "L"
+    },
+    {
+      "id": "3783",
+      "nameApp": "Pierre Fanfan",
+      "nameCsv": "Pierre Fanfan",
+      "field": "WRISTBAND COLOR",
+      "appValue": "None",
+      "csvValue": "White"
+    },
+    {
+      "id": "3845",
+      "nameApp": "Mondragon",
+      "nameCsv": "Mondragon",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "3845",
+      "nameApp": "Mondragon",
+      "nameCsv": "Mondragon",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3845",
+      "nameApp": "Mondragon",
+      "nameCsv": "Mondragon",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "20"
+    },
+    {
+      "id": "3868",
+      "nameApp": "+",
+      "nameCsv": "+",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "23",
+      "csvValue": "34"
+    },
+    {
+      "id": "3891",
+      "nameApp": "Daniel Díaz",
+      "nameCsv": "Daniel Díaz",
+      "field": "SKIN COLOR",
+      "appValue": "2",
+      "csvValue": "3"
+    },
+    {
+      "id": "3891",
+      "nameApp": "Daniel Díaz",
+      "nameCsv": "Daniel Díaz",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "171",
+      "csvValue": "62"
+    },
+    {
+      "id": "3892",
+      "nameApp": "Ibarra",
+      "nameCsv": "Ibarra",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3892",
+      "nameApp": "Ibarra",
+      "nameCsv": "Ibarra",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "50"
+    },
+    {
+      "id": "3905",
+      "nameApp": "Delgado",
+      "nameCsv": "Delgado",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3905",
+      "nameApp": "Delgado",
+      "nameCsv": "Delgado",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "43"
+    },
+    {
+      "id": "3914",
+      "nameApp": "Farías",
+      "nameCsv": "Farías",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "3914",
+      "nameApp": "Farías",
+      "nameCsv": "Farías",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "339"
+    },
+    {
+      "id": "4443",
+      "nameApp": "Alen Boksic",
+      "nameCsv": "Alen Boksic",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4443",
+      "nameApp": "Alen Boksic",
+      "nameCsv": "Alen Boksic",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "80"
+    },
+    {
+      "id": "4448",
+      "nameApp": "Iván Zamorano",
+      "nameCsv": "Iván Zamorano",
+      "field": "WRISTBAND",
+      "appValue": "N",
+      "csvValue": "L"
+    },
+    {
+      "id": "4448",
+      "nameApp": "Iván Zamorano",
+      "nameCsv": "Iván Zamorano",
+      "field": "WRISTBAND COLOR",
+      "appValue": "None",
+      "csvValue": "White"
+    },
+    {
+      "id": "4452",
+      "nameApp": "Edmundo",
+      "nameCsv": "Edmundo",
+      "field": "SKIN COLOR",
+      "appValue": "3",
+      "csvValue": "2"
+    },
+    {
+      "id": "4452",
+      "nameApp": "Edmundo",
+      "nameCsv": "Edmundo",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4452",
+      "nameApp": "Edmundo",
+      "nameCsv": "Edmundo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "27"
+    },
+    {
+      "id": "4460",
+      "nameApp": "C. Valderrama",
+      "nameCsv": "C. Valderrama",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4460",
+      "nameApp": "C. Valderrama",
+      "nameCsv": "C. Valderrama",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "164"
+    },
+    {
+      "id": "4462",
+      "nameApp": "C. Caniggia",
+      "nameCsv": "C. Caniggia",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4462",
+      "nameApp": "C. Caniggia",
+      "nameCsv": "C. Caniggia",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "46"
+    },
+    {
+      "id": "4473",
+      "nameApp": "G. Giannini",
+      "nameCsv": "G. Giannini",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4473",
+      "nameApp": "G. Giannini",
+      "nameCsv": "G. Giannini",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "55"
+    },
+    {
+      "id": "4485",
+      "nameApp": "Denis Law",
+      "nameCsv": "Denis Law",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4485",
+      "nameApp": "Denis Law",
+      "nameCsv": "Denis Law",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "97"
+    },
+    {
+      "id": "4488",
+      "nameApp": "Thomas Ravelli",
+      "nameCsv": "Thomas Ravelli",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4488",
+      "nameApp": "Thomas Ravelli",
+      "nameCsv": "Thomas Ravelli",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "338"
+    },
+    {
+      "id": "4490",
+      "nameApp": "Tomas Brolin",
+      "nameCsv": "Tomas Brolin",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4490",
+      "nameApp": "Tomas Brolin",
+      "nameCsv": "Tomas Brolin",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "268"
+    },
+    {
+      "id": "4494",
+      "nameApp": "Vágner Love",
+      "nameCsv": "Vágner Love",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4494",
+      "nameApp": "Vágner Love",
+      "nameCsv": "Vágner Love",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "36"
+    },
+    {
+      "id": "4495",
+      "nameApp": "P. Andersson",
+      "nameCsv": "P. Andersson",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4495",
+      "nameApp": "P. Andersson",
+      "nameCsv": "P. Andersson",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "322"
+    },
+    {
+      "id": "4497",
+      "nameApp": "K. Balakov",
+      "nameCsv": "K. Balakov",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "4497",
+      "nameApp": "K. Balakov",
+      "nameCsv": "K. Balakov",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4497",
+      "nameApp": "K. Balakov",
+      "nameCsv": "K. Balakov",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "21"
+    },
+    {
+      "id": "4500",
+      "nameApp": "G. Lentini",
+      "nameCsv": "G. Lentini",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "4500",
+      "nameApp": "G. Lentini",
+      "nameCsv": "G. Lentini",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4500",
+      "nameApp": "G. Lentini",
+      "nameCsv": "G. Lentini",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "21"
+    },
+    {
+      "id": "4504",
+      "nameApp": "Brian Laudrup",
+      "nameCsv": "Brian Laudrup",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4504",
+      "nameApp": "Brian Laudrup",
+      "nameCsv": "Brian Laudrup",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "55"
+    },
+    {
+      "id": "4511",
+      "nameApp": "Thomas Hässler",
+      "nameCsv": "Thomas Hässler",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4511",
+      "nameApp": "Thomas Hässler",
+      "nameCsv": "Thomas Hässler",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "56"
+    },
+    {
+      "id": "4512",
+      "nameApp": "K. Andersson",
+      "nameCsv": "K. Andersson",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4512",
+      "nameApp": "K. Andersson",
+      "nameCsv": "K. Andersson",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "73",
+      "csvValue": "80"
+    },
+    {
+      "id": "4513",
+      "nameApp": "José Cardozo",
+      "nameCsv": "José Cardozo",
+      "field": "SKIN COLOR",
+      "appValue": "3",
+      "csvValue": "2"
+    },
+    {
+      "id": "4513",
+      "nameApp": "José Cardozo",
+      "nameCsv": "José Cardozo",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4513",
+      "nameApp": "José Cardozo",
+      "nameCsv": "José Cardozo",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "169"
+    },
+    {
+      "id": "4519",
+      "nameApp": "Mark Hughes",
+      "nameCsv": "Mark Hughes",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4519",
+      "nameApp": "Mark Hughes",
+      "nameCsv": "Mark Hughes",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "86"
+    },
+    {
+      "id": "4528",
+      "nameApp": "Matt Le Tissier",
+      "nameCsv": "Matt Le Tissier",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4528",
+      "nameApp": "Matt Le Tissier",
+      "nameCsv": "Matt Le Tissier",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "361"
+    },
+    {
+      "id": "4535",
+      "nameApp": "Adrian Ilie",
+      "nameCsv": "Adrian Ilie",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4535",
+      "nameApp": "Adrian Ilie",
+      "nameCsv": "Adrian Ilie",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "15"
+    },
+    {
+      "id": "4536",
+      "nameApp": "Allan Simonsen",
+      "nameCsv": "Allan Simonsen",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4536",
+      "nameApp": "Allan Simonsen",
+      "nameCsv": "Allan Simonsen",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "263"
+    },
+    {
+      "id": "4537",
+      "nameApp": "Andreas Herzog",
+      "nameCsv": "Andreas Herzog",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4537",
+      "nameApp": "Andreas Herzog",
+      "nameCsv": "Andreas Herzog",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "256"
+    },
+    {
+      "id": "4542",
+      "nameApp": "Pat Jennings",
+      "nameCsv": "Pat Jennings",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4542",
+      "nameApp": "Pat Jennings",
+      "nameCsv": "Pat Jennings",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "88"
+    },
+    {
+      "id": "4544",
+      "nameApp": "Djalminha",
+      "nameCsv": "Djalminha",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4544",
+      "nameApp": "Djalminha",
+      "nameCsv": "Djalminha",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "65"
+    },
+    {
+      "id": "4547",
+      "nameApp": "Christian Ziege",
+      "nameCsv": "Christian Ziege",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4547",
+      "nameApp": "Christian Ziege",
+      "nameCsv": "Christian Ziege",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "66"
+    },
+    {
+      "id": "4552",
+      "nameApp": "Igor Protti",
+      "nameCsv": "Igor Protti",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "4552",
+      "nameApp": "Igor Protti",
+      "nameCsv": "Igor Protti",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4552",
+      "nameApp": "Igor Protti",
+      "nameCsv": "Igor Protti",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "159"
+    },
+    {
+      "id": "4561",
+      "nameApp": "Rubén Sosa",
+      "nameCsv": "Rubén Sosa",
+      "field": "SKIN COLOR",
+      "appValue": "3",
+      "csvValue": "2"
+    },
+    {
+      "id": "4561",
+      "nameApp": "Rubén Sosa",
+      "nameCsv": "Rubén Sosa",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4561",
+      "nameApp": "Rubén Sosa",
+      "nameCsv": "Rubén Sosa",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "10"
+    },
+    {
+      "id": "4572",
+      "nameApp": "Nilmar",
+      "nameCsv": "Nilmar",
+      "field": "SKIN COLOR",
+      "appValue": "1",
+      "csvValue": "2"
+    },
+    {
+      "id": "4572",
+      "nameApp": "Nilmar",
+      "nameCsv": "Nilmar",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4572",
+      "nameApp": "Nilmar",
+      "nameCsv": "Nilmar",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "172"
+    },
+    {
+      "id": "4573",
+      "nameApp": "Mário Jardel",
+      "nameCsv": "Mário Jardel",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4573",
+      "nameApp": "Mário Jardel",
+      "nameCsv": "Mário Jardel",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "56"
+    },
+    {
+      "id": "4584",
+      "nameApp": "Niall Quinn",
+      "nameCsv": "Niall Quinn",
+      "field": "FACE TYPE",
+      "appValue": "Build",
+      "csvValue": "Preset"
+    },
+    {
+      "id": "4584",
+      "nameApp": "Niall Quinn",
+      "nameCsv": "Niall Quinn",
+      "field": "PRESET FACE NUMBER",
+      "appValue": "1",
+      "csvValue": "86"
+    }
+  ]
+}

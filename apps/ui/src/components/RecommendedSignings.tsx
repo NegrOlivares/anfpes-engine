@@ -12,6 +12,7 @@ interface RecommendedSigningsProps {
   recommendedSignings: RecommendedSigning[];
   clubId?: string;
   onAddPossibleSigning: (playerId: string) => void;
+  readOnly?: boolean;
 }
 
 // Mapeo de roles a nombres legibles y campos de promedio
@@ -58,6 +59,7 @@ export function RecommendedSignings({
   recommendedSignings,
   clubId,
   onAddPossibleSigning,
+  readOnly = false,
 }: RecommendedSigningsProps) {
   const [filterMode, setFilterMode] = useState<'contracted' | 'free' | 'all'>('free');
   const [minAverage, setMinAverage] = useState<number>(65);
@@ -158,6 +160,7 @@ export function RecommendedSignings({
   };
 
   const handleAddSigning = (playerId: string) => {
+    if (readOnly) return;
     onAddPossibleSigning(playerId);
   };
 
@@ -326,10 +329,18 @@ export function RecommendedSignings({
                           key={player.ID}
                           className="depth-suggestion"
                           onClick={() => handleAddSigning(player.ID)}
-                          title="Click para agregar como fichaje posible"
+                          title={
+                            readOnly
+                              ? 'Táctica en modo lectura'
+                              : 'Click para agregar como fichaje posible'
+                          }
                         >
                           {renderPlayer(player.ID, role, true, true)}
-                          <button type="button" className="add-signing-btn">
+                          <button
+                            type="button"
+                            className="add-signing-btn"
+                            disabled={readOnly}
+                          >
                             + Fichar
                           </button>
                         </div>

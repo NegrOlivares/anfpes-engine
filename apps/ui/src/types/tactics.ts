@@ -50,7 +50,7 @@ export interface FormationSlot {
 }
 
 export interface PlayerInstruction {
-  playerId: string;
+  slotId: string;
   runArrows: RunDirection[]; // Max 2
   defensiveAttitude: DefensiveAttitude;
 }
@@ -62,7 +62,7 @@ export interface StrategySlot {
 
 export interface FormationPlan {
   slots: FormationSlot[]; // Always 11
-  playerInstructions: Record<string, PlayerInstruction>;
+  playerInstructions: Record<string, PlayerInstruction>; // slotId -> instruction
   attackDefenceLevel: AttackDefenceLevel;
   backLine: BackLineDepth;
   offsideTrap: OffsideTrapLevel;
@@ -114,6 +114,7 @@ export interface TeamStrategy {
 export interface Tactic {
   tacticId: string;
   name: string;
+  dataVersion?: string;
   clubId?: string;
   customDorsals: Record<string, string>; // playerId -> dorsal custom
   rosterContext: {
@@ -149,6 +150,7 @@ export interface TacticsState {
   saveAsNewTactic: (name: string) => void;
   deleteTactic: (tacticId: string) => void;
   duplicateTactic: (tacticId: string, newName: string) => void;
+  duplicateTacticWithoutPlayers: (tacticId: string, newName: string) => void;
   renameTactic: (tacticId: string, newName: string) => void;
   clearCurrentTactic: () => void;
 
@@ -169,7 +171,7 @@ export interface TacticsState {
   changeFormation: (plan: 'base' | 'planA' | 'planB', formationName: string) => void;
   updatePlayerInstruction: (
     plan: 'base' | 'planA' | 'planB',
-    playerId: string,
+    slotId: string,
     instruction: Partial<PlayerInstruction>,
   ) => void;
 

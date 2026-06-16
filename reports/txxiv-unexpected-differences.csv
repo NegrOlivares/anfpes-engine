@@ -1,0 +1,463 @@
+ID,NAME_APP,NAME_CSV,FIELD,APP_VALUE,CSV_VALUE
+26,Van Buyten,Van Buyten,FACE TYPE,Build,Preset
+26,Van Buyten,Van Buyten,PRESET FACE NUMBER,1,315
+93,Cech,Cech,PRESET FACE NUMBER,27,40
+101,Rosický,Rosický,PRESET FACE NUMBER,26,39
+104,Jaromír Blazek,+,NAME,Jaromír Blazek,+
+104,Jaromír Blazek,+,INTERNATIONAL NUMBER,16,0
+123,Rommedahl,Rommedahl,PRESET FACE NUMBER,51,103
+140,R. Ferdinand,R. Ferdinand,PRESET FACE NUMBER,22,33
+141,Terry,Terry,PRESET FACE NUMBER,62,124
+143,Ashley Cole,Ashley Cole,PRESET FACE NUMBER,24,36
+144,Lampard,Lampard,PRESET FACE NUMBER,63,125
+145,Gerrard,Gerrard,PRESET FACE NUMBER,57,112
+147,Joe Cole,Joe Cole,PRESET FACE NUMBER,61,123
+148,Owen,Owen,PRESET FACE NUMBER,52,104
+149,Crouch,Crouch,FACE TYPE,Special,Preset
+149,Crouch,Crouch,PRESET FACE NUMBER,72,134
+152,Campbell,Campbell,PRESET FACE NUMBER,8,13
+159,Downing,Downing,PRESET FACE NUMBER,68,130
+160,Rooney,Rooney,FACE TYPE,Special,Preset
+160,Rooney,Rooney,PRESET FACE NUMBER,60,119
+186,Thuram,Thuram,PRESET FACE NUMBER,14,21
+207,Trézéguet,Trézéguet,PRESET FACE NUMBER,27,42
+277,Given,Given,FACE TYPE,Build,Preset
+277,Given,Given,PRESET FACE NUMBER,1,216
+281,Harte,Harte,PRESET FACE NUMBER,118,210
+287,Robbie Keane,Robbie Keane,PRESET FACE NUMBER,117,209
+293,Finnan,Finnan,PRESET FACE NUMBER,120,213
+301,Nesta,Nesta,PRESET FACE NUMBER,131,229
+305,Pirlo,Pirlo,PRESET FACE NUMBER,140,243
+306,Camoranesi,Camoranesi,PRESET FACE NUMBER,17,25
+310,Gilardino,Gilardino,PRESET FACE NUMBER,146,252
+315,Zaccardo,Zaccardo,PRESET FACE NUMBER,158,264
+316,Oddo,Oddo,PRESET FACE NUMBER,147,253
+346,Van der Sar,Van der Sar,PRESET FACE NUMBER,162,270
+355,Robben,Robben,PRESET FACE NUMBER,170,280
+356,Van Nistelrooy,Van Nistelrooy,PRESET FACE NUMBER,167,276
+357,Timmer,Timmer,PRESET FACE NUMBER,183,293
+361,Kromkamp,Kromkamp,PRESET FACE NUMBER,177,287
+364,Landzaat,Landzaat,PRESET FACE NUMBER,32,56
+365,Van der Vaart,Van der Vaart,PRESET FACE NUMBER,172,282
+396,Riise,Riise,FACE TYPE,Build,Preset
+396,Riise,Riise,PRESET FACE NUMBER,346,43
+400,M. G. Pedersen,M. G. Pedersen,FACE TYPE,Build,Preset
+440,R. Carvalho,R. Carvalho,PRESET FACE NUMBER,189,305
+442,Nuno Valente,Nuno Valente,PRESET FACE NUMBER,120,160
+444,Deco,Deco,PRESET FACE NUMBER,117,157
+455,Tiago,Tiago,PRESET FACE NUMBER,190,306
+457,Simão,Simão,PRESET FACE NUMBER,121,161
+459,Nuno Gomes,Nuno Gomes,PRESET FACE NUMBER,35,59
+552,Zigic,Zigic,FACE TYPE,Build,Preset
+552,Zigic,Zigic,PRESET FACE NUMBER,1,73
+599,Casillas,Casillas,PRESET FACE NUMBER,78,145
+601,Puyol,Puyol,PRESET FACE NUMBER,86,158
+604,Xabi Alonso,Xabi Alonso,FACE TYPE,Special,Preset
+604,Xabi Alonso,Xabi Alonso,PRESET FACE NUMBER,10,16
+606,Xavi,Xavi,PRESET FACE NUMBER,76,143
+607,Raúl,Raúl,PRESET FACE NUMBER,73,137
+608,Fernando Torres,Fernando Torres,FACE TYPE,Special,Preset
+608,Fernando Torres,Fernando Torres,PRESET FACE NUMBER,88,162
+610,Cañizares,Cañizares,PRESET FACE NUMBER,81,148
+611,Reina,Reina,PRESET FACE NUMBER,99,173
+613,Juanito G.,Juanito G.,PRESET FACE NUMBER,97,171
+615,Antonio López,Antonio López,PRESET FACE NUMBER,96,170
+618,Iniesta,Iniesta,PRESET FACE NUMBER,100,174
+621,Joaquin,Joaquin,PRESET FACE NUMBER,85,157
+631,Ibrahimovic,Ibrahimovic,PRESET FACE NUMBER,194,312
+632,Larsson,Larsson,PRESET FACE NUMBER,40,66
+639,Nilsson,+,NAME,Nilsson,+
+639,Nilsson,+,INTERNATIONAL NUMBER,2,0
+700,Shevchenko,Shevchenko,FACE TYPE,Special,Preset
+700,Shevchenko,Shevchenko,PRESET FACE NUMBER,195,334
+769,Eto'o,Eto'o,PRESET FACE NUMBER,5,8
+792,B. Kalou,B. Kalou,SKIN COLOR,3,4
+792,B. Kalou,B. Kalou,FACE TYPE,Build,Preset
+792,B. Kalou,B. Kalou,PRESET FACE NUMBER,1,3
+836,Obodo,Obodo,PRESET FACE NUMBER,1,42
+859,Buckley,Buckley,FACE TYPE,Build,Preset
+859,Buckley,Buckley,PRESET FACE NUMBER,1,43
+1014,Ayala,Ayala,PRESET FACE NUMBER,11,14
+1018,Mascherano,Mascherano,FACE TYPE,Build,Preset
+1018,Mascherano,Mascherano,PRESET FACE NUMBER,1,130
+1019,Cambiasso,Cambiasso,PRESET FACE NUMBER,9,11
+1022,Saviola,Saviola,PRESET FACE NUMBER,7,8
+1036,Dida,Dida,FACE TYPE,Special,Preset
+1036,Dida,Dida,PRESET FACE NUMBER,13,20
+1040,Roberto Carlos,Roberto Carlos,FACE TYPE,Special,Preset
+1042,Zé Roberto,Zé Roberto,PRESET FACE NUMBER,1,2
+1043,Kaka',Kaka',FACE TYPE,Special,Preset
+1043,Kaka',Kaka',PRESET FACE NUMBER,7,12
+1057,Robinho,Robinho,PRESET FACE NUMBER,17,24
+1058,Fred,Fred,SKIN COLOR,1,2
+1058,Fred,Fred,FACE TYPE,Build,Preset
+1058,Fred,Fred,PRESET FACE NUMBER,1,155
+1072,Jorge Vargas,Jorge Vargas,PRESET FACE NUMBER,17,24
+1083,Perea,Perea,FACE TYPE,Build,Preset
+1083,Perea,Perea,PRESET FACE NUMBER,28,26
+1113,Edison Méndez,Edison Méndez,FACE TYPE,Build,Preset
+1114,Agustín Delgado,Agustín Delgado,FACE TYPE,Build,Preset
+1158,Farfán,Farfán,FACE TYPE,Build,Preset
+1175,Diego Lugano,Diego Lugano,FACE TYPE,Build,Preset
+1175,Diego Lugano,Diego Lugano,PRESET FACE NUMBER,1,50
+1180,P. García,P. García,FACE TYPE,Build,Preset
+1180,P. García,P. García,PRESET FACE NUMBER,1,13
+1193,Recoba,Recoba,PRESET FACE NUMBER,126,170
+1204,Mahdavikia,Mahdavikia,PRESET FACE NUMBER,13,21
+1220,Kawaguchi,Kawaguchi,PRESET FACE NUMBER,26,40
+1221,Tsuboi,Tsuboi,PRESET FACE NUMBER,42,67
+1222,Miyamoto,Miyamoto,PRESET FACE NUMBER,22,33
+1223,Nakazawa,Nakazawa,PRESET FACE NUMBER,34,53
+1224,Komano,Komano,PRESET FACE NUMBER,82,111
+1225,Santos,Santos,PRESET FACE NUMBER,29,51
+1227,Fukunishi,Fukunishi,PRESET FACE NUMBER,29,46
+1229,Yanagisawa,Yanagisawa,PRESET FACE NUMBER,33,51
+1230,Takahara,Takahara,PRESET FACE NUMBER,39,60
+1231,Doi,Doi,PRESET FACE NUMBER,48,76
+1232,Narazaki,Narazaki,PRESET FACE NUMBER,19,30
+1233,Moniwa,Moniwa,PRESET FACE NUMBER,51,79
+1234,Kaji,Kaji,PRESET FACE NUMBER,50,78
+1235,K. Nakata,K. Nakata,PRESET FACE NUMBER,21,32
+1236,Endo,Endo,PRESET FACE NUMBER,43,68
+1237,Inamoto,Inamoto,PRESET FACE NUMBER,23,34
+1238,Ogasawara,Ogasawara,PRESET FACE NUMBER,30,47
+1239,Ono,Ono,PRESET FACE NUMBER,25,36
+1240,Tamada,Tamada,PRESET FACE NUMBER,59,88
+1241,Oguro,Oguro,PRESET FACE NUMBER,81,110
+1242,Maki,Maki,PRESET FACE NUMBER,83,112
+1267,Choi Jin Cheul,Choi Jin Cheul,PRESET FACE NUMBER,95,131
+1268,Kim Young Chul,Kim Young Chul,PRESET FACE NUMBER,105,141
+1270,Lee Young Pyo,Lee Young Pyo,PRESET FACE NUMBER,92,125
+1271,Lee Ho,Lee Ho,PRESET FACE NUMBER,98,134
+1272,Lee Eul Yong,Lee Eul Yong,PRESET FACE NUMBER,100,136
+1273,Ahn Jung Hwan,Ahn Jung Hwan,PRESET FACE NUMBER,91,124
+1274,Lee Chun Soo,Lee Chun Soo,PRESET FACE NUMBER,90,123
+1277,Kim Young Kwang,Kim Young Kwang,PRESET FACE NUMBER,103,139
+1279,Kim Jin Kyu,Kim Jin Kyu,PRESET FACE NUMBER,104,140
+1280,Kim Sang Sik,Kim Sang Sik,PRESET FACE NUMBER,96,132
+1281,Cho Won Hee,Cho Won Hee,PRESET FACE NUMBER,97,133
+1282,Kim Dong Jin,Kim Dong Jin,PRESET FACE NUMBER,107,143
+1283,Kim Nam Il,Kim Nam Il,PRESET FACE NUMBER,93,128
+1284,Baek Ji Hoon,Baek Ji Hoon,PRESET FACE NUMBER,109,145
+1285,Kim Do Heon,Kim Do Heon,PRESET FACE NUMBER,99,135
+1288,+,+,PRESET FACE NUMBER,111,147
+1297,Bresciano,Bresciano,FACE TYPE,Build,Preset
+1297,Bresciano,Bresciano,PRESET FACE NUMBER,1,267
+1299,Viduka,Viduka,PRESET FACE NUMBER,19,26
+1313,Jack Charlton,Jack Charlton,FACE TYPE,Build,Preset
+1313,Jack Charlton,Jack Charlton,PRESET FACE NUMBER,1,359
+1314,Bobby Moore,Bobby Moore,FACE TYPE,Build,Preset
+1314,Bobby Moore,Bobby Moore,PRESET FACE NUMBER,1,257
+1315,George Cohen,George Cohen,FACE TYPE,Build,Preset
+1315,George Cohen,George Cohen,PRESET FACE NUMBER,1,48
+1318,Alan Ball,Alan Ball,FACE TYPE,Build,Preset
+1318,Alan Ball,Alan Ball,PRESET FACE NUMBER,1,94
+1319,Martin Peters,Martin Peters,FACE TYPE,Build,Preset
+1319,Martin Peters,Martin Peters,PRESET FACE NUMBER,1,51
+1322,Geoff Hurst,Geoff Hurst,FACE TYPE,Build,Preset
+1322,Geoff Hurst,Geoff Hurst,PRESET FACE NUMBER,1,48
+1323,Peter Shilton,Peter Shilton,FACE TYPE,Build,Preset
+1323,Peter Shilton,Peter Shilton,PRESET FACE NUMBER,1,266
+1325,Tony Adams,Tony Adams,FACE TYPE,Build,Preset
+1325,Tony Adams,Tony Adams,PRESET FACE NUMBER,1,258
+1328,Glen Hoodle,Glenn Hoddle,NAME,Glen Hoodle,Glenn Hoddle
+1328,Glen Hoodle,Glenn Hoddle,FACE TYPE,Build,Preset
+1328,Glen Hoodle,Glenn Hoddle,PRESET FACE NUMBER,1,90
+1331,John Barnes,John Barnes,FACE TYPE,Build,Preset
+1331,John Barnes,John Barnes,PRESET FACE NUMBER,1,17
+1332,Ian Wright,Ian Wright,FACE TYPE,Build,Preset
+1332,Ian Wright,Ian Wright,PRESET FACE NUMBER,1,19
+1337,Marius Trésor,Marius Trésor,FACE TYPE,Build,Preset
+1337,Marius Trésor,Marius Trésor,PRESET FACE NUMBER,1,26
+1338,Maxime Bossis,Maxime Bossis,FACE TYPE,Build,Preset
+1338,Maxime Bossis,Maxime Bossis,PRESET FACE NUMBER,1,31
+1341,Jean Tigana,Jean Tigana,FACE TYPE,Build,Preset
+1341,Jean Tigana,Jean Tigana,PRESET FACE NUMBER,1,36
+1342,Alain Giresse,Alain Giresse,FACE TYPE,Build,Preset
+1342,Alain Giresse,Alain Giresse,PRESET FACE NUMBER,1,24
+1344,D. Rocheteau,D. Rocheteau,FACE TYPE,Build,Preset
+1344,D. Rocheteau,D. Rocheteau,PRESET FACE NUMBER,1,322
+1359,Berti Vogts,Berti Vogts,FACE TYPE,Build,Preset
+1359,Berti Vogts,Berti Vogts,PRESET FACE NUMBER,1,177
+1360,Schwarzenbeck,Schwarzenbeck,FACE TYPE,Build,Preset
+1360,Schwarzenbeck,Schwarzenbeck,PRESET FACE NUMBER,1,52
+1361,F. Beckenbauer,F. Beckenbauer,FACE TYPE,Build,Preset
+1361,F. Beckenbauer,F. Beckenbauer,PRESET FACE NUMBER,236,136
+1364,Paul Breitner,Paul Breitner,PRESET FACE NUMBER,1,310
+1365,W. Overath,W. Overath,PRESET FACE NUMBER,1,72
+1366,J. Grabowski,J. Grabowski,FACE TYPE,Build,Preset
+1366,J. Grabowski,J. Grabowski,PRESET FACE NUMBER,1,70
+1367,B. Hölzenbein,B. Hölzenbein,FACE TYPE,Build,Preset
+1367,B. Hölzenbein,B. Hölzenbein,PRESET FACE NUMBER,1,248
+1368,Gerd Müller,Gerd Müller,FACE TYPE,Build,Preset
+1368,Gerd Müller,Gerd Müller,PRESET FACE NUMBER,1,22
+1369,Bodo Illgner,Bodo Illgner,FACE TYPE,Build,Preset
+1369,Bodo Illgner,Bodo Illgner,PRESET FACE NUMBER,1,267
+1371,Matthias Sammer,Matthias Sammer,FACE TYPE,Build,Preset
+1371,Matthias Sammer,Matthias Sammer,PRESET FACE NUMBER,1,76
+1373,Andreas Brehme,Andreas Brehme,FACE TYPE,Build,Preset
+1373,Andreas Brehme,Andreas Brehme,PRESET FACE NUMBER,1,54
+1375,Lothar Matthäus,Lothar Matthäus,FACE TYPE,Build,Preset
+1375,Lothar Matthäus,Lothar Matthäus,PRESET FACE NUMBER,1,241
+1376,K-H Rummenigge,K-H Rummenigge,FACE TYPE,Build,Preset
+1376,K-H Rummenigge,K-H Rummenigge,PRESET FACE NUMBER,1,89
+1379,Rudi Völler,Rudi Völler,FACE TYPE,Build,Preset
+1379,Rudi Völler,Rudi Völler,PRESET FACE NUMBER,1,252
+1380,J. Klinsmann,J. Klinsmann,FACE TYPE,Build,Preset
+1380,J. Klinsmann,J. Klinsmann,PRESET FACE NUMBER,1,57
+1381,Dino Zoff,Dino Zoff,FACE TYPE,Build,Preset
+1381,Dino Zoff,Dino Zoff,PRESET FACE NUMBER,1,269
+1382,Claudio Gentile,Claudio Gentile,FACE TYPE,Build,Preset
+1382,Claudio Gentile,Claudio Gentile,PRESET FACE NUMBER,1,274
+1387,Marco Tardelli,Marco Tardelli,FACE TYPE,Build,Preset
+1388,Antonio Cabrini,Antonio Cabrini,SKIN COLOR,1,2
+1388,Antonio Cabrini,Antonio Cabrini,FACE TYPE,Build,Preset
+1388,Antonio Cabrini,Antonio Cabrini,PRESET FACE NUMBER,1,24
+1392,Walter Zenga,Walter Zenga,FACE TYPE,Build,Preset
+1392,Walter Zenga,Walter Zenga,PRESET FACE NUMBER,1,37
+1393,Franco Baresi,Franco Baresi,FACE TYPE,Build,Preset
+1393,Franco Baresi,Franco Baresi,PRESET FACE NUMBER,1,359
+1394,P. Vierchowod,P. Vierchowod,FACE TYPE,Build,Preset
+1394,P. Vierchowod,P. Vierchowod,PRESET FACE NUMBER,1,76
+1401,R. Donadoni,R. Donadoni,FACE TYPE,Build,Preset
+1401,R. Donadoni,R. Donadoni,PRESET FACE NUMBER,1,274
+1403,Gianluca Vialli,Gianluca Vialli,FACE TYPE,Build,Preset
+1403,Gianluca Vialli,Gianluca Vialli,PRESET FACE NUMBER,1,331
+1405,Wim Rijsbergen,Wim Rijsbergen,FACE TYPE,Build,Preset
+1405,Wim Rijsbergen,Wim Rijsbergen,PRESET FACE NUMBER,1,295
+1408,Ruud Krol,Ruud Krol,FACE TYPE,Build,Preset
+1408,Ruud Krol,Ruud Krol,PRESET FACE NUMBER,1,113
+1411,Johan Neeskens,Johan Neeskens,FACE TYPE,Build,Preset
+1411,Johan Neeskens,Johan Neeskens,PRESET FACE NUMBER,1,57
+1414,Rob Rensenbrink,Rob Rensenbrink,FACE TYPE,Build,Preset
+1414,Rob Rensenbrink,Rob Rensenbrink,PRESET FACE NUMBER,1,28
+1429,José Luis Brown,José Luis Brown,SKIN COLOR,1,2
+1429,José Luis Brown,José Luis Brown,FACE TYPE,Build,Preset
+1429,José Luis Brown,José Luis Brown,PRESET FACE NUMBER,1,153
+1431,Sergio Batista,Sergio Batista,SKIN COLOR,1,2
+1431,Sergio Batista,Sergio Batista,FACE TYPE,Build,Preset
+1431,Sergio Batista,Sergio Batista,PRESET FACE NUMBER,1,166
+1434,J. Burruchaga,J. Burruchaga,SKIN COLOR,1,2
+1434,J. Burruchaga,J. Burruchaga,FACE TYPE,Build,Preset
+1434,J. Burruchaga,J. Burruchaga,PRESET FACE NUMBER,1,10
+1440,Luis Galván,Luis Galván,SKIN COLOR,1,2
+1440,Luis Galván,Luis Galván,FACE TYPE,Build,Preset
+1440,Luis Galván,Luis Galván,PRESET FACE NUMBER,1,154
+1446,Daniel Bertoni,Daniel Bertoni,SKIN COLOR,1,2
+1446,Daniel Bertoni,Daniel Bertoni,FACE TYPE,Build,Preset
+1446,Daniel Bertoni,Daniel Bertoni,PRESET FACE NUMBER,1,18
+1447,Leopoldo Luque,Leopoldo Luque,SKIN COLOR,1,2
+1447,Leopoldo Luque,Leopoldo Luque,FACE TYPE,Build,Preset
+1447,Leopoldo Luque,Leopoldo Luque,PRESET FACE NUMBER,1,11
+1452,Brito,Brito,FACE TYPE,Build,Preset
+1452,Brito,Brito,PRESET FACE NUMBER,1,37
+1453,Carlos Alberto,Carlos Alberto,FACE TYPE,Build,Preset
+1453,Carlos Alberto,Carlos Alberto,PRESET FACE NUMBER,1,70
+1454,Everaldo,Everaldo,SKIN COLOR,3,4
+1454,Everaldo,Everaldo,FACE TYPE,Build,Preset
+1454,Everaldo,Everaldo,PRESET FACE NUMBER,1,12
+1455,Clodoaldo,Clodoaldo,SKIN COLOR,1,2
+1455,Clodoaldo,Clodoaldo,FACE TYPE,Build,Preset
+1455,Clodoaldo,Clodoaldo,PRESET FACE NUMBER,1,172
+1456,Gerson,Gerson,SKIN COLOR,1,2
+1456,Gerson,Gerson,FACE TYPE,Build,Preset
+1456,Gerson,Gerson,PRESET FACE NUMBER,1,6
+1461,C. Taffarel,C. Taffarel,FACE TYPE,Build,Preset
+1461,C. Taffarel,C. Taffarel,PRESET FACE NUMBER,1,53
+1462,Luiz Pereira,Luiz Pereira,FACE TYPE,Build,Preset
+1462,Luiz Pereira,Luiz Pereira,PRESET FACE NUMBER,1,16
+1463,Júnior,Júnior,FACE TYPE,Build,Preset
+1463,Júnior,Júnior,PRESET FACE NUMBER,1,49
+1464,Dunga,Dunga,FACE TYPE,Build,Preset
+1464,Dunga,Dunga,PRESET FACE NUMBER,1,358
+1465,Toninho Cerezo,Toninho Cerezo,FACE TYPE,Build,Preset
+1465,Toninho Cerezo,Toninho Cerezo,PRESET FACE NUMBER,1,16
+1466,Paulo Falcao,Paulo Falcao,FACE TYPE,Build,Preset
+1466,Paulo Falcao,Paulo Falcao,PRESET FACE NUMBER,1,254
+1467,Sócrates,Sócrates,FACE TYPE,Build,Preset
+1467,Sócrates,Sócrates,PRESET FACE NUMBER,1,51
+1469,Raí,Raí,FACE TYPE,Build,Preset
+1469,Raí,Raí,PRESET FACE NUMBER,1,12
+1472,Careca,Careca,FACE TYPE,Build,Preset
+1472,Careca,Careca,PRESET FACE NUMBER,1,28
+1475,Adebayor,Adebayor,FACE TYPE,Build,Preset
+1475,Adebayor,Adebayor,PRESET FACE NUMBER,39,2
+1483,A. Hleb,A. Hleb,FACE TYPE,Build,Preset
+1483,A. Hleb,A. Hleb,PRESET FACE NUMBER,1,28
+1496,Juan P. Ángel,Juan P. Ángel,SKIN COLOR,1,2
+1496,Juan P. Ángel,Juan P. Ángel,FACE TYPE,Build,Preset
+1496,Juan P. Ángel,Juan P. Ángel,PRESET FACE NUMBER,1,153
+1534,Diouf,Diouf,PRESET FACE NUMBER,39,65
+1570,Drogba,Drogba,PRESET FACE NUMBER,2,4
+1574,Wright-Phillips,Wright-Phillips,PRESET FACE NUMBER,11,16
+1575,Ballack,Ballack,PRESET FACE NUMBER,29,62
+1579,P. Neville,P. Neville,PRESET FACE NUMBER,59,118
+1590,Van der Meyde,Van der Meyde,PRESET FACE NUMBER,171,281
+1642,Sinclair,Sinclair,PRESET FACE NUMBER,25,37
+1643,Corradi,Corradi,PRESET FACE NUMBER,18,27
+1661,Brown,Brown,PRESET FACE NUMBER,23,34
+1664,Giggs,Giggs,PRESET FACE NUMBER,197,340
+1668,+,+,PRESET FACE NUMBER,89,122
+1673,Woodgate,Woodgate,PRESET FACE NUMBER,67,129
+1753,Seol Ki Hyeon,Seol Ki Hyeon,PRESET FACE NUMBER,111,147
+1790,+,+,PRESET FACE NUMBER,92,125
+1886,Pedretti,Pedretti,PRESET FACE NUMBER,108,194
+1914,S. Dalmat,S. Dalmat,WRISTBAND,N,R
+1914,S. Dalmat,S. Dalmat,WRISTBAND COLOR,None,White
+2135,Rothen,Rothen,PRESET FACE NUMBER,109,195
+2256,Mathieu,Mathieu,FACE TYPE,Build,Preset
+2256,Mathieu,Mathieu,PRESET FACE NUMBER,1,82
+2318,Pagliuca,Pagliuca,FACE TYPE,Build,Preset
+2318,Pagliuca,Pagliuca,PRESET FACE NUMBER,1,27
+2346,Zampagna,Zampagna,FACE TYPE,Build,Preset
+2346,Zampagna,Zampagna,PRESET FACE NUMBER,1,301
+2357,Vieri,Vieri,PRESET FACE NUMBER,123,217
+2358,Chimenti,Chimenti,PRESET FACE NUMBER,151,257
+2365,Mauro Esposito,Mauro Esposito,WRISTBAND,N,R
+2365,Mauro Esposito,Mauro Esposito,WRISTBAND COLOR,None,White
+2448,Frey,Frey,FACE TYPE,Build,Preset
+2448,Frey,Frey,PRESET FACE NUMBER,1,284
+2467,Iván Córdoba,Iván Córdoba,PRESET FACE NUMBER,18,28
+2470,Dejan Stankovic,Dejan Stankovic,PRESET FACE NUMBER,201,347
+2471,Toldo,Toldo,PRESET FACE NUMBER,134,233
+2475,Maxwell,Maxwell,FACE TYPE,Build,Preset
+2475,Maxwell,Maxwell,PRESET FACE NUMBER,1,56
+2487,Rocchi,Rocchi,WRISTBAND,N,R
+2487,Rocchi,Rocchi,WRISTBAND COLOR,None,White
+2508,C. Lucarelli,C. Lucarelli,FACE TYPE,Build,Preset
+2508,C. Lucarelli,C. Lucarelli,PRESET FACE NUMBER,1,208
+2539,+,+,PRESET FACE NUMBER,30,47
+2543,C. Seedorf,C. Seedorf,FACE TYPE,Special,Preset
+2543,C. Seedorf,C. Seedorf,PRESET FACE NUMBER,23,39
+2545,Maldini,Maldini,PRESET FACE NUMBER,126,220
+2548,Favalli,Favalli,PRESET FACE NUMBER,152,258
+2552,R. Oliveira,R. Oliveira,PRESET FACE NUMBER,16,23
+2611,Rolando Bianchi,Rolando Bianchi,WRISTBAND,N,R
+2611,Rolando Bianchi,Rolando Bianchi,WRISTBAND COLOR,None,White
+2626,Mancini,Mancini,PRESET FACE NUMBER,14,21
+2703,Fiore,Fiore,PRESET FACE NUMBER,135,234
+2710,+,+,PRESET FACE NUMBER,81,110
+2755,Jaap Stam,Jaap Stam,PRESET FACE NUMBER,163,271
+2759,Rosales,Rosales,PRESET FACE NUMBER,1,167
+2812,Vlaar,Vlaar,PRESET FACE NUMBER,180,290
+2819,Castelen,Castelen,PRESET FACE NUMBER,24,40
+2931,Denneboom,Denneboom,FACE TYPE,Preset,Build
+2931,Denneboom,Denneboom,PRESET FACE NUMBER,20,36
+3133,Víctor Valdés,Víctor Valdés,PRESET FACE NUMBER,90,164
+3134,Edmilson,Edmilson,PRESET FACE NUMBER,21,32
+3137,Oleguer,Oleguer,FACE TYPE,Build,Preset
+3137,Oleguer,Oleguer,PRESET FACE NUMBER,1,339
+3141,Giuly,Giuly,PRESET FACE NUMBER,107,192
+3327,Mista,Mista,SKIN COLOR,2,1
+3327,Mista,Mista,PRESET FACE NUMBER,1,333
+3340,Kezman,Kezman,PRESET FACE NUMBER,200,345
+3341,Raúl Bravo,Raúl Bravo,PRESET FACE NUMBER,89,163
+3343,Cassano,Cassano,PRESET FACE NUMBER,124,218
+3455,Hinkel,Hinkel,PRESET FACE NUMBER,36,81
+3461,Kanoute,Kanoute,FACE TYPE,Build,Preset
+3461,Kanoute,Kanoute,PRESET FACE NUMBER,1,39
+3464,Del Horno,Del Horno,PRESET FACE NUMBER,92,166
+3465,Baraja,Baraja,FACE TYPE,Special,Preset
+3465,Baraja,Baraja,PRESET FACE NUMBER,83,151
+3481,G. Rodríguez,G. Rodríguez,FACE TYPE,Build,Preset
+3481,G. Rodríguez,G. Rodríguez,PRESET FACE NUMBER,1,18
+3486,Pirès,Pirès,PRESET FACE NUMBER,104,185
+3502,Juanfran,Juanfran,FACE TYPE,Build,Preset
+3506,D'alessandro,D'alessandro,PRESET FACE NUMBER,2,5
+3556,Blazek,Blazek,INTERNATIONAL NUMBER,0,16
+3592,Ismaël,Ismaël,FACE TYPE,Build,Preset
+3592,Ismaël,Ismaël,PRESET FACE NUMBER,1,32
+3595,Deisler,Deisler,PRESET FACE NUMBER,30,63
+3598,Makaay,Makaay,PRESET FACE NUMBER,168,277
+3604,Scholl,Scholl,PRESET FACE NUMBER,28,61
+3610,Rivaldo,Rivaldo,WRISTBAND,N,B
+3610,Rivaldo,Rivaldo,WRISTBAND COLOR,None,White
+3642,Mikael Nilsson,Mikael Nilsson,FACE TYPE,Build,Preset
+3642,Mikael Nilsson,Mikael Nilsson,PRESET FACE NUMBER,1,326
+3642,Mikael Nilsson,Mikael Nilsson,INTERNATIONAL NUMBER,0,2
+3652,C. Zanetti,C. Zanetti,PRESET FACE NUMBER,142,245
+3690,Rui Costa,Rui Costa,PRESET FACE NUMBER,188,302
+3712,Quaresma,Quaresma,PRESET FACE NUMBER,37,61
+3752,+,+,PRESET FACE NUMBER,36,57
+3754,Balde,Balde,PRESET FACE NUMBER,23,7
+3783,Pierre Fanfan,Pierre Fanfan,WRISTBAND,N,L
+3783,Pierre Fanfan,Pierre Fanfan,WRISTBAND COLOR,None,White
+3845,Mondragon,Mondragon,SKIN COLOR,1,2
+3845,Mondragon,Mondragon,FACE TYPE,Build,Preset
+3845,Mondragon,Mondragon,PRESET FACE NUMBER,1,20
+3868,+,+,PRESET FACE NUMBER,23,34
+3891,Daniel Díaz,Daniel Díaz,SKIN COLOR,2,3
+3891,Daniel Díaz,Daniel Díaz,PRESET FACE NUMBER,171,62
+3892,Ibarra,Ibarra,FACE TYPE,Build,Preset
+3892,Ibarra,Ibarra,PRESET FACE NUMBER,1,50
+3905,Delgado,Delgado,FACE TYPE,Build,Preset
+3905,Delgado,Delgado,PRESET FACE NUMBER,1,43
+3914,Farías,Farías,FACE TYPE,Build,Preset
+3914,Farías,Farías,PRESET FACE NUMBER,1,339
+4443,Alen Boksic,Alen Boksic,FACE TYPE,Build,Preset
+4443,Alen Boksic,Alen Boksic,PRESET FACE NUMBER,1,80
+4448,Iván Zamorano,Iván Zamorano,WRISTBAND,N,L
+4448,Iván Zamorano,Iván Zamorano,WRISTBAND COLOR,None,White
+4452,Edmundo,Edmundo,SKIN COLOR,3,2
+4452,Edmundo,Edmundo,FACE TYPE,Build,Preset
+4452,Edmundo,Edmundo,PRESET FACE NUMBER,1,27
+4460,C. Valderrama,C. Valderrama,FACE TYPE,Build,Preset
+4460,C. Valderrama,C. Valderrama,PRESET FACE NUMBER,1,164
+4462,C. Caniggia,C. Caniggia,FACE TYPE,Build,Preset
+4462,C. Caniggia,C. Caniggia,PRESET FACE NUMBER,1,46
+4473,G. Giannini,G. Giannini,FACE TYPE,Build,Preset
+4473,G. Giannini,G. Giannini,PRESET FACE NUMBER,1,55
+4485,Denis Law,Denis Law,FACE TYPE,Build,Preset
+4485,Denis Law,Denis Law,PRESET FACE NUMBER,1,97
+4488,Thomas Ravelli,Thomas Ravelli,FACE TYPE,Build,Preset
+4488,Thomas Ravelli,Thomas Ravelli,PRESET FACE NUMBER,1,338
+4490,Tomas Brolin,Tomas Brolin,FACE TYPE,Build,Preset
+4490,Tomas Brolin,Tomas Brolin,PRESET FACE NUMBER,1,268
+4494,Vágner Love,Vágner Love,FACE TYPE,Build,Preset
+4494,Vágner Love,Vágner Love,PRESET FACE NUMBER,1,36
+4495,P. Andersson,P. Andersson,FACE TYPE,Build,Preset
+4495,P. Andersson,P. Andersson,PRESET FACE NUMBER,1,322
+4497,K. Balakov,K. Balakov,SKIN COLOR,1,2
+4497,K. Balakov,K. Balakov,FACE TYPE,Build,Preset
+4497,K. Balakov,K. Balakov,PRESET FACE NUMBER,1,21
+4500,G. Lentini,G. Lentini,SKIN COLOR,1,2
+4500,G. Lentini,G. Lentini,FACE TYPE,Build,Preset
+4500,G. Lentini,G. Lentini,PRESET FACE NUMBER,1,21
+4504,Brian Laudrup,Brian Laudrup,FACE TYPE,Build,Preset
+4504,Brian Laudrup,Brian Laudrup,PRESET FACE NUMBER,1,55
+4511,Thomas Hässler,Thomas Hässler,FACE TYPE,Build,Preset
+4511,Thomas Hässler,Thomas Hässler,PRESET FACE NUMBER,1,56
+4512,K. Andersson,K. Andersson,FACE TYPE,Build,Preset
+4512,K. Andersson,K. Andersson,PRESET FACE NUMBER,73,80
+4513,José Cardozo,José Cardozo,SKIN COLOR,3,2
+4513,José Cardozo,José Cardozo,FACE TYPE,Build,Preset
+4513,José Cardozo,José Cardozo,PRESET FACE NUMBER,1,169
+4519,Mark Hughes,Mark Hughes,FACE TYPE,Build,Preset
+4519,Mark Hughes,Mark Hughes,PRESET FACE NUMBER,1,86
+4528,Matt Le Tissier,Matt Le Tissier,FACE TYPE,Build,Preset
+4528,Matt Le Tissier,Matt Le Tissier,PRESET FACE NUMBER,1,361
+4535,Adrian Ilie,Adrian Ilie,FACE TYPE,Build,Preset
+4535,Adrian Ilie,Adrian Ilie,PRESET FACE NUMBER,1,15
+4536,Allan Simonsen,Allan Simonsen,FACE TYPE,Build,Preset
+4536,Allan Simonsen,Allan Simonsen,PRESET FACE NUMBER,1,263
+4537,Andreas Herzog,Andreas Herzog,FACE TYPE,Build,Preset
+4537,Andreas Herzog,Andreas Herzog,PRESET FACE NUMBER,1,256
+4542,Pat Jennings,Pat Jennings,FACE TYPE,Build,Preset
+4542,Pat Jennings,Pat Jennings,PRESET FACE NUMBER,1,88
+4544,Djalminha,Djalminha,FACE TYPE,Build,Preset
+4544,Djalminha,Djalminha,PRESET FACE NUMBER,1,65
+4547,Christian Ziege,Christian Ziege,FACE TYPE,Build,Preset
+4547,Christian Ziege,Christian Ziege,PRESET FACE NUMBER,1,66
+4552,Igor Protti,Igor Protti,SKIN COLOR,1,2
+4552,Igor Protti,Igor Protti,FACE TYPE,Build,Preset
+4552,Igor Protti,Igor Protti,PRESET FACE NUMBER,1,159
+4561,Rubén Sosa,Rubén Sosa,SKIN COLOR,3,2
+4561,Rubén Sosa,Rubén Sosa,FACE TYPE,Build,Preset
+4561,Rubén Sosa,Rubén Sosa,PRESET FACE NUMBER,1,10
+4572,Nilmar,Nilmar,SKIN COLOR,1,2
+4572,Nilmar,Nilmar,FACE TYPE,Build,Preset
+4572,Nilmar,Nilmar,PRESET FACE NUMBER,1,172
+4573,Mário Jardel,Mário Jardel,FACE TYPE,Build,Preset
+4573,Mário Jardel,Mário Jardel,PRESET FACE NUMBER,1,56
+4584,Niall Quinn,Niall Quinn,FACE TYPE,Build,Preset
+4584,Niall Quinn,Niall Quinn,PRESET FACE NUMBER,1,86

@@ -130,7 +130,7 @@ export function analyzeTacticalCoverage(
   const ghostPositions: GhostPosition[] = slots
     .filter((slot) => slot.playerId)
     .map((slot) => {
-      const arrows = playerInstructions[slot.playerId!]?.runArrows || [];
+      const arrows = playerInstructions[slot.slotId]?.runArrows || [];
       const ghost = calculateGhostPosition(slot.x, slot.y, arrows);
       return {
         playerId: slot.playerId!,

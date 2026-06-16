@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import type { Tactic } from '../types/tactics';
 import { ANFPES_CLUBS } from '../data/playerStatus';
+import { TACTICS_DATA_VERSION, isReadOnlyTactic } from '../store/tacticsStore';
 
 interface SavedTacticsLibraryProps {
   tactics: Tactic[];
@@ -8,6 +9,7 @@ interface SavedTacticsLibraryProps {
   onLoad: (tacticId: string) => void;
   onDelete: (tacticId: string) => void;
   onDuplicate: (tacticId: string, newName: string) => void;
+  onDuplicateWithoutPlayers: (tacticId: string, newName: string) => void;
   onRename: (tacticId: string, newName: string) => void;
   onClose: () => void;
 }
@@ -18,6 +20,7 @@ export function SavedTacticsLibrary({
   onLoad,
   onDelete,
   onDuplicate,
+  onDuplicateWithoutPlayers,
   onRename,
   onClose,
 }: SavedTacticsLibraryProps) {
@@ -49,6 +52,16 @@ export function SavedTacticsLibrary({
     const newName = prompt('Nombre para la copia:', `${originalName} (copia)`);
     if (newName) {
       onDuplicate(tacticId, newName);
+    }
+  };
+
+  const handleDuplicateWithoutPlayers = (tacticId: string, originalName: string) => {
+    const newName = prompt(
+      'Nombre para importar sin jugadores:',
+      `${originalName} (TXXIV)`,
+    );
+    if (newName) {
+      onDuplicateWithoutPlayers(tacticId, newName);
     }
   };
 
@@ -127,6 +140,7 @@ export function SavedTacticsLibrary({
           ) : (
             filteredTactics.map((tactic) => {
               const isCurrent = tactic.tacticId === currentTacticId;
+              const isReadOnly = isReadOnlyTactic(tactic);
               const clubName = tactic.clubId || 'Sin club';
               const formation = getFormationName(tactic);
               const assignedPlayers = tactic.basePlan.slots.filter(
@@ -143,6 +157,14 @@ export function SavedTacticsLibrary({
                       <h3 className="tactics-item-name">
                         {tactic.name}
                         {isCurrent && <span className="current-badge">Actual</span>}
+                        {isReadOnly && (
+                          <span
+                            className="current-badge"
+                            title={`No pertenece a ${TACTICS_DATA_VERSION}`}
+                          >
+                            Lectura
+                          </span>
+                        )}
                       </h3>
                       <div className="tactics-item-meta">
                         <span className="tactics-club">{clubName}</span>
@@ -177,8 +199,19 @@ export function SavedTacticsLibrary({
                     </button>
                     <button
                       type="button"
+                      onClick={() =>
+                        handleDuplicateWithoutPlayers(tactic.tacticId, tactic.name)
+                      }
+                      className="tactics-btn duplicate-btn"
+                      title="Importar a temporada actual sin jugadores"
+                    >
+                      Importar
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => handleRename(tactic.tacticId, tactic.name)}
                       className="tactics-btn rename-btn"
+                      disabled={isReadOnly}
                       title="Renombrar táctica"
                     >
                       Renombrar

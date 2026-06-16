@@ -34,16 +34,14 @@ function getRolePositionLine(role: string): string {
 
 interface TacticalPlayerCardProps {
   player: DerivedPlayer;
+  slotId: string;
   clubId?: string;
   slotRole: string;
   customDorsal?: string;
   isCandidate?: boolean;
   isMarkedOut?: boolean;
   movementArrows?: RunDirection[];
-  onUpdateInstruction?: (
-    playerId: string,
-    instruction: Partial<PlayerInstruction>,
-  ) => void;
+  onUpdateInstruction?: (slotId: string, instruction: Partial<PlayerInstruction>) => void;
   ghostPosition?: { x: number; y: number };
   defensiveAttitude?: 'DEFENSIVE' | 'BALANCED' | 'OFFENSIVE';
   showAttitudeColors?: boolean;
@@ -87,6 +85,7 @@ function getPositionAverage(player: DerivedPlayer, role: string): string | null 
 
 export function TacticalPlayerCard({
   player,
+  slotId,
   clubId,
   slotRole,
   customDorsal,
@@ -338,7 +337,7 @@ export function TacticalPlayerCard({
           currentAttitude={defensiveAttitude}
           allowedDirections={slotRole === 'PT' ? ['FORWARD', 'BACKWARD'] : undefined}
           onUpdate={(arrows, attitude) =>
-            onUpdateInstruction(player.ID, {
+            onUpdateInstruction(slotId, {
               runArrows: arrows,
               defensiveAttitude: attitude,
             })

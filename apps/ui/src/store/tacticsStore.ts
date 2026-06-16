@@ -4,6 +4,7 @@ import type {
   Tactic,
   TacticsState,
   FormationSlot,
+  FormationPlan,
   PlayerInstruction,
   StrategySlot,
   AttackDefenceLevel,
@@ -11,6 +12,20 @@ import type {
   OffsideTrapLevel,
   ManualStrategy,
 } from '../types/tactics';
+
+export const TACTICS_DATA_VERSION = 'TXXIV';
+
+export const isReadOnlyTactic = (
+  tactic: Pick<Tactic, 'dataVersion'> | null | undefined,
+) => Boolean(tactic && tactic.dataVersion !== TACTICS_DATA_VERSION);
+
+const canEditTactic = (tactic: Tactic | null | undefined): tactic is Tactic =>
+  Boolean(tactic && !isReadOnlyTactic(tactic));
+
+type LegacyPlayerInstruction = PlayerInstruction & {
+  playerId?: string;
+  slotId?: string;
+};
 
 export const FORMATIONS: Record<string, FormationSlot[]> = {
   // ===== 5 DEFENDERS =====
@@ -401,12 +416,86 @@ export const FORMATIONS: Record<string, FormationSlot[]> = {
 
 const createDefaultSlots = (): FormationSlot[] => FORMATIONS['4-4-2'];
 
+const normalizePlanInstructions = (plan: FormationPlan): FormationPlan => {
+  const source = plan.playerInstructions as Record<string, LegacyPlayerInstruction>;
+  const playerInstructions: Record<string, PlayerInstruction> = {};
+
+  for (const slot of plan.slots) {
+    const bySlot = source[slot.slotId];
+    const byPlayer = slot.playerId ? source[slot.playerId] : undefined;
+    const instruction = bySlot ?? byPlayer;
+
+    if (instruction) {
+      playerInstructions[slot.slotId] = {
+        slotId: slot.slotId,
+        runArrows: instruction.runArrows ?? [],
+        defensiveAttitude: instruction.defensiveAttitude ?? 'BALANCED',
+      };
+    }
+  }
+
+  return {
+    ...plan,
+    playerInstructions,
+  };
+};
+
+const normalizeTacticInstructions = (tactic: Tactic): Tactic => ({
+  ...tactic,
+  basePlan: normalizePlanInstructions(tactic.basePlan),
+  planA: tactic.planA ? normalizePlanInstructions(tactic.planA) : undefined,
+  planB: tactic.planB ? normalizePlanInstructions(tactic.planB) : undefined,
+});
+
+const clearPlanPlayers = (plan: FormationPlan): FormationPlan => {
+  const normalizedPlan = normalizePlanInstructions(plan);
+
+  return {
+    ...normalizedPlan,
+    slots: normalizedPlan.slots.map((slot) => ({
+      slotId: slot.slotId,
+      x: slot.x,
+      y: slot.y,
+      role: slot.role,
+    })),
+  };
+};
+
+const clearOptionalPlanPlayers = (
+  plan: FormationPlan | undefined,
+): FormationPlan | undefined => (plan ? clearPlanPlayers(plan) : undefined);
+
+const createTacticalOnlyCopy = (tactic: Tactic, name: string, now: number): Tactic => {
+  const normalizedTactic = normalizeTacticInstructions(tactic);
+
+  return {
+    ...normalizedTactic,
+    tacticId: `tactic-${now}`,
+    name,
+    dataVersion: TACTICS_DATA_VERSION,
+    customDorsals: {},
+    rosterContext: {
+      candidateInPlayerIds: [],
+      candidateOutPlayerIds: [],
+    },
+    basePlan: clearPlanPlayers(normalizedTactic.basePlan),
+    planA: clearOptionalPlanPlayers(normalizedTactic.planA),
+    planB: clearOptionalPlanPlayers(normalizedTactic.planB),
+    playerDepthCharts: [],
+    depthChart: [],
+    recommendedSignings: [],
+    createdAt: now,
+    updatedAt: now,
+  };
+};
+
 const createEmptyTactic = (name: string, clubId?: string): Tactic => {
   const now = Date.now();
   const slots = createDefaultSlots();
   return {
     tacticId: `tactic-${now}`,
     name,
+    dataVersion: TACTICS_DATA_VERSION,
     clubId,
     customDorsals: {},
     rosterContext: {
@@ -481,12 +570,12 @@ export const useTacticsStore = create<TacticsState>()(
             migratedPlayerDepthCharts = [];
           }
 
-          const migratedTactic = {
+          const migratedTactic = normalizeTacticInstructions({
             ...tactic,
             customDorsals: tactic.customDorsals || {},
             recommendedSignings: tactic.recommendedSignings || [],
             playerDepthCharts: migratedPlayerDepthCharts,
-          };
+          });
           set({
             currentTactic: migratedTactic,
             selectedClubId: migratedTactic.clubId ?? null,
@@ -497,7 +586,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       saveTactic: () => {
         const { currentTactic, savedTactics } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const updated = { ...currentTactic, updatedAt: Date.now() };
         const index = savedTactics.findIndex((t) => t.tacticId === updated.tacticId);
@@ -521,13 +610,14 @@ export const useTacticsStore = create<TacticsState>()(
 
       saveAsNewTactic: (name) => {
         const { currentTactic, savedTactics } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const now = Date.now();
         const newTactic = {
           ...currentTactic,
           tacticId: `tactic-${now}`,
           name,
+          dataVersion: TACTICS_DATA_VERSION,
           createdAt: now,
           updatedAt: now,
         };
@@ -555,12 +645,23 @@ export const useTacticsStore = create<TacticsState>()(
 
         const now = Date.now();
         const duplicate = {
-          ...original,
+          ...normalizeTacticInstructions(original),
           tacticId: `tactic-${now}`,
           name: newName,
           createdAt: now,
           updatedAt: now,
         };
+
+        set({ savedTactics: [...savedTactics, duplicate] });
+      },
+
+      duplicateTacticWithoutPlayers: (tacticId, newName) => {
+        const { savedTactics } = get();
+        const original = savedTactics.find((t) => t.tacticId === tacticId);
+        if (!original) return;
+
+        const now = Date.now();
+        const duplicate = createTacticalOnlyCopy(original, newName, now);
 
         set({ savedTactics: [...savedTactics, duplicate] });
       },
@@ -571,6 +672,7 @@ export const useTacticsStore = create<TacticsState>()(
         if (index < 0) return;
 
         const newTactics = [...savedTactics];
+        if (isReadOnlyTactic(newTactics[index])) return;
         newTactics[index] = {
           ...newTactics[index],
           name: newName,
@@ -585,7 +687,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setClub: (clubId) => {
         const { currentTactic } = get();
-        if (currentTactic) {
+        if (canEditTactic(currentTactic)) {
           set({
             currentTactic: { ...currentTactic, clubId: clubId ?? undefined },
             hasUnsavedChanges: true,
@@ -596,7 +698,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setTacticName: (name) => {
         const { currentTactic } = get();
-        if (currentTactic) {
+        if (canEditTactic(currentTactic)) {
           set({
             currentTactic: { ...currentTactic, name },
             hasUnsavedChanges: true,
@@ -610,7 +712,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       updateSlot: (plan, slotId, updates) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const planKey =
           plan === 'base' ? 'basePlan' : plan === 'planA' ? 'planA' : 'planB';
@@ -839,7 +941,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       changeFormation: (plan, formationName) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const formationTemplate = FORMATIONS[formationName];
         if (!formationTemplate) return;
@@ -862,7 +964,7 @@ export const useTacticsStore = create<TacticsState>()(
           };
         });
 
-        // Limpiar instrucciones de jugador del plan (flechas de movimiento)
+        // Limpiar instrucciones del slot del plan (flechas de movimiento)
         const cleanedInstructions: Record<string, PlayerInstruction> = {};
 
         // playerDepthCharts se mantienen (siguen al jugador, no al slot)
@@ -882,17 +984,17 @@ export const useTacticsStore = create<TacticsState>()(
         });
       },
 
-      updatePlayerInstruction: (plan, playerId, instruction) => {
+      updatePlayerInstruction: (plan, slotId, instruction) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const planKey =
           plan === 'base' ? 'basePlan' : plan === 'planA' ? 'planA' : 'planB';
         const currentPlan = currentTactic[planKey];
         if (!currentPlan) return;
 
-        const current = currentPlan.playerInstructions[playerId] || {
-          playerId,
+        const current = currentPlan.playerInstructions[slotId] || {
+          slotId,
           runArrows: [],
           defensiveAttitude: 'BALANCED',
         };
@@ -904,7 +1006,7 @@ export const useTacticsStore = create<TacticsState>()(
               ...currentPlan,
               playerInstructions: {
                 ...currentPlan.playerInstructions,
-                [playerId]: { ...current, ...instruction },
+                [slotId]: { ...current, ...instruction, slotId },
               },
             },
           },
@@ -914,7 +1016,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setAttackDefenceLevel: (plan, level) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const updatedTactic = { ...currentTactic };
         if (plan === 'base') {
@@ -936,7 +1038,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setBackLine: (plan, depth) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const updatedTactic = { ...currentTactic };
         if (plan === 'base') {
@@ -955,7 +1057,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setOffsideTrap: (plan, level) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const updatedTactic = { ...currentTactic };
         if (plan === 'base') {
@@ -974,7 +1076,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setStrategyInSlot: (slotIndex, strategy) => {
         const { currentTactic } = get();
-        if (!currentTactic || slotIndex < 0 || slotIndex > 3) return;
+        if (!canEditTactic(currentTactic) || slotIndex < 0 || slotIndex > 3) return;
 
         const newStrategySlots = [...currentTactic.strategySlots] as [
           StrategySlot,
@@ -995,7 +1097,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       toggleStrategyActive: (slotIndex) => {
         const { currentTactic } = get();
-        if (!currentTactic || slotIndex < 0 || slotIndex > 3) return;
+        if (!canEditTactic(currentTactic) || slotIndex < 0 || slotIndex > 3) return;
 
         const newStrategySlots = [...currentTactic.strategySlots] as [
           StrategySlot,
@@ -1019,7 +1121,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setSelectedCBForOverlap: (slotId) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         set({
           currentTactic: {
@@ -1032,7 +1134,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       updateDepthChart: (position, backupPlayerIds) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const existingIndex = currentTactic.depthChart.findIndex(
           (d) => d.position === position,
@@ -1056,7 +1158,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setDepthSlot: (slotId, depth, playerId) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         // Si es depth1, actualizar el titular en el slot (en base plan)
         if (depth === 1) {
@@ -1186,7 +1288,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       addPossibleSigning: (playerId) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         // Agregar a candidateInPlayerIds si no existe
         const alreadyAdded =
@@ -1210,7 +1312,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       addCandidateIn: (playerId) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const ids = currentTactic.rosterContext.candidateInPlayerIds;
         if (ids.includes(playerId)) return;
@@ -1229,7 +1331,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       removeCandidateIn: (playerId) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         set({
           currentTactic: {
@@ -1248,7 +1350,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       addCandidateOut: (playerId) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         const ids = currentTactic.rosterContext.candidateOutPlayerIds;
         if (ids.includes(playerId)) return;
@@ -1308,7 +1410,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       removeCandidateOut: (playerId) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         set({
           currentTactic: {
@@ -1327,7 +1429,7 @@ export const useTacticsStore = create<TacticsState>()(
 
       setCustomDorsal: (playerId, dorsal) => {
         const { currentTactic } = get();
-        if (!currentTactic) return;
+        if (!canEditTactic(currentTactic)) return;
 
         set({
           currentTactic: {

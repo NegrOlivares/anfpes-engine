@@ -46,10 +46,7 @@ interface TacticalPitchProps {
   onSlotClick?: (slotId: string) => void;
   onPlayerDrop?: (slotId: string, playerId: string) => void;
   onSlotDrag?: (fromSlotId: string, toSlotId: string) => void;
-  onUpdateInstruction?: (
-    playerId: string,
-    instruction: Partial<PlayerInstruction>,
-  ) => void;
+  onUpdateInstruction?: (slotId: string, instruction: Partial<PlayerInstruction>) => void;
   onRoleChange?: (slotId: string, role: string) => void;
   onPositionChange?: (slotId: string, coords: { x: number; y: number }) => void;
 }
@@ -471,7 +468,7 @@ export function TacticalPitch({
     slots
       .filter((s) => s.playerId)
       .forEach((slot) => {
-        const arrows = playerInstructions[slot.playerId!]?.runArrows || [];
+        const arrows = playerInstructions[slot.slotId]?.runArrows || [];
         let deltaX = 0;
         let deltaY = 0;
         const moveDistance = 35;
@@ -865,15 +862,16 @@ export function TacticalPitch({
                 >
                   <TacticalPlayerCard
                     player={player}
+                    slotId={slot.slotId}
                     clubId={clubId}
                     slotRole={slot.role}
                     customDorsal={customDorsals[player.ID]}
                     isCandidate={isCandidate}
                     isMarkedOut={isMarkedOut}
-                    movementArrows={playerInstructions[player.ID]?.runArrows || []}
+                    movementArrows={playerInstructions[slot.slotId]?.runArrows || []}
                     onUpdateInstruction={onUpdateInstruction}
                     ghostPosition={ghostPositions.get(player.ID)}
-                    defensiveAttitude={playerInstructions[player.ID]?.defensiveAttitude}
+                    defensiveAttitude={playerInstructions[slot.slotId]?.defensiveAttitude}
                     showAttitudeColors={showAttitudeColors}
                     roleOptions={onRoleChange ? allowedRoles : undefined}
                     autoOpenRoleMenu={autoOpenRoleFor === slot.slotId}

@@ -19,6 +19,7 @@ interface RosterPanelProps {
   onSetCustomDorsal?: (playerId: string, dorsal: string) => void;
   showRecommendations?: boolean;
   onToggleRecommendations?: () => void;
+  readOnly?: boolean;
 }
 
 export function RosterPanel({
@@ -33,6 +34,7 @@ export function RosterPanel({
   onSetCustomDorsal,
   showRecommendations = false,
   onToggleRecommendations,
+  readOnly = false,
 }: RosterPanelProps) {
   const [panelMode, setPanelMode] = useState<'club' | 'search'>('club');
   const [search, setSearch] = useState('');
@@ -164,6 +166,7 @@ export function RosterPanel({
               <button
                 type="button"
                 onClick={onToggleRecommendations}
+                disabled={readOnly}
                 className={`tactical-toggle-btn ${showRecommendations ? 'active' : ''}`}
                 style={{ marginTop: '8px', width: '100%' }}
               >
@@ -225,7 +228,7 @@ export function RosterPanel({
               className={`roster-player-item ${isCandidate ? 'candidate-in' : ''} ${isMarkedOut ? 'candidate-out' : ''} ${panelMode === 'search' ? 'search-result' : ''} ${isSelected ? 'selected' : ''}`}
               onClick={(e) => {
                 // Bloquear selección de candidatos OUT
-                if (isMarkedOut) {
+                if (readOnly || isMarkedOut) {
                   e.stopPropagation();
                   return;
                 }
@@ -240,7 +243,7 @@ export function RosterPanel({
                 }
               }}
               style={{
-                cursor: isMarkedOut ? 'not-allowed' : undefined,
+                cursor: readOnly || isMarkedOut ? 'not-allowed' : undefined,
                 opacity: isMarkedOut ? 0.5 : undefined,
               }}
             >
@@ -286,10 +289,12 @@ export function RosterPanel({
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (readOnly) return;
                         onToggleCandidateIn(player.ID);
                         setPanelMode('club');
                         setSearch('');
                       }}
+                      disabled={readOnly}
                       className="roster-action-btn add-transfer"
                     >
                       + Fichar
@@ -298,7 +303,7 @@ export function RosterPanel({
                 ) : (
                   <>
                     {/* Dorsal editable */}
-                    {onSetCustomDorsal && !isMarkedOut && (
+                    {onSetCustomDorsal && !isMarkedOut && !readOnly && (
                       <EnhancedTooltip content="Editar dorsal">
                         <input
                           type="text"
@@ -325,8 +330,10 @@ export function RosterPanel({
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
+                            if (readOnly) return;
                             onToggleCandidateIn(player.ID);
                           }}
+                          disabled={readOnly}
                           className={`roster-action-btn ${isCandidate ? 'active' : ''}`}
                         >
                           +
@@ -338,8 +345,10 @@ export function RosterPanel({
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
+                          if (readOnly) return;
                           onToggleCandidateOut(player.ID);
                         }}
+                        disabled={readOnly}
                         className={`roster-action-btn ${isMarkedOut ? 'active' : ''}`}
                       >
                         ×

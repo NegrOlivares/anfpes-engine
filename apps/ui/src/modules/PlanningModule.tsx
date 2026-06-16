@@ -1,7 +1,12 @@
 import { useState, useMemo } from 'react';
 import type { DerivedPlayer } from '@anfpes/engine';
 import { useCacheStore } from '../store/cacheStore';
-import { useTacticsStore, FORMATIONS } from '../store/tacticsStore';
+import {
+  useTacticsStore,
+  FORMATIONS,
+  TACTICS_DATA_VERSION,
+  isReadOnlyTactic,
+} from '../store/tacticsStore';
 import type { FormationSlot, FormationPlan } from '../types/tactics';
 import { TacticalPitch } from '../components/TacticalPitch';
 import { TacticalPlayerCard } from '../components/TacticalPlayerCard';
@@ -107,6 +112,9 @@ export function PlanningModule() {
   const saveTactic = useTacticsStore((state) => state.saveTactic);
   const deleteTactic = useTacticsStore((state) => state.deleteTactic);
   const duplicateTactic = useTacticsStore((state) => state.duplicateTactic);
+  const duplicateTacticWithoutPlayers = useTacticsStore(
+    (state) => state.duplicateTacticWithoutPlayers,
+  );
   const renameTactic = useTacticsStore((state) => state.renameTactic);
   const clearCurrentTactic = useTacticsStore((state) => state.clearCurrentTactic);
   const setClub = useTacticsStore((state) => state.setClub);
@@ -147,6 +155,7 @@ export function PlanningModule() {
   const [activePlanForInstructions, setActivePlanForInstructions] = useState<
     'base' | 'planA' | 'planB'
   >('base');
+  const isCurrentTacticReadOnly = isReadOnlyTactic(currentTactic);
 
   // Calculate combined slots when in combined view
   const combinedSlots = useMemo(() => {
@@ -273,6 +282,10 @@ export function PlanningModule() {
   };
 
   const handleSave = () => {
+    if (isCurrentTacticReadOnly) {
+      alert('Esta táctica pertenece a una temporada anterior y está en modo lectura.');
+      return;
+    }
     saveTactic();
   };
 
@@ -284,6 +297,7 @@ export function PlanningModule() {
 
   const handleCreatePlanA = () => {
     if (!currentTactic) return;
+    if (isCurrentTacticReadOnly) return;
 
     // Detectar formación actual del base plan
     let baseFormation = '3-2-5'; // default
@@ -305,7 +319,9 @@ export function PlanningModule() {
             ...state.currentTactic,
             planA: {
               slots: JSON.parse(JSON.stringify(state.currentTactic.basePlan.slots)),
-              playerInstructions: {},
+              playerInstructions: JSON.parse(
+                JSON.stringify(state.currentTactic.basePlan.playerInstructions),
+              ),
               attackDefenceLevel: state.currentTactic.basePlan.attackDefenceLevel,
               backLine: state.currentTactic.basePlan.backLine,
               offsideTrap: state.currentTactic.basePlan.offsideTrap,
@@ -320,6 +336,7 @@ export function PlanningModule() {
 
   const handleCreatePlanB = () => {
     if (!currentTactic) return;
+    if (isCurrentTacticReadOnly) return;
 
     // Detectar formación actual del base plan
     let baseFormation = '3-2-5'; // default
@@ -341,7 +358,9 @@ export function PlanningModule() {
             ...state.currentTactic,
             planB: {
               slots: JSON.parse(JSON.stringify(state.currentTactic.basePlan.slots)),
-              playerInstructions: {},
+              playerInstructions: JSON.parse(
+                JSON.stringify(state.currentTactic.basePlan.playerInstructions),
+              ),
               attackDefenceLevel: state.currentTactic.basePlan.attackDefenceLevel,
               backLine: state.currentTactic.basePlan.backLine,
               offsideTrap: state.currentTactic.basePlan.offsideTrap,
@@ -359,6 +378,8 @@ export function PlanningModule() {
     slotId: string,
     playerId: string,
   ) => {
+    if (isCurrentTacticReadOnly) return;
+
     // Check if player is already assigned in another slot
     const currentPlan =
       plan === 'base'
@@ -386,6 +407,7 @@ export function PlanningModule() {
     fromSlotId: string,
     toSlotId: string,
   ) => {
+    if (isCurrentTacticReadOnly) return;
     if (fromSlotId === toSlotId) return;
 
     const currentPlan =
@@ -411,6 +433,7 @@ export function PlanningModule() {
     slotId: string,
     role: string,
   ) => {
+    if (isCurrentTacticReadOnly) return;
     updateSlot(plan, slotId, { role });
   };
 
@@ -419,10 +442,12 @@ export function PlanningModule() {
     slotId: string,
     coords: { x: number; y: number },
   ) => {
+    if (isCurrentTacticReadOnly) return;
     updateSlot(plan, slotId, coords);
   };
 
   const handleToggleCandidateIn = (playerId: string) => {
+    if (isCurrentTacticReadOnly) return;
     if (currentTactic?.rosterContext.candidateInPlayerIds.includes(playerId)) {
       removeCandidateIn(playerId);
     } else {
@@ -431,6 +456,7 @@ export function PlanningModule() {
   };
 
   const handleToggleCandidateOut = (playerId: string) => {
+    if (isCurrentTacticReadOnly) return;
     if (currentTactic?.rosterContext.candidateOutPlayerIds.includes(playerId)) {
       removeCandidateOut(playerId);
     } else {
@@ -500,6 +526,7 @@ export function PlanningModule() {
           onChange={(e) => changeFormation(plan, e.target.value)}
           className="formation-select"
           value={currentFormation}
+          disabled={isCurrentTacticReadOnly}
         >
           {Object.keys(FORMATIONS).map((formation) => (
             <option key={formation} value={formation}>
@@ -544,6 +571,7 @@ export function PlanningModule() {
                 type="text"
                 value={currentTactic.name}
                 onChange={(e) => setTacticName(e.target.value)}
+                disabled={isCurrentTacticReadOnly}
                 className="tactic-name-input"
                 placeholder="Nombre de táctica"
               />
@@ -558,6 +586,7 @@ export function PlanningModule() {
                 <select
                   value={selectedClubId || ''}
                   onChange={(e) => setClub(e.target.value || null)}
+                  disabled={isCurrentTacticReadOnly}
                   className="club-select"
                 >
                   <option value="">Seleccionar club...</option>
@@ -600,7 +629,7 @@ export function PlanningModule() {
                 <button
                   type="button"
                   onClick={handleSave}
-                  disabled={!hasUnsavedChanges}
+                  disabled={!hasUnsavedChanges || isCurrentTacticReadOnly}
                   className="save-button"
                 >
                   Guardar {hasUnsavedChanges && '*'}
@@ -621,6 +650,22 @@ export function PlanningModule() {
         </div>
       ) : (
         <div className="planning-content">
+          {isCurrentTacticReadOnly && (
+            <div
+              style={{
+                marginBottom: '12px',
+                padding: '10px 12px',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 193, 7, 0.45)',
+                background: 'rgba(255, 193, 7, 0.12)',
+                color: '#ffd166',
+                fontSize: '0.9rem',
+              }}
+            >
+              Modo lectura: esta táctica no pertenece a {TACTICS_DATA_VERSION}. Usa
+              Importar para crear una copia editable sin jugadores.
+            </div>
+          )}
           {/* Main layout with sidebar */}
           <div className="planning-layout">
             {/* Left sidebar */}
@@ -659,6 +704,7 @@ export function PlanningModule() {
                     onToggleRecommendations={() =>
                       setShowRecommendedSignings(!showRecommendedSignings)
                     }
+                    readOnly={isCurrentTacticReadOnly}
                   />
                 ) : (
                   <div className="tactical-instructions-panel">
@@ -726,6 +772,7 @@ export function PlanningModule() {
                                   onChange={(e) =>
                                     setStrategyInSlot(index, e.target.value as any)
                                   }
+                                  disabled={isCurrentTacticReadOnly}
                                   className="tactical-select strategy-select"
                                   style={{ flex: 1 }}
                                 >
@@ -761,7 +808,10 @@ export function PlanningModule() {
                                     type="button"
                                     onClick={() => toggleStrategyActive(index)}
                                     className={`strategy-preview-btn ${slot.isActive ? 'active' : ''}`}
-                                    disabled={slot.strategy === 'NO_STRATEGY'}
+                                    disabled={
+                                      slot.strategy === 'NO_STRATEGY' ||
+                                      isCurrentTacticReadOnly
+                                    }
                                     style={{
                                       color: slot.isActive ? psColors[index] : '#666',
                                     }}
@@ -785,6 +835,7 @@ export function PlanningModule() {
                                     onChange={(e) =>
                                       setSelectedCBForOverlap(e.target.value)
                                     }
+                                    disabled={isCurrentTacticReadOnly}
                                     className="tactical-select"
                                     style={{ flex: 1, fontSize: '0.85rem' }}
                                   >
@@ -844,6 +895,7 @@ export function PlanningModule() {
                                 e.target.value as any,
                               )
                             }
+                            disabled={isCurrentTacticReadOnly}
                             className="tactical-select"
                           >
                             <option value="ALL_OUT_DEFENCE">Toda Defensa</option>
@@ -873,6 +925,7 @@ export function PlanningModule() {
                                 e.target.value as any,
                               )
                             }
+                            disabled={isCurrentTacticReadOnly}
                             className="tactical-select"
                           >
                             <option value="A">A (Alta)</option>
@@ -900,6 +953,7 @@ export function PlanningModule() {
                                 e.target.value as any,
                               )
                             }
+                            disabled={isCurrentTacticReadOnly}
                             className="tactical-select"
                           >
                             <option value="A">A (Agresiva)</option>
@@ -930,6 +984,7 @@ export function PlanningModule() {
                   <button
                     type="button"
                     onClick={handleCreatePlanA}
+                    disabled={isCurrentTacticReadOnly}
                     className="create-plan-btn"
                   >
                     Crear Plan A
@@ -950,6 +1005,7 @@ export function PlanningModule() {
                   <button
                     type="button"
                     onClick={handleCreatePlanB}
+                    disabled={isCurrentTacticReadOnly}
                     className="create-plan-btn"
                   >
                     Crear Plan B
@@ -977,7 +1033,10 @@ export function PlanningModule() {
 
                 <button
                   type="button"
-                  onClick={() => setEditingPositions(!editingPositions)}
+                  onClick={() =>
+                    !isCurrentTacticReadOnly && setEditingPositions(!editingPositions)
+                  }
+                  disabled={isCurrentTacticReadOnly}
                   className="toggle-depth-btn"
                   style={{
                     background: editingPositions
@@ -1056,6 +1115,7 @@ export function PlanningModule() {
                         recommendedSignings={currentTactic.recommendedSignings}
                         clubId={currentTactic.clubId}
                         onAddPossibleSigning={addPossibleSigning}
+                        readOnly={isCurrentTacticReadOnly}
                       />
                     </div>
                   )}
@@ -1076,8 +1136,12 @@ export function PlanningModule() {
                       showDepthChart={showDepthChart}
                       depthChartSlots={baseDepthChartSlots}
                       getDepthPlayer={getDepthPlayer}
-                      onDepthSlotDrop={handleDepthSlotDrop}
-                      onDepthSlotRemove={handleDepthSlotRemove}
+                      onDepthSlotDrop={
+                        isCurrentTacticReadOnly ? undefined : handleDepthSlotDrop
+                      }
+                      onDepthSlotRemove={
+                        isCurrentTacticReadOnly ? undefined : handleDepthSlotRemove
+                      }
                       activeStrategies={[]} // No strategies in combined view
                       attackDefenceLevel={currentTactic.basePlan.attackDefenceLevel}
                       backLine={currentTactic.basePlan.backLine}
@@ -1106,8 +1170,12 @@ export function PlanningModule() {
                         showDepthChart={showDepthChart}
                         depthChartSlots={baseDepthChartSlots}
                         getDepthPlayer={getDepthPlayer}
-                        onDepthSlotDrop={handleDepthSlotDrop}
-                        onDepthSlotRemove={handleDepthSlotRemove}
+                        onDepthSlotDrop={
+                          isCurrentTacticReadOnly ? undefined : handleDepthSlotDrop
+                        }
+                        onDepthSlotRemove={
+                          isCurrentTacticReadOnly ? undefined : handleDepthSlotRemove
+                        }
                         activeStrategies={(() => {
                           const active = currentTactic.strategySlots
                             .filter(
@@ -1125,21 +1193,35 @@ export function PlanningModule() {
                         selectedCBForOverlap={currentTactic.selectedCBForOverlap}
                         planASlots={undefined}
                         planBSlots={undefined}
-                        onPlayerDrop={(slotId, playerId) =>
-                          handlePlayerDrop('base', slotId, playerId)
+                        onPlayerDrop={
+                          isCurrentTacticReadOnly
+                            ? undefined
+                            : (slotId, playerId) =>
+                                handlePlayerDrop('base', slotId, playerId)
                         }
-                        onSlotDrag={(fromSlotId, toSlotId) =>
-                          handleSlotDrag('base', fromSlotId, toSlotId)
+                        onSlotDrag={
+                          isCurrentTacticReadOnly
+                            ? undefined
+                            : (fromSlotId, toSlotId) =>
+                                handleSlotDrag('base', fromSlotId, toSlotId)
                         }
-                        onUpdateInstruction={(playerId, instruction) =>
-                          updatePlayerInstruction('base', playerId, instruction)
+                        onUpdateInstruction={
+                          isCurrentTacticReadOnly
+                            ? undefined
+                            : (slotId, instruction) =>
+                                updatePlayerInstruction('base', slotId, instruction)
                         }
-                        onRoleChange={(slotId, role) =>
-                          handleRoleChange('base', slotId, role)
+                        onRoleChange={
+                          isCurrentTacticReadOnly
+                            ? undefined
+                            : (slotId, role) => handleRoleChange('base', slotId, role)
                         }
-                        editingPosition={editingPositions}
-                        onPositionChange={(slotId, coords) =>
-                          handlePositionChange('base', slotId, coords)
+                        editingPosition={editingPositions && !isCurrentTacticReadOnly}
+                        onPositionChange={
+                          isCurrentTacticReadOnly
+                            ? undefined
+                            : (slotId, coords) =>
+                                handlePositionChange('base', slotId, coords)
                         }
                         labelAddon={renderFormationSelect('base')}
                       />
@@ -1178,18 +1260,29 @@ export function PlanningModule() {
                           planASlots={currentTactic.planA?.slots}
                           planBSlots={currentTactic.planB?.slots}
                           onPlayerDrop={undefined} // BLOQUEADO: No permitir drag desde roster en Plan A
-                          onSlotDrag={(fromSlotId, toSlotId) =>
-                            handleSlotDrag('planA', fromSlotId, toSlotId)
+                          onSlotDrag={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (fromSlotId, toSlotId) =>
+                                  handleSlotDrag('planA', fromSlotId, toSlotId)
                           }
-                          onUpdateInstruction={(playerId, instruction) =>
-                            updatePlayerInstruction('planA', playerId, instruction)
+                          onUpdateInstruction={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (slotId, instruction) =>
+                                  updatePlayerInstruction('planA', slotId, instruction)
                           }
-                          onRoleChange={(slotId, role) =>
-                            handleRoleChange('planA', slotId, role)
+                          onRoleChange={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (slotId, role) => handleRoleChange('planA', slotId, role)
                           }
-                          editingPosition={editingPositions}
-                          onPositionChange={(slotId, coords) =>
-                            handlePositionChange('planA', slotId, coords)
+                          editingPosition={editingPositions && !isCurrentTacticReadOnly}
+                          onPositionChange={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (slotId, coords) =>
+                                  handlePositionChange('planA', slotId, coords)
                           }
                           labelAddon={renderFormationSelect('planA')}
                         />
@@ -1229,18 +1322,29 @@ export function PlanningModule() {
                           planASlots={currentTactic.planA?.slots}
                           planBSlots={currentTactic.planB?.slots}
                           onPlayerDrop={undefined} // BLOQUEADO: No permitir drag desde roster en Plan B
-                          onSlotDrag={(fromSlotId, toSlotId) =>
-                            handleSlotDrag('planB', fromSlotId, toSlotId)
+                          onSlotDrag={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (fromSlotId, toSlotId) =>
+                                  handleSlotDrag('planB', fromSlotId, toSlotId)
                           }
-                          onUpdateInstruction={(playerId, instruction) =>
-                            updatePlayerInstruction('planB', playerId, instruction)
+                          onUpdateInstruction={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (slotId, instruction) =>
+                                  updatePlayerInstruction('planB', slotId, instruction)
                           }
-                          onRoleChange={(slotId, role) =>
-                            handleRoleChange('planB', slotId, role)
+                          onRoleChange={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (slotId, role) => handleRoleChange('planB', slotId, role)
                           }
-                          editingPosition={editingPositions}
-                          onPositionChange={(slotId, coords) =>
-                            handlePositionChange('planB', slotId, coords)
+                          editingPosition={editingPositions && !isCurrentTacticReadOnly}
+                          onPositionChange={
+                            isCurrentTacticReadOnly
+                              ? undefined
+                              : (slotId, coords) =>
+                                  handlePositionChange('planB', slotId, coords)
                           }
                           labelAddon={renderFormationSelect('planB')}
                         />
@@ -1365,6 +1469,7 @@ export function PlanningModule() {
                               >
                                 <TacticalPlayerCard
                                   player={player}
+                                  slotId={sub.slotId}
                                   clubId={currentTactic.clubId}
                                   slotRole={sub.role}
                                   customDorsal={currentTactic.customDorsals[player.ID]}
@@ -1421,6 +1526,7 @@ export function PlanningModule() {
           }}
           onDelete={deleteTactic}
           onDuplicate={duplicateTactic}
+          onDuplicateWithoutPlayers={duplicateTacticWithoutPlayers}
           onRename={renameTactic}
           onClose={() => setShowSavedTactics(false)}
         />
