@@ -20522,7 +20522,7 @@ export const profileAddons: Record<number, ProfileAddon> = {
   },
   '4554': {
     image: '/images/faces/A-12545.png',
-    fullName: 'Juan Sebastián Verón Riquelme palermo',
+    fullName: 'Juan Sebastián Verón',
     birthDate: '9 de marzo de 1975',
   },
   '4555': {

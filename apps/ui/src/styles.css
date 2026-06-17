@@ -4718,8 +4718,27 @@ tbody tr:hover {
   z-index: 1;              /* más bajo */
 }
 
+.profile-shirt.has-kit-image {
+  background: transparent;
+}
+
+.profile-shirt-kit {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  pointer-events: none;
+  transform: translate(var(--kit-x, 0%), var(--kit-y, 0%))
+    scale(var(--kit-scale, 1));
+  transform-origin: center center;
+}
+
 .shirt-number {
   position: relative;
+  z-index: 2;
   text-align: center;
   font-size: 6.4vw;
   font-family: 'SoccerLeague', system-ui, sans-serif;
@@ -4729,11 +4748,12 @@ tbody tr:hover {
 
 .shirt-name {
   position: relative;
+  z-index: 2;
   text-align: center;
   font-size: 0.66vw;
   font-family: 'RubberNippleFactoryBlack', system-ui, sans-serif;
   transform: scaleY(1.5);      /* 1.5 = 50% más alto */
-  -webkit-text-stroke: 0.062vw rgba(17, 17, 17, 0.47);
+  -webkit-text-stroke: 0.062vw rgba(17, 17, 17, 0.37);
   font-weight: bolder;
 }
 
@@ -4826,10 +4846,12 @@ tbody tr:hover {
   display:flex;
   align-items: center;
   justify-content: center;
-  mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot2.svg);
-  -webkit-mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot2.svg);
+  mask: url('./assets/footballboot2.svg');
+  -webkit-mask: url('./assets/footballboot2.svg');
   mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
   mask-size: cover;
+  -webkit-mask-size: cover;
 }
 
 .profile-foot-right {
@@ -4839,10 +4861,12 @@ tbody tr:hover {
   display:flex;
   align-items: center;
   justify-content: center;
-  mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot.svg);
-  -webkit-mask: url(C:\Users\usuario\Desktop\anfpes-engine\apps\ui\src\assets\footballboot.svg);
+  mask: url('./assets/footballboot.svg');
+  -webkit-mask: url('./assets/footballboot.svg');
   mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
   mask-size: cover;
+  -webkit-mask-size: cover;
 }
 
 .profile-main-info {

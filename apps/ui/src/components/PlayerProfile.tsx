@@ -38,7 +38,11 @@ import {
   getFieldDisplayValue,
 } from '../utils/playerDisplay';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
-import { getFlagImagePath, getClubShieldPath } from '../utils/imageHelpers';
+import {
+  getFlagImagePath,
+  getClubShieldPath,
+  getClubKitImage,
+} from '../utils/imageHelpers';
 import { getStatColor, getInjuryColor } from '../types/table';
 import { getNationalityInfo } from '../data/nationalities';
 
@@ -2027,6 +2031,18 @@ export function PlayerProfile() {
   );
   const [showPositions, setShowPositions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [failedClubKitPaths, setFailedClubKitPaths] = useState<Set<string>>(
+    () => new Set(),
+  );
+
+  const markClubKitFailed = useCallback((path: string) => {
+    setFailedClubKitPaths((current) => {
+      if (current.has(path)) return current;
+      const next = new Set(current);
+      next.add(path);
+      return next;
+    });
+  }, []);
 
   const playerKey = String(selectedPlayerId ?? '');
   const formState = (formById[playerKey] ?? DEFAULT_FORM_STATE) as FormStateId;
@@ -2295,6 +2311,12 @@ export function PlayerProfile() {
     player.CLUB as string,
     player.NACIONALIDAD as string,
   );
+  const clubKitCandidate =
+    shirtOrigin === 'club' ? getClubKitImage(player.CLUB as string) : null;
+  const clubKitImage =
+    clubKitCandidate && !failedClubKitPaths.has(clubKitCandidate.path)
+      ? clubKitCandidate
+      : null;
   const dorsalDisplay = dorsal;
   const dorsalNameDisplay =
     dorsalName || (player.DORSAL_1 ? String(player.DORSAL_1) : '');
@@ -2313,15 +2335,27 @@ export function PlayerProfile() {
         <div className="profile-identity">
           <div className="contenedor-borde">
             <div
-              className="profile-shirt"
+              className={`profile-shirt${clubKitImage ? ' has-kit-image' : ''}`}
               data-shirt-origin={shirtOrigin}
               style={
                 {
                   color: shirtStyle.color,
                   '--shirt-overlay': shirtStyle.background || '#0f2238',
+                  '--kit-scale': clubKitImage?.scale ?? 1,
+                  '--kit-x': clubKitImage?.x ?? '0%',
+                  '--kit-y': clubKitImage?.y ?? '0%',
                 } as React.CSSProperties
               }
             >
+              {clubKitImage ? (
+                <img
+                  className="profile-shirt-kit"
+                  src={clubKitImage.path}
+                  alt=""
+                  aria-hidden="true"
+                  onError={() => markClubKitFailed(clubKitImage.path)}
+                />
+              ) : null}
               <div className="shirt-name">{dorsalNameDisplay}</div>
               <div className="shirt-number">{dorsalDisplay}</div>
             </div>
