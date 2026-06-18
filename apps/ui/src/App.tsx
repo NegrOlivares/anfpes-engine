@@ -8,6 +8,7 @@ import { HomeModule } from './modules/HomeModule';
 import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
 import { PreselectionModule } from './modules/PreselectionModule';
+import { ClubModule } from './modules/ClubModule';
 import { SimilarPlayersModule } from './modules/SimilarPlayersModule';
 import { ComparatorModule } from './modules/ComparatorModule';
 import { PlanningModule } from './modules/PlanningModule';
@@ -28,6 +29,7 @@ const modules: ModuleDefinition[] = [
     label: 'Preselecciones',
     component: PreselectionModule,
   },
+  { id: MODULE_IDS.club, label: 'Clubes', component: ClubModule },
   { id: MODULE_IDS.similar, label: 'Similares', component: SimilarPlayersModule },
   { id: MODULE_IDS.comparator, label: 'Comparador', component: ComparatorModule },
   { id: MODULE_IDS.planning, label: 'Planificación', component: PlanningModule },

@@ -58,7 +58,7 @@ export function SavedTacticsLibrary({
   const handleDuplicateWithoutPlayers = (tacticId: string, originalName: string) => {
     const newName = prompt(
       'Nombre para importar sin jugadores:',
-      `${originalName} (TXXIV)`,
+      `${originalName} (${TACTICS_DATA_VERSION})`,
     );
     if (newName) {
       onDuplicateWithoutPlayers(tacticId, newName);

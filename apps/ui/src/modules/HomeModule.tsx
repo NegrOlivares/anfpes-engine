@@ -2,13 +2,14 @@ import { useMemo, useState } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import { usePreselectionViewStore } from '../store/preselectionViewStore';
-import { useSearchPresetStore } from '../store/searchPresetStore';
 import { useTacticsStore } from '../store/tacticsStore';
 import { MODULE_IDS, useModuleStore } from '../store/moduleStore';
 import { useSimilarPlayersStore } from '../store/similarPlayersStore';
 import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 import { usePlayerProfileStore } from '../store/playerProfileStore';
+import { useClubViewStore } from '../store/clubViewStore';
 import { ANFPES_CLUBS } from '../data/playerStatus';
+import { CLUBS_BY_DIVISION, sortClubsAlphabetically } from '../data/clubCompetition';
 import { getClubShieldPath, getPlayerThumbPath } from '../utils/imageHelpers';
 import { ensureNumber } from '../utils/format';
 import { getPlayerPositions, getPositionLine } from '../components/PositionBadges';
@@ -25,17 +26,8 @@ function formatNumber(value: number | undefined, digits = 1): string {
   });
 }
 
-interface RecentActivity {
-  type: 'search' | 'similar' | 'comparison' | 'profile';
-  playerId?: string;
-  playerName?: string;
-  timestamp: number;
-  details?: string;
-}
-
 export function HomeModule() {
   const players = useCacheStore((state) => state.players);
-  const setSelectedPlayer = useCacheStore((state) => state.setSelectedPlayer);
   const status = useCacheStore((state) => state.status);
   const error = useCacheStore((state) => state.error);
 
@@ -47,8 +39,8 @@ export function HomeModule() {
   const savedTactics = useTacticsStore((state) => state.savedTactics);
   const loadTactic = useTacticsStore((state) => state.loadTactic);
 
-  const setSearchPreset = useSearchPresetStore((state) => state.setPreset);
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
+  const setSelectedClub = useClubViewStore((state) => state.setSelectedClub);
 
   const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
   const setComparatorPending = useComparatorLaunchStore((state) => state.setPending);
@@ -71,10 +63,19 @@ export function HomeModule() {
 
   // Clubes ANFPES ordenados alfabéticamente y filtrados
   const anfpesClubsList = useMemo(() => {
-    const sorted = Array.from(ANFPES_CLUBS).sort((a, b) => a.localeCompare(b));
+    const sorted = sortClubsAlphabetically(Array.from(ANFPES_CLUBS));
     if (!clubFilter) return sorted;
     return sorted.filter((club) => club.toLowerCase().includes(clubFilter.toLowerCase()));
   }, [clubFilter]);
+
+  const anfpesClubsByDivision = useMemo(
+    () =>
+      CLUBS_BY_DIVISION.map(({ division, clubs }) => ({
+        division,
+        clubs: clubs.filter((club) => anfpesClubsList.includes(club)),
+      })).filter((group) => group.clubs.length > 0),
+    [anfpesClubsList],
+  );
 
   // Preselecciones activas (compactadas)
   const activePreselections = useMemo(() => {
@@ -117,8 +118,8 @@ export function HomeModule() {
   }, [preselections, players, getPlayersInPreselection]);
 
   const handleClubClick = (club: string) => {
-    setSearchPreset({ query: club });
-    setActiveModule(MODULE_IDS.search);
+    setSelectedClub(club);
+    setActiveModule(MODULE_IDS.club);
   };
 
   const handleOpenPreselection = (preselectionId: string) => {
@@ -245,25 +246,32 @@ export function HomeModule() {
           onChange={(e) => setClubFilter(e.target.value)}
           className="clubs-filter-input"
         />
-        <div className="clubs-grid">
-          {anfpesClubsList.map((club) => {
-            const shieldPath = getClubShieldPath(club);
-            return (
-              <EnhancedTooltip key={club} content={club}>
-                <button
-                  type="button"
-                  className="club-button"
-                  onClick={() => handleClubClick(club)}
-                >
-                  {shieldPath ? (
-                    <img src={shieldPath} alt={club} className="club-shield-icon" />
-                  ) : (
-                    <div className="club-fallback">⚽</div>
-                  )}
-                </button>
-              </EnhancedTooltip>
-            );
-          })}
+        <div className="clubs-division-list">
+          {anfpesClubsByDivision.map(({ division, clubs }) => (
+            <section key={division} className="clubs-division-group">
+              <h4>{division}</h4>
+              <div className="clubs-grid">
+                {clubs.map((club) => {
+                  const shieldPath = getClubShieldPath(club);
+                  return (
+                    <EnhancedTooltip key={club} content={club}>
+                      <button
+                        type="button"
+                        className="club-button"
+                        onClick={() => handleClubClick(club)}
+                      >
+                        {shieldPath ? (
+                          <img src={shieldPath} alt={club} className="club-shield-icon" />
+                        ) : (
+                          <div className="club-fallback">⚽</div>
+                        )}
+                      </button>
+                    </EnhancedTooltip>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
         </div>
       </aside>
 

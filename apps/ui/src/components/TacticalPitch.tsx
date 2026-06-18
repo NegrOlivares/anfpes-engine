@@ -3,7 +3,6 @@ import type { DerivedPlayer } from '@anfpes/engine';
 import type {
   FormationSlot,
   PlayerInstruction,
-  RunDirection,
   ManualStrategy,
   DepthSlot,
 } from '../types/tactics';
@@ -49,6 +48,9 @@ interface TacticalPitchProps {
   onUpdateInstruction?: (slotId: string, instruction: Partial<PlayerInstruction>) => void;
   onRoleChange?: (slotId: string, role: string) => void;
   onPositionChange?: (slotId: string, coords: { x: number; y: number }) => void;
+  renderSlotPopover?: (slot: FormationSlot) => ReactNode;
+  hideHeader?: boolean;
+  useClubKitImages?: boolean;
 }
 
 export function TacticalPitch({
@@ -83,6 +85,9 @@ export function TacticalPitch({
   onUpdateInstruction,
   onRoleChange,
   onPositionChange,
+  renderSlotPopover,
+  hideHeader = false,
+  useClubKitImages = false,
 }: TacticalPitchProps) {
   const playerMap = useMemo(() => {
     return new Map(players.map((p) => [p.ID, p]));
@@ -525,10 +530,12 @@ export function TacticalPitch({
 
   return (
     <div className="tactical-pitch-container">
-      <div className="tactical-pitch-header">
-        <div className="tactical-pitch-label">{planLabel}</div>
-        {labelAddon && <div className="tactical-pitch-addon">{labelAddon}</div>}
-      </div>
+      {!hideHeader && (
+        <div className="tactical-pitch-header">
+          <div className="tactical-pitch-label">{planLabel}</div>
+          {labelAddon && <div className="tactical-pitch-addon">{labelAddon}</div>}
+        </div>
+      )}
       <div className="tactical-pitch" ref={pitchRef}>
         {/* Pitch background with lines */}
         <div className="pitch-background">
@@ -876,6 +883,7 @@ export function TacticalPitch({
                     roleOptions={onRoleChange ? allowedRoles : undefined}
                     autoOpenRoleMenu={autoOpenRoleFor === slot.slotId}
                     onRoleMenuClose={() => setAutoOpenRoleFor(null)}
+                    useClubKitImage={useClubKitImages}
                     onRoleChange={
                       onRoleChange
                         ? (newRole) => onRoleChange(slot.slotId, newRole)
@@ -889,6 +897,7 @@ export function TacticalPitch({
                   <div className="empty-slot-hint">+</div>
                 </div>
               )}
+              {renderSlotPopover?.(slot)}
             </div>
           );
         })}
@@ -897,7 +906,7 @@ export function TacticalPitch({
   );
 }
 
-function getStrategyName(strategy: ManualStrategy): string {
+export function getStrategyName(strategy: ManualStrategy): string {
   const names: Record<ManualStrategy, string> = {
     NO_STRATEGY: 'Sin Estrategia',
     CENTRE_ATTACK: 'Ataque Central',

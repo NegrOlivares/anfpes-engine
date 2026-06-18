@@ -10,8 +10,8 @@ Crear un modulo dedicado a cada club ANFPES, donde se pueda consultar su identid
 plantel actual, datos competitivos y relaciones futuras con usuarios/historico.
 
 El modulo Club no debe depender inicialmente del modulo Usuario. El usuario/manager
-actual puede agregarse despues, cuando exista una fuente de verdad completa para
-temporada XXIV.
+actual puede agregarse despues, cuando exista una fuente de verdad completa por
+temporada.
 
 ## Principio Central
 
@@ -32,7 +32,7 @@ Para el primer MVP del modulo Club, las fuentes actuales bastan:
 - `players.json` en cache: plantel actual por club.
 - `clubIdentities.ts`: colores base ya disponibles para la identidad visual.
 - `imageHelpers.ts`: escudos y camisetas cuando existan.
-- Estadisticas de goles TXXIII/TXXIV: se integran cuando el archivo este cerrado.
+- Estadisticas de goles TXXIII: se integran cuando el archivo este cerrado.
 
 No se debe crear todavia una fuente de verdad de usuarios.
 
@@ -163,7 +163,7 @@ Antes de implementar, confirmar:
 - Si el MVP debe mostrar solo clubes actuales o tambien historicos.
 - Si Livorno debe aparecer con historial heredado de Fiorentina.
 - Si las estadisticas de goles entran en el primer release del modulo o en una segunda fase.
-- Si el modulo debe incluir manager actual cuando la lista de usuarios XXIV este lista.
+- Si el modulo debe incluir manager actual cuando la lista de usuarios historicos este lista.
 
 ## Assets De Camisetas
 

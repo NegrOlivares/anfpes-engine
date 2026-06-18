@@ -1,1 +1,2 @@
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[2m7:39:20 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/modules/ClubModule.tsx (resolved id: D:/CESANTE MANAGER/anfpes-engine/apps/ui/src/modules/ClubModule.tsx) in D:/CESANTE MANAGER/anfpes-engine/apps/ui/src/App.tsx. Does the file exist?

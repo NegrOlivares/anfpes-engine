@@ -13,7 +13,7 @@ import type {
   ManualStrategy,
 } from '../types/tactics';
 
-export const TACTICS_DATA_VERSION = 'TXXIV';
+export const TACTICS_DATA_VERSION = 'TXXIII';
 
 export const isReadOnlyTactic = (
   tactic: Pick<Tactic, 'dataVersion'> | null | undefined,

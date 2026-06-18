@@ -4,11 +4,13 @@ import { useSimilarPlayersStore } from './similarPlayersStore';
 import { useComparatorStore } from './comparatorLaunchStore';
 import { usePlayerProfileStore } from './playerProfileStore';
 import { usePreselectionViewStore } from './preselectionViewStore';
+import { useClubViewStore } from './clubViewStore';
 
 export type ModuleId =
   | 'dashboard'
   | 'search'
   | 'preselections'
+  | 'club'
   | 'profile'
   | 'similar'
   | 'comparator'
@@ -27,6 +29,7 @@ export const MODULE_IDS: Record<string, ModuleId> = {
   dashboard: 'dashboard',
   search: 'search',
   preselections: 'preselections',
+  club: 'club',
   profile: 'profile',
   similar: 'similar',
   comparator: 'comparator',
@@ -44,6 +47,8 @@ function captureModuleSnapshot(moduleId: ModuleId): Record<string, any> {
       return usePlayerProfileStore.getState().getSnapshot();
     case 'preselections':
       return usePreselectionViewStore.getState().getSnapshot();
+    case 'club':
+      return useClubViewStore.getState().getSnapshot();
     case 'search':
     case 'dashboard':
     default:
@@ -65,6 +70,9 @@ function restoreModuleSnapshot(moduleId: ModuleId, snapshot: Record<string, any>
       break;
     case 'preselections':
       usePreselectionViewStore.getState().restoreSnapshot(snapshot);
+      break;
+    case 'club':
+      useClubViewStore.getState().restoreSnapshot(snapshot);
       break;
   }
 }

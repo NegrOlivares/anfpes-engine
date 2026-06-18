@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { DerivedPlayer } from '@anfpes/engine';
 import type { PlayerInstruction, RunDirection } from '../types/tactics';
-import { getPlayerThumbPath } from '../utils/imageHelpers';
+import { getClubKitImage, getPlayerThumbPath } from '../utils/imageHelpers';
 import { getShirtStyle } from '../components/PlayerProfile';
 import { getStatColor } from '../types/table';
 import { MovementArrows } from './MovementArrows';
@@ -49,6 +49,7 @@ interface TacticalPlayerCardProps {
   onRoleChange?: (role: string) => void;
   autoOpenRoleMenu?: boolean;
   onRoleMenuClose?: () => void;
+  useClubKitImage?: boolean;
 }
 
 // Helper to get position average
@@ -93,16 +94,17 @@ export function TacticalPlayerCard({
   isMarkedOut = false,
   movementArrows = [],
   onUpdateInstruction,
-  ghostPosition,
   defensiveAttitude = 'BALANCED',
   showAttitudeColors = false,
   roleOptions,
   onRoleChange,
   autoOpenRoleMenu = false,
   onRoleMenuClose,
+  useClubKitImage = false,
 }: TacticalPlayerCardProps) {
   const [showArrowEditor, setShowArrowEditor] = useState(false);
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const [failedClubKitPath, setFailedClubKitPath] = useState<string | null>(null);
 
   const [animatedPosition, setAnimatedPosition] = useState({ x: 0, y: 0 });
   const [currentArrowIndex, setCurrentArrowIndex] = useState(0);
@@ -120,6 +122,13 @@ export function TacticalPlayerCard({
     clubId || (player.CLUB as string),
     player.NACIONALIDAD as string,
   );
+  const clubKitCandidate = useClubKitImage
+    ? getClubKitImage(clubId || (player.CLUB as string))
+    : null;
+  const clubKitImage =
+    clubKitCandidate && clubKitCandidate.path !== failedClubKitPath
+      ? clubKitCandidate
+      : null;
 
   // Get position average for the slot role
   const positionAvg = getPositionAverage(player, slotRole);
@@ -144,6 +153,10 @@ export function TacticalPlayerCard({
   };
 
   // Animation effect for movement arrows
+  useEffect(() => {
+    setFailedClubKitPath(null);
+  }, [clubKitCandidate?.path]);
+
   useEffect(() => {
     if (!showAttitudeColors || movementArrows.length === 0) {
       setAnimatedPosition({ x: 0, y: 0 });
@@ -225,14 +238,26 @@ export function TacticalPlayerCard({
       {/* Central shirt with dorsal */}
       <div className="tactical-shirt-main">
         <div
-          className="tactical-shirt-display"
+          className={`tactical-shirt-display${clubKitImage ? ' has-kit-image' : ''}`}
           style={
             {
               color: shirtStyle.color,
               '--shirt-overlay': shirtStyle.background || '#0f2238',
+              '--kit-scale': clubKitImage?.scale ?? 1,
+              '--kit-x': clubKitImage?.x ?? '0%',
+              '--kit-y': clubKitImage?.y ?? '0%',
             } as React.CSSProperties
           }
         >
+          {clubKitImage && (
+            <img
+              className="tactical-shirt-kit"
+              src={clubKitImage.path}
+              alt=""
+              aria-hidden="true"
+              onError={() => setFailedClubKitPath(clubKitImage.path)}
+            />
+          )}
           {hasDorsal && (
             <div className="tactical-dorsal" style={{ color: shirtStyle.color }}>
               {dorsal}
