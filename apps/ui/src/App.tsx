@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCacheLoader } from './store/cacheStore';
 import { ModuleTabs, type ModuleDefinition } from './components/ModuleTabs';
 import { GlossaryModal } from './components/GlossaryModal';
 import { SplashScreen } from './components/SplashScreen';
-import { ExitConfirmModal } from './components/ExitConfirmModal';
 import { HomeModule } from './modules/HomeModule';
 import { PlayerSearch } from './components/PlayerSearch';
 import { PlayerProfile } from './components/PlayerProfile';
@@ -12,13 +11,15 @@ import { ClubModule } from './modules/ClubModule';
 import { SimilarPlayersModule } from './modules/SimilarPlayersModule';
 import { ComparatorModule } from './modules/ComparatorModule';
 import { PlanningModule } from './modules/PlanningModule';
-import { useModuleStore, MODULE_IDS, type ModuleId } from './store/moduleStore';
+import { useModuleStore, MODULE_IDS } from './store/moduleStore';
 import { PlayerActionsOverlay } from './components/PlayerActionsOverlay';
 import { useNavigationHistoryStore } from './store/navigationHistoryStore';
 import { ToolsMenu } from './components/ToolsMenu';
 import { TitleBar } from './components/TitleBar';
+import { IdentitySetupModal } from './components/IdentitySetupModal';
 import { useWindowModeStore } from './store/windowModeStore';
 import { initializeTheme } from './store/themeStore';
+import { useIdentityStore, type UserIdentity } from './store/identityStore';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 
 const modules: ModuleDefinition[] = [
@@ -36,6 +37,18 @@ const modules: ModuleDefinition[] = [
   { id: MODULE_IDS.profile, label: 'Perfil', component: PlayerProfile },
 ];
 
+function getIdentityLabel(identity: UserIdentity): string {
+  if (identity.mode === 'manager') {
+    return `${identity.manager ?? 'DT'} - ${identity.club ?? 'Club'}`;
+  }
+
+  if (identity.mode === 'club') {
+    return identity.club ?? 'Club';
+  }
+
+  return 'Espectador';
+}
+
 export default function App() {
   useCacheLoader();
   const activeModuleId = useModuleStore((state) => state.activeModuleId);
@@ -47,6 +60,10 @@ export default function App() {
   const isFullscreen = useWindowModeStore((state) => state.isFullscreen);
   const setIsFullscreen = useWindowModeStore((state) => state.setIsFullscreen);
   const [isInitialized, setIsInitialized] = useState(false);
+  const identity = useIdentityStore((state) => state.profile);
+  const [isIdentityModalOpen, setIsIdentityModalOpen] = useState(false);
+  const mustSelectIdentity = !showSplash && !identity;
+  const identityModalOpen = isIdentityModalOpen || mustSelectIdentity;
 
   // Initialize theme
   useEffect(() => {
@@ -96,6 +113,12 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigateBack, navigateForward]);
 
+  const closeIdentityModal = () => {
+    if (!mustSelectIdentity) {
+      setIsIdentityModalOpen(false);
+    }
+  };
+
   return (
     <div className={`app-shell ${isInitialized && !isFullscreen ? 'has-titlebar' : ''}`}>
       <TitleBar visible={isInitialized && !isFullscreen} />
@@ -110,6 +133,15 @@ export default function App() {
           onOpenGlossary={() => setIsGlossaryOpen(true)}
         />
         <div className="header-actions">
+          {identity && (
+            <button
+              type="button"
+              className="identity-chip"
+              onClick={() => setIsIdentityModalOpen(true)}
+            >
+              <strong>{getIdentityLabel(identity)}</strong>
+            </button>
+          )}
           <ToolsMenu />
         </div>
       </div>
@@ -128,6 +160,11 @@ export default function App() {
       </main>
       <PlayerActionsOverlay />
       <GlossaryModal isOpen={isGlossaryOpen} onClose={() => setIsGlossaryOpen(false)} />
+      <IdentitySetupModal
+        open={identityModalOpen}
+        allowClose={Boolean(identity)}
+        onClose={closeIdentityModal}
+      />
     </div>
   );
 }

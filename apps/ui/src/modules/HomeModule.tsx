@@ -239,13 +239,6 @@ export function HomeModule() {
       {/* Panel lateral de clubes ANFPES */}
       <aside className="home-clubs-panel">
         <h3 className="clubs-panel-title">Clubes ANFPES</h3>
-        <input
-          type="text"
-          placeholder="Filtrar clubes..."
-          value={clubFilter}
-          onChange={(e) => setClubFilter(e.target.value)}
-          className="clubs-filter-input"
-        />
         <div className="clubs-division-list">
           {anfpesClubsByDivision.map(({ division, clubs }) => (
             <section key={division} className="clubs-division-group">
