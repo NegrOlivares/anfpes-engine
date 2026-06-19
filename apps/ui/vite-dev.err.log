@@ -1,2 +1,65 @@
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
 [2m7:39:20 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/modules/ClubModule.tsx (resolved id: D:/CESANTE MANAGER/anfpes-engine/apps/ui/src/modules/ClubModule.tsx) in D:/CESANTE MANAGER/anfpes-engine/apps/ui/src/App.tsx. Does the file exist?
+[2m1:27:12 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: D:\CESANTE MANAGER\anfpes-engine\apps\ui\src\modules\ClubModule.tsx: Unterminated regular expression. (1903:11)
+
+[0m [90m 1901 |[31m   )[33m;[31m
+ [90m 1902 |[31m }
+[31m[1m>[22m[31m[90m 1903 |[31m           [33m/[31m[33m>[31m
+ [90m      |[31m            [31m[1m^[22m[31m
+ [90m 1904 |[31m         ))}
+ [90m 1905 |[31m         [33m<[31m[33mrect[31m x[33m=[31m[32m"4"[31m y[33m=[31m[32m"4"[31m width[33m=[31m[32m"92"[31m height[33m=[31m[32m"92"[31m className[33m=[31m[32m"voronoi-line"[31m [33m/[31m[33m>[31m
+ [90m 1906 |[31m         [33m<[31m[33mline[31m x1[33m=[31m[32m"4"[31m y1[33m=[31m[32m"50"[31m x2[33m=[31m[32m"96"[31m y2[33m=[31m[32m"50"[31m className[33m=[31m[32m"voronoi-line"[31m [33m/[31m[33m>[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/CESANTE MANAGER/anfpes-engine/apps/ui/src/modules/ClubModule.tsx[39m:1903:11
+[33m  1901|    );
+  1902|  }
+  1903|            />
+     |             ^
+  1904|          ))}
+  1905|          <rect x="4" y="4" width="92" height="92" className="voronoi-line" />[39m
+      at constructor (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:367:19)
+      at TypeScriptParserMixin.raise (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:6624:19)
+      at TypeScriptParserMixin.readRegexp (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:6353:20)
+      at TypeScriptParserMixin.parseExprAtom (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:11377:16)
+      at TypeScriptParserMixin.parseExprAtom (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:4793:20)
+      at TypeScriptParserMixin.parseExprSubscripts (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:11145:23)
+      at TypeScriptParserMixin.parseUpdate (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:11130:21)
+      at TypeScriptParserMixin.parseMaybeUnary (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:11110:23)
+      at TypeScriptParserMixin.parseMaybeUnary (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:9890:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10963:61)
+      at TypeScriptParserMixin.parseExprOps (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10968:23)
+      at TypeScriptParserMixin.parseMaybeConditional (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10945:23)
+      at TypeScriptParserMixin.parseMaybeAssign (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10895:21)
+      at TypeScriptParserMixin.parseMaybeAssign (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:9839:20)
+      at TypeScriptParserMixin.parseExpressionBase (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10848:23)
+      at D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10844:39
+      at TypeScriptParserMixin.allowInAnd (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:12495:16)
+      at TypeScriptParserMixin.parseExpression (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10844:17)
+      at TypeScriptParserMixin.parseStatementContent (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:12971:23)
+      at TypeScriptParserMixin.parseStatementContent (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:9569:18)
+      at TypeScriptParserMixin.parseStatementLike (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:12843:17)
+      at TypeScriptParserMixin.parseModuleItem (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:12820:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:13392:36)
+      at TypeScriptParserMixin.parseBlockBody (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:13385:10)
+      at TypeScriptParserMixin.parseProgram (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:12698:10)
+      at TypeScriptParserMixin.parseTopLevel (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:12688:25)
+      at TypeScriptParserMixin.parse (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:14568:25)
+      at TypeScriptParserMixin.parse (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:10183:18)
+      at parse (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\parser\lib\index.js:14602:38)
+      at parser (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\core\lib\parser\index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\core\lib\transformation\normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\core\lib\transformation\index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\core\lib\transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:261:32)
+      at D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:273:13
+      at async.call.result.err.err (D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:223:11)
+      at D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:189:28
+      at D:\CESANTE MANAGER\anfpes-engine\node_modules\@babel\core\lib\gensync-utils\async.js:67:7
+      at D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:113:33
+      at step (D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:287:14)
+      at D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:273:13
+      at async.call.result.err.err (D:\CESANTE MANAGER\anfpes-engine\node_modules\gensync\index.js:223:11)

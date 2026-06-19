@@ -1,5 +1,5 @@
 import type { DerivedPlayer } from '@anfpes/engine';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, MouseEvent as ReactMouseEvent, ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
 import { CLUB_IDENTITIES } from '../data/clubIdentities';
@@ -30,6 +30,7 @@ import { ensureNumber, formatPlayerValue } from '../utils/format';
 import { getStatColor } from '../types/table';
 import {
   PositionBadges,
+  getPositionFullName,
   getPlayerPositions,
   getPositionLine,
 } from '../components/PositionBadges';
@@ -87,7 +88,90 @@ interface PositionDepthEntry {
   }>;
 }
 
+interface ClubAnalysisProfile {
+  summary: ClubSummary;
+  roster: DerivedPlayer[];
+  overall: number;
+  macros: Record<MacroField, number>;
+  lines: Record<PositionLineKey, number>;
+  dimensions: Record<AnalysisDimensionKey, number>;
+  attackIndex: number;
+  defenceIndex: number;
+  balanceIndex: number;
+}
+
+interface FormationAssignment {
+  slot: FormationSlot;
+  player: DerivedPlayer;
+  rating: number;
+  score: number;
+  fit: 'natural' | 'compatible' | 'adapted' | 'forced';
+}
+
+interface FormationRecommendation {
+  formationName: string;
+  score: number;
+  assignments: FormationAssignment[];
+}
+
+type PositionLineKey = 'PT' | 'DEF' | 'MED' | 'ATA';
+type AnalysisDimensionGroup =
+  | 'gameReading'
+  | 'physical'
+  | 'dribbling'
+  | 'passing'
+  | 'finishing'
+  | 'goalkeeping';
+type AnalysisDimensionKey =
+  | 'attack'
+  | 'defense'
+  | 'balance'
+  | 'stamina'
+  | 'topSpeed'
+  | 'acceleration'
+  | 'response'
+  | 'agility'
+  | 'dribbleAccuracy'
+  | 'dribbleSpeed'
+  | 'shortPassAccuracy'
+  | 'shortPassSpeed'
+  | 'longPassAccuracy'
+  | 'longPassSpeed'
+  | 'shotAccuracy'
+  | 'shotPower'
+  | 'shotTechnique'
+  | 'freeKickAccuracy'
+  | 'swerve'
+  | 'heading'
+  | 'jump'
+  | 'technique'
+  | 'aggression'
+  | 'mentality'
+  | 'goalkeeping'
+  | 'teamwork';
+
+interface AnalysisDimensionDefinition {
+  key: AnalysisDimensionKey;
+  field: keyof DerivedPlayer;
+  label: string;
+  shortLabel: string;
+  group: AnalysisDimensionGroup;
+  description: string;
+}
+
+interface ChartPoint {
+  x: number;
+  y: number;
+}
+
+interface ChartTooltipState {
+  x: number;
+  y: number;
+  content: ReactNode;
+}
+
 const MACRO_FIELDS: MacroField[] = ['ATK', 'TEC', 'RES', 'DEF', 'FUE', 'VEL'];
+const ANALYSIS_LINE_ORDER: PositionLineKey[] = ['PT', 'DEF', 'MED', 'ATA'];
 const DEFAULT_FORMATION = '4-4-2';
 const CLUB_CURRENT_SEASON_LABEL = 'T-XXIII';
 const SHORT_TERM_BADGE_LABEL = '⏳';
@@ -114,6 +198,10 @@ const POSITION_DEPTH_ORDER = [
   'SD',
   'DC',
 ];
+
+const CRITICAL_DEPTH_ORDER = POSITION_DEPTH_ORDER.filter(
+  (position) => !['DD', 'DI', 'DLD', 'DLI', 'CDR', 'CIZ', 'ED', 'EI'].includes(position),
+);
 
 const POSITION_AVERAGE_FIELD: Record<string, keyof DerivedPlayer> = {
   PT: 'PT',
@@ -171,6 +259,292 @@ const MACRO_LABELS: Record<MacroField, string> = {
   FUE: 'FUE',
   VEL: 'VEL',
 };
+
+const LINE_ROLES: Record<PositionLineKey, string[]> = {
+  PT: ['PT'],
+  DEF: ['LIB', 'CT', 'SA', 'DD', 'DI'],
+  MED: ['CCD', 'LA', 'DLD', 'DLI', 'CC', 'VOL', 'CDR', 'CIZ', 'MP'],
+  ATA: ['EX', 'ED', 'EI', 'SD', 'DC'],
+};
+
+const LINE_LABELS: Record<PositionLineKey, string> = {
+  PT: 'Porteria',
+  DEF: 'Defensa',
+  MED: 'Mediocampo',
+  ATA: 'Ataque',
+};
+
+const LINE_COLORS: Record<PositionLineKey, string> = {
+  PT: '#ffd166',
+  DEF: '#4ea8de',
+  MED: '#06d6a0',
+  ATA: '#ff5c5c',
+};
+
+const ANALYSIS_DIMENSIONS: AnalysisDimensionDefinition[] = [
+  {
+    key: 'attack',
+    field: 'ATAQUE',
+    label: 'Ataque',
+    shortLabel: 'ATQ',
+    group: 'gameReading',
+    description: 'Lectura ofensiva, disponibilidad y aparicion en zonas de dano.',
+  },
+  {
+    key: 'defense',
+    field: 'DEFENSA',
+    label: 'Defensa',
+    shortLabel: 'DEF',
+    group: 'gameReading',
+    description: 'Lectura defensiva, cierre de espacios, anticipacion y recuperacion.',
+  },
+  {
+    key: 'balance',
+    field: 'ESTABILIDAD',
+    label: 'Estabilidad',
+    shortLabel: 'EST',
+    group: 'physical',
+    description: 'Firmeza al contacto y control corporal.',
+  },
+  {
+    key: 'stamina',
+    field: 'RESISTENCIA',
+    label: 'Resistencia',
+    shortLabel: 'RES',
+    group: 'physical',
+    description: 'Capacidad de sostener esfuerzo durante el partido.',
+  },
+  {
+    key: 'topSpeed',
+    field: 'VELOCIDAD M\u00c1XIMA',
+    label: 'Velocidad Maxima',
+    shortLabel: 'VMX',
+    group: 'physical',
+    description: 'Velocidad maxima en carrera larga.',
+  },
+  {
+    key: 'acceleration',
+    field: 'ACELERACI\u00d3N',
+    label: 'Aceleracion',
+    shortLabel: 'ACE',
+    group: 'physical',
+    description: 'Arranque y ganancia de velocidad en los primeros metros.',
+  },
+  {
+    key: 'response',
+    field: 'REPUESTA',
+    label: 'Respuesta',
+    shortLabel: 'RSP',
+    group: 'gameReading',
+    description: 'Reaccion mental y fisica ante la jugada.',
+  },
+  {
+    key: 'agility',
+    field: 'AGILIDAD',
+    label: 'Agilidad',
+    shortLabel: 'AGI',
+    group: 'physical',
+    description: 'Giro, cambio de direccion y soltura corporal.',
+  },
+  {
+    key: 'dribbleAccuracy',
+    field: 'PRECISI\u00d3N DRIBBLE',
+    label: 'Precision de Conduccion',
+    shortLabel: 'PCD',
+    group: 'dribbling',
+    description: 'Limpieza y control tecnico al llevar la pelota.',
+  },
+  {
+    key: 'dribbleSpeed',
+    field: 'VELOCIDAD DRIBBLE',
+    label: 'Velocidad de Conduccion',
+    shortLabel: 'VCD',
+    group: 'dribbling',
+    description: 'Rapidez para conducir sin romper la accion.',
+  },
+  {
+    key: 'shortPassAccuracy',
+    field: 'PRECISI\u00d3N   P CORTO',
+    label: 'Precision Pase Corto',
+    shortLabel: 'PPC',
+    group: 'passing',
+    description: 'Precision en pases cortos y combinaciones cercanas.',
+  },
+  {
+    key: 'shortPassSpeed',
+    field: 'VELOCIDAD  P CORTO',
+    label: 'Velocidad Pase Corto',
+    shortLabel: 'VPC',
+    group: 'passing',
+    description: 'Fuerza y ritmo del pase corto.',
+  },
+  {
+    key: 'longPassAccuracy',
+    field: 'PRECISI\u00d3N       P LARGO',
+    label: 'Precision Pase Largo',
+    shortLabel: 'PPL',
+    group: 'passing',
+    description: 'Precision para cambios de frente, filtros y envios largos.',
+  },
+  {
+    key: 'longPassSpeed',
+    field: 'VELOCIDAD     P LARGO',
+    label: 'Velocidad Pase Largo',
+    shortLabel: 'VPL',
+    group: 'passing',
+    description: 'Fuerza y velocidad del envio largo.',
+  },
+  {
+    key: 'shotAccuracy',
+    field: 'PRECISI\u00d3N DISPARO',
+    label: 'Precision Disparo',
+    shortLabel: 'PDI',
+    group: 'finishing',
+    description: 'Capacidad de dirigir el remate.',
+  },
+  {
+    key: 'shotPower',
+    field: 'POTENCIA DISPARO',
+    label: 'Potencia Disparo',
+    shortLabel: 'POT',
+    group: 'finishing',
+    description: 'Potencia del disparo.',
+  },
+  {
+    key: 'shotTechnique',
+    field: 'T\u00c9CNICA DISPARO',
+    label: 'Tecnica Disparo',
+    shortLabel: 'TDI',
+    group: 'finishing',
+    description: 'Calidad tecnica del golpeo en situaciones dificiles.',
+  },
+  {
+    key: 'freeKickAccuracy',
+    field: 'PRECISI\u00d3N TIRO LIBRE',
+    label: 'Precision Tiro Libre',
+    shortLabel: 'TL',
+    group: 'passing',
+    description: 'Precision especifica en tiros libres directos.',
+  },
+  {
+    key: 'swerve',
+    field: 'EFECTO',
+    label: 'Efecto',
+    shortLabel: 'EFE',
+    group: 'passing',
+    description: 'Curvatura y efecto aplicado a la pelota.',
+  },
+  {
+    key: 'heading',
+    field: 'CABEZAZO',
+    label: 'Cabezazo',
+    shortLabel: 'CAB',
+    group: 'finishing',
+    description: 'Direccion y limpieza tecnica del cabezazo.',
+  },
+  {
+    key: 'jump',
+    field: 'SALTO',
+    label: 'Salto',
+    shortLabel: 'SAL',
+    group: 'physical',
+    description: 'Capacidad de elevarse y ganar altura.',
+  },
+  {
+    key: 'technique',
+    field: 'T\u00c9CNICA',
+    label: 'Tecnica',
+    shortLabel: 'TEC',
+    group: 'dribbling',
+    description: 'Calidad tecnica general con la pelota.',
+  },
+  {
+    key: 'aggression',
+    field: 'AGRESIVIDAD',
+    label: 'Agresividad',
+    shortLabel: 'AGR',
+    group: 'gameReading',
+    description: 'Impulso para atacar espacios, disputar fuerte e ir a la accion.',
+  },
+  {
+    key: 'mentality',
+    field: 'MENTALIDAD',
+    label: 'Mentalidad',
+    shortLabel: 'MEN',
+    group: 'gameReading',
+    description: 'Protagonismo competitivo y persistencia durante el partido.',
+  },
+  {
+    key: 'goalkeeping',
+    field: 'ARQUERO',
+    label: 'Cualidades de Portero',
+    shortLabel: 'POR',
+    group: 'goalkeeping',
+    description: 'Calidad especifica de arquero.',
+  },
+  {
+    key: 'teamwork',
+    field: 'TRABAJO EN EQUIPO',
+    label: 'Trabajo en Equipo',
+    shortLabel: 'TEQ',
+    group: 'gameReading',
+    description: 'Coordinacion colectiva, estructura y continuidad.',
+  },
+];
+
+const ANALYSIS_GROUP_ORDER: AnalysisDimensionGroup[] = [
+  'gameReading',
+  'physical',
+  'dribbling',
+  'passing',
+  'finishing',
+  'goalkeeping',
+];
+
+const ANALYSIS_GROUP_LABELS: Record<AnalysisDimensionGroup, string> = {
+  gameReading: 'Lectura',
+  physical: 'Fisico',
+  dribbling: 'Conduccion',
+  passing: 'Pase',
+  finishing: 'Finalizacion',
+  goalkeeping: 'Porteria',
+};
+
+const ANALYSIS_GROUP_COLORS: Record<AnalysisDimensionGroup, string> = {
+  gameReading: '#169ad7',
+  physical: '#f04e4e',
+  dribbling: '#00b688',
+  passing: '#f8d300',
+  finishing: '#d300c8',
+  goalkeeping: '#9ca3af',
+};
+
+const ANALYSIS_TOP_STAT_COUNT = 8;
+
+const ATTACK_INDEX_KEYS: AnalysisDimensionKey[] = [
+  'attack',
+  'dribbleAccuracy',
+  'dribbleSpeed',
+  'shortPassAccuracy',
+  'longPassAccuracy',
+  'shotAccuracy',
+  'shotPower',
+  'shotTechnique',
+  'heading',
+  'technique',
+  'aggression',
+];
+
+const DEFENCE_INDEX_KEYS: AnalysisDimensionKey[] = [
+  'defense',
+  'balance',
+  'stamina',
+  'response',
+  'jump',
+  'mentality',
+  'goalkeeping',
+  'teamwork',
+];
 
 const CLUB_DETAILS: Record<string, { fullName: string; country: string }> = {
   'A.C. Milan': {
@@ -390,6 +764,293 @@ function playerCanCoverDepthPosition(player: DerivedPlayer, position: string): b
   );
 }
 
+function playerCanCoverRole(player: DerivedPlayer, role: string): boolean {
+  return getPlayerPositions(player).some((playerPosition) =>
+    getCoveredDepthPositions(playerPosition).includes(role),
+  );
+}
+
+function getRosterShortTermPlayers(roster: DerivedPlayer[]): DerivedPlayer[] {
+  return roster.filter(isShortTermPlayer);
+}
+
+function mean(values: number[]): number {
+  const validValues = values.filter((value) => Number.isFinite(value) && value > 0);
+  if (!validValues.length) return 0;
+  return validValues.reduce((sum, value) => sum + value, 0) / validValues.length;
+}
+
+function getPlayerStatValue(
+  player: DerivedPlayer,
+  field: keyof DerivedPlayer,
+): number | undefined {
+  const directValue = ensureNumber(player[field]);
+  if (directValue !== undefined) return directValue;
+
+  const normalizedField = normalizeText(String(field));
+  const matchingKey = Object.keys(player).find(
+    (key) => normalizeText(key) === normalizedField,
+  );
+  return matchingKey ? ensureNumber(player[matchingKey]) : undefined;
+}
+
+function getTopStatAverage(
+  players: DerivedPlayer[],
+  field: keyof DerivedPlayer,
+  takeCount = ANALYSIS_TOP_STAT_COUNT,
+): number {
+  const values = players
+    .map((player) => getPlayerStatValue(player, field) ?? 0)
+    .filter((value) => value > 0)
+    .sort((a, b) => b - a)
+    .slice(0, takeCount);
+
+  return mean(values);
+}
+
+function getBestLineValue(player: DerivedPlayer, line: PositionLineKey): number {
+  const values = LINE_ROLES[line]
+    .map((role) => getPositionAverage(player, role))
+    .filter((value) => value > 0);
+
+  if (!values.length) return ensureNumber(player.PROMEDIO) ?? 0;
+  return Math.max(...values);
+}
+
+function getLineStrength(roster: DerivedPlayer[], line: PositionLineKey): number {
+  const takeCount: Record<PositionLineKey, number> = {
+    PT: 1,
+    DEF: 5,
+    MED: 5,
+    ATA: 3,
+  };
+  const values = roster
+    .map((player) => getBestLineValue(player, line))
+    .sort((a, b) => b - a)
+    .slice(0, takeCount[line]);
+
+  if (!values.length) return 0;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function getAnalysisDimensionValue(
+  roster: DerivedPlayer[],
+  dimension: AnalysisDimensionDefinition,
+): number {
+  const sourceRoster =
+    dimension.key === 'goalkeeping'
+      ? roster.filter((player) => playerCanCoverRole(player, 'PT'))
+      : roster;
+  return getTopStatAverage(sourceRoster, dimension.field);
+}
+
+function getFamilyValue(
+  dimensions: Record<AnalysisDimensionKey, number>,
+  group: AnalysisDimensionGroup,
+): number {
+  return mean(
+    ANALYSIS_DIMENSIONS.filter((dimension) => dimension.group === group).map(
+      (dimension) => dimensions[dimension.key],
+    ),
+  );
+}
+
+function getDimensionKeyAverage(
+  dimensions: Record<AnalysisDimensionKey, number>,
+  keys: AnalysisDimensionKey[],
+): number {
+  return mean(keys.map((key) => dimensions[key]));
+}
+
+function buildAnalysisProfile(summary: ClubSummary): ClubAnalysisProfile {
+  const roster = summary.roster;
+  const macros = Object.fromEntries(
+    MACRO_FIELDS.map((field) => [field, getAverage(roster, field) ?? 0]),
+  ) as Record<MacroField, number>;
+  const lines = Object.fromEntries(
+    ANALYSIS_LINE_ORDER.map((line) => [line, getLineStrength(roster, line)]),
+  ) as Record<PositionLineKey, number>;
+  const dimensions = Object.fromEntries(
+    ANALYSIS_DIMENSIONS.map((dimension) => [
+      dimension.key,
+      getAnalysisDimensionValue(roster, dimension),
+    ]),
+  ) as Record<AnalysisDimensionKey, number>;
+  const overall = getAverage(roster, 'PROMEDIO') ?? 0;
+  const attackIndex = getDimensionKeyAverage(dimensions, ATTACK_INDEX_KEYS);
+  const defenceIndex = getDimensionKeyAverage(dimensions, DEFENCE_INDEX_KEYS);
+  const balanceIndex = mean(Object.values(dimensions));
+
+  return {
+    summary,
+    roster,
+    overall,
+    macros,
+    lines,
+    dimensions,
+    attackIndex,
+    defenceIndex,
+    balanceIndex,
+  };
+}
+
+function getRank(
+  profiles: ClubAnalysisProfile[],
+  activeClub: string,
+  getValue: (profile: ClubAnalysisProfile) => number,
+): number {
+  return (
+    [...profiles]
+      .sort((a, b) => getValue(b) - getValue(a))
+      .findIndex((profile) => profile.summary.club === activeClub) + 1
+  );
+}
+
+function getPercentile(values: number[], value: number): number {
+  if (!values.length) return 0;
+  const belowOrEqual = values.filter((item) => item <= value).length;
+  return Math.round((belowOrEqual / values.length) * 100);
+}
+
+function formatSignedNumber(value: number, digits = 1): string {
+  return `${value >= 0 ? '+' : ''}${formatNumber(value, digits)}`;
+}
+
+function getRankingContext(rank: number): string {
+  if (rank <= 4) return 'elite ANFPES';
+  if (rank <= 8) return 'zona alta';
+  if (rank <= 16) return 'mitad superior';
+  if (rank <= 24) return 'mitad baja';
+  return 'zona baja';
+}
+
+function getSquadIdentity(attackDelta: number, defenceDelta: number): string {
+  if (attackDelta >= 1.5 && defenceDelta >= 1.5) return 'dominante y equilibrado';
+  if (attackDelta - defenceDelta >= 1.5) return 'perfil ofensivo';
+  if (defenceDelta - attackDelta >= 1.5) return 'perfil defensivo';
+  if (attackDelta < -1.5 && defenceDelta < -1.5) return 'bajo promedio en ambos indices';
+  return 'equilibrado';
+}
+
+function getRoleFit(player: DerivedPlayer, role: string): FormationAssignment['fit'] {
+  const positions = getPlayerPositions(player);
+  const primary = positions[0];
+
+  if (primary && getCoveredDepthPositions(primary).includes(role)) return 'natural';
+  if (playerCanCoverRole(player, role)) return 'compatible';
+  if (positions.some((position) => getPositionLine(position) === getPositionLine(role))) {
+    return 'adapted';
+  }
+  return 'forced';
+}
+
+function getRoleFitBonus(fit: FormationAssignment['fit']): number {
+  if (fit === 'natural') return 4;
+  if (fit === 'compatible') return 2;
+  if (fit === 'adapted') return -5;
+  return -14;
+}
+
+function scorePlayerForSlot(player: DerivedPlayer, slot: FormationSlot) {
+  const rating = getPositionAverage(player, slot.role);
+  const fit = getRoleFit(player, slot.role);
+  const score = rating + getRoleFitBonus(fit);
+  return { rating, fit, score };
+}
+
+function buildFormationRecommendation(
+  formationName: string,
+  slots: FormationSlot[],
+  roster: DerivedPlayer[],
+): FormationRecommendation | null {
+  if (roster.length < slots.length) return null;
+
+  const orderedSlots = slots
+    .map((slot, originalIndex) => {
+      const candidates = roster
+        .map((player, playerIndex) => ({
+          player,
+          playerIndex,
+          ...scorePlayerForSlot(player, slot),
+        }))
+        .sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          return String(a.player.NOMBRE ?? '').localeCompare(
+            String(b.player.NOMBRE ?? ''),
+            'es',
+            { sensitivity: 'base' },
+          );
+        });
+
+      return { slot, originalIndex, candidates };
+    })
+    .sort((a, b) => {
+      const aNaturalCount = a.candidates.filter(
+        (candidate) => candidate.fit === 'natural' || candidate.fit === 'compatible',
+      ).length;
+      const bNaturalCount = b.candidates.filter(
+        (candidate) => candidate.fit === 'natural' || candidate.fit === 'compatible',
+      ).length;
+      if (aNaturalCount !== bNaturalCount) return aNaturalCount - bNaturalCount;
+
+      const aTopScore = a.candidates[0]?.score ?? 0;
+      const bTopScore = b.candidates[0]?.score ?? 0;
+      return bTopScore - aTopScore;
+    });
+
+  const usedPlayerIds = new Set<string>();
+  const assignments = orderedSlots
+    .map((slotEntry) => {
+      const pick = slotEntry.candidates.find(
+        (candidate) => !usedPlayerIds.has(String(candidate.player.ID)),
+      );
+      if (!pick) return null;
+      usedPlayerIds.add(String(pick.player.ID));
+      return {
+        slot: slotEntry.slot,
+        originalIndex: slotEntry.originalIndex,
+        player: pick.player,
+        rating: pick.rating,
+        score: pick.score,
+        fit: pick.fit,
+      };
+    })
+    .filter((assignment): assignment is FormationAssignment & { originalIndex: number } =>
+      Boolean(assignment),
+    )
+    .sort((a, b) => a.originalIndex - b.originalIndex)
+    .map(({ slot, player, rating, score, fit }) => ({
+      slot,
+      player,
+      rating,
+      score,
+      fit,
+    }));
+
+  if (assignments.length !== slots.length) return null;
+  const totalScore = assignments.reduce((sum, assignment) => sum + assignment.score, 0);
+
+  return {
+    formationName,
+    score: totalScore / slots.length,
+    assignments,
+  };
+}
+
+function buildFormationRecommendations(
+  roster: DerivedPlayer[],
+): FormationRecommendation[] {
+  return Object.entries(FORMATIONS)
+    .map(([formationName, slots]) =>
+      buildFormationRecommendation(formationName, slots, roster),
+    )
+    .filter((recommendation): recommendation is FormationRecommendation =>
+      Boolean(recommendation),
+    )
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+}
+
 function buildPositionDepth(roster: DerivedPlayer[]): PositionDepthEntry[] {
   return POSITION_DEPTH_ORDER.map((position) => {
     const players = roster
@@ -397,6 +1058,50 @@ function buildPositionDepth(roster: DerivedPlayer[]): PositionDepthEntry[] {
       .map((player) => ({
         player,
         rating: getPositionAverage(player, position),
+      }))
+      .sort((a, b) => {
+        if (b.rating !== a.rating) return b.rating - a.rating;
+        return String(a.player.NOMBRE ?? '').localeCompare(
+          String(b.player.NOMBRE ?? ''),
+          'es',
+          { sensitivity: 'base' },
+        );
+      });
+
+    return { position, players };
+  });
+}
+
+function getCriticalDepthRoles(position: string): string[] {
+  return POSITION_DEPTH_COVERAGE[position] ?? [position];
+}
+
+function playerCanCoverCriticalDepthPosition(
+  player: DerivedPlayer,
+  position: string,
+): boolean {
+  const targetRoles = getCriticalDepthRoles(position);
+  return getPlayerPositions(player).some((playerPosition) => {
+    if (targetRoles.includes(playerPosition)) return true;
+    return getCoveredDepthPositions(playerPosition).some((coveredPosition) =>
+      targetRoles.includes(coveredPosition),
+    );
+  });
+}
+
+function getCriticalDepthRating(player: DerivedPlayer, position: string): number {
+  const targetRoles = getCriticalDepthRoles(position);
+  const ratings = targetRoles.map((role) => getPositionAverage(player, role));
+  return Math.max(...ratings);
+}
+
+function buildCriticalDepth(roster: DerivedPlayer[]): PositionDepthEntry[] {
+  return CRITICAL_DEPTH_ORDER.map((position) => {
+    const players = roster
+      .filter((player) => playerCanCoverCriticalDepthPosition(player, position))
+      .map((player) => ({
+        player,
+        rating: getCriticalDepthRating(player, position),
       }))
       .sort((a, b) => {
         if (b.rating !== a.rating) return b.rating - a.rating;
@@ -437,7 +1142,9 @@ function buildClubSummary(club: string, players: DerivedPlayer[]): ClubSummary {
     club,
     division: competitionDetails?.division,
     manager: competitionDetails?.manager,
-    shortTermPlayer: competitionDetails?.shortTermPlayer,
+    shortTermPlayer: getRosterShortTermPlayers(roster)
+      .map((player) => String(player.NOMBRE ?? ''))
+      .join(', '),
     roster,
     rosterCount: roster.length,
     average: getAverage(roster, 'PROMEDIO'),
@@ -559,11 +1266,20 @@ function PlayerPrimaryPositionRating({ player }: { player: DerivedPlayer }) {
   return (
     <div className="club-feature-meta">
       {primaryPosition && (
-        <span className={`position-badge primary position-${line}`}>
-          {primaryPosition}
-        </span>
+        <EnhancedTooltip content={getPositionFullName(primaryPosition)} placement="top">
+          <span className={`position-badge primary position-${line}`}>
+            {primaryPosition}
+          </span>
+        </EnhancedTooltip>
       )}
-      <RatingValue value={average} />
+      <EnhancedTooltip
+        content={`Promedio principal: ${formatNumber(average, 0)}`}
+        placement="top"
+      >
+        <span>
+          <RatingValue value={average} />
+        </span>
+      </EnhancedTooltip>
     </div>
   );
 }
@@ -939,6 +1655,1112 @@ function OpponentLineupPitch({
   );
 }
 
+function getChartTooltipPosition(event: ReactMouseEvent<Element>) {
+  const estimatedWidth = 300;
+  const estimatedHeight = 140;
+  const margin = 10;
+  return {
+    x: Math.min(event.clientX + 14, window.innerWidth - estimatedWidth - margin),
+    y: Math.min(event.clientY + 14, window.innerHeight - estimatedHeight - margin),
+  };
+}
+
+function ClubChartTooltip({ tooltip }: { tooltip: ChartTooltipState | null }) {
+  if (!tooltip) return null;
+
+  return (
+    <div
+      className="glossary-tooltip-popup club-chart-tooltip"
+      style={{
+        position: 'fixed',
+        left: `${Math.max(10, tooltip.x)}px`,
+        top: `${Math.max(10, tooltip.y)}px`,
+        transform: 'none',
+      }}
+    >
+      <div className="glossary-tooltip-definition club-chart-tooltip-body">
+        {tooltip.content}
+      </div>
+    </div>
+  );
+}
+
+function AnalysisKpi({
+  label,
+  value,
+  detail,
+  description,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+  description: string;
+}) {
+  return (
+    <article className="club-analysis-kpi">
+      <span>{label}</span>
+      <EnhancedTooltip
+        content={
+          <div className="club-enhanced-tooltip-content">
+            <strong>{label}</strong>
+            <span>{description}</span>
+            <small>
+              {value} · {detail}
+            </small>
+          </div>
+        }
+        placement="top"
+      >
+        <strong>{value}</strong>
+      </EnhancedTooltip>
+      <small>{detail}</small>
+    </article>
+  );
+}
+
+function getLeagueDimensionAverage(
+  profiles: ClubAnalysisProfile[],
+  key: AnalysisDimensionKey,
+): number {
+  return mean(profiles.map((profile) => profile.dimensions[key]));
+}
+
+function getLeagueFamilyAverage(
+  profiles: ClubAnalysisProfile[],
+  group: AnalysisDimensionGroup,
+): number {
+  return mean(profiles.map((profile) => getFamilyValue(profile.dimensions, group)));
+}
+
+function polarPoint(
+  centerX: number,
+  centerY: number,
+  radius: number,
+  angleDegrees: number,
+): ChartPoint {
+  const radians = ((angleDegrees - 90) * Math.PI) / 180;
+  return {
+    x: centerX + Math.cos(radians) * radius,
+    y: centerY + Math.sin(radians) * radius,
+  };
+}
+
+function describeDonutSegment(
+  centerX: number,
+  centerY: number,
+  innerRadius: number,
+  outerRadius: number,
+  startAngle: number,
+  endAngle: number,
+): string {
+  const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+  const outerStart = polarPoint(centerX, centerY, outerRadius, startAngle);
+  const outerEnd = polarPoint(centerX, centerY, outerRadius, endAngle);
+  const innerEnd = polarPoint(centerX, centerY, innerRadius, endAngle);
+  const innerStart = polarPoint(centerX, centerY, innerRadius, startAngle);
+
+  return [
+    `M ${outerStart.x} ${outerStart.y}`,
+    `A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${outerEnd.x} ${outerEnd.y}`,
+    `L ${innerEnd.x} ${innerEnd.y}`,
+    `A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${innerStart.x} ${innerStart.y}`,
+    'Z',
+  ].join(' ');
+}
+
+function ClubAttributeRoseChart({
+  activeProfile,
+  profiles,
+}: {
+  activeProfile: ClubAnalysisProfile;
+  profiles: ClubAnalysisProfile[];
+}) {
+  const center = 170;
+  const innerRadius = 32;
+  const maxOuterRadius = 164;
+  const orderedDimensions = ANALYSIS_GROUP_ORDER.flatMap((group) =>
+    ANALYSIS_DIMENSIONS.filter((dimension) => dimension.group === group),
+  );
+  const segmentAngle = 360 / orderedDimensions.length;
+  const minValue = 45;
+  const maxValue = 95;
+  const [tooltip, setTooltip] = useState<ChartTooltipState | null>(null);
+
+  return (
+    <div className="club-analysis-chart-card club-attribute-rose-card">
+      <header>
+        <h3>Radar de Stats</h3>
+        <span>Top {ANALYSIS_TOP_STAT_COUNT} por stat</span>
+      </header>
+      <div className="club-attribute-visual">
+        <svg className="club-attribute-rose-chart" viewBox="0 0 340 340" role="img">
+          <circle
+            cx={center}
+            cy={center}
+            r={innerRadius}
+            className="club-attribute-core"
+          />
+          {[0.25, 0.5, 0.75, 1].map((ring) => (
+            <circle
+              key={ring}
+              cx={center}
+              cy={center}
+              r={innerRadius + (maxOuterRadius - innerRadius) * ring}
+              className="club-attribute-ring"
+            />
+          ))}
+          {orderedDimensions.map((dimension, index) => {
+            const startAngle = index * segmentAngle + 1.2;
+            const endAngle = (index + 1) * segmentAngle - 1.2;
+            const value = activeProfile.dimensions[dimension.key];
+            const leagueValue = getLeagueDimensionAverage(profiles, dimension.key);
+            const normalized = Math.max(
+              0.04,
+              Math.min(1, (value - minValue) / (maxValue - minValue)),
+            );
+            const outerRadius = innerRadius + (maxOuterRadius - innerRadius) * normalized;
+            const tooltipContent = (
+              <div className="club-chart-tooltip-content">
+                <strong>{dimension.label}</strong>
+                <span>{ANALYSIS_GROUP_LABELS[dimension.group]}</span>
+                <small>
+                  Club {formatNumber(value, 1)} · Liga {formatNumber(leagueValue, 1)}
+                </small>
+                <p>{dimension.description}</p>
+              </div>
+            );
+            return (
+              <g key={dimension.key} className="club-attribute-segment">
+                <path
+                  d={describeDonutSegment(
+                    center,
+                    center,
+                    innerRadius,
+                    outerRadius,
+                    startAngle,
+                    endAngle,
+                  )}
+                  fill={ANALYSIS_GROUP_COLORS[dimension.group]}
+                  className="club-attribute-slice"
+                  onMouseEnter={(event) =>
+                    setTooltip({
+                      ...getChartTooltipPosition(event),
+                      content: tooltipContent,
+                    })
+                  }
+                  onMouseMove={(event) =>
+                    setTooltip({
+                      ...getChartTooltipPosition(event),
+                      content: tooltipContent,
+                    })
+                  }
+                  onMouseLeave={() => setTooltip(null)}
+                />
+              </g>
+            );
+          })}
+        </svg>
+        <ClubChartTooltip tooltip={tooltip} />
+      </div>
+    </div>
+  );
+}
+
+function FamilyComparisonPanel({
+  activeProfile,
+  profiles,
+}: {
+  activeProfile: ClubAnalysisProfile;
+  profiles: ClubAnalysisProfile[];
+}) {
+  const activeValues = Object.fromEntries(
+    ANALYSIS_GROUP_ORDER.map((group) => [
+      group,
+      getFamilyValue(activeProfile.dimensions, group),
+    ]),
+  ) as Record<AnalysisDimensionGroup, number>;
+  const leagueValues = Object.fromEntries(
+    ANALYSIS_GROUP_ORDER.map((group) => [group, getLeagueFamilyAverage(profiles, group)]),
+  ) as Record<AnalysisDimensionGroup, number>;
+
+  return (
+    <article className="club-analysis-chart-card club-family-comparison-card">
+      <header>
+        <h3>Familia de Stats</h3>
+        <span>Club vs promedio ANFPES</span>
+      </header>
+      <div className="club-family-bars">
+        {ANALYSIS_GROUP_ORDER.map((group) => {
+          const value = activeValues[group];
+          const leagueValue = leagueValues[group];
+          const delta = value - leagueValue;
+          return (
+            <div key={group} className="club-family-row">
+              <div className="club-family-row-head">
+                <strong>{ANALYSIS_GROUP_LABELS[group]}</strong>
+                <span className={delta >= 0 ? 'positive' : 'negative'}>
+                  {delta >= 0 ? '+' : ''}
+                  {formatNumber(delta, 1)}
+                </span>
+              </div>
+              <EnhancedTooltip
+                content={`${ANALYSIS_GROUP_LABELS[group]} | Club: ${formatNumber(
+                  value,
+                  1,
+                )} | Liga: ${formatNumber(leagueValue, 1)}`}
+                placement="top"
+                className="club-family-track-tooltip"
+              >
+                <span className="club-family-track">
+                  <span
+                    className="club-family-league-marker"
+                    style={{ left: `${Math.max(0, Math.min(100, leagueValue))}%` }}
+                  />
+                  <span
+                    className="club-family-fill"
+                    style={{
+                      width: `${Math.max(0, Math.min(100, value))}%`,
+                      background: ANALYSIS_GROUP_COLORS[group],
+                    }}
+                  />
+                </span>
+              </EnhancedTooltip>
+              <div className="club-family-values">
+                <span>Club {formatNumber(value, 1)}</span>
+                <span>Liga {formatNumber(leagueValue, 1)}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </article>
+  );
+}
+
+function ClubScatterPlot({
+  activeProfile,
+  profiles,
+}: {
+  activeProfile: ClubAnalysisProfile;
+  profiles: ClubAnalysisProfile[];
+}) {
+  const width = 420;
+  const height = 280;
+  const padding = 38;
+  const xValues = profiles.map((profile) => profile.attackIndex);
+  const yValues = profiles.map((profile) => profile.defenceIndex);
+  const xMin = Math.min(...xValues) - 1;
+  const xMax = Math.max(...xValues) + 1;
+  const yMin = Math.min(...yValues) - 1;
+  const yMax = Math.max(...yValues) + 1;
+  const xAverage = xValues.reduce((sum, value) => sum + value, 0) / xValues.length;
+  const yAverage = yValues.reduce((sum, value) => sum + value, 0) / yValues.length;
+  const isHighAttack = activeProfile.attackIndex >= xAverage;
+  const isHighDefence = activeProfile.defenceIndex >= yAverage;
+  const reading =
+    isHighAttack && isHighDefence
+      ? 'Cuadrante superior derecho: plantel fuerte y equilibrado para competir arriba.'
+      : isHighAttack
+        ? 'Cuadrante inferior derecho: plantel con mas peso ofensivo que defensivo.'
+        : isHighDefence
+          ? 'Cuadrante superior izquierdo: plantel mas solido defendiendo que atacando.'
+          : 'Cuadrante inferior izquierdo: plantel bajo el promedio en ambos indices.';
+
+  const xScale = (value: number) =>
+    padding + ((value - xMin) / (xMax - xMin || 1)) * (width - padding * 2);
+  const yScale = (value: number) =>
+    height - padding - ((value - yMin) / (yMax - yMin || 1)) * (height - padding * 2);
+  const [tooltip, setTooltip] = useState<ChartTooltipState | null>(null);
+
+  return (
+    <div className="club-analysis-chart-card club-scatter-card">
+      <header>
+        <h3>Ataque vs defensa</h3>
+        <span>Comparacion con los otros 31</span>
+      </header>
+      <svg className="club-scatter-chart" viewBox={`0 0 ${width} ${height}`} role="img">
+        <text x={padding + 4} y={padding - 12} className="club-scatter-quadrant">
+          defensa alta / ataque bajo
+        </text>
+        <text
+          x={width - padding - 4}
+          y={padding - 12}
+          textAnchor="end"
+          className="club-scatter-quadrant"
+        >
+          ataque y defensa altos
+        </text>
+        <text
+          x={width - padding - 4}
+          y={height - padding + 22}
+          textAnchor="end"
+          className="club-scatter-quadrant"
+        >
+          ataque alto / defensa baja
+        </text>
+        <line
+          x1={xScale(xAverage)}
+          x2={xScale(xAverage)}
+          y1={padding}
+          y2={height - padding}
+          className="club-scatter-axis"
+        />
+        <line
+          x1={padding}
+          x2={width - padding}
+          y1={yScale(yAverage)}
+          y2={yScale(yAverage)}
+          className="club-scatter-axis"
+        />
+        {profiles.map((profile) => {
+          const active = profile.summary.club === activeProfile.summary.club;
+          const tooltipContent = (
+            <div className="club-chart-tooltip-content">
+              <strong>{profile.summary.club}</strong>
+              <span>{active ? 'Club analizado' : 'Comparacion ANFPES'}</span>
+              <small>
+                Ataque {formatNumber(profile.attackIndex, 1)} · Defensa{' '}
+                {formatNumber(profile.defenceIndex, 1)}
+              </small>
+              <p>Promedio general {formatNumber(profile.overall, 1)}</p>
+            </div>
+          );
+          return (
+            <g
+              key={profile.summary.club}
+              className="club-scatter-point-group"
+              onMouseEnter={(event) =>
+                setTooltip({
+                  ...getChartTooltipPosition(event),
+                  content: tooltipContent,
+                })
+              }
+              onMouseMove={(event) =>
+                setTooltip({
+                  ...getChartTooltipPosition(event),
+                  content: tooltipContent,
+                })
+              }
+              onMouseLeave={() => setTooltip(null)}
+            >
+              <circle
+                cx={xScale(profile.attackIndex)}
+                cy={yScale(profile.defenceIndex)}
+                r={active ? 7 : 4}
+                className={active ? 'club-scatter-point active' : 'club-scatter-point'}
+              />
+              {active && (
+                <text
+                  x={xScale(profile.attackIndex) + 10}
+                  y={yScale(profile.defenceIndex) - 8}
+                >
+                  {profile.summary.club}
+                </text>
+              )}
+            </g>
+          );
+        })}
+        <text x={width / 2} y={height - 6} textAnchor="middle">
+          Indice ofensivo
+        </text>
+        <text
+          x={12}
+          y={height / 2}
+          textAnchor="middle"
+          transform={`rotate(-90 12 ${height / 2})`}
+        >
+          Indice defensivo
+        </text>
+      </svg>
+      <ClubChartTooltip tooltip={tooltip} />
+      <p className="club-scatter-reading">
+        Las lineas marcan el promedio ANFPES. {reading}
+      </p>
+    </div>
+  );
+}
+
+function AnalysisLineupPitch({
+  recommendation,
+  club,
+  onOpenPlayer,
+}: {
+  recommendation: FormationRecommendation;
+  club: string;
+  onOpenPlayer: (player: DerivedPlayer) => void;
+}) {
+  const slots = recommendation.assignments.map((assignment) => ({
+    ...assignment.slot,
+    playerId: String(assignment.player.ID),
+  }));
+  const players = recommendation.assignments.map((assignment) => assignment.player);
+
+  return (
+    <div className="analysis-tactical-pitch-wrap">
+      <TacticalPitch
+        slots={slots}
+        players={players}
+        clubId={club}
+        candidateInIds={[]}
+        candidateOutIds={[]}
+        planLabel={recommendation.formationName}
+        hideHeader
+        useClubKitImages
+        offsideTrap="C"
+        onSlotClick={(slotId) => {
+          const assignment = recommendation.assignments.find(
+            (item) => item.slot.slotId === slotId,
+          );
+          if (assignment) onOpenPlayer(assignment.player);
+        }}
+      />
+    </div>
+  );
+}
+
+function formatVoronoiPlayerName(value: unknown): string {
+  const name = String(value ?? '').trim();
+  if (name.length <= 11) return name;
+  return `${name.slice(0, 10)}.`;
+}
+
+function transformSlotToVoronoiPoint(slot: FormationSlot): ChartPoint {
+  return {
+    x: 100 - slot.y,
+    y: slot.x * 0.64,
+  };
+}
+
+function clipPolygonForPoint(
+  polygon: ChartPoint[],
+  point: ChartPoint,
+  otherPoint: ChartPoint,
+): ChartPoint[] {
+  const a = otherPoint.x - point.x;
+  const b = otherPoint.y - point.y;
+  const c =
+    (otherPoint.x * otherPoint.x +
+      otherPoint.y * otherPoint.y -
+      point.x * point.x -
+      point.y * point.y) /
+    2;
+
+  const distance = (candidate: ChartPoint) => a * candidate.x + b * candidate.y - c;
+  const clipped: ChartPoint[] = [];
+
+  polygon.forEach((current, index) => {
+    const previous = polygon[(index + polygon.length - 1) % polygon.length];
+    const currentDistance = distance(current);
+    const previousDistance = distance(previous);
+    const currentInside = currentDistance <= 0.001;
+    const previousInside = previousDistance <= 0.001;
+
+    if (currentInside !== previousInside) {
+      const ratio = previousDistance / (previousDistance - currentDistance);
+      clipped.push({
+        x: previous.x + (current.x - previous.x) * ratio,
+        y: previous.y + (current.y - previous.y) * ratio,
+      });
+    }
+
+    if (currentInside) clipped.push(current);
+  });
+
+  return clipped;
+}
+
+function polygonPoints(points: ChartPoint[]): string {
+  return points.map((point) => `${point.x},${point.y}`).join(' ');
+}
+
+function polygonArea(points: ChartPoint[]): number {
+  if (points.length < 3) return 0;
+  const doubledArea = points.reduce((sum, point, index) => {
+    const next = points[(index + 1) % points.length];
+    return sum + point.x * next.y - next.x * point.y;
+  }, 0);
+  return Math.abs(doubledArea / 2);
+}
+
+function getVoronoiSide(point: ChartPoint): string {
+  if (point.y < 64 / 3) return 'Izquierda';
+  if (point.y > (64 / 3) * 2) return 'Derecha';
+  return 'Centro';
+}
+
+function VoronoiPitch({ recommendation }: { recommendation: FormationRecommendation }) {
+  const points = recommendation.assignments.map((assignment) => ({
+    assignment,
+    point: transformSlotToVoronoiPoint(assignment.slot),
+  }));
+  const cells = points.map((entry) => {
+    let polygon: ChartPoint[] = [
+      { x: 0, y: 0 },
+      { x: 100, y: 0 },
+      { x: 100, y: 64 },
+      { x: 0, y: 64 },
+    ];
+
+    points.forEach((otherEntry) => {
+      if (otherEntry.assignment.slot.slotId === entry.assignment.slot.slotId) return;
+      polygon = clipPolygonForPoint(polygon, entry.point, otherEntry.point);
+    });
+
+    return {
+      ...entry,
+      polygon,
+      area: polygonArea(polygon),
+    };
+  });
+  const totalArea = cells.reduce((sum, cell) => sum + cell.area, 0);
+  const largestCell = cells.reduce((best, cell) => (cell.area > best.area ? cell : best));
+  const smallestCell = cells.reduce((best, cell) =>
+    cell.area < best.area ? cell : best,
+  );
+  const lineShares = ANALYSIS_LINE_ORDER.map((line) => {
+    const lineCells = cells.filter(
+      (cell) => getPositionLine(cell.assignment.slot.role) === line,
+    );
+    const area = lineCells.reduce((sum, cell) => sum + cell.area, 0);
+    return {
+      line,
+      area,
+      percentage: totalArea ? (area / totalArea) * 100 : 0,
+      rating: mean(lineCells.map((cell) => cell.assignment.rating)),
+    };
+  }).filter((line) => line.area > 0);
+  const dominantLine = lineShares.reduce((best, line) =>
+    line.area > best.area ? line : best,
+  );
+  const sideShares = ['Izquierda', 'Centro', 'Derecha'].map((side) => {
+    const area = cells
+      .filter((cell) => getVoronoiSide(cell.point) === side)
+      .reduce((sum, cell) => sum + cell.area, 0);
+    return {
+      side,
+      area,
+      percentage: totalArea ? (area / totalArea) * 100 : 0,
+    };
+  });
+  const dominantSide = sideShares.reduce((best, side) =>
+    side.area > best.area ? side : best,
+  );
+  const lineCenters = ANALYSIS_LINE_ORDER.map((line) =>
+    mean(
+      cells
+        .filter((cell) => getPositionLine(cell.assignment.slot.role) === line)
+        .map((cell) => cell.point.x),
+    ),
+  ).filter((value) => value > 0);
+  const lineSpread = lineCenters.length
+    ? Math.max(...lineCenters) - Math.min(...lineCenters)
+    : 0;
+  const compactness =
+    lineSpread <= 48 ? 'compacto' : lineSpread <= 62 ? 'medio' : 'largo';
+  const riskyCell = [...cells].sort((a, b) => {
+    const riskA = (a.area / (totalArea || 1)) * Math.max(0, 88 - a.assignment.rating);
+    const riskB = (b.area / (totalArea || 1)) * Math.max(0, 88 - b.assignment.rating);
+    return riskB - riskA;
+  })[0];
+  const [tooltip, setTooltip] = useState<ChartTooltipState | null>(null);
+
+  return (
+    <div className="club-analysis-chart-card club-voronoi-card">
+      <header>
+        <h3>Voronoi territorial</h3>
+        <span>Zonas del once sugerido</span>
+      </header>
+      <div className="club-voronoi-layout">
+        <div className="club-voronoi-visual">
+          <svg className="analysis-voronoi-pitch" viewBox="0 0 100 64" role="img">
+            <rect x="0" y="0" width="100" height="64" className="voronoi-pitch-bg" />
+            {cells.map((cell) => {
+              const line = getPositionLine(cell.assignment.slot.role);
+              const territoryShare = totalArea ? (cell.area / totalArea) * 100 : 0;
+              const tooltipContent = (
+                <div className="club-chart-tooltip-content">
+                  <strong>{cell.assignment.player.NOMBRE as string}</strong>
+                  <span>{cell.assignment.slot.role}</span>
+                  <small>
+                    Rating {formatNumber(cell.assignment.rating, 0)} · Territorio{' '}
+                    {formatNumber(territoryShare, 0)}%
+                  </small>
+                  <p>
+                    {LINE_LABELS[line]} · {cell.assignment.fit}
+                  </p>
+                </div>
+              );
+              return (
+                <polygon
+                  key={cell.assignment.slot.slotId}
+                  points={polygonPoints(cell.polygon)}
+                  fill={LINE_COLORS[line]}
+                  opacity={
+                    0.18 +
+                    Math.max(0, Math.min(1, (cell.assignment.rating - 65) / 25)) * 0.16
+                  }
+                  className="voronoi-cell"
+                  onMouseEnter={(event) =>
+                    setTooltip({
+                      ...getChartTooltipPosition(event),
+                      content: tooltipContent,
+                    })
+                  }
+                  onMouseMove={(event) =>
+                    setTooltip({
+                      ...getChartTooltipPosition(event),
+                      content: tooltipContent,
+                    })
+                  }
+                  onMouseLeave={() => setTooltip(null)}
+                />
+              );
+            })}
+            <rect x="1" y="1" width="98" height="62" className="voronoi-line" />
+            <line x1="50" y1="1" x2="50" y2="63" className="voronoi-line" />
+            <circle cx="50" cy="32" r="8" className="voronoi-line-fill" />
+            <rect x="1" y="14" width="16" height="36" className="voronoi-line-fill" />
+            <rect x="1" y="23.5" width="6.5" height="17" className="voronoi-line-fill" />
+            <rect x="83" y="14" width="16" height="36" className="voronoi-line-fill" />
+            <rect
+              x="92.5"
+              y="23.5"
+              width="6.5"
+              height="17"
+              className="voronoi-line-fill"
+            />
+            {points.map((entry) => {
+              const matchingCell = cells.find(
+                (cell) => cell.assignment.slot.slotId === entry.assignment.slot.slotId,
+              );
+              const territoryShare =
+                matchingCell && totalArea ? (matchingCell.area / totalArea) * 100 : 0;
+              const tooltipContent = (
+                <div className="club-chart-tooltip-content">
+                  <strong>{entry.assignment.player.NOMBRE as string}</strong>
+                  <span>{entry.assignment.slot.role}</span>
+                  <small>
+                    Rating {formatNumber(entry.assignment.rating, 0)} · Territorio{' '}
+                    {formatNumber(territoryShare, 0)}%
+                  </small>
+                </div>
+              );
+              return (
+                <g
+                  key={entry.assignment.slot.slotId}
+                  className="voronoi-player-label"
+                  onMouseEnter={(event) =>
+                    setTooltip({
+                      ...getChartTooltipPosition(event),
+                      content: tooltipContent,
+                    })
+                  }
+                  onMouseMove={(event) =>
+                    setTooltip({
+                      ...getChartTooltipPosition(event),
+                      content: tooltipContent,
+                    })
+                  }
+                  onMouseLeave={() => setTooltip(null)}
+                >
+                  <rect
+                    x={entry.point.x - 4.4}
+                    y={entry.point.y - 4.5}
+                    width="8.8"
+                    height="3.9"
+                    rx="0.9"
+                    fill={LINE_COLORS[getPositionLine(entry.assignment.slot.role)]}
+                    className="voronoi-position-badge"
+                  />
+                  <text
+                    x={entry.point.x}
+                    y={entry.point.y - 2.55}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className="voronoi-position-text"
+                  >
+                    {entry.assignment.slot.role}
+                  </text>
+                  <text
+                    x={entry.point.x}
+                    y={entry.point.y + 3}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className="voronoi-player-name"
+                  >
+                    {formatVoronoiPlayerName(entry.assignment.player.NOMBRE)}
+                  </text>
+                </g>
+              );
+            })}
+            <line x1="0" y1="0" x2="100" y2="64" className="voronoi-shadow-diagonal" />
+            <line x1="0" y1="64" x2="100" y2="0" className="voronoi-shadow-diagonal" />
+          </svg>
+          <ClubChartTooltip tooltip={tooltip} />
+        </div>
+        <aside className="club-voronoi-insights">
+          <h4>Lectura territorial</h4>
+          <div className="club-territory-grid">
+            <div>
+              <span>Mayor zona</span>
+              <strong>{largestCell.assignment.player.NOMBRE as string}</strong>
+              <small>
+                {formatNumber((largestCell.area / (totalArea || 1)) * 100, 0)}% del mapa
+              </small>
+            </div>
+            <div>
+              <span>Menor zona</span>
+              <strong>{smallestCell.assignment.player.NOMBRE as string}</strong>
+              <small>
+                {formatNumber((smallestCell.area / (totalArea || 1)) * 100, 0)}% del mapa
+              </small>
+            </div>
+            <div>
+              <span>Carril dominante</span>
+              <strong>{dominantSide.side}</strong>
+              <small>{formatNumber(dominantSide.percentage, 0)}% territorial</small>
+            </div>
+            <div>
+              <span>Compactacion</span>
+              <strong>{compactness}</strong>
+              <small>distancia entre bloques {formatNumber(lineSpread, 0)}</small>
+            </div>
+          </div>
+          <div className="club-territory-lines">
+            {lineShares.map((share) => (
+              <div key={share.line} className="club-territory-line-row">
+                <span>{LINE_LABELS[share.line]}</span>
+                <div className="club-territory-track">
+                  <em
+                    style={{
+                      width: `${Math.max(0, Math.min(100, share.percentage))}%`,
+                      background: LINE_COLORS[share.line],
+                    }}
+                  />
+                </div>
+                <strong>{formatNumber(share.percentage, 0)}%</strong>
+              </div>
+            ))}
+          </div>
+          <p className="club-voronoi-reading">
+            Bloque territorial principal:{' '}
+            <strong>{LINE_LABELS[dominantLine.line]}</strong>. Carga sensible:{' '}
+            <strong>{riskyCell.assignment.player.NOMBRE as string}</strong> (
+            {riskyCell.assignment.slot.role}{' '}
+            {formatNumber(riskyCell.assignment.rating, 0)}).
+          </p>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function ClubAnalysisHub({
+  summary,
+  summaries,
+  onClose,
+  onOpenPlayer,
+}: {
+  summary: ClubSummary;
+  summaries: ClubSummary[];
+  onClose: () => void;
+  onOpenPlayer: (player: DerivedPlayer) => void;
+}) {
+  const [selectedRecommendationIndex, setSelectedRecommendationIndex] = useState(0);
+  const profiles = useMemo(
+    () => summaries.map((item) => buildAnalysisProfile(item)),
+    [summaries],
+  );
+  const activeProfile =
+    profiles.find((profile) => profile.summary.club === summary.club) ??
+    buildAnalysisProfile(summary);
+  const recommendations = useMemo(
+    () => buildFormationRecommendations(activeProfile.roster),
+    [activeProfile.roster],
+  );
+  const selectedRecommendation =
+    recommendations[selectedRecommendationIndex] ?? recommendations[0];
+  const overallRank = getRank(profiles, summary.club, (profile) => profile.overall);
+  const attackRank = getRank(profiles, summary.club, (profile) => profile.attackIndex);
+  const defenceRank = getRank(profiles, summary.club, (profile) => profile.defenceIndex);
+  const balanceRank = getRank(profiles, summary.club, (profile) => profile.balanceIndex);
+  const leagueBoard = [...profiles].sort((a, b) => b.overall - a.overall);
+  const bestDimension = ANALYSIS_DIMENSIONS.reduce((best, dimension) =>
+    activeProfile.dimensions[dimension.key] > activeProfile.dimensions[best.key]
+      ? dimension
+      : best,
+  );
+  const weakestDimension = ANALYSIS_DIMENSIONS.reduce((weakest, dimension) =>
+    activeProfile.dimensions[dimension.key] < activeProfile.dimensions[weakest.key]
+      ? dimension
+      : weakest,
+  );
+  const shortTermPlayers = getRosterShortTermPlayers(activeProfile.roster);
+  const percentile = getPercentile(
+    profiles.map((profile) => profile.overall),
+    activeProfile.overall,
+  );
+  const leagueAttackAverage = mean(profiles.map((profile) => profile.attackIndex));
+  const leagueDefenceAverage = mean(profiles.map((profile) => profile.defenceIndex));
+  const attackDelta = activeProfile.attackIndex - leagueAttackAverage;
+  const defenceDelta = activeProfile.defenceIndex - leagueDefenceAverage;
+  const familyComparisons = ANALYSIS_GROUP_ORDER.map((group) => {
+    const value = getFamilyValue(activeProfile.dimensions, group);
+    const leagueValue = getLeagueFamilyAverage(profiles, group);
+    return {
+      group,
+      value,
+      leagueValue,
+      delta: value - leagueValue,
+    };
+  });
+  const strongestFamily = familyComparisons.reduce((best, family) =>
+    family.value > best.value ? family : best,
+  );
+  const bestFamilyDelta = familyComparisons.reduce((best, family) =>
+    family.delta > best.delta ? family : best,
+  );
+  const weakestFamilyDelta = familyComparisons.reduce((weakest, family) =>
+    family.delta < weakest.delta ? family : weakest,
+  );
+  const weakestFamily = familyComparisons.reduce((weakest, family) =>
+    family.value < weakest.value ? family : weakest,
+  );
+  const rankingContext = getRankingContext(overallRank);
+  const squadIdentity = getSquadIdentity(attackDelta, defenceDelta);
+  const viableDepth = buildCriticalDepth(activeProfile.roster)
+    .map((entry) => {
+      const viablePlayers = entry.players.filter((item) => item.rating >= 75);
+      return {
+        position: entry.position,
+        count: viablePlayers.length,
+        bestRating: entry.players[0]?.rating ?? 0,
+      };
+    })
+    .filter((entry) => entry.count < 2)
+    .sort((a, b) => {
+      if (a.count !== b.count) return a.count - b.count;
+      return a.bestRating - b.bestRating;
+    })
+    .slice(0, 4);
+  const criticalDepthText = viableDepth.length
+    ? viableDepth
+        .map((entry) => `${entry.position}: ${entry.count} jugadores +75`)
+        .join(', ')
+    : 'sin alertas con criterio +75';
+  const topFivePlayerIds = new Set(
+    sortByNumberField(activeProfile.roster, 'PROMEDIO')
+      .slice(0, 5)
+      .map((player) => String(player.ID)),
+  );
+  const selectedShortTermAssignments =
+    selectedRecommendation?.assignments.filter((assignment) =>
+      isShortTermPlayer(assignment.player),
+    ) ?? [];
+  const shortTermTopPlayers = shortTermPlayers.filter((player) =>
+    topFivePlayerIds.has(String(player.ID)),
+  );
+  const dependencyText = selectedShortTermAssignments.length
+    ? selectedShortTermAssignments
+        .map(
+          (assignment) =>
+            `${assignment.player.NOMBRE as string} (${assignment.slot.role})`,
+        )
+        .join(', ')
+    : shortTermTopPlayers.length
+      ? `${shortTermTopPlayers
+          .map((player) => String(player.NOMBRE ?? ''))
+          .join(', ')} entre los mejores 5`
+      : shortTermPlayers.length
+        ? `${shortTermPlayers.map((player) => String(player.NOMBRE ?? '')).join(', ')} fuera del once sugerido`
+        : 'sin contrato de una temporada detectado';
+  const secondRecommendation = recommendations[1];
+  const recommendationGap =
+    selectedRecommendation && secondRecommendation
+      ? selectedRecommendation.score - secondRecommendation.score
+      : undefined;
+
+  useEffect(() => {
+    setSelectedRecommendationIndex(0);
+  }, [summary.club]);
+
+  return (
+    <div className="club-analysis-overlay" role="dialog" aria-modal="true">
+      <section className="club-analysis-hub">
+        <header className="club-analysis-header">
+          <div>
+            <span>{CLUB_CURRENT_SEASON_LABEL}</span>
+            <h2>Analisis - {summary.club}</h2>
+            <p>Plantel analizado: {activeProfile.roster.length} jugadores</p>
+          </div>
+          <div className="club-analysis-kpi-grid">
+            <AnalysisKpi
+              label="Ranking ANFPES"
+              value={`${overallRank}/32`}
+              detail={`Percentil ${percentile}`}
+              description="Posicion del club entre los 32 planteles segun promedio general del plantel actual."
+            />
+            <AnalysisKpi
+              label="Indice ofensivo"
+              value={`${attackRank}/32`}
+              detail={formatNumber(activeProfile.attackIndex, 1)}
+              description="Ranking por indice ofensivo, calculado desde dimensiones de ataque, conduccion, pase, remate y agresividad."
+            />
+            <AnalysisKpi
+              label="Indice defensivo"
+              value={`${defenceRank}/32`}
+              detail={formatNumber(activeProfile.defenceIndex, 1)}
+              description="Ranking por indice defensivo, calculado desde lectura defensiva, fisico, respuesta, mentalidad, porteria y trabajo colectivo."
+            />
+            <AnalysisKpi
+              label="Balance"
+              value={`${balanceRank}/32`}
+              detail={formatNumber(activeProfile.balanceIndex, 1)}
+              description="Ranking por promedio de todas las dimensiones usadas en el Radar de Stats."
+            />
+          </div>
+          <EnhancedTooltip content="Cerrar analisis" placement="left">
+            <button type="button" onClick={onClose} aria-label="Cerrar analisis">
+              x
+            </button>
+          </EnhancedTooltip>
+        </header>
+
+        <div className="club-analysis-grid">
+          <article className="club-analysis-card club-analysis-insights">
+            <header>
+              <h3>Lectura rapida</h3>
+            </header>
+            <p>
+              Identidad: <strong>{squadIdentity}</strong>. Ranking{' '}
+              <strong>{overallRank}/32</strong> ({rankingContext}, percentil{' '}
+              <strong>{percentile}</strong>).
+            </p>
+            <p>
+              Ataque <strong>{attackRank}/32</strong> ({formatSignedNumber(attackDelta)}{' '}
+              vs liga). Defensa <strong>{defenceRank}/32</strong> (
+              {formatSignedNumber(defenceDelta)} vs liga).
+            </p>
+            <p>
+              Ventaja real:{' '}
+              <strong>{ANALYSIS_GROUP_LABELS[bestFamilyDelta.group]}</strong>{' '}
+              <strong>{formatSignedNumber(bestFamilyDelta.delta)}</strong>. Debilidad
+              real: <strong>{ANALYSIS_GROUP_LABELS[weakestFamilyDelta.group]}</strong>{' '}
+              <strong>{formatSignedNumber(weakestFamilyDelta.delta)}</strong>.
+            </p>
+            <p>
+              Punto alto: <strong>{bestDimension.label}</strong>{' '}
+              <strong>
+                {formatNumber(activeProfile.dimensions[bestDimension.key], 1)}
+              </strong>
+              . Punto bajo: <strong>{weakestDimension.label}</strong>{' '}
+              <strong>
+                {formatNumber(activeProfile.dimensions[weakestDimension.key], 1)}
+              </strong>
+              .
+            </p>
+            <p>
+              Familia mas alta:{' '}
+              <strong>{ANALYSIS_GROUP_LABELS[strongestFamily.group]}</strong>{' '}
+              <strong>{formatNumber(strongestFamily.value, 1)}</strong>. Familia mas baja:{' '}
+              <strong>{ANALYSIS_GROUP_LABELS[weakestFamily.group]}</strong>{' '}
+              <strong>{formatNumber(weakestFamily.value, 1)}</strong>.
+            </p>
+            {selectedRecommendation && (
+              <p>
+                Once sugerido: <strong>{selectedRecommendation.formationName}</strong>{' '}
+                <strong>{formatNumber(selectedRecommendation.score, 1)}</strong>.
+                {recommendationGap !== undefined && (
+                  <>
+                    {' '}
+                    Margen sobre segunda opcion:{' '}
+                    <strong>{formatSignedNumber(recommendationGap)}</strong>.
+                  </>
+                )}
+              </p>
+            )}
+            <p>
+              Profundidad critica: <strong>{criticalDepthText}</strong>.
+            </p>
+            <p>
+              Contrato por 1 temporada: <strong>{dependencyText}</strong>.
+            </p>
+          </article>
+
+          <article className="club-analysis-card club-formation-card">
+            <header>
+              <h3>Formaciones sugeridas</h3>
+              <div className="club-formation-tabs">
+                {recommendations.map((recommendation, index) => (
+                  <EnhancedTooltip
+                    key={recommendation.formationName}
+                    content={`${recommendation.formationName} | Score ${formatNumber(
+                      recommendation.score,
+                      1,
+                    )}`}
+                    placement="top"
+                  >
+                    <button
+                      type="button"
+                      className={
+                        index === selectedRecommendationIndex ? 'active' : undefined
+                      }
+                      onClick={() => setSelectedRecommendationIndex(index)}
+                    >
+                      <strong>{recommendation.formationName}</strong>
+                      <span>{formatNumber(recommendation.score, 1)}</span>
+                    </button>
+                  </EnhancedTooltip>
+                ))}
+              </div>
+            </header>
+            {selectedRecommendation ? (
+              <>
+                <div className="club-formation-title">
+                  <strong>{selectedRecommendation.formationName}</strong>
+                  <span>Seleccion recomendada por encaje puesto/jugador</span>
+                </div>
+                <AnalysisLineupPitch
+                  recommendation={selectedRecommendation}
+                  club={summary.club}
+                  onOpenPlayer={onOpenPlayer}
+                />
+              </>
+            ) : (
+              <p>No hay jugadores suficientes para sugerir una formacion.</p>
+            )}
+          </article>
+
+          <article className="club-analysis-card club-ranking-card">
+            <header>
+              <h3>Promedios</h3>
+              <span>Ranking general ANFPES</span>
+            </header>
+            <div className="club-ranking-list">
+              {leagueBoard.map((profile, index) => (
+                <div
+                  key={profile.summary.club}
+                  className={profile.summary.club === summary.club ? 'active' : undefined}
+                >
+                  <span>{index + 1}</span>
+                  <strong>{profile.summary.club}</strong>
+                  <RatingValue value={profile.overall} digits={1} />
+                </div>
+              ))}
+            </div>
+          </article>
+          <FamilyComparisonPanel activeProfile={activeProfile} profiles={profiles} />
+          <ClubAttributeRoseChart activeProfile={activeProfile} profiles={profiles} />
+          <ClubScatterPlot activeProfile={activeProfile} profiles={profiles} />
+          {selectedRecommendation && (
+            <VoronoiPitch recommendation={selectedRecommendation} />
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export function ClubModule() {
   const players = useCacheStore((state) => state.players);
   const status = useCacheStore((state) => state.status);
@@ -956,6 +2778,7 @@ export function ClubModule() {
     {},
   );
   const [captainsByClub, setCaptainsByClub] = useState<Record<string, string>>({});
+  const [analysisOpen, setAnalysisOpen] = useState(false);
 
   const clubNames = useMemo(() => sortClubsAlphabetically(Array.from(ANFPES_CLUBS)), []);
 
@@ -1210,10 +3033,10 @@ export function ClubModule() {
                 <span className="club-game-name">{activeSummary.club}</span>
                 <em>{clubDetails.fullName}</em>
                 <span className="club-title-metrics">
-                  <span>Edad media {formatNumber(activeSummary.averageAge, 1)}</span>
-                  <span>Seleccionados {activeSummary.nationalCount}</span>
-                  <span>Leyendas {activeSummary.legendCount}</span>
-                  <span>ML {activeSummary.mlCount}</span>
+                  <span>{formatNumber(activeSummary.averageAge, 1)} Edad Promedio</span>
+                  <span>{activeSummary.nationalCount} Seleccionados</span>
+                  <span>{activeSummary.legendCount} Leyendas</span>
+                  <span>{activeSummary.mlCount} ML</span>
                 </span>
               </span>
             </button>
@@ -1252,21 +3075,35 @@ export function ClubModule() {
                 {activeSummary.manager}
               </span>
             )}
+            <button
+              type="button"
+              className="club-analysis-button"
+              onClick={() => setAnalysisOpen(true)}
+            >
+              Analisis
+            </button>
           </div>
 
           <div className="club-hero-rating">
-            <div
-              className="player-average club-average"
-              style={{ color: averageColor ?? '#ffd166' }}
+            <EnhancedTooltip
+              content={`Promedio del plantel: ${formatNumber(activeSummary.average, 1)}`}
+              placement="top"
             >
-              {formatNumber(activeSummary.average, 1)}
-            </div>
+              <div
+                className="player-average club-average"
+                style={{ color: averageColor ?? '#ffd166' }}
+              >
+                {formatNumber(activeSummary.average, 1)}
+              </div>
+            </EnhancedTooltip>
             {countryFlag && (
-              <img
-                src={countryFlag}
-                alt={clubDetails.country}
-                className="flag club-country-flag"
-              />
+              <EnhancedTooltip content={clubDetails.country} placement="top">
+                <img
+                  src={countryFlag}
+                  alt={clubDetails.country}
+                  className="flag club-country-flag"
+                />
+              </EnhancedTooltip>
             )}
           </div>
 
@@ -1290,17 +3127,24 @@ export function ClubModule() {
             )}
           </div>
 
-          <button
-            type="button"
-            className="club-clear-button"
-            aria-label="Cerrar club"
-            onClick={() => {
-              setSelectedClub(null);
-              setSelectorOpen(false);
-            }}
+          <EnhancedTooltip
+            content="Cerrar club"
+            placement="left"
+            className="club-clear-tooltip"
           >
-            ×
-          </button>
+            <button
+              type="button"
+              className="club-clear-button"
+              aria-label="Cerrar club"
+              onClick={() => {
+                setSelectedClub(null);
+                setSelectorOpen(false);
+                setAnalysisOpen(false);
+              }}
+            >
+              ×
+            </button>
+          </EnhancedTooltip>
         </section>
 
         <section className="club-main-grid">
@@ -1373,39 +3217,61 @@ export function ClubModule() {
                 <tr>
                   <th>
                     <button type="button" onClick={() => handleSort('DORSAL')}>
-                      #{sortIndicator('DORSAL')}
+                      <EnhancedTooltip content="Ordenar por dorsal" placement="top">
+                        <span>#{sortIndicator('DORSAL')}</span>
+                      </EnhancedTooltip>
                     </button>
                   </th>
                   <th>
                     <button type="button" onClick={() => handleSort('NOMBRE')}>
-                      Jugador{sortIndicator('NOMBRE')}
+                      <EnhancedTooltip content="Ordenar por jugador" placement="top">
+                        <span>Jugador{sortIndicator('NOMBRE')}</span>
+                      </EnhancedTooltip>
                     </button>
                   </th>
                   <th>
                     <button type="button" onClick={() => handleSort('POSICIONES')}>
-                      Posiciones{sortIndicator('POSICIONES')}
+                      <EnhancedTooltip
+                        content="Ordenar por posicion principal"
+                        placement="top"
+                      >
+                        <span>Posiciones{sortIndicator('POSICIONES')}</span>
+                      </EnhancedTooltip>
                     </button>
                   </th>
                   <th>
                     <button type="button" onClick={() => handleSort('EDAD')}>
-                      Edad{sortIndicator('EDAD')}
+                      <EnhancedTooltip content="Ordenar por edad" placement="top">
+                        <span>Edad{sortIndicator('EDAD')}</span>
+                      </EnhancedTooltip>
                     </button>
                   </th>
                   <th>
                     <button type="button" onClick={() => handleSort('NACIONALIDAD')}>
-                      Nac.{sortIndicator('NACIONALIDAD')}
+                      <EnhancedTooltip content="Ordenar por nacionalidad" placement="top">
+                        <span>Nac.{sortIndicator('NACIONALIDAD')}</span>
+                      </EnhancedTooltip>
                     </button>
                   </th>
                   <th>
                     <button type="button" onClick={() => handleSort('PROMEDIO')}>
-                      Prom.{sortIndicator('PROMEDIO')}
+                      <EnhancedTooltip content="Ordenar por promedio" placement="top">
+                        <span>Prom.{sortIndicator('PROMEDIO')}</span>
+                      </EnhancedTooltip>
                     </button>
                   </th>
                   {MACRO_FIELDS.map((field) => (
                     <th key={field}>
                       <button type="button" onClick={() => handleSort(field)}>
-                        {field}
-                        {sortIndicator(field)}
+                        <EnhancedTooltip
+                          content={`Ordenar por ${MACRO_LABELS[field]}`}
+                          placement="top"
+                        >
+                          <span>
+                            {field}
+                            {sortIndicator(field)}
+                          </span>
+                        </EnhancedTooltip>
                       </button>
                     </th>
                   ))}
@@ -1433,7 +3299,12 @@ export function ClubModule() {
                             }}
                           />
                           <span className="club-player-name-wrap">
-                            <strong>{player.NOMBRE}</strong>
+                            <EnhancedTooltip
+                              content={String(player.NOMBRE ?? '')}
+                              placement="top"
+                            >
+                              <strong>{player.NOMBRE}</strong>
+                            </EnhancedTooltip>
                             <PlayerStatusBadges player={player} />
                           </span>
                         </div>
@@ -1444,12 +3315,16 @@ export function ClubModule() {
                       <td>{formatPlayerValue(player.EDAD, 0)}</td>
                       <td>
                         {flagPath ? (
-                          <img
-                            src={flagPath}
-                            alt={formatNationality(rawNationality)}
-                            className="flag-icon"
-                            title={formatNationality(rawNationality)}
-                          />
+                          <EnhancedTooltip
+                            content={formatNationality(rawNationality)}
+                            placement="top"
+                          >
+                            <img
+                              src={flagPath}
+                              alt={formatNationality(rawNationality)}
+                              className="flag-icon"
+                            />
+                          </EnhancedTooltip>
                         ) : (
                           formatNationality(rawNationality)
                         )}
@@ -1469,6 +3344,15 @@ export function ClubModule() {
             </table>
           </div>
         </section>
+
+        {analysisOpen && (
+          <ClubAnalysisHub
+            summary={activeSummary}
+            summaries={summaries}
+            onClose={() => setAnalysisOpen(false)}
+            onOpenPlayer={openPlayerProfile}
+          />
+        )}
       </main>
     </div>
   );
