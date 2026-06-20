@@ -30,7 +30,11 @@ if (!existsSync(signaturePath)) {
   throw new Error(`Missing updater signature: ${signaturePath}`);
 }
 
-const encodedInstaller = encodeURIComponent(installer);
+// GitHub release uploads from the web UI normalize spaces in asset names to dots.
+// Keep this overrideable in case we publish assets through another channel later.
+const publishedInstallerName =
+  process.env.TAURI_UPDATE_ASSET_NAME || installer.replaceAll(' ', '.');
+const encodedInstaller = encodeURIComponent(publishedInstallerName);
 const url =
   process.env.TAURI_UPDATE_URL ||
   `https://github.com/${repository}/releases/download/${releaseTag}/${encodedInstaller}`;
@@ -52,4 +56,5 @@ writeFileSync(outputPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 
 console.log(`Wrote ${outputPath}`);
 console.log(`Installer: ${basename(installer)}`);
+console.log(`Published asset: ${publishedInstallerName}`);
 console.log(`URL: ${url}`);
