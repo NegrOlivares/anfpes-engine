@@ -18,6 +18,10 @@ interface EnhancedTooltipProps {
    * Clase CSS adicional para el contenedor
    */
   className?: string;
+  /**
+   * Clase CSS adicional para el popup renderizado en portal
+   */
+  popupClassName?: string;
 }
 
 type ActualPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -31,6 +35,7 @@ export function EnhancedTooltip({
   children,
   placement = 'bottom',
   className = '',
+  popupClassName = '',
 }: EnhancedTooltipProps) {
   const [isHovering, setIsHovering] = useState(false);
   const [actualPlacement, setActualPlacement] = useState<ActualPlacement>(placement);
@@ -164,7 +169,7 @@ export function EnhancedTooltip({
   const tooltipContent = isHovering && (
     <div
       ref={tooltipRef}
-      className={`glossary-tooltip-popup glossary-tooltip-${actualPlacement}`}
+      className={`glossary-tooltip-popup glossary-tooltip-${actualPlacement} ${popupClassName}`}
       style={{
         position: 'fixed',
         top: `${tooltipPosition.top}px`,

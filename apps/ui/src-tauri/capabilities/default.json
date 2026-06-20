@@ -16,6 +16,8 @@
     "core:window:allow-close",
     "core:window:allow-start-dragging",
     "dialog:allow-save",
-    "fs:allow-write-text-file"
+    "fs:allow-write-text-file",
+    "process:allow-restart",
+    "updater:default"
   ]
 }

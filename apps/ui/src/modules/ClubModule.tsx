@@ -12,6 +12,10 @@ import {
 import { useCacheStore } from '../store/cacheStore';
 import { MODULE_IDS, useModuleStore } from '../store/moduleStore';
 import { useClubViewStore } from '../store/clubViewStore';
+import { createEmptyClubLineup, useClubLineupStore } from '../store/clubLineupStore';
+import type { ClubLineupConfig } from '../store/clubLineupStore';
+import { useActivityHistoryStore } from '../store/activityHistoryStore';
+import { useIdentityStore } from '../store/identityStore';
 import { usePlayerProfileStore } from '../store/playerProfileStore';
 import { FORMATIONS } from '../store/tacticsStore';
 import type { FormationSlot } from '../types/tactics';
@@ -50,11 +54,6 @@ type SortKey =
 interface SortConfig {
   key: SortKey;
   direction: SortDirection;
-}
-
-interface ClubLineupConfig {
-  formationName: string | null;
-  playersBySlot: Record<string, string>;
 }
 
 interface ClubSummary {
@@ -112,6 +111,116 @@ interface FormationRecommendation {
   formationName: string;
   score: number;
   assignments: FormationAssignment[];
+}
+
+interface ResolvedLineupPlayer {
+  slot: FormationSlot;
+  player: DerivedPlayer;
+  rating: number;
+}
+
+interface LineupDuel {
+  own: ResolvedLineupPlayer;
+  opponent: ResolvedLineupPlayer;
+  context: VsDuelContext;
+  stats: VsDuelStat[];
+  ownScore: number;
+  opponentScore: number;
+  difference: number;
+  distance: number;
+}
+
+type VsProfileKey =
+  | 'carrying'
+  | 'creation'
+  | 'finishing'
+  | 'containment'
+  | 'pressing'
+  | 'aerial'
+  | 'keeper';
+
+interface VsDuelContext {
+  type: 'wide' | 'central' | 'midfield' | 'aerial' | 'keeper' | 'default';
+  label: string;
+  ownLabel: string;
+  opponentLabel: string;
+  contests: VsDuelStatDefinition[];
+}
+
+interface VsDuelStatDefinition {
+  label: string;
+  ownKey: AnalysisDimensionKey;
+  opponentKey: AnalysisDimensionKey;
+}
+
+interface VsDuelStat {
+  label: string;
+  ownLabel: string;
+  opponentLabel: string;
+  ownValue: number;
+  opponentValue: number;
+  difference: number;
+}
+
+interface VsFocusItem {
+  key: string;
+  kind: 'advantage' | 'risk' | 'control';
+  title: string;
+  detail: string;
+  value: number;
+}
+
+type VsTerritorySide = 'own' | 'opponent';
+
+interface VsTerritoryPoint {
+  id: string;
+  side: VsTerritorySide;
+  sideLabel: string;
+  entry: ResolvedLineupPlayer;
+  point: ChartPoint;
+  influenceScore: number;
+  influenceWeight: number;
+  influenceContext: VsDuelContext | null;
+  influenceStats: VsDuelStat[];
+  influenceOpponent: ResolvedLineupPlayer | null;
+}
+
+interface VsTerritoryCell {
+  point: VsTerritoryPoint;
+  polygon: ChartPoint[];
+  area: number;
+}
+
+interface VsTerritoryQuadrant {
+  key: string;
+  label: string;
+  shortLabel: string;
+  rect: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+}
+
+interface VsQuadrantSummary extends VsTerritoryQuadrant {
+  winner: VsTerritorySide | 'even';
+  winnerLabel: string;
+  ownShare: number;
+  opponentShare: number;
+  ownQuality: number;
+  opponentQuality: number;
+  ownControl: number;
+  opponentControl: number;
+  dominantPoint: VsTerritoryPoint | null;
+  reason: string;
+}
+
+interface VsVisualTerritoryPoint {
+  point: VsTerritoryPoint;
+  visualPoint: ChartPoint;
+  labelPoint: ChartPoint;
+  textAnchor: 'start' | 'middle' | 'end';
 }
 
 type PositionLineKey = 'PT' | 'DEF' | 'MED' | 'ATA';
@@ -520,6 +629,11 @@ const ANALYSIS_GROUP_COLORS: Record<AnalysisDimensionGroup, string> = {
 };
 
 const ANALYSIS_TOP_STAT_COUNT = 8;
+const VS_PITCH_WIDTH = 82;
+const VS_PITCH_HEIGHT = 100;
+const VS_PITCH_SIDE_LANE_WIDTH = 26;
+const VS_PITCH_CENTER_LANE_WIDTH = VS_PITCH_WIDTH - VS_PITCH_SIDE_LANE_WIDTH * 2;
+const VS_PITCH_RIGHT_LANE_X = VS_PITCH_SIDE_LANE_WIDTH + VS_PITCH_CENTER_LANE_WIDTH;
 
 const ATTACK_INDEX_KEYS: AnalysisDimensionKey[] = [
   'attack',
@@ -544,6 +658,81 @@ const DEFENCE_INDEX_KEYS: AnalysisDimensionKey[] = [
   'mentality',
   'goalkeeping',
   'teamwork',
+];
+
+const VS_PROFILE_KEYS: Record<VsProfileKey, AnalysisDimensionKey[]> = {
+  carrying: [
+    'attack',
+    'dribbleAccuracy',
+    'dribbleSpeed',
+    'topSpeed',
+    'acceleration',
+    'agility',
+    'technique',
+  ],
+  creation: [
+    'attack',
+    'shortPassAccuracy',
+    'shortPassSpeed',
+    'longPassAccuracy',
+    'longPassSpeed',
+    'technique',
+    'teamwork',
+  ],
+  finishing: [
+    'attack',
+    'shotAccuracy',
+    'shotPower',
+    'shotTechnique',
+    'heading',
+    'aggression',
+    'technique',
+  ],
+  containment: [
+    'defense',
+    'response',
+    'balance',
+    'topSpeed',
+    'acceleration',
+    'agility',
+    'mentality',
+  ],
+  pressing: ['defense', 'response', 'aggression', 'stamina', 'teamwork', 'mentality'],
+  aerial: ['heading', 'jump', 'balance', 'aggression', 'mentality'],
+  keeper: ['goalkeeping', 'response', 'jump', 'balance', 'mentality'],
+};
+
+const VS_TERRITORY_QUADRANTS: VsTerritoryQuadrant[] = [
+  {
+    key: 'rival-box',
+    label: 'Area Rival',
+    shortLabel: 'AREA RIVAL',
+    rect: { x: 0, y: 0, width: VS_PITCH_WIDTH, height: 18 },
+  },
+  {
+    key: 'high-block',
+    label: 'Bloque Alto',
+    shortLabel: 'BLOQUE ALTO',
+    rect: { x: 0, y: 18, width: VS_PITCH_WIDTH, height: 20 },
+  },
+  {
+    key: 'middle-block',
+    label: 'Bloque Medio',
+    shortLabel: 'BLOQUE MEDIO',
+    rect: { x: 0, y: 38, width: VS_PITCH_WIDTH, height: 24 },
+  },
+  {
+    key: 'low-block',
+    label: 'Bloque Bajo',
+    shortLabel: 'BLOQUE BAJO',
+    rect: { x: 0, y: 62, width: VS_PITCH_WIDTH, height: 20 },
+  },
+  {
+    key: 'own-box',
+    label: 'Area Propia',
+    shortLabel: 'AREA PROPIA',
+    rect: { x: 0, y: 82, width: VS_PITCH_WIDTH, height: 18 },
+  },
 ];
 
 const CLUB_DETAILS: Record<string, { fullName: string; country: string }> = {
@@ -1500,6 +1689,9 @@ interface OpponentLineupPitchProps {
   onFormationChange: (formationName: string | null) => void;
   onSlotPlayerChange: (slotId: string, playerId: string) => void;
   onClear: () => void;
+  canOpenVsAnalysis?: boolean;
+  onOpenVsAnalysis?: () => void;
+  vsClub?: string;
 }
 
 function OpponentLineupPitch({
@@ -1508,6 +1700,9 @@ function OpponentLineupPitch({
   onFormationChange,
   onSlotPlayerChange,
   onClear,
+  canOpenVsAnalysis = false,
+  onOpenVsAnalysis,
+  vsClub,
 }: OpponentLineupPitchProps) {
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
   const selectedFormation = lineup.formationName
@@ -1525,6 +1720,7 @@ function OpponentLineupPitch({
   const assignedCount = selectedIds.size;
   const showOverlay = !lineup.formationName;
   const activeSlot = displaySlots.find((slot) => slot.slotId === activeSlotId);
+  const vsClubShield = vsClub ? getClubShieldPath(vsClub) : null;
 
   const rosterOptions = useMemo(
     () =>
@@ -1631,6 +1827,20 @@ function OpponentLineupPitch({
         </div>
       </header>
       <div className={`club-tactical-pitch-wrap${showOverlay ? ' empty' : ''}`}>
+        {canOpenVsAnalysis && (
+          <button
+            type="button"
+            className="club-vs-pitch-button"
+            onClick={onOpenVsAnalysis}
+          >
+            <span>VS</span>
+            {vsClubShield ? (
+              <img src={vsClubShield} alt="" />
+            ) : vsClub ? (
+              <em>{getInitials(vsClub)}</em>
+            ) : null}
+          </button>
+        )}
         <TacticalPitch
           slots={tacticalSlots}
           players={summary.roster}
@@ -1655,8 +1865,1270 @@ function OpponentLineupPitch({
   );
 }
 
+function getLineupFormationSlots(lineup: ClubLineupConfig | undefined): FormationSlot[] {
+  if (!lineup?.formationName) return [];
+  return FORMATIONS[lineup.formationName] ?? [];
+}
+
+function resolveLineupPlayers(
+  summary: ClubSummary,
+  lineup: ClubLineupConfig,
+): ResolvedLineupPlayer[] {
+  return getLineupFormationSlots(lineup)
+    .map((slot) => {
+      const playerId = lineup.playersBySlot[slot.slotId];
+      const player = findRosterPlayer(summary.roster, playerId);
+      if (!player) return null;
+      return {
+        slot,
+        player,
+        rating: getPositionAverage(player, slot.role),
+      };
+    })
+    .filter((entry): entry is ResolvedLineupPlayer => Boolean(entry));
+}
+
+function isResolvedLineupConfigured(
+  summary: ClubSummary,
+  lineup: ClubLineupConfig | undefined,
+): boolean {
+  const slots = getLineupFormationSlots(lineup);
+  if (!lineup || slots.length === 0) return false;
+  return (
+    slots.every((slot) => Boolean(lineup.playersBySlot[slot.slotId])) &&
+    resolveLineupPlayers(summary, lineup).length === slots.length
+  );
+}
+
+function getResolvedLineupAverage(players: ResolvedLineupPlayer[]): number {
+  return mean(players.map((entry) => entry.rating));
+}
+
+function getVsDimensionValue(player: DerivedPlayer, key: AnalysisDimensionKey): number {
+  const dimension = ANALYSIS_DIMENSIONS.find((item) => item.key === key);
+  if (!dimension) return 0;
+  return getPlayerStatValue(player, dimension.field) ?? 0;
+}
+
+function getVsDimensionLabel(key: AnalysisDimensionKey): string {
+  return ANALYSIS_DIMENSIONS.find((item) => item.key === key)?.label ?? key;
+}
+
+function buildVsDuelStats(
+  own: ResolvedLineupPlayer,
+  opponent: ResolvedLineupPlayer,
+  context: VsDuelContext,
+): VsDuelStat[] {
+  return context.contests.map((contest) => {
+    const ownValue = getVsDimensionValue(own.player, contest.ownKey);
+    const opponentValue = getVsDimensionValue(opponent.player, contest.opponentKey);
+    return {
+      label: contest.label,
+      ownLabel: getVsDimensionLabel(contest.ownKey),
+      opponentLabel: getVsDimensionLabel(contest.opponentKey),
+      ownValue,
+      opponentValue,
+      difference: ownValue - opponentValue,
+    };
+  });
+}
+
+function getVsStatsScore(stats: VsDuelStat[], side: 'own' | 'opponent'): number {
+  return mean(stats.map((stat) => (side === 'own' ? stat.ownValue : stat.opponentValue)));
+}
+
+function formatVsStatSummary(stats: VsDuelStat[], limit = 3): string {
+  return stats
+    .slice(0, limit)
+    .map(
+      (stat) =>
+        `${stat.ownLabel} ${formatNumber(stat.ownValue, 0)} vs ${stat.opponentLabel} ${formatNumber(
+          stat.opponentValue,
+          0,
+        )}`,
+    )
+    .join('; ');
+}
+
+function getVsProfileScore(player: DerivedPlayer, profile: VsProfileKey): number {
+  return mean(VS_PROFILE_KEYS[profile].map((key) => getVsDimensionValue(player, key)));
+}
+
+function getLineupProfileScore(
+  players: ResolvedLineupPlayer[],
+  profile: VsProfileKey,
+  predicate: (entry: ResolvedLineupPlayer) => boolean,
+): number {
+  return mean(
+    players.filter(predicate).map((entry) => getVsProfileScore(entry.player, profile)),
+  );
+}
+
+function roleIsWide(role: string): boolean {
+  return [
+    'DD',
+    'DI',
+    'SA',
+    'DLD',
+    'DLI',
+    'LA',
+    'CDR',
+    'CIZ',
+    'VOL',
+    'ED',
+    'EI',
+    'EX',
+  ].includes(role);
+}
+
+function roleIsCentralAerial(role: string): boolean {
+  return ['CT', 'LIB', 'DC', 'SD'].includes(role);
+}
+
+function roleIsKeeper(role: string): boolean {
+  return role === 'PT';
+}
+
+function getVsDuelContext(
+  own: ResolvedLineupPlayer,
+  opponent: ResolvedLineupPlayer,
+): VsDuelContext {
+  const ownLine = getPositionLine(own.slot.role);
+  const opponentLine = getPositionLine(opponent.slot.role);
+
+  if (roleIsKeeper(own.slot.role) || roleIsKeeper(opponent.slot.role)) {
+    return roleIsKeeper(own.slot.role)
+      ? {
+          type: 'keeper',
+          label: 'Arquero vs remate',
+          ownLabel: 'respuesta de arquero',
+          opponentLabel: 'definicion',
+          contests: [
+            { label: 'Intervencion', ownKey: 'goalkeeping', opponentKey: 'shotAccuracy' },
+            { label: 'Reaccion', ownKey: 'response', opponentKey: 'shotTechnique' },
+            { label: 'Juego aereo', ownKey: 'jump', opponentKey: 'heading' },
+          ],
+        }
+      : {
+          type: 'keeper',
+          label: 'Remate vs arquero',
+          ownLabel: 'definicion',
+          opponentLabel: 'respuesta de arquero',
+          contests: [
+            {
+              label: 'Direccion del remate',
+              ownKey: 'shotAccuracy',
+              opponentKey: 'goalkeeping',
+            },
+            { label: 'Golpeo dificil', ownKey: 'shotTechnique', opponentKey: 'response' },
+            { label: 'Remate aereo', ownKey: 'heading', opponentKey: 'jump' },
+          ],
+        };
+  }
+
+  if (roleIsCentralAerial(own.slot.role) && roleIsCentralAerial(opponent.slot.role)) {
+    return {
+      type: 'aerial',
+      label: 'Juego aereo',
+      ownLabel: 'duelo aereo',
+      opponentLabel: 'duelo aereo',
+      contests: [
+        { label: 'Cabezazo', ownKey: 'heading', opponentKey: 'heading' },
+        { label: 'Salto', ownKey: 'jump', opponentKey: 'jump' },
+        { label: 'Contacto', ownKey: 'balance', opponentKey: 'balance' },
+      ],
+    };
+  }
+
+  if (roleIsWide(own.slot.role) || roleIsWide(opponent.slot.role)) {
+    if (ownLine === 'DEF') {
+      return {
+        type: 'wide',
+        label: 'Cierre lateral vs desborde',
+        ownLabel: 'cierre lateral',
+        opponentLabel: 'desborde',
+        contests: [
+          { label: 'Cierre', ownKey: 'defense', opponentKey: 'dribbleAccuracy' },
+          { label: 'Reaccion', ownKey: 'response', opponentKey: 'acceleration' },
+          { label: 'Carrera', ownKey: 'topSpeed', opponentKey: 'dribbleSpeed' },
+        ],
+      };
+    }
+
+    return {
+      type: 'wide',
+      label: 'Desborde vs cierre lateral',
+      ownLabel: 'desborde',
+      opponentLabel: 'cierre lateral',
+      contests: [
+        { label: 'Control en banda', ownKey: 'dribbleAccuracy', opponentKey: 'defense' },
+        { label: 'Arranque', ownKey: 'acceleration', opponentKey: 'response' },
+        { label: 'Carrera con balon', ownKey: 'dribbleSpeed', opponentKey: 'topSpeed' },
+      ],
+    };
+  }
+
+  if (ownLine === 'MED' && opponentLine === 'MED') {
+    return {
+      type: 'midfield',
+      label: 'Salida vs presion',
+      ownLabel: 'salida y pase',
+      opponentLabel: 'presion',
+      contests: [
+        { label: 'Primer pase', ownKey: 'shortPassAccuracy', opponentKey: 'defense' },
+        { label: 'Control bajo marca', ownKey: 'technique', opponentKey: 'response' },
+        { label: 'Continuidad', ownKey: 'teamwork', opponentKey: 'aggression' },
+      ],
+    };
+  }
+
+  if (ownLine === 'ATA') {
+    return {
+      type: 'central',
+      label: 'Definicion vs contencion',
+      ownLabel: 'definicion',
+      opponentLabel: 'contencion',
+      contests: [
+        { label: 'Remate', ownKey: 'shotAccuracy', opponentKey: 'defense' },
+        { label: 'Golpeo', ownKey: 'shotTechnique', opponentKey: 'response' },
+        { label: 'Choque final', ownKey: 'balance', opponentKey: 'balance' },
+      ],
+    };
+  }
+
+  if (ownLine === 'DEF') {
+    return {
+      type: 'central',
+      label: 'Contencion vs amenaza',
+      ownLabel: 'contencion',
+      opponentLabel: 'amenaza ofensiva',
+      contests: [
+        { label: 'Marca', ownKey: 'defense', opponentKey: 'shotAccuracy' },
+        { label: 'Anticipo', ownKey: 'response', opponentKey: 'shotTechnique' },
+        { label: 'Juego aereo', ownKey: 'jump', opponentKey: 'heading' },
+      ],
+    };
+  }
+
+  return {
+    type: 'default',
+    label: 'Control vs presion',
+    ownLabel: 'control',
+    opponentLabel: 'presion',
+    contests: [
+      { label: 'Control tecnico', ownKey: 'technique', opponentKey: 'defense' },
+      { label: 'Pase corto', ownKey: 'shortPassAccuracy', opponentKey: 'response' },
+      { label: 'Juego colectivo', ownKey: 'teamwork', opponentKey: 'aggression' },
+    ],
+  };
+}
+
+function getMirroredSlotPosition(slot: FormationSlot) {
+  return {
+    x: 100 - slot.x,
+    y: 100 - slot.y,
+  };
+}
+
+function getSlotDistance(ownSlot: FormationSlot, opponentSlot: FormationSlot): number {
+  const mirroredOpponent = getMirroredSlotPosition(opponentSlot);
+  return Math.hypot(ownSlot.x - mirroredOpponent.x, ownSlot.y - mirroredOpponent.y);
+}
+
+function buildLineupDuels(
+  ownPlayers: ResolvedLineupPlayer[],
+  opponentPlayers: ResolvedLineupPlayer[],
+): LineupDuel[] {
+  return opponentPlayers
+    .map((opponent) => {
+      const own = ownPlayers
+        .map((candidate) => ({
+          candidate,
+          distance: getSlotDistance(candidate.slot, opponent.slot),
+        }))
+        .sort((a, b) => a.distance - b.distance)[0];
+
+      if (!own) return null;
+      const context = getVsDuelContext(own.candidate, opponent);
+      const stats = buildVsDuelStats(own.candidate, opponent, context);
+      const ownScore = getVsStatsScore(stats, 'own');
+      const opponentScore = getVsStatsScore(stats, 'opponent');
+
+      return {
+        own: own.candidate,
+        opponent,
+        context,
+        stats,
+        ownScore,
+        opponentScore,
+        difference: ownScore - opponentScore,
+        distance: own.distance,
+      };
+    })
+    .filter((duel): duel is LineupDuel => Boolean(duel))
+    .sort((a, b) => Math.abs(b.difference) - Math.abs(a.difference));
+}
+
+function getLineupOffensiveEdge(
+  attackingPlayers: ResolvedLineupPlayer[],
+  defendingPlayers: ResolvedLineupPlayer[],
+): number {
+  const attackScore = getLineupProfileScore(
+    attackingPlayers,
+    'finishing',
+    (entry) => getPositionLine(entry.slot.role) === 'ATA',
+  );
+  const carryScore = getLineupProfileScore(attackingPlayers, 'carrying', (entry) =>
+    ['MED', 'ATA'].includes(getPositionLine(entry.slot.role)),
+  );
+  const defenseScore = getLineupProfileScore(defendingPlayers, 'containment', (entry) =>
+    ['DEF', 'MED'].includes(getPositionLine(entry.slot.role)),
+  );
+
+  return mean([attackScore, carryScore]) - defenseScore;
+}
+
+function getLineupMidfieldEdge(
+  ownPlayers: ResolvedLineupPlayer[],
+  opponentPlayers: ResolvedLineupPlayer[],
+): number {
+  const ownCreation = getLineupProfileScore(
+    ownPlayers,
+    'creation',
+    (entry) => getPositionLine(entry.slot.role) === 'MED',
+  );
+  const opponentPressing = getLineupProfileScore(
+    opponentPlayers,
+    'pressing',
+    (entry) => getPositionLine(entry.slot.role) === 'MED',
+  );
+  return ownCreation - opponentPressing;
+}
+
+function getLineupAerialEdge(
+  ownPlayers: ResolvedLineupPlayer[],
+  opponentPlayers: ResolvedLineupPlayer[],
+): number {
+  const ownAerial = getLineupProfileScore(ownPlayers, 'aerial', (entry) =>
+    roleIsCentralAerial(entry.slot.role),
+  );
+  const opponentAerial = getLineupProfileScore(opponentPlayers, 'aerial', (entry) =>
+    roleIsCentralAerial(entry.slot.role),
+  );
+  return ownAerial - opponentAerial;
+}
+
+function buildVsFocusItems(
+  duels: LineupDuel[],
+  ownPlayers: ResolvedLineupPlayer[],
+  opponentPlayers: ResolvedLineupPlayer[],
+): VsFocusItem[] {
+  const focusItems: VsFocusItem[] = [];
+  const advantages = duels
+    .filter((duel) => duel.difference >= 2)
+    .sort((a, b) => b.difference - a.difference);
+  const risks = duels
+    .filter((duel) => duel.difference <= -2)
+    .sort((a, b) => a.difference - b.difference);
+
+  advantages.slice(0, 2).forEach((duel, index) => {
+    focusItems.push({
+      key: `advantage-${index}`,
+      kind: 'advantage',
+      title: `Explotar ${duel.context.ownLabel}`,
+      detail: `${String(duel.own.player.NOMBRE ?? '-')} supera a ${String(
+        duel.opponent.player.NOMBRE ?? '-',
+      )} en ${duel.context.label.toLowerCase()} (+${formatNumber(
+        duel.difference,
+        1,
+      )}): ${formatVsStatSummary(duel.stats, 2)}.`,
+      value: duel.difference,
+    });
+  });
+
+  risks.slice(0, 2).forEach((duel, index) => {
+    focusItems.push({
+      key: `risk-${index}`,
+      kind: 'risk',
+      title: `Cubrir ${duel.context.opponentLabel}`,
+      detail: `${String(duel.opponent.player.NOMBRE ?? '-')} le saca ${formatNumber(
+        Math.abs(duel.difference),
+        1,
+      )} a ${String(
+        duel.own.player.NOMBRE ?? '-',
+      )} en ${duel.context.label.toLowerCase()}: ${formatVsStatSummary(duel.stats, 2)}.`,
+      value: duel.difference,
+    });
+  });
+
+  const midfieldEdge = getLineupMidfieldEdge(ownPlayers, opponentPlayers);
+  focusItems.push({
+    key: 'midfield-edge',
+    kind: midfieldEdge >= 0 ? 'control' : 'risk',
+    title: midfieldEdge >= 0 ? 'Salida interior viable' : 'Salida interior bajo presion',
+    detail:
+      midfieldEdge >= 0
+        ? `El bloque medio propio tiene +${formatNumber(
+            midfieldEdge,
+            1,
+          )} ante la presion rival.`
+        : `La presion rival supera la salida propia por ${formatNumber(
+            Math.abs(midfieldEdge),
+            1,
+          )}; conviene descargar antes o abrir bandas.`,
+    value: midfieldEdge,
+  });
+
+  const aerialEdge = getLineupAerialEdge(ownPlayers, opponentPlayers);
+  focusItems.push({
+    key: 'aerial-edge',
+    kind: aerialEdge >= 0 ? 'advantage' : 'risk',
+    title: aerialEdge >= 0 ? 'Balon aereo favorable' : 'Cuidar balon aereo',
+    detail:
+      aerialEdge >= 0
+        ? `Los duelos centrales/aereos favorecen por +${formatNumber(aerialEdge, 1)}.`
+        : `El rival tiene +${formatNumber(
+            Math.abs(aerialEdge),
+            1,
+          )} en juego aereo central.`,
+    value: aerialEdge,
+  });
+
+  return focusItems.slice(0, 5);
+}
+
+function buildVsTerritoryPoints(
+  ownPlayers: ResolvedLineupPlayer[],
+  opponentPlayers: ResolvedLineupPlayer[],
+  ownLabel: string,
+  opponentLabel: string,
+): VsTerritoryPoint[] {
+  const ownPoints = ownPlayers.map((entry) => ({
+    id: `own-${entry.slot.slotId}-${String(entry.player.ID)}`,
+    side: 'own' as const,
+    sideLabel: ownLabel,
+    entry,
+    point: transformSlotToVsVoronoiPoint(entry.slot),
+    influenceScore: 0,
+    influenceWeight: 0,
+    influenceContext: null,
+    influenceStats: [],
+    influenceOpponent: null,
+  }));
+  const opponentPoints = opponentPlayers.map((entry) => {
+    const mirrored = {
+      ...entry.slot,
+      ...getMirroredSlotPosition(entry.slot),
+    };
+    return {
+      id: `opponent-${entry.slot.slotId}-${String(entry.player.ID)}`,
+      side: 'opponent' as const,
+      sideLabel: opponentLabel,
+      entry,
+      point: transformSlotToVsVoronoiPoint(mirrored),
+      influenceScore: 0,
+      influenceWeight: 0,
+      influenceContext: null,
+      influenceStats: [],
+      influenceOpponent: null,
+    };
+  });
+
+  const rawPoints = [...ownPoints, ...opponentPoints];
+  return rawPoints.map((point) => {
+    const nearestOpponent = rawPoints
+      .filter((candidate) => candidate.side !== point.side)
+      .map((candidate) => ({
+        candidate,
+        distance: Math.hypot(
+          candidate.point.x - point.point.x,
+          candidate.point.y - point.point.y,
+        ),
+      }))
+      .sort((a, b) => a.distance - b.distance)[0]?.candidate;
+
+    if (!nearestOpponent) return point;
+
+    const context = getVsDuelContext(point.entry, nearestOpponent.entry);
+    const stats = buildVsDuelStats(point.entry, nearestOpponent.entry, context);
+    const score = getVsStatsScore(stats, 'own') - getVsStatsScore(stats, 'opponent');
+
+    return {
+      ...point,
+      influenceScore: score,
+      influenceWeight: Math.max(-430, Math.min(430, score * 34)),
+      influenceContext: context,
+      influenceStats: stats,
+      influenceOpponent: nearestOpponent.entry,
+    };
+  });
+}
+
+function clipWeightedPolygonForPoint(
+  polygon: ChartPoint[],
+  point: ChartPoint,
+  otherPoint: ChartPoint,
+  pointWeight: number,
+  otherWeight: number,
+): ChartPoint[] {
+  const a = otherPoint.x - point.x;
+  const b = otherPoint.y - point.y;
+  const c =
+    (otherPoint.x * otherPoint.x +
+      otherPoint.y * otherPoint.y -
+      point.x * point.x -
+      point.y * point.y +
+      pointWeight -
+      otherWeight) /
+    2;
+
+  const distance = (candidate: ChartPoint) => a * candidate.x + b * candidate.y - c;
+  const clipped: ChartPoint[] = [];
+
+  polygon.forEach((current, index) => {
+    const previous = polygon[(index + polygon.length - 1) % polygon.length];
+    const currentDistance = distance(current);
+    const previousDistance = distance(previous);
+    const currentInside = currentDistance <= 0.001;
+    const previousInside = previousDistance <= 0.001;
+
+    if (currentInside !== previousInside) {
+      const ratio = previousDistance / (previousDistance - currentDistance);
+      clipped.push({
+        x: previous.x + (current.x - previous.x) * ratio,
+        y: previous.y + (current.y - previous.y) * ratio,
+      });
+    }
+
+    if (currentInside) clipped.push(current);
+  });
+
+  return clipped;
+}
+
+function buildVsTerritoryCells(points: VsTerritoryPoint[]): VsTerritoryCell[] {
+  return points.map((entry) => {
+    let polygon: ChartPoint[] = [
+      { x: 0, y: 0 },
+      { x: VS_PITCH_WIDTH, y: 0 },
+      { x: VS_PITCH_WIDTH, y: VS_PITCH_HEIGHT },
+      { x: 0, y: VS_PITCH_HEIGHT },
+    ];
+
+    points.forEach((otherEntry) => {
+      if (otherEntry.id === entry.id) return;
+      polygon = clipWeightedPolygonForPoint(
+        polygon,
+        entry.point,
+        otherEntry.point,
+        entry.influenceWeight,
+        otherEntry.influenceWeight,
+      );
+    });
+
+    return {
+      point: entry,
+      polygon,
+      area: polygonArea(polygon),
+    };
+  });
+}
+
+function findDominantVsTerritoryPoint(
+  points: VsTerritoryPoint[],
+  sample: ChartPoint,
+): VsTerritoryPoint | null {
+  if (!points.length) return null;
+  return points.reduce((best, point) => {
+    const bestDistance =
+      (best.point.x - sample.x) ** 2 +
+      (best.point.y - sample.y) ** 2 -
+      best.influenceWeight;
+    const pointDistance =
+      (point.point.x - sample.x) ** 2 +
+      (point.point.y - sample.y) ** 2 -
+      point.influenceWeight;
+    return pointDistance < bestDistance ? point : best;
+  }, points[0]);
+}
+
+function buildVsQuadrantSummaries(
+  points: VsTerritoryPoint[],
+  ownLabel: string,
+  opponentLabel: string,
+): VsQuadrantSummary[] {
+  return VS_TERRITORY_QUADRANTS.map((quadrant) => {
+    const contributions = new Map<
+      string,
+      { point: VsTerritoryPoint; count: number; qualityTotal: number }
+    >();
+    let ownSamples = 0;
+    let opponentSamples = 0;
+    let ownQualityTotal = 0;
+    let opponentQualityTotal = 0;
+    const sampleColumns = 14;
+    const sampleRows = 9;
+
+    for (let column = 0; column < sampleColumns; column += 1) {
+      for (let row = 0; row < sampleRows; row += 1) {
+        const sample = {
+          x: quadrant.rect.x + ((column + 0.5) / sampleColumns) * quadrant.rect.width,
+          y: quadrant.rect.y + ((row + 0.5) / sampleRows) * quadrant.rect.height,
+        };
+        const nearest = findDominantVsTerritoryPoint(points, sample);
+        if (!nearest) continue;
+
+        const quality = nearest.influenceScore;
+        const current = contributions.get(nearest.id) ?? {
+          point: nearest,
+          count: 0,
+          qualityTotal: 0,
+        };
+        current.count += 1;
+        current.qualityTotal += quality;
+        contributions.set(nearest.id, current);
+
+        if (nearest.side === 'own') {
+          ownSamples += 1;
+          ownQualityTotal += quality;
+        } else {
+          opponentSamples += 1;
+          opponentQualityTotal += quality;
+        }
+      }
+    }
+
+    const totalSamples = ownSamples + opponentSamples;
+    const ownShare = totalSamples ? (ownSamples / totalSamples) * 100 : 0;
+    const opponentShare = totalSamples ? (opponentSamples / totalSamples) * 100 : 0;
+    const ownQuality = ownSamples ? ownQualityTotal / ownSamples : 0;
+    const opponentQuality = opponentSamples ? opponentQualityTotal / opponentSamples : 0;
+    const ownControl = ownShare;
+    const opponentControl = opponentShare;
+    const winner: VsQuadrantSummary['winner'] =
+      Math.abs(ownControl - opponentControl) < 2.5
+        ? 'even'
+        : ownControl > opponentControl
+          ? 'own'
+          : 'opponent';
+    const dominantPoint =
+      [...contributions.values()]
+        .filter((entry) => winner === 'even' || entry.point.side === winner)
+        .sort((a, b) => b.count - a.count || b.qualityTotal - a.qualityTotal)[0]?.point ??
+      null;
+    const winnerLabel =
+      winner === 'even' ? 'Zona pareja' : winner === 'own' ? ownLabel : opponentLabel;
+    const winnerShare =
+      winner === 'opponent'
+        ? opponentShare
+        : winner === 'own'
+          ? ownShare
+          : Math.max(ownShare, opponentShare);
+    const loserShare =
+      winner === 'opponent'
+        ? ownShare
+        : winner === 'own'
+          ? opponentShare
+          : Math.min(ownShare, opponentShare);
+    const reason =
+      winner === 'even'
+        ? `Nadie toma una ventaja clara: ${ownLabel} controla ${formatNumber(
+            ownShare,
+            0,
+          )}% y ${opponentLabel} ${formatNumber(opponentShare, 0)}% de la zona.`
+        : `${String(
+            dominantPoint?.entry.player.NOMBRE ?? winnerLabel,
+          )} inclina la zona por territorio ponderado (${formatNumber(
+            winnerShare,
+            0,
+          )}% vs ${formatNumber(loserShare, 0)}%)${
+            dominantPoint?.influenceStats.length
+              ? `: ${formatVsStatSummary(dominantPoint.influenceStats, 2)}.`
+              : '.'
+          }`;
+
+    return {
+      ...quadrant,
+      winner,
+      winnerLabel,
+      ownShare,
+      opponentShare,
+      ownQuality,
+      opponentQuality,
+      ownControl,
+      opponentControl,
+      dominantPoint,
+      reason,
+    };
+  });
+}
+
+function clampChartPoint(point: ChartPoint): ChartPoint {
+  return {
+    x: Math.max(2, Math.min(VS_PITCH_WIDTH - 2, point.x)),
+    y: Math.max(3, Math.min(VS_PITCH_HEIGHT - 3, point.y)),
+  };
+}
+
+function buildVsVisualTerritoryPoints(
+  points: VsTerritoryPoint[],
+): VsVisualTerritoryPoint[] {
+  const ungrouped = new Set(points.map((point) => point.id));
+  const groups: VsTerritoryPoint[][] = [];
+
+  points.forEach((point) => {
+    if (!ungrouped.has(point.id)) return;
+    const group = points.filter(
+      (candidate) =>
+        ungrouped.has(candidate.id) &&
+        Math.hypot(candidate.point.x - point.point.x, candidate.point.y - point.point.y) <
+          8.8,
+    );
+    group.forEach((entry) => ungrouped.delete(entry.id));
+    groups.push(group);
+  });
+
+  return groups.flatMap((group) =>
+    group.map((point, index) => {
+      const angle =
+        group.length > 1
+          ? -Math.PI / 2 + (Math.PI * 2 * index) / group.length
+          : -Math.PI / 2;
+      const pointRadius = group.length > 1 ? 2.75 : 0;
+      const labelRadius = group.length > 1 ? 7.6 : 3.7;
+      const pointOffset = {
+        x: Math.cos(angle) * pointRadius,
+        y: Math.sin(angle) * pointRadius,
+      };
+      const labelOffset = {
+        x: Math.cos(angle) * labelRadius,
+        y: Math.sin(angle) * labelRadius,
+      };
+      const visualPoint = clampChartPoint({
+        x: point.point.x + pointOffset.x,
+        y: point.point.y + pointOffset.y,
+      });
+      const labelPoint = clampChartPoint({
+        x: point.point.x + labelOffset.x,
+        y: point.point.y + labelOffset.y,
+      });
+      const textAnchor =
+        Math.abs(Math.cos(angle)) < 0.25
+          ? 'middle'
+          : Math.cos(angle) > 0
+            ? 'start'
+            : 'end';
+      return {
+        point,
+        visualPoint,
+        labelPoint,
+        textAnchor,
+      };
+    }),
+  );
+}
+
+function VsStatsTooltipContent({
+  title,
+  subtitle,
+  stats,
+  ownName,
+  opponentName,
+  ownScore,
+  opponentScore,
+  difference,
+  note,
+}: {
+  title: string;
+  subtitle: string;
+  stats: VsDuelStat[];
+  ownName: string;
+  opponentName: string;
+  ownScore: number;
+  opponentScore: number;
+  difference: number;
+  note?: string;
+}) {
+  return (
+    <div className="club-vs-tooltip-content">
+      <strong>{title}</strong>
+      <span>{subtitle}</span>
+      <div className="club-vs-tooltip-score">
+        <em>{ownName}</em>
+        <b className={difference >= 0 ? 'positive' : 'negative'}>
+          {formatNumber(ownScore, 0)} / {formatNumber(opponentScore, 0)}
+        </b>
+        <em>{opponentName}</em>
+      </div>
+      <div className="club-vs-tooltip-stats">
+        {stats.map((stat) => (
+          <div key={stat.label}>
+            <span>{stat.label}</span>
+            <p>
+              <em>
+                {stat.ownLabel}: {formatNumber(stat.ownValue, 0)}
+              </em>
+              <b className={stat.difference >= 0 ? 'positive' : 'negative'}>
+                {stat.difference >= 0 ? '+' : ''}
+                {formatNumber(stat.difference, 0)}
+              </b>
+              <em>
+                {stat.opponentLabel}: {formatNumber(stat.opponentValue, 0)}
+              </em>
+            </p>
+          </div>
+        ))}
+      </div>
+      {note && <small>{note}</small>}
+    </div>
+  );
+}
+
+function VsTerritoryVoronoi({
+  ownSummary,
+  opponentSummary,
+  ownPlayers,
+  opponentPlayers,
+}: {
+  ownSummary: ClubSummary;
+  opponentSummary: ClubSummary;
+  ownPlayers: ResolvedLineupPlayer[];
+  opponentPlayers: ResolvedLineupPlayer[];
+}) {
+  const [tooltipContent, setTooltipContent] = useState<ReactNode | null>(null);
+  const points = buildVsTerritoryPoints(
+    ownPlayers,
+    opponentPlayers,
+    ownSummary.club,
+    opponentSummary.club,
+  );
+  const cells = buildVsTerritoryCells(points);
+  const totalArea = cells.reduce((sum, cell) => sum + cell.area, 0);
+  const quadrants = buildVsQuadrantSummaries(
+    points,
+    ownSummary.club,
+    opponentSummary.club,
+  );
+  const visualPoints = buildVsVisualTerritoryPoints(points);
+
+  return (
+    <article className="club-vs-card club-vs-territory">
+      <header>
+        <h3>Analisis territorial</h3>
+        <span>quien gana cada zona</span>
+      </header>
+      <div className="club-vs-territory-layout">
+        <div className="club-vs-territory-map">
+          <svg
+            className="club-vs-voronoi-pitch"
+            viewBox={`0 0 ${VS_PITCH_WIDTH} ${VS_PITCH_HEIGHT}`}
+            role="img"
+          >
+            <defs>
+              <linearGradient id="club-vs-grass" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stopColor="#183d20" />
+                <stop offset="0.5" stopColor="#0f2f18" />
+                <stop offset="1" stopColor="#082311" />
+              </linearGradient>
+            </defs>
+            <rect
+              x="0"
+              y="0"
+              width={VS_PITCH_WIDTH}
+              height={VS_PITCH_HEIGHT}
+              className="club-vs-pitch-bg"
+            />
+            {cells.map((cell) => {
+              const areaShare = totalArea ? (cell.area / totalArea) * 100 : 0;
+              const playerName = String(cell.point.entry.player.NOMBRE ?? '-');
+              const rivalName = String(
+                cell.point.influenceOpponent?.player.NOMBRE ?? 'Rival cercano',
+              );
+              const ownScore = getVsStatsScore(cell.point.influenceStats, 'own');
+              const opponentScore = getVsStatsScore(
+                cell.point.influenceStats,
+                'opponent',
+              );
+              const winnerFirstTitle =
+                ownScore >= opponentScore
+                  ? `${playerName} vs ${rivalName}`
+                  : `${rivalName} vs ${playerName}`;
+              const tooltipContent = (
+                <VsStatsTooltipContent
+                  title={winnerFirstTitle}
+                  subtitle={`${cell.point.sideLabel} - ${getPositionFullName(
+                    cell.point.entry.slot.role,
+                  )} - territorio ${formatNumber(areaShare, 0)}%`}
+                  stats={cell.point.influenceStats}
+                  ownName={playerName}
+                  opponentName={rivalName}
+                  ownScore={ownScore}
+                  opponentScore={opponentScore}
+                  difference={cell.point.influenceScore}
+                  note={`La zona crece o se achica por cercania ponderada: distancia territorial + diferencia de estos stats (${cell.point.influenceScore >= 0 ? '+' : ''}${formatNumber(
+                    cell.point.influenceScore,
+                    1,
+                  )}).`}
+                />
+              );
+
+              return (
+                <polygon
+                  key={cell.point.id}
+                  points={polygonPoints(cell.polygon)}
+                  className={`club-vs-voronoi-cell ${cell.point.side}`}
+                  onMouseEnter={() => setTooltipContent(tooltipContent)}
+                  onMouseMove={() => setTooltipContent(tooltipContent)}
+                  onMouseLeave={() => setTooltipContent(null)}
+                />
+              );
+            })}
+            <line
+              x1="0"
+              y1="50"
+              x2={VS_PITCH_WIDTH}
+              y2="50"
+              className="club-vs-pitch-line"
+            />
+            <line
+              x1={VS_PITCH_SIDE_LANE_WIDTH}
+              y1="0"
+              x2={VS_PITCH_SIDE_LANE_WIDTH}
+              y2="100"
+              className="club-vs-pitch-line soft"
+            />
+            <line
+              x1={VS_PITCH_RIGHT_LANE_X}
+              y1="0"
+              x2={VS_PITCH_RIGHT_LANE_X}
+              y2="100"
+              className="club-vs-pitch-line soft"
+            />
+            <circle
+              cx={VS_PITCH_WIDTH / 2}
+              cy="50"
+              r="8.4"
+              className="club-vs-pitch-line-fill"
+            />
+            <rect
+              x={(VS_PITCH_WIDTH - 46) / 2}
+              y="0.7"
+              width="46"
+              height="14"
+              className="club-vs-pitch-box"
+            />
+            <rect
+              x={(VS_PITCH_WIDTH - 46) / 2}
+              y="85.3"
+              width="46"
+              height="14"
+              className="club-vs-pitch-box"
+            />
+            {quadrants.map((quadrant) => (
+              <g
+                key={quadrant.key}
+                className={`club-vs-quadrant-mark ${quadrant.winner}`}
+              >
+                <rect
+                  x={quadrant.rect.x}
+                  y={quadrant.rect.y}
+                  width={quadrant.rect.width}
+                  height={quadrant.rect.height}
+                />
+              </g>
+            ))}
+            {visualPoints.map(({ point, visualPoint, labelPoint, textAnchor }) => {
+              const playerTooltipContent = (
+                <VsStatsTooltipContent
+                  title={String(point.entry.player.NOMBRE ?? '-')}
+                  subtitle={`${point.sideLabel} - ${getPositionFullName(
+                    point.entry.slot.role,
+                  )} - rating ${formatNumber(point.entry.rating, 0)}`}
+                  stats={point.influenceStats}
+                  ownName={String(point.entry.player.NOMBRE ?? '-')}
+                  opponentName={String(
+                    point.influenceOpponent?.player.NOMBRE ?? 'Rival cercano',
+                  )}
+                  ownScore={getVsStatsScore(point.influenceStats, 'own')}
+                  opponentScore={getVsStatsScore(point.influenceStats, 'opponent')}
+                  difference={point.influenceScore}
+                  note="Estos stats son los que ponderan su influencia territorial frente al rival cercano."
+                />
+              );
+
+              return (
+                <g
+                  key={point.id}
+                  className={`club-vs-voronoi-player ${point.side}`}
+                  onMouseEnter={() => setTooltipContent(playerTooltipContent)}
+                  onMouseMove={() => setTooltipContent(playerTooltipContent)}
+                  onMouseLeave={() => setTooltipContent(null)}
+                >
+                  {(visualPoint.x !== point.point.x ||
+                    visualPoint.y !== point.point.y) && (
+                    <line
+                      x1={point.point.x}
+                      y1={point.point.y}
+                      x2={visualPoint.x}
+                      y2={visualPoint.y}
+                      className="offset-link"
+                    />
+                  )}
+                  <circle
+                    className="halo"
+                    cx={visualPoint.x}
+                    cy={visualPoint.y}
+                    r="2.25"
+                  />
+                  <circle cx={visualPoint.x} cy={visualPoint.y} r="1.45" />
+                  <line
+                    x1={visualPoint.x}
+                    y1={visualPoint.y}
+                    x2={labelPoint.x}
+                    y2={labelPoint.y}
+                    className="label-link"
+                  />
+                  <text
+                    x={labelPoint.x}
+                    y={labelPoint.y}
+                    className="name"
+                    textAnchor={textAnchor}
+                  >
+                    {formatVoronoiPlayerName(point.entry.player.NOMBRE)}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+        <div
+          className={`club-vs-quadrant-panel ${
+            tooltipContent ? 'is-tooltip-visible' : ''
+          }`}
+        >
+          <div className="club-vs-quadrant-list">
+            {quadrants.map((quadrant) => (
+              <div
+                key={quadrant.key}
+                className={`club-vs-quadrant-card ${quadrant.winner}`}
+              >
+                <div>
+                  <span>{quadrant.label}</span>
+                  <strong>{quadrant.winnerLabel}</strong>
+                </div>
+                <div className="club-vs-quadrant-meter">
+                  <span style={{ width: `${Math.max(4, quadrant.ownShare)}%` }} />
+                  <em style={{ width: `${Math.max(4, quadrant.opponentShare)}%` }} />
+                </div>
+                <small>
+                  {ownSummary.club}: {formatNumber(quadrant.ownControl, 0)} -{' '}
+                  {opponentSummary.club}: {formatNumber(quadrant.opponentControl, 0)}
+                </small>
+                <p>{quadrant.reason}</p>
+              </div>
+            ))}
+          </div>
+          <ClubInlineTooltip
+            content={tooltipContent}
+            className="club-vs-chart-tooltip club-vs-zone-panel-tooltip"
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ClubVsAnalysisOverlay({
+  ownSummary,
+  opponentSummary,
+  ownLineup,
+  opponentLineup,
+  onClose,
+}: {
+  ownSummary: ClubSummary;
+  opponentSummary: ClubSummary;
+  ownLineup: ClubLineupConfig;
+  opponentLineup: ClubLineupConfig;
+  onClose: () => void;
+}) {
+  const ownPlayers = resolveLineupPlayers(ownSummary, ownLineup);
+  const opponentPlayers = resolveLineupPlayers(opponentSummary, opponentLineup);
+  const ownAverage = getResolvedLineupAverage(ownPlayers);
+  const opponentAverage = getResolvedLineupAverage(opponentPlayers);
+  const duels = buildLineupDuels(ownPlayers, opponentPlayers).slice(0, 8);
+  const balance = ownAverage - opponentAverage;
+  const ownOffensiveEdge = getLineupOffensiveEdge(ownPlayers, opponentPlayers);
+  const opponentOffensiveEdge = getLineupOffensiveEdge(opponentPlayers, ownPlayers);
+  const midfieldEdge = getLineupMidfieldEdge(ownPlayers, opponentPlayers);
+  const focusItems = buildVsFocusItems(duels, ownPlayers, opponentPlayers);
+  const mainAdvantage = focusItems.find((item) => item.kind === 'advantage');
+  const mainRisk = focusItems.find((item) => item.kind === 'risk');
+
+  return (
+    <div className="club-vs-overlay" role="dialog" aria-modal="true">
+      <section className="club-vs-hub">
+        <header className="club-vs-header">
+          <div>
+            <span>Analisis VS</span>
+            <h2>
+              {ownSummary.club} vs {opponentSummary.club}
+            </h2>
+            <p>
+              Comparacion basada en los onces titulares probables configurados en el
+              modulo Clubes.
+            </p>
+          </div>
+          <button type="button" onClick={onClose} aria-label="Cerrar analisis VS">
+            x
+          </button>
+        </header>
+
+        <div className="club-vs-kpis">
+          <article>
+            <span>Ataque propio</span>
+            <strong className={ownOffensiveEdge >= 0 ? 'positive' : 'negative'}>
+              {ownOffensiveEdge >= 0 ? '+' : ''}
+              {formatNumber(ownOffensiveEdge, 1)}
+            </strong>
+            <small>vs contencion rival - {ownLineup.formationName}</small>
+          </article>
+          <article>
+            <span>Amenaza rival</span>
+            <strong className={opponentOffensiveEdge <= 0 ? 'positive' : 'negative'}>
+              {opponentOffensiveEdge >= 0 ? '+' : ''}
+              {formatNumber(opponentOffensiveEdge, 1)}
+            </strong>
+            <small>vs defensa propia - {opponentLineup.formationName}</small>
+          </article>
+          <article>
+            <span>Control medio</span>
+            <strong className={midfieldEdge >= 0 ? 'positive' : 'negative'}>
+              {midfieldEdge >= 0 ? '+' : ''}
+              {formatNumber(midfieldEdge, 1)}
+            </strong>
+            <small>salida propia vs presion rival</small>
+          </article>
+        </div>
+
+        <div className="club-vs-grid">
+          <article className="club-vs-card club-vs-reading">
+            <header>
+              <h3>Lectura rapida</h3>
+            </header>
+            <p>
+              Promedio del once: <strong>{ownSummary.club}</strong>{' '}
+              {formatNumber(ownAverage, 1)} / <strong>{opponentSummary.club}</strong>{' '}
+              {formatNumber(opponentAverage, 1)} ({balance >= 0 ? '+' : ''}
+              {formatNumber(balance, 1)}).
+            </p>
+            {mainAdvantage && (
+              <p>
+                Mejor ruta: <strong>{mainAdvantage.title}</strong>. {mainAdvantage.detail}
+              </p>
+            )}
+            {mainRisk && (
+              <p>
+                Alerta: <strong>{mainRisk.title}</strong>. {mainRisk.detail}
+              </p>
+            )}
+            <p>
+              El dato util no es la linea completa, sino donde el perfil del jugador
+              propio supera o queda expuesto ante el perfil que lo enfrenta.
+            </p>
+          </article>
+
+          <article className="club-vs-card club-vs-focus">
+            <header>
+              <h3>Focos del partido</h3>
+              <span>acciones sugeridas</span>
+            </header>
+            <div className="club-vs-focus-list">
+              {focusItems.map((item) => (
+                <div key={item.key} className={`club-vs-focus-item ${item.kind}`}>
+                  <span>
+                    {item.kind === 'risk'
+                      ? 'Riesgo'
+                      : item.kind === 'advantage'
+                        ? 'Ventaja'
+                        : 'Control'}
+                  </span>
+                  <strong>{item.title}</strong>
+                  <p>{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="club-vs-card club-vs-duels">
+            <header>
+              <h3>Duelos probables</h3>
+              <span>por cercania en cancha</span>
+            </header>
+            <div className="club-vs-duel-list">
+              {duels.map((duel) => {
+                const duelTooltip = (
+                  <VsStatsTooltipContent
+                    title={duel.context.label}
+                    subtitle={`${duel.context.ownLabel} vs ${duel.context.opponentLabel}`}
+                    stats={duel.stats}
+                    ownName={String(duel.own.player.NOMBRE ?? '-')}
+                    opponentName={String(duel.opponent.player.NOMBRE ?? '-')}
+                    ownScore={duel.ownScore}
+                    opponentScore={duel.opponentScore}
+                    difference={duel.difference}
+                    note={`Diferencia del duelo: ${duel.difference >= 0 ? '+' : ''}${formatNumber(
+                      duel.difference,
+                      1,
+                    )}. Distancia posicional: ${formatNumber(duel.distance, 1)}.`}
+                  />
+                );
+
+                return (
+                  <EnhancedTooltip
+                    key={`${duel.opponent.slot.slotId}-${duel.own.slot.slotId}`}
+                    content={duelTooltip}
+                    placement="left"
+                    className="club-vs-duel-tooltip-wrapper"
+                    popupClassName="club-vs-enhanced-tooltip"
+                  >
+                    <div className="club-vs-duel-row">
+                      <div>
+                        <span className="position-badge">{duel.own.slot.role}</span>
+                        <strong>{String(duel.own.player.NOMBRE ?? '-')}</strong>
+                        <RatingValue value={duel.ownScore} />
+                      </div>
+                      <span className={duel.difference >= 0 ? 'positive' : 'negative'}>
+                        {duel.difference >= 0 ? '+' : ''}
+                        {formatNumber(duel.difference, 0)}
+                      </span>
+                      <div>
+                        <span className="position-badge">{duel.opponent.slot.role}</span>
+                        <strong>{String(duel.opponent.player.NOMBRE ?? '-')}</strong>
+                        <RatingValue value={duel.opponentScore} />
+                      </div>
+                      <small>
+                        {duel.context.label} - {formatVsStatSummary(duel.stats, 1)}
+                      </small>
+                    </div>
+                  </EnhancedTooltip>
+                );
+              })}
+            </div>
+          </article>
+        </div>
+        <VsTerritoryVoronoi
+          ownSummary={ownSummary}
+          opponentSummary={opponentSummary}
+          ownPlayers={ownPlayers}
+          opponentPlayers={opponentPlayers}
+        />
+      </section>
+    </div>
+  );
+}
+
 function getChartTooltipPosition(event: ReactMouseEvent<Element>) {
-  const estimatedWidth = 300;
+  const estimatedWidth = 440;
   const estimatedHeight = 140;
   const margin = 10;
   return {
@@ -1665,12 +3137,18 @@ function getChartTooltipPosition(event: ReactMouseEvent<Element>) {
   };
 }
 
-function ClubChartTooltip({ tooltip }: { tooltip: ChartTooltipState | null }) {
+function ClubChartTooltip({
+  tooltip,
+  className = '',
+}: {
+  tooltip: ChartTooltipState | null;
+  className?: string;
+}) {
   if (!tooltip) return null;
 
   return (
     <div
-      className="glossary-tooltip-popup club-chart-tooltip"
+      className={`glossary-tooltip-popup club-chart-tooltip ${className}`}
       style={{
         position: 'fixed',
         left: `${Math.max(10, tooltip.x)}px`,
@@ -1681,6 +3159,22 @@ function ClubChartTooltip({ tooltip }: { tooltip: ChartTooltipState | null }) {
       <div className="glossary-tooltip-definition club-chart-tooltip-body">
         {tooltip.content}
       </div>
+    </div>
+  );
+}
+
+function ClubInlineTooltip({
+  content,
+  className = '',
+}: {
+  content: ReactNode | null;
+  className?: string;
+}) {
+  if (!content) return null;
+
+  return (
+    <div className={`glossary-tooltip-popup club-chart-tooltip ${className}`}>
+      <div className="glossary-tooltip-definition club-chart-tooltip-body">{content}</div>
     </div>
   );
 }
@@ -2131,6 +3625,13 @@ function transformSlotToVoronoiPoint(slot: FormationSlot): ChartPoint {
   };
 }
 
+function transformSlotToVsVoronoiPoint(slot: FormationSlot): ChartPoint {
+  return {
+    x: slot.x * (VS_PITCH_WIDTH / 100),
+    y: slot.y,
+  };
+}
+
 function clipPolygonForPoint(
   polygon: ChartPoint[],
   point: ChartPoint,
@@ -2267,7 +3768,7 @@ function VoronoiPitch({ recommendation }: { recommendation: FormationRecommendat
   return (
     <div className="club-analysis-chart-card club-voronoi-card">
       <header>
-        <h3>Voronoi territorial</h3>
+        <h3>Analisis territorial</h3>
         <span>Zonas del once sugerido</span>
       </header>
       <div className="club-voronoi-layout">
@@ -2767,6 +4268,12 @@ export function ClubModule() {
   const error = useCacheStore((state) => state.error);
   const selectedClub = useClubViewStore((state) => state.selectedClub);
   const setSelectedClub = useClubViewStore((state) => state.setSelectedClub);
+  const addActivity = useActivityHistoryStore((state) => state.addActivity);
+  const lineupsByClub = useClubLineupStore((state) => state.lineupsByClub);
+  const captainsByClub = useClubLineupStore((state) => state.captainsByClub);
+  const updateClubLineup = useClubLineupStore((state) => state.updateClubLineup);
+  const setClubCaptain = useClubLineupStore((state) => state.setClubCaptain);
+  const identity = useIdentityStore((state) => state.profile);
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
   const setProfilePlayerId = usePlayerProfileStore((state) => state.setSelectedPlayerId);
   const [selectorOpen, setSelectorOpen] = useState(false);
@@ -2774,11 +4281,8 @@ export function ClubModule() {
     key: 'PROMEDIO',
     direction: 'desc',
   });
-  const [lineupsByClub, setLineupsByClub] = useState<Record<string, ClubLineupConfig>>(
-    {},
-  );
-  const [captainsByClub, setCaptainsByClub] = useState<Record<string, string>>({});
   const [analysisOpen, setAnalysisOpen] = useState(false);
+  const [vsAnalysisOpen, setVsAnalysisOpen] = useState(false);
 
   const clubNames = useMemo(() => sortClubsAlphabetically(Array.from(ANFPES_CLUBS)), []);
 
@@ -2838,15 +4342,14 @@ export function ClubModule() {
 
   const setActiveCaptain = (playerId: string) => {
     if (!activeSummary) return;
-    setCaptainsByClub((current) => ({
-      ...current,
-      [activeSummary.club]: playerId,
-    }));
+    setClubCaptain(activeSummary.club, playerId || null);
   };
 
   const chooseClub = (club: string) => {
     setSelectedClub(club);
     setSelectorOpen(false);
+    setAnalysisOpen(false);
+    setVsAnalysisOpen(false);
   };
 
   const openPlayerProfile = (player: DerivedPlayer) => {
@@ -2872,29 +4375,51 @@ export function ClubModule() {
   };
 
   const activeLineup: ClubLineupConfig = activeSummary
-    ? (lineupsByClub[activeSummary.club] ?? {
-        formationName: null,
-        playersBySlot: {},
-      })
-    : {
-        formationName: null,
-        playersBySlot: {},
-      };
+    ? (lineupsByClub[activeSummary.club] ?? createEmptyClubLineup())
+    : createEmptyClubLineup();
+
+  const identityClub = identity?.club;
+  const identitySummary =
+    typeof identityClub === 'string'
+      ? summaries.find((summary) => summary.club === identityClub)
+      : undefined;
+  const identityLineup =
+    typeof identityClub === 'string' ? lineupsByClub[identityClub] : undefined;
+  const canOpenVsAnalysis = Boolean(
+    activeSummary &&
+      identitySummary &&
+      identityClub !== activeSummary.club &&
+      isResolvedLineupConfigured(identitySummary, identityLineup) &&
+      isResolvedLineupConfigured(activeSummary, activeLineup),
+  );
+
+  useEffect(() => {
+    if (!canOpenVsAnalysis && vsAnalysisOpen) {
+      setVsAnalysisOpen(false);
+    }
+  }, [canOpenVsAnalysis, vsAnalysisOpen]);
+
+  useEffect(() => {
+    if (!activeSummary) return;
+    addActivity({
+      type: 'club',
+      clubName: activeSummary.club,
+      details: activeSummary.manager
+        ? `DT: ${activeSummary.manager}`
+        : activeSummary.division,
+      metadata: {
+        club: activeSummary.club,
+        division: activeSummary.division,
+        manager: activeSummary.manager,
+      },
+    });
+  }, [activeSummary?.club, activeSummary?.division, activeSummary?.manager, addActivity]);
 
   const updateActiveLineup = (
     updater: (lineup: ClubLineupConfig) => ClubLineupConfig,
   ) => {
     if (!activeSummary) return;
-    setLineupsByClub((current) => {
-      const previous = current[activeSummary.club] ?? {
-        formationName: null,
-        playersBySlot: {},
-      };
-      return {
-        ...current,
-        [activeSummary.club]: updater(previous),
-      };
-    });
+    updateClubLineup(activeSummary.club, updater);
   };
 
   const handleFormationChange = (formationName: string | null) => {
@@ -3140,6 +4665,7 @@ export function ClubModule() {
                 setSelectedClub(null);
                 setSelectorOpen(false);
                 setAnalysisOpen(false);
+                setVsAnalysisOpen(false);
               }}
             >
               ×
@@ -3154,6 +4680,9 @@ export function ClubModule() {
             onFormationChange={handleFormationChange}
             onSlotPlayerChange={handleSlotPlayerChange}
             onClear={clearActiveLineup}
+            canOpenVsAnalysis={canOpenVsAnalysis}
+            onOpenVsAnalysis={() => setVsAnalysisOpen(true)}
+            vsClub={identitySummary?.club}
           />
 
           <PositionDepthPanel summary={activeSummary} onOpenPlayer={openPlayerProfile} />
@@ -3351,6 +4880,15 @@ export function ClubModule() {
             summaries={summaries}
             onClose={() => setAnalysisOpen(false)}
             onOpenPlayer={openPlayerProfile}
+          />
+        )}
+        {vsAnalysisOpen && canOpenVsAnalysis && identitySummary && identityLineup && (
+          <ClubVsAnalysisOverlay
+            ownSummary={identitySummary}
+            opponentSummary={activeSummary}
+            ownLineup={identityLineup}
+            opponentLineup={activeLineup}
+            onClose={() => setVsAnalysisOpen(false)}
           />
         )}
       </main>

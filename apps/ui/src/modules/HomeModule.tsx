@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import type { DerivedPlayer } from '@anfpes/engine';
+import { useMemo } from 'react';
 import { useCacheStore } from '../store/cacheStore';
 import { usePreselectionStore } from '../store/preselectionStore';
 import { usePreselectionViewStore } from '../store/preselectionViewStore';
@@ -8,10 +9,17 @@ import { useSimilarPlayersStore } from '../store/similarPlayersStore';
 import { useComparatorLaunchStore } from '../store/comparatorLaunchStore';
 import { usePlayerProfileStore } from '../store/playerProfileStore';
 import { useClubViewStore } from '../store/clubViewStore';
-import { ANFPES_CLUBS } from '../data/playerStatus';
-import { CLUBS_BY_DIVISION, sortClubsAlphabetically } from '../data/clubCompetition';
+import { useIdentityStore } from '../store/identityStore';
+import { ANFPES_CLUBS, LEGEND_PLAYERS, ML_PLAYERS } from '../data/playerStatus';
+import {
+  CLUBS_BY_DIVISION,
+  getClubCompetitionDetail,
+  sortClubsAlphabetically,
+} from '../data/clubCompetition';
 import { getClubShieldPath, getPlayerThumbPath } from '../utils/imageHelpers';
 import { ensureNumber } from '../utils/format';
+import { formatSelectionDisplay } from '../utils/playerDisplay';
+import { getStatColor } from '../types/table';
 import { getPlayerPositions, getPositionLine } from '../components/PositionBadges';
 import { EnhancedTooltip } from '../components/EnhancedTooltip';
 import { useActivityHistoryStore } from '../store/activityHistoryStore';
@@ -24,6 +32,42 @@ function formatNumber(value: number | undefined, digits = 1): string {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
+}
+
+function getAverage(
+  targetPlayers: DerivedPlayer[],
+  field: keyof DerivedPlayer,
+): number | undefined {
+  const values = targetPlayers
+    .map((player) => ensureNumber(player[field]))
+    .filter((value): value is number => value !== undefined);
+
+  if (!values.length) return undefined;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function getPlayerFieldByName(player: DerivedPlayer, namePart: string): unknown {
+  const normalizedNamePart = namePart.toLowerCase();
+  const key = Object.keys(player).find((candidate) =>
+    candidate.toLowerCase().includes(normalizedNamePart),
+  );
+  return key ? player[key as keyof DerivedPlayer] : undefined;
+}
+
+function isNationalPlayer(player: DerivedPlayer): boolean {
+  return (
+    formatSelectionDisplay(getPlayerFieldByName(player, 'selecci')).toLowerCase() !== 'no'
+  );
+}
+
+function isLegendPlayer(player: DerivedPlayer): boolean {
+  const classicValue = formatSelectionDisplay(getPlayerFieldByName(player, 'clasico'));
+  const playerName = String(player.NOMBRE ?? '').trim();
+  return classicValue.toLowerCase() !== 'no' || LEGEND_PLAYERS.has(playerName);
+}
+
+function isMlPlayer(player: DerivedPlayer): boolean {
+  return ML_PLAYERS.has(String(player.NOMBRE ?? '').trim());
 }
 
 export function HomeModule() {
@@ -41,6 +85,7 @@ export function HomeModule() {
 
   const setActiveModule = useModuleStore((state) => state.setActiveModuleId);
   const setSelectedClub = useClubViewStore((state) => state.setSelectedClub);
+  const identity = useIdentityStore((state) => state.profile);
 
   const setBasePlayerId = useSimilarPlayersStore((state) => state.setBasePlayerId);
   const setComparatorPending = useComparatorLaunchStore((state) => state.setPending);
@@ -52,8 +97,6 @@ export function HomeModule() {
   const allActivities = useActivityHistoryStore((state) => state.activities);
   const clearActivities = useActivityHistoryStore((state) => state.clearActivities);
 
-  const [clubFilter, setClubFilter] = useState('');
-
   // Get recent activities (memoized to avoid infinite loop)
   const recentActivities = useMemo(() => {
     return allActivities.slice(0, 8);
@@ -64,9 +107,8 @@ export function HomeModule() {
   // Clubes ANFPES ordenados alfabéticamente y filtrados
   const anfpesClubsList = useMemo(() => {
     const sorted = sortClubsAlphabetically(Array.from(ANFPES_CLUBS));
-    if (!clubFilter) return sorted;
-    return sorted.filter((club) => club.toLowerCase().includes(clubFilter.toLowerCase()));
-  }, [clubFilter]);
+    return sorted;
+  }, []);
 
   const anfpesClubsByDivision = useMemo(
     () =>
@@ -76,6 +118,26 @@ export function HomeModule() {
       })).filter((group) => group.clubs.length > 0),
     [anfpesClubsList],
   );
+
+  const identityClubSummary = useMemo(() => {
+    if (!players || !identity?.club) return null;
+
+    const roster = players.filter(
+      (player) => String(player.CLUB ?? '').trim() === identity.club,
+    );
+    const competitionDetail = getClubCompetitionDetail(identity.club);
+
+    return {
+      club: identity.club,
+      manager: identity.manager ?? competitionDetail?.manager,
+      division: competitionDetail?.division,
+      average: getAverage(roster, 'PROMEDIO'),
+      averageAge: getAverage(roster, 'EDAD'),
+      nationalCount: roster.filter(isNationalPlayer).length,
+      legendCount: roster.filter(isLegendPlayer).length,
+      mlCount: roster.filter(isMlPlayer).length,
+    };
+  }, [identity, players]);
 
   // Preselecciones activas (compactadas)
   const activePreselections = useMemo(() => {
@@ -142,6 +204,17 @@ export function HomeModule() {
 
   const handleActivityClick = (activity: (typeof recentActivities)[0]) => {
     switch (activity.type) {
+      case 'club':
+        {
+          const clubName =
+            activity.clubName ??
+            (typeof activity.metadata?.club === 'string' ? activity.metadata.club : null);
+          if (clubName) {
+            setSelectedClub(clubName);
+          }
+        }
+        setActiveModule(MODULE_IDS.club);
+        break;
       case 'search':
         setActiveModule(MODULE_IDS.search);
         break;
@@ -194,6 +267,8 @@ export function HomeModule() {
         return '⚖️';
       case 'profile':
         return '👤';
+      case 'club':
+        return '⚽';
       default:
         return '•';
     }
@@ -209,6 +284,8 @@ export function HomeModule() {
         return 'Comparación';
       case 'profile':
         return 'Perfil visitado';
+      case 'club':
+        return 'Club visitado';
       default:
         return 'Actividad';
     }
@@ -270,6 +347,66 @@ export function HomeModule() {
 
       {/* Contenido principal */}
       <main className="home-main-content">
+        {identityClubSummary && (
+          <section className="home-identity-card">
+            <div className="home-identity-main">
+              <button
+                type="button"
+                className="home-identity-shield"
+                onClick={() => handleClubClick(identityClubSummary.club)}
+                aria-label={`Abrir club ${identityClubSummary.club}`}
+              >
+                {getClubShieldPath(identityClubSummary.club) ? (
+                  <img src={getClubShieldPath(identityClubSummary.club) ?? ''} alt="" />
+                ) : (
+                  <span>{identityClubSummary.club.slice(0, 2).toUpperCase()}</span>
+                )}
+              </button>
+              <div className="home-identity-copy">
+                <span className="home-identity-kicker">Usuario seleccionado</span>
+                <h2>{identityClubSummary.manager ?? 'Usuario'}</h2>
+                <p>{identityClubSummary.club}</p>
+              </div>
+              <div className="home-identity-tags">
+                {identityClubSummary.division && (
+                  <span>{identityClubSummary.division}</span>
+                )}
+              </div>
+            </div>
+
+            <div className="home-identity-stats">
+              <div className="home-identity-average">
+                <span>Promedio</span>
+                <strong
+                  style={{
+                    color: getStatColor(identityClubSummary.average) ?? undefined,
+                  }}
+                >
+                  {formatNumber(identityClubSummary.average, 1)}
+                </strong>
+              </div>
+              <div className="home-identity-stat-grid">
+                <div>
+                  <strong>{formatNumber(identityClubSummary.averageAge, 1)}</strong>
+                  <span>Edad media</span>
+                </div>
+                <div>
+                  <strong>{identityClubSummary.nationalCount}</strong>
+                  <span>Seleccionados</span>
+                </div>
+                <div>
+                  <strong>{identityClubSummary.legendCount}</strong>
+                  <span>Leyendas</span>
+                </div>
+                <div>
+                  <strong>{identityClubSummary.mlCount}</strong>
+                  <span>ML</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Contenedor para Preselecciones y Planificaciones */}
         <div className="home-dual-section">
           {/* Mis Preselecciones */}
@@ -456,6 +593,16 @@ export function HomeModule() {
                   onClick={() => handleActivityClick(activity)}
                 >
                   <div className="recent-item-icon">{getActivityIcon(activity.type)}</div>
+                  {activity.type === 'club' && activity.clubName && (
+                    <img
+                      src={getClubShieldPath(activity.clubName) || ''}
+                      alt={activity.clubName}
+                      className="club-shield-icon recent-club-shield"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
                   {activity.playerId && (
                     <img
                       src={getPlayerThumbPath(activity.playerId)}
@@ -468,7 +615,7 @@ export function HomeModule() {
                   )}
                   <div className="recent-item-content">
                     <div className="recent-item-title">
-                      {activity.playerName || 'Sin nombre'}
+                      {activity.clubName || activity.playerName || 'Sin nombre'}
                     </div>
                     <div className="recent-item-details">
                       {getActivityLabel(activity.type)}

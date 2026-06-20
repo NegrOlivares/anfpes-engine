@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type ActivityType = 'search' | 'similar' | 'comparison' | 'profile';
+export type ActivityType = 'search' | 'similar' | 'comparison' | 'profile' | 'club';
 
 export interface Activity {
   id: string;
@@ -9,6 +9,7 @@ export interface Activity {
   timestamp: number;
   playerId?: string;
   playerName?: string;
+  clubName?: string;
   details?: string;
   metadata?: Record<string, unknown>;
 }
@@ -32,9 +33,19 @@ export const useActivityHistoryStore = create<ActivityHistoryState>()(
           timestamp: Date.now(),
         };
 
-        set((state) => ({
-          activities: [newActivity, ...state.activities].slice(0, 50), // Keep only last 50
-        }));
+        set((state) => {
+          const [latestActivity, ...olderActivities] = state.activities;
+          const isRepeatedClubVisit =
+            newActivity.type === 'club' &&
+            latestActivity?.type === 'club' &&
+            latestActivity.clubName === newActivity.clubName;
+
+          return {
+            activities: isRepeatedClubVisit
+              ? [newActivity, ...olderActivities].slice(0, 50)
+              : [newActivity, ...state.activities].slice(0, 50),
+          };
+        });
       },
 
       clearActivities: () => set({ activities: [] }),

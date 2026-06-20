@@ -20,7 +20,10 @@ import { IdentitySetupModal } from './components/IdentitySetupModal';
 import { useWindowModeStore } from './store/windowModeStore';
 import { initializeTheme } from './store/themeStore';
 import { useIdentityStore, type UserIdentity } from './store/identityStore';
+import { isTauri } from '@tauri-apps/api/core';
 import { getCurrentWindow } from '@tauri-apps/api/window';
+import { relaunch } from '@tauri-apps/plugin-process';
+import { check, type DownloadEvent, type Update } from '@tauri-apps/plugin-updater';
 
 const modules: ModuleDefinition[] = [
   { id: MODULE_IDS.dashboard, label: 'Home', component: HomeModule },
@@ -49,6 +52,14 @@ function getIdentityLabel(identity: UserIdentity): string {
   return 'Espectador';
 }
 
+type UpdateStatus =
+  | 'idle'
+  | 'checking'
+  | 'available'
+  | 'downloading'
+  | 'installing'
+  | 'error';
+
 export default function App() {
   useCacheLoader();
   const activeModuleId = useModuleStore((state) => state.activeModuleId);
@@ -62,12 +73,54 @@ export default function App() {
   const [isInitialized, setIsInitialized] = useState(false);
   const identity = useIdentityStore((state) => state.profile);
   const [isIdentityModalOpen, setIsIdentityModalOpen] = useState(false);
+  const [availableUpdate, setAvailableUpdate] = useState<Update | null>(null);
+  const [updateStatus, setUpdateStatus] = useState<UpdateStatus>('idle');
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [isUpdateNoticeDismissed, setIsUpdateNoticeDismissed] = useState(false);
   const mustSelectIdentity = !showSplash && !identity;
   const identityModalOpen = isIdentityModalOpen || mustSelectIdentity;
+  const shouldShowUpdateNotice =
+    !showSplash &&
+    !isUpdateNoticeDismissed &&
+    (updateStatus === 'available' ||
+      updateStatus === 'downloading' ||
+      updateStatus === 'installing' ||
+      updateStatus === 'error');
 
   // Initialize theme
   useEffect(() => {
     initializeTheme();
+  }, []);
+
+  // Buscar actualizaciones al iniciar la app empaquetada.
+  useEffect(() => {
+    let isCancelled = false;
+
+    const checkForUpdates = async () => {
+      if (!isTauri()) return;
+
+      try {
+        setUpdateStatus('checking');
+        const update = await check({ timeout: 15000 });
+        if (isCancelled) return;
+
+        if (update) {
+          setAvailableUpdate(update);
+          setUpdateStatus('available');
+        } else {
+          setUpdateStatus('idle');
+        }
+      } catch (error) {
+        console.warn('No se pudo comprobar actualizaciones:', error);
+        if (!isCancelled) setUpdateStatus('idle');
+      }
+    };
+
+    void checkForUpdates();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   // Sincronizar estado inicial con Tauri
@@ -119,6 +172,46 @@ export default function App() {
     }
   };
 
+  const installAvailableUpdate = async () => {
+    if (!availableUpdate) return;
+
+    try {
+      setUpdateStatus('downloading');
+      setDownloadProgress(0);
+      let downloaded = 0;
+      let contentLength = 0;
+
+      await availableUpdate.downloadAndInstall((event: DownloadEvent) => {
+        if (event.event === 'Started') {
+          contentLength = event.data.contentLength ?? 0;
+          downloaded = 0;
+          setDownloadProgress(0);
+          return;
+        }
+
+        if (event.event === 'Progress') {
+          downloaded += event.data.chunkLength;
+          if (contentLength > 0) {
+            setDownloadProgress(
+              Math.min(100, Math.round((downloaded / contentLength) * 100)),
+            );
+          }
+          return;
+        }
+
+        if (event.event === 'Finished') {
+          setDownloadProgress(100);
+          setUpdateStatus('installing');
+        }
+      });
+
+      await relaunch();
+    } catch (error) {
+      console.error('No se pudo instalar la actualizacion:', error);
+      setUpdateStatus('error');
+    }
+  };
+
   return (
     <div className={`app-shell ${isInitialized && !isFullscreen ? 'has-titlebar' : ''}`}>
       <TitleBar visible={isInitialized && !isFullscreen} />
@@ -145,6 +238,43 @@ export default function App() {
           <ToolsMenu />
         </div>
       </div>
+      {shouldShowUpdateNotice && (
+        <div className={`update-notice ${updateStatus}`}>
+          <div>
+            <strong>
+              {updateStatus === 'error'
+                ? 'No se pudo actualizar'
+                : updateStatus === 'installing'
+                  ? 'Instalando actualizacion'
+                  : updateStatus === 'downloading'
+                    ? 'Descargando actualizacion'
+                    : 'Actualizacion disponible'}
+            </strong>
+            <span>
+              {availableUpdate
+                ? `Version ${availableUpdate.version}`
+                : 'Revisa tu conexion e intenta nuevamente.'}
+            </span>
+          </div>
+          {updateStatus === 'downloading' && (
+            <div className="update-notice-progress" aria-label="Progreso de descarga">
+              <span style={{ width: `${downloadProgress}%` }} />
+            </div>
+          )}
+          <div className="update-notice-actions">
+            {updateStatus === 'available' && (
+              <button type="button" onClick={() => void installAvailableUpdate()}>
+                Actualizar
+              </button>
+            )}
+            {(updateStatus === 'available' || updateStatus === 'error') && (
+              <button type="button" onClick={() => setIsUpdateNoticeDismissed(true)}>
+                Luego
+              </button>
+            )}
+          </div>
+        </div>
+      )}
       <main className="app-main">
         {modules.map((module) => {
           const Component = module.component;

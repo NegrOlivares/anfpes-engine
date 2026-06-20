@@ -1,7 +1,7 @@
 {
   "$schema": "../../../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Cesante Manager",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "com.cesante.manager",
   "build": {
     "frontendDist": "../dist",
@@ -29,7 +29,8 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["app"],
+    "targets": ["nsis"],
+    "createUpdaterArtifacts": true,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -40,6 +41,17 @@
     "windows": {
       "webviewInstallMode": {
         "type": "downloadBootstrapper"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZFRUQ5Njc3NDcxMUZCMkUKUldRdSt4RkhkNWJ0L3RFanJyZFgyb1QwbHpCcHJOYWdmV2wvWURFaTdWNWc5eE5YMVAvSHNLKzkK",
+      "endpoints": [
+        "https://github.com/NegrOlivares/anfpes-engine/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
       }
     }
   }
