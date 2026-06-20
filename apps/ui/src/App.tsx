@@ -60,6 +60,8 @@ type UpdateStatus =
   | 'installing'
   | 'error';
 
+const UPDATE_INSTALL_NOTICE_MS = 1400;
+
 export default function App() {
   useCacheLoader();
   const activeModuleId = useModuleStore((state) => state.activeModuleId);
@@ -181,7 +183,7 @@ export default function App() {
       let downloaded = 0;
       let contentLength = 0;
 
-      await availableUpdate.downloadAndInstall((event: DownloadEvent) => {
+      await availableUpdate.download((event: DownloadEvent) => {
         if (event.event === 'Started') {
           contentLength = event.data.contentLength ?? 0;
           downloaded = 0;
@@ -201,10 +203,14 @@ export default function App() {
 
         if (event.event === 'Finished') {
           setDownloadProgress(100);
-          setUpdateStatus('installing');
         }
       });
 
+      setUpdateStatus('installing');
+      await new Promise((resolve) =>
+        window.setTimeout(resolve, UPDATE_INSTALL_NOTICE_MS),
+      );
+      await availableUpdate.install();
       await relaunch();
     } catch (error) {
       console.error('No se pudo instalar la actualizacion:', error);
@@ -245,18 +251,20 @@ export default function App() {
               {updateStatus === 'error'
                 ? 'No se pudo actualizar'
                 : updateStatus === 'installing'
-                  ? 'Instalando actualizacion'
+                  ? 'Actualizacion descargada'
                   : updateStatus === 'downloading'
                     ? 'Descargando actualizacion'
                     : 'Actualizacion disponible'}
             </strong>
             <span>
-              {availableUpdate
-                ? `Version ${availableUpdate.version}`
-                : 'Revisa tu conexion e intenta nuevamente.'}
+              {updateStatus === 'installing'
+                ? 'La app se cerrara unos segundos y se reiniciara al terminar.'
+                : availableUpdate
+                  ? `Version ${availableUpdate.version}`
+                  : 'Revisa tu conexion e intenta nuevamente.'}
             </span>
           </div>
-          {updateStatus === 'downloading' && (
+          {(updateStatus === 'downloading' || updateStatus === 'installing') && (
             <div className="update-notice-progress" aria-label="Progreso de descarga">
               <span style={{ width: `${downloadProgress}%` }} />
             </div>
