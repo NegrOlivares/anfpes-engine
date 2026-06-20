@@ -4,6 +4,7 @@ node_modules/
 # Build artifacts
 dist/
 apps/ui/dist/
+apps/ui/src-tauri/target/
 *.tsbuildinfo
 build/
 coverage/
@@ -11,6 +12,12 @@ legacy playerprofile/
 apps/ui/public/images/faces/
 apps/ui/public/images/thumbs/
 apps/ui/src/assets/legacy/
+
+# Local source dumps and generated installers
+Cesante Manager v*.exe
+RAW DB + FORMULAS - CON NOMBRES.xlsx
+excel_extracted/
+apps/ui/src/assets/*.fm
 
 # Logs
 npm-debug.log*
@@ -28,4 +35,3 @@ Thumbs.db
 data/processed/
 data/cache/
 *.json.tmp
-
