@@ -17,9 +17,16 @@ import { useNavigationHistoryStore } from './store/navigationHistoryStore';
 import { ToolsMenu } from './components/ToolsMenu';
 import { TitleBar } from './components/TitleBar';
 import { IdentitySetupModal } from './components/IdentitySetupModal';
+import { ReleaseNotesModal } from './components/ReleaseNotesModal';
 import { useWindowModeStore } from './store/windowModeStore';
 import { initializeTheme } from './store/themeStore';
 import { useIdentityStore, type UserIdentity } from './store/identityStore';
+import {
+  LATEST_RELEASE_NOTES_VERSION,
+  RELEASE_NOTES,
+  type ReleaseNote,
+} from './data/releaseNotes';
+import { getVersion } from '@tauri-apps/api/app';
 import { isTauri } from '@tauri-apps/api/core';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { relaunch } from '@tauri-apps/plugin-process';
@@ -61,6 +68,7 @@ type UpdateStatus =
   | 'error';
 
 const UPDATE_INSTALL_NOTICE_MS = 1400;
+const RELEASE_NOTES_STORAGE_KEY = 'cesante:lastSeenReleaseNotesVersion';
 
 export default function App() {
   useCacheLoader();
@@ -79,6 +87,7 @@ export default function App() {
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>('idle');
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [isUpdateNoticeDismissed, setIsUpdateNoticeDismissed] = useState(false);
+  const [releaseNoteToShow, setReleaseNoteToShow] = useState<ReleaseNote | null>(null);
   const mustSelectIdentity = !showSplash && !identity;
   const identityModalOpen = isIdentityModalOpen || mustSelectIdentity;
   const shouldShowUpdateNotice =
@@ -93,6 +102,45 @@ export default function App() {
   useEffect(() => {
     initializeTheme();
   }, []);
+
+  useEffect(() => {
+    if (showSplash || identityModalOpen) return;
+
+    let isCancelled = false;
+
+    const showReleaseNotesIfNeeded = async () => {
+      let currentVersion = LATEST_RELEASE_NOTES_VERSION;
+
+      if (isTauri()) {
+        try {
+          currentVersion = await getVersion();
+        } catch (error) {
+          console.warn('No se pudo leer la version de la app:', error);
+        }
+      }
+
+      const note = RELEASE_NOTES[currentVersion];
+      if (!note) return;
+
+      try {
+        if (localStorage.getItem(RELEASE_NOTES_STORAGE_KEY) === note.version) {
+          return;
+        }
+      } catch (error) {
+        console.warn('No se pudo leer el estado de novedades:', error);
+      }
+
+      if (!isCancelled) {
+        setReleaseNoteToShow(note);
+      }
+    };
+
+    void showReleaseNotesIfNeeded();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [identityModalOpen, showSplash]);
 
   // Buscar actualizaciones al iniciar la app empaquetada.
   useEffect(() => {
@@ -172,6 +220,18 @@ export default function App() {
     if (!mustSelectIdentity) {
       setIsIdentityModalOpen(false);
     }
+  };
+
+  const closeReleaseNotes = () => {
+    if (releaseNoteToShow) {
+      try {
+        localStorage.setItem(RELEASE_NOTES_STORAGE_KEY, releaseNoteToShow.version);
+      } catch (error) {
+        console.warn('No se pudo guardar el estado de novedades:', error);
+      }
+    }
+
+    setReleaseNoteToShow(null);
   };
 
   const installAvailableUpdate = async () => {
@@ -303,6 +363,7 @@ export default function App() {
         allowClose={Boolean(identity)}
         onClose={closeIdentityModal}
       />
+      <ReleaseNotesModal note={releaseNoteToShow} onClose={closeReleaseNotes} />
     </div>
   );
 }

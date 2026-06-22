@@ -1286,7 +1286,7 @@ export function getShirtStyle(
         '#ffffff', // franjas claras
         '#000000', // franjas oscuras
       ),
-      color: '#af8c1aff',
+      color: 'rgb(219, 175, 28)',
     },
     {
       token: 'newcastle',
@@ -1295,7 +1295,7 @@ export function getShirtStyle(
         '#000', // franjas claras
         '#fff', // franjas oscuras
       ),
-      color: '#ffca1aff',
+      color: 'rgb(209, 40, 40)',
     },
     {
       token: 'nice',
@@ -1520,7 +1520,7 @@ export function getShirtStyle(
           '#ffffff', // mangas blancas
         ),
       ),
-      color: '#010911ff', // dorsales azul oscuro
+      color: 'rgb(13, 6, 121)', // dorsales azul oscuro
     },
 
     // Tipo G – half & half vertical
@@ -1632,7 +1632,7 @@ export function getShirtStyle(
         '#0033a0',
         horizontalHoops('#ffda00', '#0033a0', 14, '#0033a0'),
       ),
-      color: '#ffffff',
+      color: '#000000',
     },
     {
       token: 'sporting lisbon',
