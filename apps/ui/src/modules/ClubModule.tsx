@@ -4176,25 +4176,25 @@ function ClubAnalysisHub({
               label="Ranking ANFPES"
               value={`${overallRank}/32`}
               detail={`Percentil ${percentile}`}
-              description="Posicion del club entre los 32 planteles segun promedio general del plantel actual."
+              description="Posicion del club entre los 32 planteles segun el promedio general de sus jugadores."
             />
             <AnalysisKpi
               label="Indice ofensivo"
               value={`${attackRank}/32`}
               detail={formatNumber(activeProfile.attackIndex, 1)}
-              description="Ranking por indice ofensivo, calculado desde dimensiones de ataque, conduccion, pase, remate y agresividad."
+              description="Ranking ofensivo construido desde el Radar de Stats: ataque, conduccion, pase, remate, tecnica y agresividad."
             />
             <AnalysisKpi
               label="Indice defensivo"
               value={`${defenceRank}/32`}
               detail={formatNumber(activeProfile.defenceIndex, 1)}
-              description="Ranking por indice defensivo, calculado desde lectura defensiva, fisico, respuesta, mentalidad, porteria y trabajo colectivo."
+              description="Ranking defensivo construido desde el Radar de Stats: defensa, fisico, respuesta, mentalidad, porteria y trabajo colectivo."
             />
             <AnalysisKpi
-              label="Balance"
+              label="Balance en Radar"
               value={`${balanceRank}/32`}
               detail={formatNumber(activeProfile.balanceIndex, 1)}
-              description="Ranking por promedio de todas las dimensiones usadas en el Radar de Stats."
+              description="Ranking general segun el promedio de todas las areas del Radar de Stats."
             />
           </div>
           <EnhancedTooltip content="Cerrar analisis" placement="left">
