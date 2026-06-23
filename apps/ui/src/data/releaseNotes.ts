@@ -17,6 +17,12 @@ export const RELEASE_NOTES: Record<string, ReleaseNote> = {
       'Insercion de todas las camisetas de los 32 clubes de la ANFPES en perfiles de jugadores.',
     ],
   },
+  '0.1.3': {
+    version: '0.1.3',
+    title: 'Novedades de Cesante Manager',
+    intro: 'Estos cambios se mostraran una sola vez al abrir esta version.',
+    changes: ['Mejoras visuales en el analisis de clubes.'],
+  },
 };
 
-export const LATEST_RELEASE_NOTES_VERSION = '0.1.2';
+export const LATEST_RELEASE_NOTES_VERSION = '0.1.3';

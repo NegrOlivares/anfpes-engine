@@ -3311,7 +3311,7 @@ function ClubAttributeRoseChart({
     <div className="club-analysis-chart-card club-attribute-rose-card">
       <header>
         <h3>Radar de Stats</h3>
-        <span>Top {ANALYSIS_TOP_STAT_COUNT} por stat</span>
+        <span>Top {ANALYSIS_TOP_STAT_COUNT} Jugadores por stat</span>
       </header>
       <div className="club-attribute-visual">
         <svg className="club-attribute-rose-chart" viewBox="0 0 340 340" role="img">

@@ -34,7 +34,7 @@ export const CLUB_COMPETITION_DETAILS: Record<string, ClubCompetitionDetail> = {
   },
   'Athletic Club': {
     division: 'Primera Division',
-    manager: 'Antres',
+    manager: 'Antares',
     shortTermPlayer: 'R. Ferdinand',
   },
   Inter: {
