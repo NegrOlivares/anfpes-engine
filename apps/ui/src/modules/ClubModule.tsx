@@ -623,9 +623,9 @@ const ANALYSIS_GROUP_COLORS: Record<AnalysisDimensionGroup, string> = {
   gameReading: '#169ad7',
   physical: '#f04e4e',
   dribbling: '#00b688',
-  passing: '#f8d300',
+  passing: '#ceb004',
   finishing: '#d300c8',
-  goalkeeping: '#9ca3af',
+  goalkeeping: '#b95c04',
 };
 
 const ANALYSIS_TOP_STAT_COUNT = 8;
@@ -3262,6 +3262,33 @@ function describeDonutSegment(
   ].join(' ');
 }
 
+function describeArcLine(
+  centerX: number,
+  centerY: number,
+  radius: number,
+  startAngle: number,
+  endAngle: number,
+): string {
+  const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+  const start = polarPoint(centerX, centerY, radius, startAngle);
+  const end = polarPoint(centerX, centerY, radius, endAngle);
+
+  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArc} 1 ${end.x} ${end.y}`;
+}
+
+function describeRadialLine(
+  centerX: number,
+  centerY: number,
+  startRadius: number,
+  endRadius: number,
+  angleDegrees: number,
+): string {
+  const start = polarPoint(centerX, centerY, startRadius, angleDegrees);
+  const end = polarPoint(centerX, centerY, endRadius, angleDegrees);
+
+  return `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
+}
+
 function ClubAttributeRoseChart({
   activeProfile,
   profiles,
@@ -3306,13 +3333,33 @@ function ClubAttributeRoseChart({
           {orderedDimensions.map((dimension, index) => {
             const startAngle = index * segmentAngle + 1.2;
             const endAngle = (index + 1) * segmentAngle - 1.2;
+            const midAngle = (startAngle + endAngle) / 2;
             const value = activeProfile.dimensions[dimension.key];
             const leagueValue = getLeagueDimensionAverage(profiles, dimension.key);
             const normalized = Math.max(
               0.04,
               Math.min(1, (value - minValue) / (maxValue - minValue)),
             );
+            const leagueNormalized = Math.max(
+              0.04,
+              Math.min(1, (leagueValue - minValue) / (maxValue - minValue)),
+            );
             const outerRadius = innerRadius + (maxOuterRadius - innerRadius) * normalized;
+            const leagueRadius =
+              innerRadius + (maxOuterRadius - innerRadius) * leagueNormalized;
+            const labelPathId = `club-attribute-label-${dimension.key}`;
+            const isLeftSideLabel = midAngle > 180 && midAngle < 360;
+            const labelInnerRadius = innerRadius + 8;
+            const labelOuterRadius = Math.min(
+              maxOuterRadius - 8,
+              Math.max(labelInnerRadius + 70, outerRadius - 10),
+            );
+            const labelStartRadius = isLeftSideLabel
+              ? labelOuterRadius
+              : labelInnerRadius;
+            const labelEndRadius = isLeftSideLabel ? labelInnerRadius : labelOuterRadius;
+            const labelAnchor = isLeftSideLabel ? 'end' : 'start';
+            const labelOffset = isLeftSideLabel ? '92%' : '8%';
             const tooltipContent = (
               <div className="club-chart-tooltip-content">
                 <strong>{dimension.label}</strong>
@@ -3349,6 +3396,36 @@ function ClubAttributeRoseChart({
                     })
                   }
                   onMouseLeave={() => setTooltip(null)}
+                />
+                <path
+                  id={labelPathId}
+                  d={describeRadialLine(
+                    center,
+                    center,
+                    labelStartRadius,
+                    labelEndRadius,
+                    midAngle,
+                  )}
+                  className="club-attribute-label-guide"
+                />
+                <text
+                  className="club-attribute-stat-label"
+                  textAnchor={labelAnchor}
+                  dominantBaseline="middle"
+                >
+                  <textPath href={`#${labelPathId}`} startOffset={labelOffset}>
+                    {dimension.label}
+                  </textPath>
+                </text>
+                <path
+                  d={describeArcLine(
+                    center,
+                    center,
+                    leagueRadius,
+                    startAngle + 1.2,
+                    endAngle - 1.2,
+                  )}
+                  className="club-attribute-league-marker"
                 />
               </g>
             );

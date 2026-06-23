@@ -9379,6 +9379,30 @@ tbody tr:hover {
   transition: transform 0.16s ease;
 }
 
+.club-attribute-label-guide {
+  fill: none;
+  stroke: none;
+  pointer-events: none;
+}
+
+.club-attribute-stat-label {
+  fill: rgba(255, 255, 255, 0.7);
+  font-size: 5.75px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.club-attribute-league-marker {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-linecap: round;
+  stroke-width: 1;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.58));
+  pointer-events: none;
+}
+
 .club-attribute-segment:hover {
   transform: scale(1.035);
 }
@@ -9387,6 +9411,15 @@ tbody tr:hover {
   opacity: 1;
   stroke-width: 2.8;
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.42));
+}
+
+.club-attribute-segment:hover .club-attribute-stat-label {
+  fill: rgba(255, 255, 255, 0.64);
+}
+
+.club-attribute-segment:hover .club-attribute-league-marker {
+  stroke: #fff;
+  stroke-width: 2.7;
 }
 
 .club-scatter-chart text,
