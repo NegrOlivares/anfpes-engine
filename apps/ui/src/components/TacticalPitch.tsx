@@ -45,6 +45,11 @@ interface TacticalPitchProps {
   onSlotClick?: (slotId: string) => void;
   onPlayerDrop?: (slotId: string, playerId: string) => void;
   onSlotDrag?: (fromSlotId: string, toSlotId: string) => void;
+  onSlotHover?: (slotId: string) => void;
+  getSlotFitLabel?: (
+    slot: FormationSlot,
+    player: DerivedPlayer,
+  ) => { label: string; className?: string } | null;
   onUpdateInstruction?: (slotId: string, instruction: Partial<PlayerInstruction>) => void;
   onRoleChange?: (slotId: string, role: string) => void;
   onPositionChange?: (slotId: string, coords: { x: number; y: number }) => void;
@@ -82,6 +87,8 @@ export function TacticalPitch({
   onSlotClick,
   onPlayerDrop,
   onSlotDrag,
+  onSlotHover,
+  getSlotFitLabel,
   onUpdateInstruction,
   onRoleChange,
   onPositionChange,
@@ -748,6 +755,7 @@ export function TacticalPitch({
             ? candidateOutIds.includes(slot.playerId)
             : false;
           const allowedRoles = onRoleChange ? getAllowedRoles(slot) : [];
+          const slotFit = player ? getSlotFitLabel?.(slot, player) : null;
 
           // Calculate base position
           let displayX =
@@ -772,7 +780,7 @@ export function TacticalPitch({
           return (
             <div
               key={slot.slotId}
-              className={`tactical-slot ${selectedPlayerId && selectedFromRoster && !player ? 'target-available' : ''} ${selectedSlotForSwap === slot.slotId ? 'selected-for-swap' : ''}`}
+              className={`tactical-slot ${selectedPlayerId && selectedFromRoster && !player ? 'target-available' : ''} ${onSlotDrag && selectedSlotForSwap === slot.slotId ? 'selected-for-swap' : ''}`}
               style={{
                 left: `${displayX}%`,
                 top: `${displayY}%`,
@@ -805,6 +813,7 @@ export function TacticalPitch({
                   }
                 }
               }}
+              onMouseEnter={() => onSlotHover?.(slot.slotId)}
               onMouseDown={(e) => {
                 if (!editingPosition) return;
                 if (slot.role === 'PT') return;
@@ -851,6 +860,10 @@ export function TacticalPitch({
                       return;
                     }
 
+                    if (!onSlotDrag) {
+                      return;
+                    }
+
                     if (!selectedSlotForSwap) {
                       // First click: select this slot
                       setSelectedSlotForSwap(slot.slotId);
@@ -859,9 +872,7 @@ export function TacticalPitch({
                       setSelectedSlotForSwap(null);
                     } else {
                       // Second click: swap players
-                      if (onSlotDrag) {
-                        onSlotDrag(selectedSlotForSwap, slot.slotId);
-                      }
+                      onSlotDrag(selectedSlotForSwap, slot.slotId);
                       setSelectedSlotForSwap(null);
                     }
                   }}
@@ -884,6 +895,8 @@ export function TacticalPitch({
                     autoOpenRoleMenu={autoOpenRoleFor === slot.slotId}
                     onRoleMenuClose={() => setAutoOpenRoleFor(null)}
                     useClubKitImage={useClubKitImages}
+                    roleFitLabel={slotFit?.label}
+                    roleFitClassName={slotFit?.className}
                     onRoleChange={
                       onRoleChange
                         ? (newRole) => onRoleChange(slot.slotId, newRole)

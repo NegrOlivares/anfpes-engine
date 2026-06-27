@@ -7603,6 +7603,19 @@ tbody tr:hover {
   color: #ffd166;
 }
 
+.club-xi-pitch-button {
+  left: 0.55rem;
+  right: auto;
+  border-color: rgba(216, 124, 255, 0.34);
+  color: rgba(216, 124, 255, 0.92);
+}
+
+.club-xi-pitch-button:hover {
+  border-color: rgba(216, 124, 255, 0.72);
+  background: rgba(216, 124, 255, 0.18);
+  color: #e7a6ff;
+}
+
 .club-vs-pitch-button img,
 .club-vs-pitch-button em {
   display: inline-flex;
@@ -8998,6 +9011,636 @@ tbody tr:hover {
   text-align: left !important;
 }
 
+.club-xi-hub {
+  width: min(1360px, 96vw);
+}
+
+.club-xi-header {
+  position: sticky;
+  top: -0.95rem;
+  z-index: 8;
+  background:
+    linear-gradient(135deg, rgba(18, 25, 38, 0.99), rgba(8, 12, 20, 0.99)),
+    rgba(8, 12, 20, 0.99);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.club-xi-kpis {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.club-xi-kpi-text {
+  max-width: 100%;
+  overflow: hidden;
+  font-family: inherit !important;
+  font-size: 1.05rem !important;
+  line-height: 1.05 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-text-stroke: 0 !important;
+}
+
+.club-xi-grid {
+  display: grid;
+  grid-template-columns: minmax(270px, 0.86fr) minmax(390px, 1.16fr) minmax(330px, 1fr);
+  gap: 0.65rem;
+  align-items: stretch;
+}
+
+.club-xi-reading {
+  padding: 0.7rem;
+}
+
+.club-xi-pitch-card {
+  overflow: hidden;
+}
+
+.club-xi-pitch-card .analysis-tactical-pitch-wrap {
+  min-height: 410px;
+}
+
+.club-xi-pitch-card .analysis-tactical-pitch-wrap .tactical-pitch-container {
+  min-height: 410px;
+}
+
+.club-xi-pitch-card .analysis-tactical-pitch-wrap .tactical-pitch {
+  height: 460px;
+  max-width: 374px;
+  zoom: 80%;
+}
+
+.club-xi-actions-card,
+.club-xi-role-detail-card,
+.club-xi-players-card,
+.club-xi-insights-card,
+.club-xi-lines-card,
+.club-xi-roster-stats-card {
+  padding: 0.7rem;
+}
+
+.club-xi-role-detail-card {
+  overflow: hidden;
+}
+
+.club-xi-role-detail-card .club-xi-tooltip-content {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.club-xi-empty-detail {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.club-xi-action-list,
+.club-xi-player-list,
+.club-xi-line-list,
+.club-xi-roster-family-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.48rem;
+}
+
+.club-xi-action-list .glossary-tooltip-wrapper,
+.club-xi-player-list .glossary-tooltip-wrapper {
+  display: block;
+}
+
+.club-xi-action-row {
+  min-width: 0;
+  display: grid;
+  gap: 0.34rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 0.48rem;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.club-xi-action-row > div:first-child,
+.club-xi-line-row > div:first-child {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.club-xi-action-row strong,
+.club-xi-line-row strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-xi-action-row span,
+.club-xi-line-row span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.club-xi-action-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
+.club-xi-action-metrics span {
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0.12rem 0.28rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.065);
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-xi-track {
+  height: 0.48rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.club-xi-track em {
+  display: block;
+  height: 100%;
+  max-width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--theme-primaryLight), var(--theme-highlight));
+  box-shadow: 0 0 14px rgba(216, 124, 255, 0.22);
+}
+
+.club-xi-player-row {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(86px, 0.72fr) auto;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  padding: 0.42rem 0.5rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  background: rgba(255, 255, 255, 0.035);
+  color: #f4f6fb;
+  cursor: pointer;
+  text-align: left;
+}
+
+.club-xi-player-row:hover {
+  border-color: rgba(216, 124, 255, 0.48);
+  background: rgba(216, 124, 255, 0.12);
+}
+
+.club-xi-player-row.active {
+  border-color: rgba(216, 124, 255, 0.64);
+  background: rgba(216, 124, 255, 0.16);
+  box-shadow: inset 3px 0 0 rgba(216, 124, 255, 0.92);
+}
+
+.club-xi-player-row strong,
+.club-xi-player-row small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.club-xi-player-row strong {
+  color: #fff;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.club-xi-player-row small {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 0.7rem;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.club-xi-player-row small em {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.34);
+  font-size: 0.64rem;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-xi-fit-pill {
+  justify-self: end;
+  min-width: 72px;
+  padding: 0.26rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.075);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.64rem;
+  font-weight: 1000;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.club-xi-fit-pill.elite {
+  background: rgba(91, 255, 142, 0.15);
+  color: #70ff9b;
+}
+
+.club-xi-fit-pill.strong {
+  background: rgba(146, 235, 255, 0.13);
+  color: #92ebff;
+}
+
+.club-xi-fit-pill.compatible {
+  background: rgba(255, 211, 41, 0.13);
+  color: #ffd329;
+}
+
+.club-xi-fit-pill.forced {
+  background: rgba(255, 157, 74, 0.13);
+  color: #ffb06d;
+}
+
+.club-xi-fit-pill.risk {
+  background: rgba(255, 94, 112, 0.13);
+  color: #ff7585;
+}
+
+.club-xi-line-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(90px, 0.8fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 0.48rem;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.club-xi-line-row > div:first-child {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.12rem;
+}
+
+.club-xi-roster-stats-layout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(155px, 1fr) minmax(118px, 0.72fr);
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.club-xi-roster-stats-card .club-xi-role-rose-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.club-xi-roster-stats-card .club-xi-role-rose {
+  max-height: 238px;
+}
+
+.club-xi-roster-stats-card {
+  overflow: hidden;
+}
+
+.club-xi-roster-attribute-visual {
+  min-height: 0;
+}
+
+.club-xi-roster-stats-card .club-attribute-rose-chart {
+  width: min(100%, 430px);
+}
+.club-xi-roster-stats-card .club-attribute-stat-label {
+  font-size: 5.35px;
+}
+
+.club-xi-roster-family-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.34rem;
+  margin-top: 0.35rem;
+}
+
+.club-xi-roster-family-list div {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.42rem;
+  row-gap: 0.16rem;
+  min-height: 1.7rem;
+  padding: 0.28rem 0.36rem 0.36rem;
+  border-radius: 0.42rem;
+  background: rgba(255, 255, 255, 0.035);
+  overflow: hidden;
+}
+
+.club-xi-roster-family-list span {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.26rem;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-xi-roster-family-list i {
+  width: 0.42rem;
+  min-width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.club-xi-roster-family-list strong {
+  position: relative;
+  z-index: 1;
+  justify-self: end;
+  font-size: 0.64rem;
+  font-weight: 1000;
+  line-height: 1;
+}
+
+.club-xi-roster-family-list em {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  height: 2px;
+  max-width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--theme-primaryLight), var(--theme-highlight));
+  opacity: 0.75;
+}
+
+.club-xi-tooltip-content {
+  max-width: 100%;
+}
+
+.club-xi-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.club-xi-detail-header > div {
+  min-width: 0;
+  display: grid;
+  gap: 0.12rem;
+}
+
+.club-xi-detail-header strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-xi-detail-header span:not(.position-badge) {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.club-xi-archetype-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.32rem;
+}
+
+.club-xi-archetype-list button {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 3.05rem;
+  padding: 0.44rem 0.5rem;
+  border-radius: 0.42rem;
+  border: 0;
+  background: rgba(255, 255, 255, 0.055);
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+}
+
+.club-xi-archetype-list button.active {
+  border: 1px solid rgba(216, 124, 255, 0.38);
+  background: rgba(216, 124, 255, 0.12);
+}
+
+.club-xi-archetype-list span {
+  grid-column: 1 / -1;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.club-xi-archetype-list strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #fff;
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-xi-archetype-list b {
+  position: relative;
+  z-index: 1;
+  color: var(--theme-primaryLight);
+  font-size: 0.72rem;
+  text-align: right;
+}
+
+.club-xi-archetype-list button > em {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  max-width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--theme-primaryLight), var(--theme-highlight));
+  opacity: 0.82;
+}
+
+.club-xi-archetype-list button > span,
+.club-xi-archetype-list button > strong {
+  position: relative;
+  z-index: 1;
+}
+
+.club-xi-role-rose-wrap {
+  min-width: 0;
+}
+
+.club-xi-role-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.78fr) minmax(180px, 1fr);
+  gap: 0.75rem;
+  align-items: stretch;
+  padding: 0.55rem;
+  border-radius: 0.5rem;
+  background:
+    radial-gradient(circle at 24% 40%, rgba(216, 124, 255, 0.12), transparent 36%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.club-xi-role-rose {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  overflow: visible;
+}
+
+.club-xi-role-core {
+  fill: rgba(5, 9, 16, 0.98);
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.club-xi-role-ring {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.09);
+  stroke-dasharray: 4 6;
+}
+
+.club-xi-role-slice {
+  fill: var(--theme-primaryLight);
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 1.2;
+  transition:
+    opacity 0.15s ease,
+    filter 0.15s ease;
+}
+
+.club-xi-role-segment:hover .club-xi-role-slice {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 9px rgba(216, 124, 255, 0.44));
+}
+
+.club-xi-role-stat-list {
+  min-width: 0;
+  max-height: 228px;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+}
+
+.club-xi-role-stat-list div {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: center;
+  min-height: 1.45rem;
+  padding: 0.18rem 0;
+  overflow: hidden;
+}
+
+.club-xi-role-stat-list span {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.32rem;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.club-xi-role-stat-list i {
+  width: 0.5rem;
+  min-width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.club-xi-role-stat-list strong {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-size: 0.74rem;
+}
+
+.club-xi-role-stat-list div > em {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  max-width: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.club-xi-priority-stats {
+  display: none;
+}
+
+.club-xi-selected-role-panel {
+  margin-top: 0.65rem;
+  padding: 0.62rem;
+  border-radius: 0.58rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(9, 13, 21, 0.7);
+}
+
+.club-xi-selected-role-panel > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.club-xi-selected-role-panel h4 {
+  margin: 0;
+  color: var(--theme-primaryLight);
+  font-size: 0.84rem;
+}
+
+.club-xi-selected-role-panel > header span {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.club-xi-selected-role-panel .club-xi-tooltip-content {
+  gap: 0.5rem;
+}
+
 @media (max-width: 980px) {
   .club-vs-overlay {
     padding: 0.45rem;
@@ -9014,9 +9657,19 @@ tbody tr:hover {
     padding: 0.65rem;
   }
 
+  .club-xi-header {
+    top: -0.65rem;
+  }
+
   .club-vs-kpis,
   .club-vs-grid,
+  .club-xi-kpis,
+  .club-xi-grid,
   .club-vs-territory-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .club-xi-roster-stats-layout {
     grid-template-columns: 1fr;
   }
 
@@ -10923,6 +11576,8 @@ tbody tr:hover {
 .tactical-player-meta {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 0.25rem;
 }
 
@@ -10932,6 +11587,37 @@ tbody tr:hover {
   color: rgba(255, 255, 255, 0.7);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   margin-top: 0.3rem;
+}
+
+.tactical-role-fit {
+  flex: 0 0 100%;
+  margin-top: -0.08rem;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 1);
+  font-size: 0.65rem;
+  font-weight: 750;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+}
+
+.tactical-role-fit.elite,
+.tactical-role-fit.very-natural {
+  color: #6dff9a;
+}
+
+.tactical-role-fit.strong {
+  color: #8bd8ff;
+}
+
+.tactical-role-fit.compatible {
+  color: #ffd45f;
+}
+
+.tactical-role-fit.forced,
+.tactical-role-fit.risk {
+  color: #ff7a7a;
 }
 
 .tactical-card-top {

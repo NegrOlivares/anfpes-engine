@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 export interface ClubLineupConfig {
   formationName: string | null;
   playersBySlot: Record<string, string>;
+  rolesBySlot?: Record<string, string>;
 }
 
 interface ClubLineupState {
@@ -20,6 +21,7 @@ interface ClubLineupState {
 export const createEmptyClubLineup = (): ClubLineupConfig => ({
   formationName: null,
   playersBySlot: {},
+  rolesBySlot: {},
 });
 
 export const useClubLineupStore = create<ClubLineupState>()(

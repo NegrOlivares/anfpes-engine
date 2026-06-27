@@ -223,6 +223,132 @@ interface VsVisualTerritoryPoint {
   textAnchor: 'start' | 'middle' | 'end';
 }
 
+type XiMetricKey = AnalysisDimensionKey | 'height' | 'condition';
+type XiRoleKey =
+  | 'keeper'
+  | 'libero'
+  | 'centralDefender'
+  | 'wideDefender'
+  | 'wingBack'
+  | 'defensiveMidfielder'
+  | 'centralMidfielder'
+  | 'wideMidfielder'
+  | 'creator'
+  | 'wideAttacker'
+  | 'secondForward'
+  | 'forward';
+type XiActionKey =
+  | 'buildUp'
+  | 'ballRetention'
+  | 'wideProgression'
+  | 'spaceAttack'
+  | 'centralCreation'
+  | 'finishing'
+  | 'pressing'
+  | 'boxDefense'
+  | 'aerialGame'
+  | 'goalkeeping';
+
+interface XiWeightedMetric {
+  key: XiMetricKey;
+  weight: number;
+}
+
+interface XiRoleRequirement {
+  key: XiMetricKey;
+  minimum: number;
+  impact?: number;
+}
+
+interface XiRoleArchetype {
+  key: string;
+  roleKey: XiRoleKey;
+  label: string;
+  description: string;
+  metrics: XiWeightedMetric[];
+  softRequirements?: XiRoleRequirement[];
+  actions: XiActionKey[];
+}
+
+interface XiActionProfile {
+  key: XiActionKey;
+  label: string;
+  description: string;
+  metrics: XiWeightedMetric[];
+}
+
+interface XiSkillModifier {
+  field: keyof DerivedPlayer;
+  label: string;
+  actions: XiActionKey[];
+  roles?: XiRoleKey[];
+  bonus: number;
+}
+
+interface XiMetricScore {
+  key: XiMetricKey;
+  label: string;
+  value: number;
+  weight: number;
+}
+
+interface XiArchetypeScore {
+  key: string;
+  label: string;
+  description: string;
+  score: number;
+  requirementPenalty: number;
+  metricScores: XiMetricScore[];
+  actions: XiActionKey[];
+  activeModifiers: XiSkillModifier[];
+}
+
+interface XiAssignmentAnalysis {
+  entry: ResolvedLineupPlayer;
+  roleKey: XiRoleKey;
+  roleLabel: string;
+  roleDescription: string;
+  roleScore: number;
+  archetypes: XiArchetypeScore[];
+  metricScores: XiMetricScore[];
+  actionScores: Record<XiActionKey, number>;
+  strongestAction: XiActionKey;
+  weakestAction: XiActionKey;
+  activeModifiers: XiSkillModifier[];
+}
+
+interface XiActionSummary {
+  key: XiActionKey;
+  label: string;
+  description: string;
+  score: number;
+  players: XiAssignmentAnalysis[];
+}
+
+interface XiInsightItem {
+  key: string;
+  kind: 'strength' | 'risk' | 'control';
+  title: string;
+  detail: string;
+  score: number;
+}
+
+interface XiTeamAnalysis {
+  summary: ClubSummary;
+  lineup: ClubLineupConfig;
+  players: ResolvedLineupPlayer[];
+  assignments: XiAssignmentAnalysis[];
+  score: number;
+  dependencyLabel: string;
+  dependencyValue: number;
+  strongestAction: XiActionSummary;
+  weakestAction: XiActionSummary;
+  actionSummaries: XiActionSummary[];
+  insights: XiInsightItem[];
+  lineSummaries: Array<{ key: string; label: string; score: number; count: number }>;
+  pitchRecommendation: FormationRecommendation;
+}
+
 type PositionLineKey = 'PT' | 'DEF' | 'MED' | 'ATA';
 type AnalysisDimensionGroup =
   | 'gameReading'
@@ -701,6 +827,837 @@ const VS_PROFILE_KEYS: Record<VsProfileKey, AnalysisDimensionKey[]> = {
   aerial: ['heading', 'jump', 'balance', 'aggression', 'mentality'],
   keeper: ['goalkeeping', 'response', 'jump', 'balance', 'mentality'],
 };
+
+const XI_ACTION_PROFILES: Record<XiActionKey, XiActionProfile> = {
+  buildUp: {
+    key: 'buildUp',
+    label: 'Salida limpia',
+    description: 'Capacidad para iniciar jugada, circular corto y sostener continuidad.',
+    metrics: [
+      { key: 'shortPassAccuracy', weight: 1.2 },
+      { key: 'technique', weight: 1 },
+      { key: 'teamwork', weight: 1 },
+      { key: 'shortPassSpeed', weight: 0.75 },
+      { key: 'balance', weight: 0.7 },
+      { key: 'longPassAccuracy', weight: 0.45 },
+      { key: 'response', weight: 0.45 },
+    ],
+  },
+  ballRetention: {
+    key: 'ballRetention',
+    label: 'Control de posesion',
+    description:
+      'Capacidad para conservar pelota bajo presion, proteger y sostener pausa.',
+    metrics: [
+      { key: 'technique', weight: 1.1 },
+      { key: 'shortPassAccuracy', weight: 1.05 },
+      { key: 'balance', weight: 0.9 },
+      { key: 'dribbleAccuracy', weight: 0.9 },
+      { key: 'teamwork', weight: 0.85 },
+      { key: 'response', weight: 0.65 },
+      { key: 'agility', weight: 0.55 },
+    ],
+  },
+  wideProgression: {
+    key: 'wideProgression',
+    label: 'Progresion por banda',
+    description: 'Avance por costados mediante carrera, conduccion y envio largo.',
+    metrics: [
+      { key: 'dribbleAccuracy', weight: 1 },
+      { key: 'dribbleSpeed', weight: 1.05 },
+      { key: 'acceleration', weight: 1 },
+      { key: 'topSpeed', weight: 0.9 },
+      { key: 'technique', weight: 0.6 },
+      { key: 'longPassAccuracy', weight: 0.45 },
+    ],
+  },
+  spaceAttack: {
+    key: 'spaceAttack',
+    label: 'Ruptura al espacio',
+    description:
+      'Amenaza para atacar espalda rival con desmarque, aceleracion y llegada.',
+    metrics: [
+      { key: 'attack', weight: 1.15 },
+      { key: 'response', weight: 1.05 },
+      { key: 'acceleration', weight: 1 },
+      { key: 'topSpeed', weight: 0.95 },
+      { key: 'dribbleSpeed', weight: 0.75 },
+      { key: 'mentality', weight: 0.65 },
+      { key: 'agility', weight: 0.45 },
+    ],
+  },
+  centralCreation: {
+    key: 'centralCreation',
+    label: 'Creacion interior',
+    description: 'Lectura ofensiva, pase, tecnica y continuidad por carriles centrales.',
+    metrics: [
+      { key: 'shortPassAccuracy', weight: 1.15 },
+      { key: 'technique', weight: 1.05 },
+      { key: 'attack', weight: 0.9 },
+      { key: 'teamwork', weight: 0.9 },
+      { key: 'dribbleAccuracy', weight: 0.75 },
+      { key: 'agility', weight: 0.55 },
+      { key: 'longPassAccuracy', weight: 0.45 },
+    ],
+  },
+  finishing: {
+    key: 'finishing',
+    label: 'Finalizacion',
+    description: 'Presencia ofensiva y calidad real de remate.',
+    metrics: [
+      { key: 'attack', weight: 1.1 },
+      { key: 'shotAccuracy', weight: 1.25 },
+      { key: 'shotTechnique', weight: 1.05 },
+      { key: 'response', weight: 0.8 },
+      { key: 'shotPower', weight: 0.75 },
+      { key: 'technique', weight: 0.45 },
+      { key: 'heading', weight: 0.25 },
+    ],
+  },
+  pressing: {
+    key: 'pressing',
+    label: 'Presion y recuperacion',
+    description: 'Activacion defensiva, respuesta, agresividad funcional y esfuerzo.',
+    metrics: [
+      { key: 'response', weight: 1 },
+      { key: 'stamina', weight: 0.95 },
+      { key: 'teamwork', weight: 0.9 },
+      { key: 'aggression', weight: 0.75 },
+      { key: 'mentality', weight: 0.65 },
+      { key: 'acceleration', weight: 0.6 },
+      { key: 'defense', weight: 0.45 },
+    ],
+  },
+  boxDefense: {
+    key: 'boxDefense',
+    label: 'Defensa de area',
+    description: 'Proteccion de espacios, contacto, anticipacion y rechazo aereo.',
+    metrics: [
+      { key: 'defense', weight: 1.25 },
+      { key: 'response', weight: 1 },
+      { key: 'balance', weight: 0.8 },
+      { key: 'heading', weight: 0.7 },
+      { key: 'jump', weight: 0.7 },
+      { key: 'teamwork', weight: 0.75 },
+      { key: 'height', weight: 0.45 },
+    ],
+  },
+  aerialGame: {
+    key: 'aerialGame',
+    label: 'Juego aereo',
+    description: 'Alcance vertical, cabezazo, cuerpo y disputa sobre pelota alta.',
+    metrics: [
+      { key: 'heading', weight: 1.05 },
+      { key: 'jump', weight: 1 },
+      { key: 'balance', weight: 0.75 },
+      { key: 'height', weight: 0.8 },
+      { key: 'aggression', weight: 0.5 },
+    ],
+  },
+  goalkeeping: {
+    key: 'goalkeeping',
+    label: 'Porteria',
+    description: 'Intervencion de arquero, respuesta y alcance propio del puesto.',
+    metrics: [
+      { key: 'goalkeeping', weight: 1.45 },
+      { key: 'response', weight: 0.9 },
+      { key: 'jump', weight: 0.55 },
+      { key: 'balance', weight: 0.45 },
+      { key: 'height', weight: 0.35 },
+    ],
+  },
+};
+
+const XI_VISIBLE_ACTION_KEYS: XiActionKey[] = [
+  'buildUp',
+  'ballRetention',
+  'wideProgression',
+  'spaceAttack',
+  'centralCreation',
+  'finishing',
+  'pressing',
+  'boxDefense',
+  'aerialGame',
+];
+
+const XI_ROLE_ARCHETYPES: Record<XiRoleKey, XiRoleArchetype[]> = {
+  keeper: [
+    {
+      key: 'keeper-guardian',
+      roleKey: 'keeper',
+      label: 'Guardian',
+      description: 'Arquero bajo palos: atajada, reaccion, area inmediata y fiabilidad.',
+      metrics: [
+        { key: 'goalkeeping', weight: 1.55 },
+        { key: 'response', weight: 1 },
+        { key: 'jump', weight: 0.55 },
+        { key: 'balance', weight: 0.45 },
+        { key: 'height', weight: 0.35 },
+      ],
+      softRequirements: [
+        { key: 'goalkeeping', minimum: 78, impact: 0.2 },
+        { key: 'response', minimum: 68, impact: 0.1 },
+      ],
+      actions: ['goalkeeping', 'boxDefense'],
+    },
+    {
+      key: 'keeper-offensive',
+      roleKey: 'keeper',
+      label: 'Asociativo',
+      description: 'Arquero que achica, sale lejos y participa como primera salida.',
+      metrics: [
+        { key: 'goalkeeping', weight: 1.05 },
+        { key: 'response', weight: 0.92 },
+        { key: 'shortPassAccuracy', weight: 0.95 },
+        { key: 'teamwork', weight: 0.88 },
+        { key: 'longPassAccuracy', weight: 0.78 },
+        { key: 'acceleration', weight: 0.68 },
+        { key: 'topSpeed', weight: 0.62 },
+        { key: 'technique', weight: 0.42 },
+      ],
+      softRequirements: [
+        { key: 'goalkeeping', minimum: 70, impact: 0.16 },
+        { key: 'shortPassAccuracy', minimum: 62, impact: 0.16 },
+        { key: 'teamwork', minimum: 62, impact: 0.12 },
+        { key: 'response', minimum: 66, impact: 0.1 },
+        { key: 'acceleration', minimum: 56, impact: 0.08 },
+        { key: 'topSpeed', minimum: 56, impact: 0.08 },
+      ],
+      actions: ['goalkeeping', 'buildUp'],
+    },
+  ],
+  libero: [
+    {
+      key: 'libero-sweeper',
+      roleKey: 'libero',
+      label: 'Cobertura',
+      description: 'Corrector que cubre profundidad, anticipa y limpia a espaldas.',
+      metrics: [
+        { key: 'defense', weight: 1.25 },
+        { key: 'response', weight: 1.1 },
+        { key: 'topSpeed', weight: 0.82 },
+        { key: 'teamwork', weight: 0.76 },
+        { key: 'acceleration', weight: 0.66 },
+        { key: 'balance', weight: 0.62 },
+        { key: 'mentality', weight: 0.45 },
+      ],
+      softRequirements: [
+        { key: 'defense', minimum: 74, impact: 0.16 },
+        { key: 'response', minimum: 70, impact: 0.12 },
+        { key: 'topSpeed', minimum: 64, impact: 0.1 },
+        { key: 'teamwork', minimum: 62, impact: 0.08 },
+      ],
+      actions: ['boxDefense', 'pressing'],
+    },
+    {
+      key: 'libero-director',
+      roleKey: 'libero',
+      label: 'Organizador',
+      description: 'Libero organizador que defiende y limpia salida desde atras.',
+      metrics: [
+        { key: 'shortPassAccuracy', weight: 1.05 },
+        { key: 'longPassAccuracy', weight: 1 },
+        { key: 'defense', weight: 0.9 },
+        { key: 'teamwork', weight: 0.88 },
+        { key: 'technique', weight: 0.85 },
+        { key: 'response', weight: 0.76 },
+        { key: 'mentality', weight: 0.5 },
+        { key: 'dribbleAccuracy', weight: 0.34 },
+      ],
+      softRequirements: [
+        { key: 'defense', minimum: 68, impact: 0.14 },
+        { key: 'shortPassAccuracy', minimum: 68, impact: 0.14 },
+        { key: 'longPassAccuracy', minimum: 66, impact: 0.12 },
+        { key: 'teamwork', minimum: 64, impact: 0.08 },
+      ],
+      actions: ['buildUp', 'boxDefense'],
+    },
+  ],
+  centralDefender: [
+    {
+      key: 'central-defender-dominant',
+      roleKey: 'centralDefender',
+      label: 'Dominante',
+      description: 'Central de presencia: cuerpo, juego aereo, lectura y area.',
+      metrics: [
+        { key: 'defense', weight: 1.2 },
+        { key: 'balance', weight: 0.95 },
+        { key: 'heading', weight: 0.95 },
+        { key: 'jump', weight: 0.85 },
+        { key: 'height', weight: 0.65 },
+        { key: 'response', weight: 0.75 },
+        { key: 'teamwork', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'defense', minimum: 74, impact: 0.14 },
+        { key: 'balance', minimum: 72, impact: 0.1 },
+        { key: 'heading', minimum: 68, impact: 0.1 },
+        { key: 'jump', minimum: 64, impact: 0.08 },
+      ],
+      actions: ['boxDefense', 'aerialGame'],
+    },
+    {
+      key: 'central-defender-stopper',
+      roleKey: 'centralDefender',
+      label: 'Stopper',
+      description: 'Central de corte que sale a romper jugadas y ganar duelos.',
+      metrics: [
+        { key: 'defense', weight: 1.3 },
+        { key: 'response', weight: 1.05 },
+        { key: 'acceleration', weight: 0.62 },
+        { key: 'topSpeed', weight: 0.55 },
+        { key: 'balance', weight: 0.65 },
+        { key: 'stamina', weight: 0.55 },
+        { key: 'mentality', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'defense', minimum: 74, impact: 0.16 },
+        { key: 'response', minimum: 70, impact: 0.13 },
+        { key: 'acceleration', minimum: 60, impact: 0.08 },
+        { key: 'topSpeed', minimum: 60, impact: 0.08 },
+      ],
+      actions: ['pressing', 'boxDefense'],
+    },
+  ],
+  wideDefender: [
+    {
+      key: 'side-back-marker',
+      roleKey: 'wideDefender',
+      label: 'Marcador',
+      description: 'Lateral bajo que neutraliza extremos y sostiene el 1v1 defensivo.',
+      metrics: [
+        { key: 'defense', weight: 1.2 },
+        { key: 'response', weight: 1 },
+        { key: 'topSpeed', weight: 0.75 },
+        { key: 'acceleration', weight: 0.7 },
+        { key: 'agility', weight: 0.6 },
+        { key: 'stamina', weight: 0.7 },
+        { key: 'teamwork', weight: 0.5 },
+      ],
+      softRequirements: [
+        { key: 'defense', minimum: 68, impact: 0.14 },
+        { key: 'response', minimum: 66, impact: 0.1 },
+        { key: 'topSpeed', minimum: 66, impact: 0.1 },
+        { key: 'acceleration', minimum: 64, impact: 0.1 },
+      ],
+      actions: ['boxDefense', 'pressing'],
+    },
+    {
+      key: 'side-back-balanced',
+      roleKey: 'wideDefender',
+      label: 'Equilibrado',
+      description: 'Lateral de doble fase: cierra, apoya y se proyecta controlado.',
+      metrics: [
+        { key: 'defense', weight: 0.86 },
+        { key: 'stamina', weight: 0.84 },
+        { key: 'teamwork', weight: 0.8 },
+        { key: 'response', weight: 0.75 },
+        { key: 'shortPassAccuracy', weight: 0.65 },
+        { key: 'topSpeed', weight: 0.55 },
+        { key: 'acceleration', weight: 0.5 },
+        { key: 'dribbleAccuracy', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'defense', minimum: 64, impact: 0.2 },
+        { key: 'stamina', minimum: 68, impact: 0.1 },
+        { key: 'response', minimum: 64, impact: 0.1 },
+        { key: 'topSpeed', minimum: 60, impact: 0.08 },
+      ],
+      actions: ['boxDefense', 'wideProgression', 'buildUp'],
+    },
+  ],
+  wingBack: [
+    {
+      key: 'wing-back-technical',
+      roleKey: 'wingBack',
+      label: 'Tecnico',
+      description:
+        'Carrilero asociativo que conduce, combina y conecta desde el lateral.',
+      metrics: [
+        { key: 'technique', weight: 1 },
+        { key: 'dribbleAccuracy', weight: 1 },
+        { key: 'shortPassAccuracy', weight: 0.9 },
+        { key: 'teamwork', weight: 0.85 },
+        { key: 'stamina', weight: 0.72 },
+        { key: 'acceleration', weight: 0.58 },
+        { key: 'agility', weight: 0.48 },
+        { key: 'defense', weight: 0.35 },
+      ],
+      softRequirements: [
+        { key: 'dribbleAccuracy', minimum: 70, impact: 0.16 },
+        { key: 'shortPassAccuracy', minimum: 68, impact: 0.12 },
+        { key: 'stamina', minimum: 66, impact: 0.1 },
+        { key: 'acceleration', minimum: 60, impact: 0.1 },
+        { key: 'defense', minimum: 50, impact: 0.08 },
+      ],
+      actions: ['buildUp', 'ballRetention', 'wideProgression'],
+    },
+    {
+      key: 'wing-back-attacker',
+      roleKey: 'wingBack',
+      label: 'Atacante',
+      description: 'Carrilero profundo que rompe, acelera y genera peligro por banda.',
+      metrics: [
+        { key: 'attack', weight: 0.75 },
+        { key: 'topSpeed', weight: 0.9 },
+        { key: 'acceleration', weight: 0.95 },
+        { key: 'dribbleSpeed', weight: 0.85 },
+        { key: 'dribbleAccuracy', weight: 0.75 },
+        { key: 'longPassAccuracy', weight: 0.65 },
+        { key: 'stamina', weight: 0.8 },
+      ],
+      softRequirements: [
+        { key: 'topSpeed', minimum: 70, impact: 0.12 },
+        { key: 'acceleration', minimum: 70, impact: 0.12 },
+        { key: 'dribbleSpeed', minimum: 68, impact: 0.12 },
+        { key: 'stamina', minimum: 68, impact: 0.08 },
+      ],
+      actions: ['wideProgression', 'spaceAttack', 'centralCreation'],
+    },
+  ],
+  defensiveMidfielder: [
+    {
+      key: 'defensive-midfielder-destroyer',
+      roleKey: 'defensiveMidfielder',
+      label: 'Tapon',
+      description: 'Mediocentro de corte que recupera, interrumpe y protege el centro.',
+      metrics: [
+        { key: 'defense', weight: 1.35 },
+        { key: 'response', weight: 1.05 },
+        { key: 'teamwork', weight: 0.86 },
+        { key: 'balance', weight: 0.82 },
+        { key: 'stamina', weight: 0.78 },
+        { key: 'mentality', weight: 0.62 },
+        { key: 'shortPassAccuracy', weight: 0.36 },
+      ],
+      softRequirements: [
+        { key: 'defense', minimum: 74, impact: 0.18 },
+        { key: 'response', minimum: 68, impact: 0.12 },
+        { key: 'teamwork', minimum: 64, impact: 0.1 },
+        { key: 'balance', minimum: 62, impact: 0.08 },
+      ],
+      actions: ['pressing', 'boxDefense'],
+    },
+    {
+      key: 'defensive-midfielder-pivot',
+      roleKey: 'defensiveMidfielder',
+      label: 'Pivote',
+      description: 'Base organizadora que distribuye, equilibra y conecta desde abajo.',
+      metrics: [
+        { key: 'shortPassAccuracy', weight: 1.15 },
+        { key: 'longPassAccuracy', weight: 1.05 },
+        { key: 'technique', weight: 0.95 },
+        { key: 'teamwork', weight: 0.9 },
+        { key: 'shortPassSpeed', weight: 0.7 },
+        { key: 'defense', weight: 0.55 },
+        { key: 'response', weight: 0.5 },
+        { key: 'balance', weight: 0.45 },
+      ],
+      softRequirements: [
+        { key: 'shortPassAccuracy', minimum: 72, impact: 0.14 },
+        { key: 'longPassAccuracy', minimum: 68, impact: 0.12 },
+        { key: 'technique', minimum: 70, impact: 0.1 },
+        { key: 'teamwork', minimum: 66, impact: 0.1 },
+        { key: 'defense', minimum: 54, impact: 0.08 },
+      ],
+      actions: ['buildUp', 'ballRetention', 'centralCreation'],
+    },
+  ],
+  centralMidfielder: [
+    {
+      key: 'central-midfielder-creator',
+      roleKey: 'centralMidfielder',
+      label: 'Creador',
+      description: 'Mediocampista asociativo que ordena, circula y conecta lineas.',
+      metrics: [
+        { key: 'shortPassAccuracy', weight: 1.2 },
+        { key: 'technique', weight: 1.05 },
+        { key: 'teamwork', weight: 1 },
+        { key: 'longPassAccuracy', weight: 0.8 },
+        { key: 'dribbleAccuracy', weight: 0.55 },
+        { key: 'attack', weight: 0.45 },
+        { key: 'shortPassSpeed', weight: 0.4 },
+        { key: 'response', weight: 0.35 },
+      ],
+      softRequirements: [
+        { key: 'shortPassAccuracy', minimum: 72, impact: 0.14 },
+        { key: 'technique', minimum: 70, impact: 0.12 },
+        { key: 'teamwork', minimum: 66, impact: 0.1 },
+      ],
+      actions: ['buildUp', 'ballRetention', 'centralCreation'],
+    },
+    {
+      key: 'central-midfielder-box-to-box',
+      roleKey: 'centralMidfielder',
+      label: 'Box-to-Box',
+      description: 'Volante de ida y vuelta que defiende, corre, llega y amenaza.',
+      metrics: [
+        { key: 'stamina', weight: 1.15 },
+        { key: 'attack', weight: 1 },
+        { key: 'balance', weight: 0.9 },
+        { key: 'shotPower', weight: 0.85 },
+        { key: 'response', weight: 0.78 },
+        { key: 'shotAccuracy', weight: 0.68 },
+        { key: 'defense', weight: 0.62 },
+        { key: 'teamwork', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'stamina', minimum: 76, impact: 0.1 },
+        { key: 'attack', minimum: 68, impact: 0.08 },
+        { key: 'defense', minimum: 56, impact: 0.08 },
+        { key: 'response', minimum: 68, impact: 0.08 },
+      ],
+      actions: ['pressing', 'spaceAttack', 'centralCreation', 'finishing'],
+    },
+  ],
+  wideMidfielder: [
+    {
+      key: 'wide-midfielder-worker',
+      roleKey: 'wideMidfielder',
+      label: 'Trabajador',
+      description:
+        'Volante exterior sacrificado que presiona, cubre y sostiene esfuerzo.',
+      metrics: [
+        { key: 'stamina', weight: 1.15 },
+        { key: 'teamwork', weight: 1 },
+        { key: 'defense', weight: 0.94 },
+        { key: 'response', weight: 0.84 },
+        { key: 'topSpeed', weight: 0.72 },
+        { key: 'acceleration', weight: 0.7 },
+        { key: 'balance', weight: 0.5 },
+        { key: 'shortPassAccuracy', weight: 0.32 },
+      ],
+      softRequirements: [
+        { key: 'stamina', minimum: 72, impact: 0.14 },
+        { key: 'teamwork', minimum: 68, impact: 0.12 },
+        { key: 'defense', minimum: 62, impact: 0.1 },
+        { key: 'topSpeed', minimum: 62, impact: 0.08 },
+        { key: 'acceleration', minimum: 62, impact: 0.08 },
+      ],
+      actions: ['pressing', 'boxDefense'],
+    },
+    {
+      key: 'wide-midfielder-crosser',
+      roleKey: 'wideMidfielder',
+      label: 'Centrador',
+      description: 'Exterior de golpeo: pase largo, efecto y servicio desde banda.',
+      metrics: [
+        { key: 'longPassAccuracy', weight: 1.15 },
+        { key: 'longPassSpeed', weight: 0.85 },
+        { key: 'swerve', weight: 0.85 },
+        { key: 'technique', weight: 0.7 },
+        { key: 'shortPassAccuracy', weight: 0.55 },
+        { key: 'dribbleAccuracy', weight: 0.5 },
+        { key: 'teamwork', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'longPassAccuracy', minimum: 72, impact: 0.16 },
+        { key: 'longPassSpeed', minimum: 66, impact: 0.1 },
+        { key: 'swerve', minimum: 68, impact: 0.1 },
+      ],
+      actions: ['wideProgression', 'ballRetention', 'centralCreation'],
+    },
+  ],
+  creator: [
+    {
+      key: 'creator-playmaker',
+      roleKey: 'creator',
+      label: 'Enganche',
+      description: 'Mediapunta que recibe, pausa, filtra y crea peligro entre lineas.',
+      metrics: [
+        { key: 'attack', weight: 0.95 },
+        { key: 'technique', weight: 1 },
+        { key: 'shortPassAccuracy', weight: 1 },
+        { key: 'longPassAccuracy', weight: 0.75 },
+        { key: 'teamwork', weight: 0.75 },
+        { key: 'swerve', weight: 0.55 },
+        { key: 'response', weight: 0.5 },
+      ],
+      softRequirements: [
+        { key: 'attack', minimum: 70, impact: 0.12 },
+        { key: 'technique', minimum: 72, impact: 0.12 },
+        { key: 'shortPassAccuracy', minimum: 70, impact: 0.12 },
+      ],
+      actions: ['centralCreation', 'ballRetention', 'buildUp'],
+    },
+    {
+      key: 'creator-dribbler',
+      roleKey: 'creator',
+      label: 'Driblador',
+      description: 'Mediapunta que desequilibra por conduccion, giro y control corto.',
+      metrics: [
+        { key: 'dribbleAccuracy', weight: 1.1 },
+        { key: 'technique', weight: 1 },
+        { key: 'agility', weight: 0.85 },
+        { key: 'acceleration', weight: 0.7 },
+        { key: 'attack', weight: 0.75 },
+        { key: 'shotTechnique', weight: 0.5 },
+        { key: 'shortPassAccuracy', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'dribbleAccuracy', minimum: 74, impact: 0.15 },
+        { key: 'technique', minimum: 72, impact: 0.12 },
+        { key: 'agility', minimum: 68, impact: 0.08 },
+      ],
+      actions: ['wideProgression', 'spaceAttack', 'centralCreation', 'finishing'],
+    },
+  ],
+  wideAttacker: [
+    {
+      key: 'wide-attacker-dribbler',
+      roleKey: 'wideAttacker',
+      label: 'Desborde',
+      description: 'Extremo de 1v1: encara, acelera, gana linea y rompe por fuera.',
+      metrics: [
+        { key: 'dribbleAccuracy', weight: 1.05 },
+        { key: 'dribbleSpeed', weight: 1 },
+        { key: 'acceleration', weight: 1 },
+        { key: 'topSpeed', weight: 0.85 },
+        { key: 'agility', weight: 0.75 },
+        { key: 'attack', weight: 0.65 },
+        { key: 'technique', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'dribbleAccuracy', minimum: 74, impact: 0.14 },
+        { key: 'dribbleSpeed', minimum: 72, impact: 0.14 },
+        { key: 'acceleration', minimum: 72, impact: 0.12 },
+        { key: 'topSpeed', minimum: 70, impact: 0.1 },
+      ],
+      actions: ['wideProgression', 'spaceAttack', 'centralCreation'],
+    },
+    {
+      key: 'wide-attacker-inside',
+      roleKey: 'wideAttacker',
+      label: 'Interior',
+      description: 'Extremo que amenaza por dentro con diagonal, remate y espacio.',
+      metrics: [
+        { key: 'attack', weight: 1.05 },
+        { key: 'shotAccuracy', weight: 0.85 },
+        { key: 'shotTechnique', weight: 0.75 },
+        { key: 'acceleration', weight: 0.82 },
+        { key: 'dribbleAccuracy', weight: 0.65 },
+        { key: 'technique', weight: 0.6 },
+        { key: 'topSpeed', weight: 0.48 },
+        { key: 'response', weight: 0.42 },
+      ],
+      softRequirements: [
+        { key: 'attack', minimum: 74, impact: 0.14 },
+        { key: 'shotAccuracy', minimum: 68, impact: 0.1 },
+        { key: 'acceleration', minimum: 68, impact: 0.1 },
+      ],
+      actions: ['finishing', 'spaceAttack', 'wideProgression'],
+    },
+  ],
+  secondForward: [
+    {
+      key: 'second-forward-link',
+      roleKey: 'secondForward',
+      label: 'Enlace',
+      description:
+        'Segundo delantero asociativo que conecta, asiste y finaliza secundario.',
+      metrics: [
+        { key: 'attack', weight: 0.85 },
+        { key: 'technique', weight: 1 },
+        { key: 'shortPassAccuracy', weight: 0.9 },
+        { key: 'teamwork', weight: 0.84 },
+        { key: 'dribbleAccuracy', weight: 0.6 },
+        { key: 'shotAccuracy', weight: 0.55 },
+        { key: 'response', weight: 0.55 },
+        { key: 'balance', weight: 0.34 },
+      ],
+      softRequirements: [
+        { key: 'attack', minimum: 70, impact: 0.12 },
+        { key: 'technique', minimum: 70, impact: 0.12 },
+        { key: 'shortPassAccuracy', minimum: 66, impact: 0.1 },
+      ],
+      actions: ['centralCreation', 'ballRetention', 'finishing'],
+    },
+    {
+      key: 'second-forward-runner',
+      roleKey: 'secondForward',
+      label: 'Rompedor',
+      description: 'Segundo punta de ruptura: arrastre, conduccion, potencia y espacio.',
+      metrics: [
+        { key: 'acceleration', weight: 1.1 },
+        { key: 'topSpeed', weight: 1 },
+        { key: 'dribbleSpeed', weight: 0.95 },
+        { key: 'dribbleAccuracy', weight: 0.75 },
+        { key: 'response', weight: 0.72 },
+        { key: 'attack', weight: 0.7 },
+        { key: 'agility', weight: 0.7 },
+        { key: 'technique', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'acceleration', minimum: 78, impact: 0.14 },
+        { key: 'topSpeed', minimum: 78, impact: 0.14 },
+        { key: 'dribbleSpeed', minimum: 76, impact: 0.16 },
+        { key: 'dribbleAccuracy', minimum: 72, impact: 0.12 },
+      ],
+      actions: ['finishing', 'spaceAttack', 'wideProgression'],
+    },
+  ],
+  forward: [
+    {
+      key: 'forward-scorer',
+      roleKey: 'forward',
+      label: 'Goleador',
+      description: 'Delantero centrado en convertir: ubicacion, respuesta y remate.',
+      metrics: [
+        { key: 'attack', weight: 1.15 },
+        { key: 'shotAccuracy', weight: 1.15 },
+        { key: 'shotTechnique', weight: 0.9 },
+        { key: 'response', weight: 0.85 },
+        { key: 'shotPower', weight: 0.65 },
+        { key: 'technique', weight: 0.55 },
+        { key: 'heading', weight: 0.35 },
+      ],
+      softRequirements: [
+        { key: 'attack', minimum: 76, impact: 0.14 },
+        { key: 'shotAccuracy', minimum: 76, impact: 0.14 },
+        { key: 'response', minimum: 68, impact: 0.1 },
+      ],
+      actions: ['finishing', 'spaceAttack'],
+    },
+    {
+      key: 'forward-target',
+      roleKey: 'forward',
+      label: 'Objetivo',
+      description:
+        'Referencia que fija centrales, juega de espaldas, gana duelos y descarga.',
+      metrics: [
+        { key: 'balance', weight: 1.05 },
+        { key: 'heading', weight: 0.95 },
+        { key: 'jump', weight: 0.75 },
+        { key: 'height', weight: 0.8 },
+        { key: 'technique', weight: 0.7 },
+        { key: 'shortPassAccuracy', weight: 0.6 },
+        { key: 'attack', weight: 0.65 },
+        { key: 'teamwork', weight: 0.55 },
+      ],
+      softRequirements: [
+        { key: 'balance', minimum: 74, impact: 0.14 },
+        { key: 'heading', minimum: 70, impact: 0.12 },
+        { key: 'technique', minimum: 62, impact: 0.08 },
+        { key: 'shortPassAccuracy', minimum: 58, impact: 0.08 },
+      ],
+      actions: ['aerialGame', 'ballRetention', 'centralCreation', 'finishing'],
+    },
+  ],
+};
+
+const XI_PARTIAL_SKILL_MODIFIERS: XiSkillModifier[] = [
+  {
+    field: 'REGATE' as keyof DerivedPlayer,
+    label: 'Regate',
+    actions: ['wideProgression', 'ballRetention', 'spaceAttack'],
+    roles: ['wingBack', 'wideAttacker', 'wideMidfielder', 'creator'],
+    bonus: 0.6,
+  },
+  {
+    field: 'HAB REGATE' as keyof DerivedPlayer,
+    label: 'Habilidad de Regate',
+    actions: ['wideProgression', 'ballRetention', 'spaceAttack'],
+    roles: ['wingBack', 'wideAttacker', 'wideMidfielder', 'creator'],
+    bonus: 0.6,
+  },
+  {
+    field: 'POSICION' as keyof DerivedPlayer,
+    label: 'Posicionamiento',
+    actions: ['finishing', 'centralCreation', 'spaceAttack'],
+    roles: ['forward', 'secondForward', 'creator'],
+    bonus: 0.65,
+  },
+  {
+    field: 'CAP MANDO' as keyof DerivedPlayer,
+    label: 'Capacidad de Mando',
+    actions: ['buildUp', 'ballRetention', 'centralCreation'],
+    roles: ['libero', 'centralMidfielder', 'defensiveMidfielder', 'creator'],
+    bonus: 0.55,
+  },
+  {
+    field: 'PASES' as keyof DerivedPlayer,
+    label: 'Pase',
+    actions: ['buildUp', 'ballRetention', 'centralCreation'],
+    roles: [
+      'libero',
+      'centralMidfielder',
+      'defensiveMidfielder',
+      'creator',
+      'wideMidfielder',
+    ],
+    bonus: 0.55,
+  },
+  {
+    field: 'GOLEADOR' as keyof DerivedPlayer,
+    label: 'Goleador',
+    actions: ['finishing', 'spaceAttack'],
+    roles: ['forward', 'secondForward', 'wideAttacker'],
+    bonus: 0.7,
+  },
+  {
+    field: '1-1 GOL' as keyof DerivedPlayer,
+    label: 'Definicion 1v1',
+    actions: ['finishing'],
+    roles: ['forward', 'secondForward', 'wideAttacker'],
+    bonus: 0.6,
+  },
+  {
+    field: 'JUG POSTE' as keyof DerivedPlayer,
+    label: 'Jugador Poste',
+    actions: ['finishing', 'centralCreation'],
+    roles: ['forward', 'secondForward'],
+    bonus: 0.5,
+  },
+  {
+    field: 'NO OFFSIDE' as keyof DerivedPlayer,
+    label: 'Evadir Offside',
+    actions: ['finishing'],
+    roles: ['forward', 'secondForward', 'wideAttacker'],
+    bonus: 0.45,
+  },
+  {
+    field: 'MID SHOOT' as keyof DerivedPlayer,
+    label: 'Disparo Media Distancia',
+    actions: ['finishing'],
+    roles: ['creator', 'centralMidfielder', 'secondForward'],
+    bonus: 0.45,
+  },
+  {
+    field: 'LADO' as keyof DerivedPlayer,
+    label: 'Lado',
+    actions: ['wideProgression', 'spaceAttack'],
+    roles: ['wideDefender', 'wingBack', 'wideMidfielder', 'wideAttacker'],
+    bonus: 0.45,
+  },
+  {
+    field: 'MARCA MAN' as keyof DerivedPlayer,
+    label: 'Marcaje al Hombre',
+    actions: ['boxDefense', 'pressing'],
+    roles: ['libero', 'centralDefender', 'wideDefender', 'defensiveMidfielder'],
+    bonus: 0.5,
+  },
+  {
+    field: 'ENTRADAS' as keyof DerivedPlayer,
+    label: 'Entradas',
+    actions: ['boxDefense', 'pressing'],
+    roles: ['libero', 'centralDefender', 'wideDefender', 'defensiveMidfielder'],
+    bonus: 0.45,
+  },
+  {
+    field: 'PARAPENAL' as keyof DerivedPlayer,
+    label: 'Ataja Penales',
+    actions: ['goalkeeping'],
+    roles: ['keeper'],
+    bonus: 0.3,
+  },
+  {
+    field: 'ACHIQUE 1-1' as keyof DerivedPlayer,
+    label: 'Achique 1v1',
+    actions: ['goalkeeping'],
+    roles: ['keeper'],
+    bonus: 0.55,
+  },
+];
 
 const VS_TERRITORY_QUADRANTS: VsTerritoryQuadrant[] = [
   {
@@ -1688,7 +2645,10 @@ interface OpponentLineupPitchProps {
   lineup: ClubLineupConfig;
   onFormationChange: (formationName: string | null) => void;
   onSlotPlayerChange: (slotId: string, playerId: string) => void;
+  onSlotRoleChange: (slotId: string, role: string) => void;
   onClear: () => void;
+  canOpenLineupAnalysis?: boolean;
+  onOpenLineupAnalysis?: () => void;
   canOpenVsAnalysis?: boolean;
   onOpenVsAnalysis?: () => void;
   vsClub?: string;
@@ -1699,7 +2659,10 @@ function OpponentLineupPitch({
   lineup,
   onFormationChange,
   onSlotPlayerChange,
+  onSlotRoleChange,
   onClear,
+  canOpenLineupAnalysis = false,
+  onOpenLineupAnalysis,
   canOpenVsAnalysis = false,
   onOpenVsAnalysis,
   vsClub,
@@ -1712,6 +2675,9 @@ function OpponentLineupPitch({
     selectedFormation ?? FORMATIONS[DEFAULT_FORMATION];
   const tacticalSlots: FormationSlot[] = displaySlots.map((slot) => ({
     ...slot,
+    role: lineup.formationName
+      ? (lineup.rolesBySlot?.[slot.slotId] ?? slot.role)
+      : slot.role,
     playerId: lineup.formationName
       ? lineup.playersBySlot[slot.slotId] || undefined
       : undefined,
@@ -1719,7 +2685,8 @@ function OpponentLineupPitch({
   const selectedIds = new Set(Object.values(lineup.playersBySlot).filter(Boolean));
   const assignedCount = selectedIds.size;
   const showOverlay = !lineup.formationName;
-  const activeSlot = displaySlots.find((slot) => slot.slotId === activeSlotId);
+  const activeSlot = tacticalSlots.find((slot) => slot.slotId === activeSlotId);
+  const xiClubShield = getClubShieldPath(summary.club);
   const vsClubShield = vsClub ? getClubShieldPath(vsClub) : null;
 
   const rosterOptions = useMemo(
@@ -1730,7 +2697,7 @@ function OpponentLineupPitch({
     [summary.roster],
   );
   const getAvailablePlayersForSlot = (slotId: string) => {
-    const slot = displaySlots.find((item) => item.slotId === slotId);
+    const slot = tacticalSlots.find((item) => item.slotId === slotId);
     const slotRole = slot?.role ?? '';
     const selectedPlayerId = lineup.playersBySlot[slotId] ?? '';
     return rosterOptions
@@ -1827,6 +2794,20 @@ function OpponentLineupPitch({
         </div>
       </header>
       <div className={`club-tactical-pitch-wrap${showOverlay ? ' empty' : ''}`}>
+        {canOpenLineupAnalysis && (
+          <button
+            type="button"
+            className="club-vs-pitch-button club-xi-pitch-button"
+            onClick={onOpenLineupAnalysis}
+          >
+            <span>XI</span>
+            {xiClubShield ? (
+              <img src={xiClubShield} alt="" />
+            ) : (
+              <em>{getInitials(summary.club)}</em>
+            )}
+          </button>
+        )}
         {canOpenVsAnalysis && (
           <button
             type="button"
@@ -1852,6 +2833,18 @@ function OpponentLineupPitch({
           useClubKitImages
           onSlotClick={(slotId) => setActiveSlotId(slotId)}
           onPlayerDrop={(slotId, playerId) => onSlotPlayerChange(slotId, playerId)}
+          onRoleChange={onSlotRoleChange}
+          getSlotFitLabel={(slot, player) => {
+            const assignment = buildXiAssignmentAnalysis({
+              slot,
+              player,
+              rating: getPositionAverage(player, slot.role),
+            });
+            return {
+              label: getXiFitLabel(assignment.roleScore),
+              className: getXiFitClass(assignment.roleScore),
+            };
+          }}
           offsideTrap="C"
         />
         {renderSlotPlayerMenu()}
@@ -1867,7 +2860,10 @@ function OpponentLineupPitch({
 
 function getLineupFormationSlots(lineup: ClubLineupConfig | undefined): FormationSlot[] {
   if (!lineup?.formationName) return [];
-  return FORMATIONS[lineup.formationName] ?? [];
+  return (FORMATIONS[lineup.formationName] ?? []).map((slot) => ({
+    ...slot,
+    role: lineup.rolesBySlot?.[slot.slotId] ?? slot.role,
+  }));
 }
 
 function resolveLineupPlayers(
@@ -2295,6 +3291,483 @@ function buildVsFocusItems(
   });
 
   return focusItems.slice(0, 5);
+}
+
+function clampScore(value: number, min = 0, max = 99): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function getXiFitLabel(score: number): string {
+  if (score >= 88) return 'Elite';
+  if (score >= 82) return 'Fuerte';
+  if (score >= 75) return 'Útil';
+  if (score >= 69) return 'Forzado';
+  return 'Riesgoso';
+}
+
+function getXiFitClass(score: number): string {
+  if (score >= 88) return 'elite';
+  if (score >= 82) return 'strong';
+  if (score >= 75) return 'compatible';
+  if (score >= 69) return 'forced';
+  return 'risk';
+}
+
+function isBinarySkillActive(value: DerivedPlayer[keyof DerivedPlayer]): boolean {
+  if (value === null || value === undefined) return false;
+  const normalized = String(value)
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  return normalized === 'si' || normalized === '1' || normalized === 'true';
+}
+
+function getXiHeightScore(player: DerivedPlayer): number {
+  const height = getPlayerStatValue(player, 'ALTURA' as keyof DerivedPlayer);
+  if (!height) return 0;
+  return clampScore(56 + (height - 165) * 1.25, 50, 95);
+}
+
+function getXiConditionScore(player: DerivedPlayer): number {
+  const condition =
+    getPlayerStatValue(player, 'CONDICIÓN FITNESS' as keyof DerivedPlayer) ??
+    getPlayerStatValue(player, 'CONDICIÃ“N FITNESS' as keyof DerivedPlayer);
+  if (!condition) return 0;
+  if (condition <= 8) return clampScore(50 + ((condition - 1) / 7) * 45, 50, 95);
+  return clampScore(condition, 50, 95);
+}
+
+function getXiMetricLabel(key: XiMetricKey): string {
+  if (key === 'height') return 'Altura';
+  if (key === 'condition') return 'Condicion';
+  return getVsDimensionLabel(key);
+}
+
+function getXiMetricValue(player: DerivedPlayer, key: XiMetricKey): number {
+  if (key === 'height') return getXiHeightScore(player);
+  if (key === 'condition') return getXiConditionScore(player);
+  return getVsDimensionValue(player, key);
+}
+
+function getWeightedMetricScore(
+  player: DerivedPlayer,
+  metrics: XiWeightedMetric[],
+): number {
+  let total = 0;
+  let totalWeight = 0;
+  metrics.forEach((metric) => {
+    const value = getXiMetricValue(player, metric.key);
+    if (!value) return;
+    total += value * metric.weight;
+    totalWeight += metric.weight;
+  });
+  return totalWeight ? total / totalWeight : 0;
+}
+
+function getXiRequirementPenalty(
+  player: DerivedPlayer,
+  requirements: XiRoleRequirement[] = [],
+): number {
+  const penalty = requirements.reduce((sum, requirement) => {
+    const value = getXiMetricValue(player, requirement.key);
+    const deficit = Math.max(0, requirement.minimum - value);
+    return sum + deficit * (requirement.impact ?? 0.12);
+  }, 0);
+
+  return Math.min(16, penalty);
+}
+
+function getXiRoleKey(slot: FormationSlot): XiRoleKey {
+  const role = slot.role;
+  if (role === 'PT') return 'keeper';
+  if (role === 'LIB') return 'libero';
+  if (role === 'CT') return 'centralDefender';
+  if (['SA', 'DD', 'DI'].includes(role)) return 'wideDefender';
+  if (['LA', 'DLD', 'DLI'].includes(role)) return 'wingBack';
+  if (role === 'CCD') return 'defensiveMidfielder';
+  if (['VOL', 'CDR', 'CIZ'].includes(role)) return 'wideMidfielder';
+  if (role === 'CC') return 'centralMidfielder';
+  if (role === 'MP') return 'creator';
+  if (['EX', 'ED', 'EI'].includes(role)) return 'wideAttacker';
+  if (role === 'SD') return 'secondForward';
+  return 'forward';
+}
+
+function getXiActiveModifiers(
+  player: DerivedPlayer,
+  roleKey: XiRoleKey,
+  actionKeys: XiActionKey[],
+): XiSkillModifier[] {
+  return XI_PARTIAL_SKILL_MODIFIERS.filter((modifier) => {
+    if (!isBinarySkillActive(player[modifier.field])) return false;
+    const appliesToRole = !modifier.roles || modifier.roles.includes(roleKey);
+    const appliesToAction = modifier.actions.some((action) =>
+      actionKeys.includes(action),
+    );
+    return appliesToRole && appliesToAction;
+  });
+}
+
+function getXiSkillBonus(modifiers: XiSkillModifier[]): number {
+  return Math.min(
+    2.4,
+    modifiers.reduce((sum, modifier) => sum + modifier.bonus, 0),
+  );
+}
+
+function getXiMetricScores(
+  player: DerivedPlayer,
+  metrics: XiWeightedMetric[],
+): XiMetricScore[] {
+  return metrics
+    .map((metric) => ({
+      key: metric.key,
+      label: getXiMetricLabel(metric.key),
+      value: getXiMetricValue(player, metric.key),
+      weight: metric.weight,
+    }))
+    .filter((metric) => metric.value > 0);
+}
+
+function getXiActionMetricsForEntry(
+  entry: ResolvedLineupPlayer,
+  roleKey: XiRoleKey,
+  actionKey: XiActionKey,
+): XiWeightedMetric[] {
+  if (actionKey !== 'pressing') return XI_ACTION_PROFILES[actionKey].metrics;
+
+  const line = getPositionLine(entry.slot.role);
+  if (line === 'ATA') {
+    return [
+      { key: 'response', weight: 1.15 },
+      { key: 'stamina', weight: 1 },
+      { key: 'teamwork', weight: 0.95 },
+      { key: 'acceleration', weight: 0.9 },
+      { key: 'aggression', weight: 0.75 },
+      { key: 'mentality', weight: 0.7 },
+      { key: 'defense', weight: 0.25 },
+    ];
+  }
+
+  if (line === 'MED') {
+    return [
+      { key: 'response', weight: 1.05 },
+      { key: 'teamwork', weight: 0.95 },
+      { key: 'stamina', weight: 0.95 },
+      { key: 'defense', weight: 0.8 },
+      { key: 'aggression', weight: 0.75 },
+      { key: 'mentality', weight: 0.65 },
+      { key: 'acceleration', weight: 0.45 },
+    ];
+  }
+
+  if (
+    [
+      'libero',
+      'centralDefender',
+      'wideDefender',
+      'wingBack',
+      'defensiveMidfielder',
+    ].includes(roleKey)
+  ) {
+    return [
+      { key: 'defense', weight: 1.15 },
+      { key: 'response', weight: 1 },
+      { key: 'teamwork', weight: 0.85 },
+      { key: 'stamina', weight: 0.75 },
+      { key: 'aggression', weight: 0.7 },
+      { key: 'mentality', weight: 0.6 },
+      { key: 'acceleration', weight: 0.35 },
+    ];
+  }
+
+  return XI_ACTION_PROFILES[actionKey].metrics;
+}
+
+function buildXiArchetypeScore(
+  entry: ResolvedLineupPlayer,
+  roleKey: XiRoleKey,
+  archetype: XiRoleArchetype,
+): XiArchetypeScore {
+  const metricScores = getXiMetricScores(entry.player, archetype.metrics);
+  const baseScore = getWeightedMetricScore(entry.player, archetype.metrics);
+  const activeModifiers = getXiActiveModifiers(entry.player, roleKey, archetype.actions);
+  const condition = getXiConditionScore(entry.player);
+  const conditionBonus = condition ? (condition - 72) * 0.035 : 0;
+  const requirementPenalty = getXiRequirementPenalty(
+    entry.player,
+    archetype.softRequirements,
+  );
+  const score = clampScore(
+    baseScore + getXiSkillBonus(activeModifiers) + conditionBonus - requirementPenalty,
+  );
+
+  return {
+    key: archetype.key,
+    label: archetype.label,
+    description: archetype.description,
+    score,
+    requirementPenalty,
+    metricScores,
+    actions: archetype.actions,
+    activeModifiers,
+  };
+}
+
+function buildXiAssignmentAnalysis(entry: ResolvedLineupPlayer): XiAssignmentAnalysis {
+  const roleKey = getXiRoleKey(entry.slot);
+  const archetypes = XI_ROLE_ARCHETYPES[roleKey]
+    .map((archetype) => buildXiArchetypeScore(entry, roleKey, archetype))
+    .sort((a, b) => b.score - a.score);
+  const dominantArchetype = archetypes[0];
+  const actionScores = Object.fromEntries(
+    Object.values(XI_ACTION_PROFILES).map((profile) => [
+      profile.key,
+      clampScore(
+        getWeightedMetricScore(
+          entry.player,
+          getXiActionMetricsForEntry(entry, roleKey, profile.key),
+        ) + getXiSkillBonus(getXiActiveModifiers(entry.player, roleKey, [profile.key])),
+      ),
+    ]),
+  ) as Record<XiActionKey, number>;
+  const sortedRoleActions = [...dominantArchetype.actions].sort(
+    (a, b) => actionScores[b] - actionScores[a],
+  );
+
+  return {
+    entry,
+    roleKey,
+    roleLabel: dominantArchetype.label,
+    roleDescription: dominantArchetype.description,
+    roleScore: dominantArchetype.score,
+    archetypes,
+    metricScores: dominantArchetype.metricScores,
+    actionScores,
+    strongestAction: sortedRoleActions[0],
+    weakestAction: sortedRoleActions[sortedRoleActions.length - 1],
+    activeModifiers: dominantArchetype.activeModifiers,
+  };
+}
+
+function getXiRelevantAssignments(
+  assignments: XiAssignmentAnalysis[],
+  actionKey: XiActionKey,
+): XiAssignmentAnalysis[] {
+  const relevant = assignments.filter((assignment) => {
+    const { slot } = assignment.entry;
+    if (actionKey === 'goalkeeping') return assignment.roleKey === 'keeper';
+    if (actionKey === 'buildUp') return slot.y >= 38 || assignment.roleKey === 'keeper';
+    if (actionKey === 'ballRetention')
+      return slot.y >= 24 && slot.y <= 76 && assignment.roleKey !== 'keeper';
+    if (actionKey === 'wideProgression') return slot.x <= 32 || slot.x >= 68;
+    if (actionKey === 'spaceAttack')
+      return slot.y <= 55 && assignment.roleKey !== 'keeper';
+    if (actionKey === 'centralCreation') return slot.y <= 60 && slot.y >= 22;
+    if (actionKey === 'finishing') return slot.y <= 36;
+    if (actionKey === 'pressing') return slot.y <= 65 && assignment.roleKey !== 'keeper';
+    if (actionKey === 'boxDefense')
+      return slot.y >= 58 || assignment.roleKey === 'keeper';
+    if (actionKey === 'aerialGame') {
+      return (
+        ['libero', 'centralDefender', 'forward', 'secondForward', 'keeper'].includes(
+          assignment.roleKey,
+        ) ||
+        (slot.x > 34 && slot.x < 66)
+      );
+    }
+    return true;
+  });
+
+  return relevant.length ? relevant : assignments;
+}
+
+function buildXiActionSummaries(assignments: XiAssignmentAnalysis[]): XiActionSummary[] {
+  return XI_VISIBLE_ACTION_KEYS.map((actionKey) => {
+    const profile = XI_ACTION_PROFILES[actionKey];
+    const players = getXiRelevantAssignments(assignments, profile.key);
+    return {
+      key: profile.key,
+      label: profile.label,
+      description: profile.description,
+      score: mean(players.map((assignment) => assignment.actionScores[profile.key])),
+      players,
+    };
+  });
+}
+
+function getXiSideActionScore(
+  assignments: XiAssignmentAnalysis[],
+  side: 'left' | 'right',
+): number {
+  const players = assignments.filter((assignment) =>
+    side === 'left' ? assignment.entry.slot.x <= 35 : assignment.entry.slot.x >= 65,
+  );
+  return mean(players.map((assignment) => assignment.actionScores.wideProgression));
+}
+
+function getXiDependencyLabel(value: number): string {
+  if (value >= 9) return 'Alta';
+  if (value >= 5) return 'Media';
+  return 'Repartida';
+}
+
+function buildXiInsights(
+  assignments: XiAssignmentAnalysis[],
+  actionSummaries: XiActionSummary[],
+): XiInsightItem[] {
+  const sortedActions = [...actionSummaries].sort((a, b) => b.score - a.score);
+  const bestAction = sortedActions[0];
+  const weakestAction = sortedActions[sortedActions.length - 1];
+  const weakestRole = [...assignments].sort((a, b) => a.roleScore - b.roleScore)[0];
+  const strongestRole = [...assignments].sort((a, b) => b.roleScore - a.roleScore)[0];
+  const leftWide = getXiSideActionScore(assignments, 'left');
+  const rightWide = getXiSideActionScore(assignments, 'right');
+  const strongerSide = leftWide >= rightWide ? 'izquierda' : 'derecha';
+  const strongerSideScore = Math.max(leftWide, rightWide);
+  const weakerSideScore = Math.min(leftWide, rightWide);
+  const strongestVisibleRoleAction =
+    [...strongestRole.archetypes[0].actions]
+      .filter((action) => action !== 'goalkeeping')
+      .sort((a, b) => strongestRole.actionScores[b] - strongestRole.actionScores[a])[0] ??
+    null;
+
+  const insights: XiInsightItem[] = [
+    {
+      key: 'best-action',
+      kind: 'strength',
+      title: bestAction.label,
+      detail: `La accion mejor sostenida del once es ${bestAction.label.toLowerCase()}; la lectura sale de stats comprobados de los jugadores ubicados en esa zona funcional.`,
+      score: bestAction.score,
+    },
+    {
+      key: 'side-route',
+      kind: strongerSideScore - weakerSideScore >= 2 ? 'strength' : 'control',
+      title:
+        strongerSideScore - weakerSideScore >= 2
+          ? `Ruta preferente por ${strongerSide}`
+          : 'Banda equilibrada',
+      detail:
+        strongerSideScore - weakerSideScore >= 2
+          ? `La progresion por ${strongerSide} se ve mas natural que por la otra banda.`
+          : 'Las dos bandas entregan una progresion similar; no hay un costado claramente dominante.',
+      score: strongerSideScore - weakerSideScore,
+    },
+    {
+      key: 'weak-role',
+      kind: weakestRole.roleScore < 76 ? 'risk' : 'control',
+      title: `Slot mas exigido: ${weakestRole.roleLabel}`,
+      detail: `${String(weakestRole.entry.player.NOMBRE ?? '-')} aparece como el encaje mas exigido para la funcion pedida. No es un castigo por posicion listada; es lectura de stats del rol.`,
+      score: weakestRole.roleScore,
+    },
+    {
+      key: 'best-role',
+      kind: 'strength',
+      title: `Mejor encaje: ${strongestRole.roleLabel}`,
+      detail: `${String(strongestRole.entry.player.NOMBRE ?? '-')} sostiene mejor su funcion; su punto mas fuerte es ${
+        strongestVisibleRoleAction
+          ? XI_ACTION_PROFILES[strongestVisibleRoleAction].label
+          : 'su encaje general'
+      }.`,
+      score: strongestRole.roleScore,
+    },
+    {
+      key: 'weak-action',
+      kind: weakestAction.score < 76 ? 'risk' : 'control',
+      title: `Accion a vigilar: ${weakestAction.label}`,
+      detail: `${weakestAction.label} aparece como la accion menos segura; si el plan depende de ella, conviene revisar nombres o estructura.`,
+      score: weakestAction.score,
+    },
+  ];
+
+  return insights;
+}
+
+function buildXiLineSummaries(
+  assignments: XiAssignmentAnalysis[],
+): XiTeamAnalysis['lineSummaries'] {
+  const lineGroups = [
+    {
+      key: 'goal',
+      label: 'Porteria',
+      predicate: (assignment: XiAssignmentAnalysis) => assignment.roleKey === 'keeper',
+    },
+    {
+      key: 'defense',
+      label: 'Bloque bajo',
+      predicate: (assignment: XiAssignmentAnalysis) =>
+        assignment.entry.slot.y >= 62 && assignment.roleKey !== 'keeper',
+    },
+    {
+      key: 'middle',
+      label: 'Bloque medio',
+      predicate: (assignment: XiAssignmentAnalysis) =>
+        assignment.entry.slot.y < 62 && assignment.entry.slot.y >= 34,
+    },
+    {
+      key: 'attack',
+      label: 'Bloque alto',
+      predicate: (assignment: XiAssignmentAnalysis) => assignment.entry.slot.y < 34,
+    },
+  ];
+
+  return lineGroups.map((group) => {
+    const players = assignments.filter(group.predicate);
+    return {
+      key: group.key,
+      label: group.label,
+      score: mean(players.map((assignment) => assignment.roleScore)),
+      count: players.length,
+    };
+  });
+}
+
+function buildXiPitchRecommendation(
+  lineup: ClubLineupConfig,
+  assignments: XiAssignmentAnalysis[],
+): FormationRecommendation {
+  return {
+    formationName: lineup.formationName ?? 'Once probable',
+    score: mean(assignments.map((assignment) => assignment.roleScore)),
+    assignments: assignments.map((assignment) => ({
+      slot: assignment.entry.slot,
+      player: assignment.entry.player,
+      rating: assignment.roleScore,
+      score: assignment.roleScore,
+      fit: 'compatible',
+    })),
+  };
+}
+
+function buildXiTeamAnalysis(
+  summary: ClubSummary,
+  lineup: ClubLineupConfig,
+): XiTeamAnalysis {
+  const players = resolveLineupPlayers(summary, lineup);
+  const assignments = players.map(buildXiAssignmentAnalysis);
+  const actionSummaries = buildXiActionSummaries(assignments);
+  const sortedActions = [...actionSummaries].sort((a, b) => b.score - a.score);
+  const score = mean(assignments.map((assignment) => assignment.roleScore));
+  const topThree = [...assignments].sort((a, b) => b.roleScore - a.roleScore).slice(0, 3);
+  const dependencyValue =
+    mean(topThree.map((assignment) => assignment.roleScore)) - score;
+
+  return {
+    summary,
+    lineup,
+    players,
+    assignments,
+    score,
+    dependencyLabel: getXiDependencyLabel(dependencyValue),
+    dependencyValue,
+    strongestAction: sortedActions[0],
+    weakestAction: sortedActions[sortedActions.length - 1],
+    actionSummaries,
+    insights: buildXiInsights(assignments, actionSummaries),
+    lineSummaries: buildXiLineSummaries(assignments),
+    pitchRecommendation: buildXiPitchRecommendation(lineup, assignments),
+  };
 }
 
 function buildVsTerritoryPoints(
@@ -3089,7 +4562,6 @@ function ClubVsAnalysisOverlay({
                     content={duelTooltip}
                     placement="left"
                     className="club-vs-duel-tooltip-wrapper"
-                    popupClassName="club-vs-enhanced-tooltip"
                   >
                     <div className="club-vs-duel-row">
                       <div>
@@ -3175,6 +4647,601 @@ function ClubInlineTooltip({
   return (
     <div className={`glossary-tooltip-popup club-chart-tooltip ${className}`}>
       <div className="glossary-tooltip-definition club-chart-tooltip-body">{content}</div>
+    </div>
+  );
+}
+
+function getXiMetricGroup(key: XiMetricKey): AnalysisDimensionGroup {
+  if (key === 'height' || key === 'condition') return 'physical';
+  return (
+    ANALYSIS_DIMENSIONS.find((dimension) => dimension.key === key)?.group ?? 'gameReading'
+  );
+}
+
+function getXiMetricColor(key: XiMetricKey): string {
+  return ANALYSIS_GROUP_COLORS[getXiMetricGroup(key)];
+}
+
+const XI_VISIBLE_ROLE_STAT_COUNT = 6;
+const XI_METRIC_PRESENTATION_GROUP_ORDER: AnalysisDimensionGroup[] = [
+  'gameReading',
+  'passing',
+  'dribbling',
+  'physical',
+  'finishing',
+  'goalkeeping',
+];
+
+function getXiPresentationMetrics(archetype: XiArchetypeScore): XiMetricScore[] {
+  const metrics = archetype.metricScores.filter((metric) => metric.value > 0);
+  const selected = [...metrics]
+    .sort((a, b) => b.weight - a.weight || b.value - a.value)
+    .slice(0, XI_VISIBLE_ROLE_STAT_COUNT);
+
+  return selected.sort((a, b) => {
+    const groupA = XI_METRIC_PRESENTATION_GROUP_ORDER.indexOf(getXiMetricGroup(a.key));
+    const groupB = XI_METRIC_PRESENTATION_GROUP_ORDER.indexOf(getXiMetricGroup(b.key));
+    if (groupA !== groupB) return groupA - groupB;
+    return a.label.localeCompare(b.label, 'es', { sensitivity: 'base' });
+  });
+}
+
+function XiRoleRoseChart({ metrics }: { metrics: XiMetricScore[] }) {
+  const center = 112;
+  const innerRadius = 30;
+  const maxOuterRadius = 104;
+  const segmentAngle = metrics.length ? 360 / metrics.length : 360;
+  const minValue = 45;
+  const maxValue = 99;
+
+  return (
+    <div className="club-xi-role-rose-wrap">
+      <svg className="club-xi-role-rose" viewBox="0 0 224 224" role="img">
+        <circle cx={center} cy={center} r={innerRadius} className="club-xi-role-core" />
+        {[0.33, 0.66, 1].map((ring) => (
+          <circle
+            key={ring}
+            cx={center}
+            cy={center}
+            r={innerRadius + (maxOuterRadius - innerRadius) * ring}
+            className="club-xi-role-ring"
+          />
+        ))}
+        {metrics.map((metric, index) => {
+          const startAngle = index * segmentAngle + 2;
+          const endAngle = (index + 1) * segmentAngle - 2;
+          const normalized = Math.max(
+            0.08,
+            Math.min(1, (metric.value - minValue) / (maxValue - minValue)),
+          );
+          const outerRadius = innerRadius + (maxOuterRadius - innerRadius) * normalized;
+          const labelPoint = polarPoint(
+            center,
+            center,
+            Math.min(maxOuterRadius - 10, Math.max(innerRadius + 44, outerRadius - 10)),
+            (startAngle + endAngle) / 2,
+          );
+          return (
+            <g key={metric.key} className="club-xi-role-segment">
+              <path
+                d={describeDonutSegment(
+                  center,
+                  center,
+                  innerRadius,
+                  outerRadius,
+                  startAngle,
+                  endAngle,
+                )}
+                className="club-xi-role-slice"
+                style={{
+                  fill: getXiMetricColor(metric.key),
+                  opacity: 0.56 + Math.min(0.36, metric.weight * 0.2),
+                }}
+              />
+              <circle
+                cx={labelPoint.x}
+                cy={labelPoint.y}
+                r={Math.max(2.4, Math.min(4.2, metric.weight * 2.3))}
+                fill="#f5f7fb"
+                opacity="0.78"
+              />
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+function getXiRosterStatMetrics(players: ResolvedLineupPlayer[]): XiMetricScore[] {
+  const keepers = players.filter((entry) => getXiRoleKey(entry.slot) === 'keeper');
+  const fieldPlayers = players.filter((entry) => getXiRoleKey(entry.slot) !== 'keeper');
+
+  return ANALYSIS_GROUP_ORDER.flatMap((group) =>
+    ANALYSIS_DIMENSIONS.filter((dimension) => dimension.group === group).map(
+      (dimension) => {
+        const sourcePlayers =
+          dimension.key === 'goalkeeping'
+            ? keepers.length
+              ? keepers
+              : players
+            : fieldPlayers.length
+              ? fieldPlayers
+              : players;
+
+        return {
+          key: dimension.key,
+          label: dimension.label,
+          value: mean(
+            sourcePlayers.map((entry) =>
+              getVsDimensionValue(entry.player, dimension.key),
+            ),
+          ),
+          weight: 1,
+        };
+      },
+    ),
+  );
+}
+
+function XiRosterAttributeRoseChart({ metrics }: { metrics: XiMetricScore[] }) {
+  const center = 170;
+  const innerRadius = 32;
+  const maxOuterRadius = 164;
+  const orderedDimensions = ANALYSIS_GROUP_ORDER.flatMap((group) =>
+    ANALYSIS_DIMENSIONS.filter((dimension) => dimension.group === group),
+  );
+  const metricByKey = Object.fromEntries(
+    metrics.map((metric) => [metric.key, metric]),
+  ) as Partial<Record<AnalysisDimensionKey, XiMetricScore>>;
+  const segmentAngle = 360 / orderedDimensions.length;
+  const minValue = 45;
+  const maxValue = 95;
+  const [tooltip, setTooltip] = useState<ChartTooltipState | null>(null);
+
+  return (
+    <div className="club-attribute-visual club-xi-roster-attribute-visual">
+      <svg className="club-attribute-rose-chart" viewBox="0 0 340 340" role="img">
+        <circle cx={center} cy={center} r={innerRadius} className="club-attribute-core" />
+        {[0.25, 0.5, 0.75, 1].map((ring) => (
+          <circle
+            key={ring}
+            cx={center}
+            cy={center}
+            r={innerRadius + (maxOuterRadius - innerRadius) * ring}
+            className="club-attribute-ring"
+          />
+        ))}
+        {orderedDimensions.map((dimension, index) => {
+          const startAngle = index * segmentAngle + 1.2;
+          const endAngle = (index + 1) * segmentAngle - 1.2;
+          const midAngle = (startAngle + endAngle) / 2;
+          const value = metricByKey[dimension.key]?.value ?? 0;
+          const normalized = Math.max(
+            0.04,
+            Math.min(1, (value - minValue) / (maxValue - minValue)),
+          );
+          const outerRadius = innerRadius + (maxOuterRadius - innerRadius) * normalized;
+          const labelPathId = `club-xi-roster-label-${dimension.key}`;
+          const isLeftSideLabel = midAngle > 180 && midAngle < 360;
+          const labelInnerRadius = innerRadius + 8;
+          const labelOuterRadius = Math.min(
+            maxOuterRadius - 8,
+            Math.max(labelInnerRadius + 70, outerRadius - 10),
+          );
+          const labelStartRadius = isLeftSideLabel ? labelOuterRadius : labelInnerRadius;
+          const labelEndRadius = isLeftSideLabel ? labelInnerRadius : labelOuterRadius;
+          const labelAnchor = isLeftSideLabel ? 'end' : 'start';
+          const labelOffset = isLeftSideLabel ? '92%' : '8%';
+          const tooltipContent = (
+            <div className="club-chart-tooltip-content">
+              <strong>{dimension.label}</strong>
+              <span>{ANALYSIS_GROUP_LABELS[dimension.group]}</span>
+              <small>Once {formatNumber(value, 1)}</small>
+              <p>{dimension.description}</p>
+            </div>
+          );
+
+          return (
+            <g key={dimension.key} className="club-attribute-segment">
+              <path
+                d={describeDonutSegment(
+                  center,
+                  center,
+                  innerRadius,
+                  outerRadius,
+                  startAngle,
+                  endAngle,
+                )}
+                fill={ANALYSIS_GROUP_COLORS[dimension.group]}
+                className="club-attribute-slice"
+                onMouseEnter={(event) =>
+                  setTooltip({
+                    ...getChartTooltipPosition(event),
+                    content: tooltipContent,
+                  })
+                }
+                onMouseMove={(event) =>
+                  setTooltip({
+                    ...getChartTooltipPosition(event),
+                    content: tooltipContent,
+                  })
+                }
+                onMouseLeave={() => setTooltip(null)}
+              />
+              <path
+                id={labelPathId}
+                d={describeRadialLine(
+                  center,
+                  center,
+                  labelStartRadius,
+                  labelEndRadius,
+                  midAngle,
+                )}
+                className="club-attribute-label-guide"
+              />
+              <text
+                className="club-attribute-stat-label"
+                textAnchor={labelAnchor}
+                dominantBaseline="middle"
+              >
+                <textPath href={`#${labelPathId}`} startOffset={labelOffset}>
+                  {dimension.label}
+                </textPath>
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      <ClubChartTooltip tooltip={tooltip} />
+    </div>
+  );
+}
+
+function XiRosterStatsCard({ players }: { players: ResolvedLineupPlayer[] }) {
+  const metrics = getXiRosterStatMetrics(players);
+  const familyScores = ANALYSIS_GROUP_ORDER.map((group) => {
+    const groupMetrics = metrics.filter(
+      (metric) => getXiMetricGroup(metric.key) === group,
+    );
+    return {
+      group,
+      label: ANALYSIS_GROUP_LABELS[group],
+      value: mean(groupMetrics.map((metric) => metric.value)),
+    };
+  });
+
+  return (
+    <article className="club-vs-card club-xi-roster-stats-card">
+      <header>
+        <h3>Radar de Stats</h3>
+        <span>promedio del once</span>
+      </header>
+      <XiRosterAttributeRoseChart metrics={metrics} />
+      <div className="club-xi-roster-family-list">
+        {familyScores.map((family) => (
+          <div key={family.group}>
+            <span>
+              <i style={{ background: ANALYSIS_GROUP_COLORS[family.group] }} />
+              {family.label}
+            </span>
+            <strong style={{ color: getStatColor(family.value) ?? undefined }}>
+              {formatNumber(family.value, 1)}
+            </strong>
+            <em style={{ width: `${Math.max(4, family.value)}%` }} />
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function XiAssignmentTooltipContent({
+  assignment,
+}: {
+  assignment: XiAssignmentAnalysis;
+}) {
+  const [selectedArchetypeKey, setSelectedArchetypeKey] = useState(
+    assignment.archetypes[0]?.key ?? '',
+  );
+  const selectedArchetype =
+    assignment.archetypes.find((archetype) => archetype.key === selectedArchetypeKey) ??
+    assignment.archetypes[0];
+  const presentationMetrics = selectedArchetype
+    ? getXiPresentationMetrics(selectedArchetype)
+    : [];
+  const slotRole = assignment.entry.slot.role;
+  const slotLine = getPositionLine(slotRole);
+
+  return (
+    <div className="club-vs-tooltip-content club-xi-tooltip-content">
+      <header className="club-xi-detail-header">
+        <div>
+          <strong>{String(assignment.entry.player.NOMBRE ?? '-')}</strong>
+          <span>
+            {selectedArchetype?.label ?? assignment.roleLabel} -{' '}
+            {getXiFitLabel(selectedArchetype?.score ?? assignment.roleScore)}
+          </span>
+        </div>
+        <EnhancedTooltip content={getPositionFullName(slotRole)} placement="top">
+          <span className={`position-badge primary position-${slotLine}`}>
+            {slotRole}
+          </span>
+        </EnhancedTooltip>
+      </header>
+      <div
+        className="club-xi-archetype-list"
+        onClick={(event) => event.stopPropagation()}
+      >
+        {assignment.archetypes.map((archetype, index) => (
+          <button
+            key={archetype.key}
+            type="button"
+            className={archetype.key === selectedArchetype?.key ? 'active' : undefined}
+            onClick={(event) => {
+              event.stopPropagation();
+              setSelectedArchetypeKey(archetype.key);
+            }}
+          >
+            <span>{index === 0 ? 'Funcion dominante' : 'Funcion hermana'}</span>
+            <strong>{archetype.label}</strong>
+            <b>{getXiFitLabel(archetype.score)}</b>
+            <em style={{ width: `${Math.max(4, archetype.score)}%` }} />
+          </button>
+        ))}
+      </div>
+      <small>{selectedArchetype?.description ?? assignment.roleDescription}</small>
+      {selectedArchetype && (
+        <div className="club-xi-role-detail-grid">
+          <XiRoleRoseChart metrics={presentationMetrics} />
+          <div className="club-xi-role-stat-list">
+            {presentationMetrics.map((metric) => (
+              <div key={`${assignment.entry.slot.slotId}-summary-${metric.key}`}>
+                <span>
+                  <i style={{ background: getXiMetricColor(metric.key) }} />
+                  {metric.label}
+                </span>
+                <strong>{formatNumber(metric.value, 0)}</strong>
+                <em style={{ width: `${Math.max(4, metric.weight * 54)}%` }} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="club-vs-tooltip-stats club-xi-priority-stats">
+        {presentationMetrics.slice(0, 4).map((metric) => (
+          <div key={`${assignment.entry.slot.slotId}-${metric.key}`}>
+            <span>{metric.label}</span>
+            <p>
+              <em>Prioridad {formatNumber(metric.weight, 2)}</em>
+              <b>{formatNumber(metric.value, 0)}</b>
+              <em>stat comprobado</em>
+            </p>
+          </div>
+        ))}
+      </div>
+      {assignment.activeModifiers.length > 0 && (
+        <small>
+          Rasgos parciales considerados como apoyo suave:{' '}
+          {assignment.activeModifiers.map((modifier) => modifier.label).join(', ')}.
+        </small>
+      )}
+    </div>
+  );
+}
+
+function ClubLineupAnalysisOverlay({
+  summary,
+  lineup,
+  onClose,
+  onOpenPlayer,
+}: {
+  summary: ClubSummary;
+  lineup: ClubLineupConfig;
+  onClose: () => void;
+  onOpenPlayer: (player: DerivedPlayer) => void;
+}) {
+  const analysis = buildXiTeamAnalysis(summary, lineup);
+  const [focusedSlotId, setFocusedSlotId] = useState<string | null>(null);
+  const weakestAssignment = [...analysis.assignments].sort(
+    (a, b) => a.roleScore - b.roleScore,
+  )[0];
+  const strongestAssignment = [...analysis.assignments].sort(
+    (a, b) => b.roleScore - a.roleScore,
+  )[0];
+  const focusedAssignment =
+    analysis.assignments.find(
+      (assignment) => assignment.entry.slot.slotId === focusedSlotId,
+    ) ??
+    strongestAssignment ??
+    analysis.assignments[0];
+
+  return (
+    <div className="club-vs-overlay club-xi-overlay" role="dialog" aria-modal="true">
+      <section className="club-vs-hub club-xi-hub">
+        <header className="club-vs-header club-xi-header">
+          <div>
+            <span>Analisis del Once Probable</span>
+            <h2>
+              {summary.club} - {lineup.formationName}
+            </h2>
+            <p>
+              Lectura basada en stats comprobados del juego. La posicion listada del
+              jugador no bloquea ni habilita el rol.
+            </p>
+          </div>
+          <button type="button" onClick={onClose} aria-label="Cerrar analisis del once">
+            x
+          </button>
+        </header>
+
+        <div className="club-vs-kpis club-xi-kpis">
+          <article>
+            <span>Coherencia del Once</span>
+            <strong className="club-xi-kpi-text">{getXiFitLabel(analysis.score)}</strong>
+            <small>lectura global de roles y stats</small>
+          </article>
+          <article>
+            <span>Plan fuerte</span>
+            <strong className="club-xi-kpi-text">{analysis.strongestAction.label}</strong>
+            <small>accion mejor sustentada</small>
+          </article>
+          <article>
+            <span>Riesgo principal</span>
+            <strong className="club-xi-kpi-text">{analysis.weakestAction.label}</strong>
+            <small>accion mas expuesta</small>
+          </article>
+          <article>
+            <span>Dependencia</span>
+            <strong className="club-xi-kpi-text">{analysis.dependencyLabel}</strong>
+            <small>concentracion del plan en pocos nombres</small>
+          </article>
+        </div>
+
+        <div className="club-xi-grid">
+          <article className="club-vs-card club-vs-reading club-xi-reading">
+            <header>
+              <h3>Lectura rapida</h3>
+            </header>
+            <p>
+              El once se lee como <strong>{getXiFitLabel(analysis.score)}</strong> para la
+              estructura configurada. El plan mas natural es{' '}
+              <strong>{analysis.strongestAction.label}</strong>, sostenido por perfiles
+              que comparten stats clave.
+            </p>
+            <p>
+              La accion mas debil es <strong>{analysis.weakestAction.label}</strong>. Si
+              el partido exige esa accion, hay que revisar estructura o nombres antes de
+              confiar en el promedio general.
+            </p>
+            {strongestAssignment && (
+              <p>
+                Mejor encaje individual:{' '}
+                <strong>{String(strongestAssignment.entry.player.NOMBRE ?? '-')}</strong>{' '}
+                como {strongestAssignment.roleLabel.toLowerCase()} (
+                {getXiFitLabel(strongestAssignment.roleScore).toLowerCase()}).
+              </p>
+            )}
+            {weakestAssignment && (
+              <p>
+                Slot mas delicado:{' '}
+                <strong>{String(weakestAssignment.entry.player.NOMBRE ?? '-')}</strong>{' '}
+                como {weakestAssignment.roleLabel.toLowerCase()} (
+                {getXiFitLabel(weakestAssignment.roleScore).toLowerCase()}).
+              </p>
+            )}
+          </article>
+
+          <article className="club-vs-card club-xi-pitch-card">
+            <header>
+              <h3>Once probable</h3>
+              <span>roles detectados por stats</span>
+            </header>
+            <AnalysisLineupPitch
+              recommendation={analysis.pitchRecommendation}
+              club={summary.club}
+              onOpenPlayer={onOpenPlayer}
+              onSlotSelect={setFocusedSlotId}
+            />
+          </article>
+
+          <article className="club-vs-card club-xi-role-detail-card">
+            <header>
+              <h3>Detalle por rol</h3>
+              <span>clickea un jugador en cancha</span>
+            </header>
+            {focusedAssignment ? (
+              <XiAssignmentTooltipContent assignment={focusedAssignment} />
+            ) : (
+              <p className="club-xi-empty-detail">
+                Pasa por un jugador del once para leer su funcion.
+              </p>
+            )}
+          </article>
+
+          <article className="club-vs-card club-xi-actions-card">
+            <header>
+              <h3>Acciones funcionales</h3>
+              <span>lectura por zona</span>
+            </header>
+            <div className="club-xi-action-list">
+              {analysis.actionSummaries.map((action) => (
+                <EnhancedTooltip
+                  key={action.key}
+                  placement="left"
+                  content={
+                    <div className="club-enhanced-tooltip-content">
+                      <strong>{action.label}</strong>
+                      <span>{getXiFitLabel(action.score)}</span>
+                      <small>{action.description}</small>
+                      <div className="club-xi-action-metrics">
+                        {XI_ACTION_PROFILES[action.key].metrics.map((metric) => (
+                          <span key={`tooltip-${action.key}-${metric.key}`}>
+                            {getXiMetricLabel(metric.key)}
+                          </span>
+                        ))}
+                      </div>
+                      <small>
+                        Jugadores ponderados:{' '}
+                        {action.players
+                          .map((assignment) =>
+                            String(assignment.entry.player.NOMBRE ?? '-'),
+                          )
+                          .slice(0, 6)
+                          .join(', ')}
+                        {action.players.length > 6 ? '...' : ''}
+                      </small>
+                    </div>
+                  }
+                >
+                  <div className="club-xi-action-row">
+                    <div>
+                      <strong>{action.label}</strong>
+                      <span>{getXiFitLabel(action.score)}</span>
+                    </div>
+                    <div className="club-xi-track">
+                      <em style={{ width: `${Math.max(4, action.score)}%` }} />
+                    </div>
+                  </div>
+                </EnhancedTooltip>
+              ))}
+            </div>
+          </article>
+
+          <article className="club-vs-card club-xi-insights-card">
+            <header>
+              <h3>Circuitos y alertas</h3>
+              <span>lectura tactica</span>
+            </header>
+            <div className="club-vs-focus-list">
+              {analysis.insights.map((item) => (
+                <div
+                  key={item.key}
+                  className={`club-vs-focus-item ${
+                    item.kind === 'strength'
+                      ? 'advantage'
+                      : item.kind === 'risk'
+                        ? 'risk'
+                        : 'control'
+                  }`}
+                >
+                  <span>
+                    {item.kind === 'strength'
+                      ? 'Fortaleza'
+                      : item.kind === 'risk'
+                        ? 'Riesgo'
+                        : 'Control'}
+                  </span>
+                  <strong>{item.title}</strong>
+                  <p>{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <XiRosterStatsCard players={analysis.players} />
+        </div>
+      </section>
     </div>
   );
 }
@@ -3655,10 +5722,14 @@ function AnalysisLineupPitch({
   recommendation,
   club,
   onOpenPlayer,
+  onSlotHover,
+  onSlotSelect,
 }: {
   recommendation: FormationRecommendation;
   club: string;
   onOpenPlayer: (player: DerivedPlayer) => void;
+  onSlotHover?: (slotId: string) => void;
+  onSlotSelect?: (slotId: string) => void;
 }) {
   const slots = recommendation.assignments.map((assignment) => ({
     ...assignment.slot,
@@ -3679,10 +5750,26 @@ function AnalysisLineupPitch({
         useClubKitImages
         offsideTrap="C"
         onSlotClick={(slotId) => {
+          if (onSlotSelect) {
+            onSlotSelect(slotId);
+            return;
+          }
           const assignment = recommendation.assignments.find(
             (item) => item.slot.slotId === slotId,
           );
           if (assignment) onOpenPlayer(assignment.player);
+        }}
+        onSlotHover={onSlotHover}
+        getSlotFitLabel={(slot, player) => {
+          const assignment = buildXiAssignmentAnalysis({
+            slot,
+            player,
+            rating: getPositionAverage(player, slot.role),
+          });
+          return {
+            label: getXiFitLabel(assignment.roleScore),
+            className: getXiFitClass(assignment.roleScore),
+          };
         }}
       />
     </div>
@@ -4360,6 +6447,7 @@ export function ClubModule() {
   });
   const [analysisOpen, setAnalysisOpen] = useState(false);
   const [vsAnalysisOpen, setVsAnalysisOpen] = useState(false);
+  const [lineupAnalysisOpen, setLineupAnalysisOpen] = useState(false);
 
   const clubNames = useMemo(() => sortClubsAlphabetically(Array.from(ANFPES_CLUBS)), []);
 
@@ -4427,6 +6515,7 @@ export function ClubModule() {
     setSelectorOpen(false);
     setAnalysisOpen(false);
     setVsAnalysisOpen(false);
+    setLineupAnalysisOpen(false);
   };
 
   const openPlayerProfile = (player: DerivedPlayer) => {
@@ -4454,6 +6543,9 @@ export function ClubModule() {
   const activeLineup: ClubLineupConfig = activeSummary
     ? (lineupsByClub[activeSummary.club] ?? createEmptyClubLineup())
     : createEmptyClubLineup();
+  const canOpenLineupAnalysis = Boolean(
+    activeSummary && isResolvedLineupConfigured(activeSummary, activeLineup),
+  );
 
   const identityClub = identity?.club;
   const identitySummary =
@@ -4475,6 +6567,12 @@ export function ClubModule() {
       setVsAnalysisOpen(false);
     }
   }, [canOpenVsAnalysis, vsAnalysisOpen]);
+
+  useEffect(() => {
+    if (!canOpenLineupAnalysis && lineupAnalysisOpen) {
+      setLineupAnalysisOpen(false);
+    }
+  }, [canOpenLineupAnalysis, lineupAnalysisOpen]);
 
   useEffect(() => {
     if (!activeSummary) return;
@@ -4509,10 +6607,16 @@ export function ClubModule() {
           validSlotIds.has(slotId),
         ),
       );
+      const nextRolesBySlot = Object.fromEntries(
+        Object.entries(lineup.rolesBySlot ?? {}).filter(([slotId]) =>
+          validSlotIds.has(slotId),
+        ),
+      );
 
       return {
         formationName,
         playersBySlot: formationName ? nextPlayersBySlot : {},
+        rolesBySlot: formationName ? nextRolesBySlot : {},
       };
     });
   };
@@ -4527,10 +6631,21 @@ export function ClubModule() {
     }));
   };
 
+  const handleSlotRoleChange = (slotId: string, role: string) => {
+    updateActiveLineup((lineup) => ({
+      ...lineup,
+      rolesBySlot: {
+        ...(lineup.rolesBySlot ?? {}),
+        [slotId]: role,
+      },
+    }));
+  };
+
   const clearActiveLineup = () => {
     updateActiveLineup(() => ({
       formationName: null,
       playersBySlot: {},
+      rolesBySlot: {},
     }));
   };
 
@@ -4743,6 +6858,7 @@ export function ClubModule() {
                 setSelectorOpen(false);
                 setAnalysisOpen(false);
                 setVsAnalysisOpen(false);
+                setLineupAnalysisOpen(false);
               }}
             >
               ×
@@ -4756,7 +6872,10 @@ export function ClubModule() {
             lineup={activeLineup}
             onFormationChange={handleFormationChange}
             onSlotPlayerChange={handleSlotPlayerChange}
+            onSlotRoleChange={handleSlotRoleChange}
             onClear={clearActiveLineup}
+            canOpenLineupAnalysis={canOpenLineupAnalysis}
+            onOpenLineupAnalysis={() => setLineupAnalysisOpen(true)}
             canOpenVsAnalysis={canOpenVsAnalysis}
             onOpenVsAnalysis={() => setVsAnalysisOpen(true)}
             vsClub={identitySummary?.club}
@@ -4956,6 +7075,14 @@ export function ClubModule() {
             summary={activeSummary}
             summaries={summaries}
             onClose={() => setAnalysisOpen(false)}
+            onOpenPlayer={openPlayerProfile}
+          />
+        )}
+        {lineupAnalysisOpen && canOpenLineupAnalysis && (
+          <ClubLineupAnalysisOverlay
+            summary={activeSummary}
+            lineup={activeLineup}
+            onClose={() => setLineupAnalysisOpen(false)}
             onOpenPlayer={openPlayerProfile}
           />
         )}

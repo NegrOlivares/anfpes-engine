@@ -50,6 +50,8 @@ interface TacticalPlayerCardProps {
   autoOpenRoleMenu?: boolean;
   onRoleMenuClose?: () => void;
   useClubKitImage?: boolean;
+  roleFitLabel?: string;
+  roleFitClassName?: string;
 }
 
 // Helper to get position average
@@ -101,6 +103,8 @@ export function TacticalPlayerCard({
   autoOpenRoleMenu = false,
   onRoleMenuClose,
   useClubKitImage = false,
+  roleFitLabel,
+  roleFitClassName,
 }: TacticalPlayerCardProps) {
   const [showArrowEditor, setShowArrowEditor] = useState(false);
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
@@ -350,6 +354,11 @@ export function TacticalPlayerCard({
               style={{ color: getStatColor(positionAvg) || '#fff' }}
             >
               {positionAvg}
+            </span>
+          )}
+          {roleFitLabel && (
+            <span className={`tactical-role-fit ${roleFitClassName ?? ''}`}>
+              {roleFitLabel}
             </span>
           )}
         </div>
